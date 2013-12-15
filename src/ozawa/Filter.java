@@ -93,7 +93,7 @@ public class Filter {
 
 	private boolean filterCard(AbstractCard abstractCard) {
 		if (filterString!=null&&filterString.length()!=0){
-			if(!(abstractCard.gameText.contains(filterString)||abstractCard.name.contains(filterString)))return false;
+			if(!(abstractCard.gameText.toLowerCase().contains(filterString.toLowerCase())||abstractCard.name.toLowerCase().contains(filterString.toLowerCase())))return false;
 		}
 		if (colors.size() != NUMBEROFCOLORS) {
 			if(!match(abstractCard.colorFlags,colors))return false;
