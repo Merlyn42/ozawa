@@ -6,15 +6,19 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class JSONConverter {
 	static final File HEXLOCATION = new File("E:\\Games\\Hex");
 	
 	
 	public static Card convertJSONtoCard(String json){
-		Gson gson = new Gson();
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.registerTypeAdapter(List.class, new AttributeListDeserializer());
+		Gson gson = gsonBuilder.create();
 		
 		Card newCard = gson.fromJson(json, Card.class);
 		
