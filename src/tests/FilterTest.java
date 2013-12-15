@@ -26,42 +26,17 @@ public class FilterTest {
 
 	@Test
 	public void testNewFilter() {
-		assertTrue(filter.isActive(ColorFlag.BLOOD));
-		assertTrue(filter.isActive(ColorFlag.COLORLESS));
-		assertTrue(filter.isActive(ColorFlag.DIAMOND));
-		assertTrue(filter.isActive(ColorFlag.RUBY));
-		assertTrue(filter.isActive(ColorFlag.SAPPHIRE));
-		assertTrue(filter.isActive(ColorFlag.WILD));
+		for(ColorFlag color:EnumSet.allOf(ColorFlag.class)){
+			assertTrue(filter.isActive(color));
+		}
 		
-		assertFalse(filter.isActive(Attribute.UNKNOWN));
-		assertFalse(filter.isActive(Attribute.FLIGHT));
-		assertFalse(filter.isActive(Attribute.DEFENSIVE));
-		assertFalse(filter.isActive(Attribute.JUGGERNAUGHT));
-		assertFalse(filter.isActive(Attribute.FORCEATTACK));
-		assertFalse(filter.isActive(Attribute.CANTREADYAUTOMATICALLY));
-		assertFalse(filter.isActive(Attribute.CANTBLOCK));
-		assertFalse(filter.isActive(Attribute.SPIRITDRAIN));
-		assertFalse(filter.isActive(Attribute.ESCALATION));
-		assertFalse(filter.isActive(Attribute.CANTATTACK));
-		assertFalse(filter.isActive(Attribute.SPEED));
-		assertFalse(filter.isActive(Attribute.STEADFAST));
-		assertFalse(filter.isActive(Attribute.INSPIRE));
-		assertFalse(filter.isActive(Attribute.FIRSTSTRIKE));
-		assertFalse(filter.isActive(Attribute.SPELLSHIELD));
-		assertFalse(filter.isActive(Attribute.IMMORTAL));
-		assertFalse(filter.isActive(Attribute.ALLOWYARDINSPIRE));
-		assertFalse(filter.isActive(Attribute.RAGE));
-		assertFalse(filter.isActive(Attribute.PREVENTCOMBATDAMAGE));	
-		assertFalse(filter.isActive(Attribute.CANTBEBLOCKED));
+		for(Attribute attribute:EnumSet.allOf(Attribute.class)){
+			assertFalse(filter.isActive(attribute));
+		}
 		
-		assertTrue(filter.isActive(CardType.TROOP));
-		assertTrue(filter.isActive(CardType.BASICACTION));
-		assertTrue(filter.isActive(CardType.QUICKACTION));
-		assertTrue(filter.isActive(CardType.CONSTANT));
-		assertTrue(filter.isActive(CardType.ARTIFACT));
-		assertTrue(filter.isActive(CardType.CHAMPION));
-		assertTrue(filter.isActive(CardType.MERCENARY));
-		assertTrue(filter.isActive(CardType.RESOURCE));
+		for(CardType type:EnumSet.allOf(CardType.class)){
+			assertTrue(filter.isActive(type));
+		}
 		
 		assertTrue(filter.getFilterString()==null||filter.getFilterString().length()==0);
 		
