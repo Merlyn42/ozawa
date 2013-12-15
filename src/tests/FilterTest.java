@@ -25,7 +25,6 @@ public class FilterTest {
 
 	@Test
 	public void testNewFilter() {
-		Filter filter = new Filter();
 		assertTrue(filter.isActive(ColorFlag.BLOOD));
 		assertTrue(filter.isActive(ColorFlag.COLORLESS));
 		assertTrue(filter.isActive(ColorFlag.DIAMOND));
