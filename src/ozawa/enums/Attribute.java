@@ -1,46 +1,56 @@
-package ozawa.enums;
+package enums;
 
 import com.google.gson.annotations.SerializedName;
 
 public enum Attribute {
 	@SerializedName("Unknown")
-	UNKNOWN,
+	UNKNOWN("Unknown"),
 	@SerializedName("Flight")
-	FLIGHT,
+	FLIGHT("Flight"),
 	@SerializedName("Defensive")
-	DEFENSIVE,
+	DEFENSIVE("Defensive"),
 	@SerializedName("Juggernaught")
-	JUGGERNAUGHT,
+	JUGGERNAUGHT("Juggernaught"),
 	@SerializedName("ForceAttack")
-	FORCEATTACK,
+	FORCEATTACK("Force Attack"),
 	@SerializedName("CantReadyAutomatically")
-	CANTREADYAUTOMATICALLY,
+	CANTREADYAUTOMATICALLY("Can't Ready Automatically"),
 	@SerializedName("CantBlock")
-	CANTBLOCK,
+	CANTBLOCK("Can't Block"),
 	@SerializedName("SpiritDrain")
-	SPIRITDRAIN,
+	SPIRITDRAIN("Spirit Drain"),
 	@SerializedName("Escalation")
-	ESCALATION,
+	ESCALATION("Escalation"),
 	@SerializedName("CantAttack")
-	CANTATTACK,
+	CANTATTACK("Can't Attack"),
 	@SerializedName("Speed")
-	SPEED,
+	SPEED("Speed"),
 	@SerializedName("Steadfast")
-	STEADFAST,
+	STEADFAST("Steadfast"),
 	@SerializedName("Inspire")
-	INSPIRE,
+	INSPIRE("Inspire"),
 	@SerializedName("FirstStrike")
-	FIRSTSTRIKE,
+	FIRSTSTRIKE("First Strike"),
 	@SerializedName("SpellShield")
-	SPELLSHIELD,
+	SPELLSHIELD("Spell Shield"),
 	@SerializedName("Immortal")
-	IMMORTAL,
+	IMMORTAL("Immortal"),
 	@SerializedName("AllowYardInspire")
-	ALLOWYARDINSPIRE,
+	ALLOWYARDINSPIRE("Allow Yard Inspire"),
 	@SerializedName("Rage")
-	RAGE,
+	RAGE("Rage"),
 	@SerializedName("PreventCombatDamage")
-	PREVENTCOMBATDAMAGE,
+	PREVENTCOMBATDAMAGE("Prevent Combat Damage"),
 	@SerializedName("CantBeBlocked")
-	CANTBEBLOCKED      
+	CANTBEBLOCKED("Can't Be Blocked");
+	
+	private String attribute;
+	
+	private Attribute(String attribute){
+		this.attribute = attribute;
+	}
+	
+	public String getAttribute(){
+		return attribute;
+	}
 }
