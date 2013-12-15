@@ -3,6 +3,7 @@ package tests;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import hexentities.AbstractCard;
@@ -231,5 +232,72 @@ public class FilterTest {
 		assertTrue(result.contains(card1));
 		assertTrue(result.contains(card4));
 	}
-
+	
+	@Test
+	public void testFilterBySingleType() {
+		Card card1 = new Card();
+		Card card2 = new Card();
+		Card card3 = new Card();
+		Card card4 = new Card();
+		CardType[] types1 = {CardType.ARTIFACT};
+		CardType[] types2 = {CardType.TROOP};
+		CardType[] types3 = {CardType.ARTIFACT,CardType.TROOP};
+		CardType[] types4 = {CardType.CHAMPION,CardType.BASICACTION};
+		card1.cardType=types1;
+		card2.cardType=types2;
+		card3.cardType=types3;
+		card4.cardType=types4;
+		
+		List<AbstractCard> cards= new ArrayList<AbstractCard>();
+		cards.add(card1);
+		cards.add(card2);
+		cards.add(card3);
+		cards.add(card4);
+		
+		EnumSet<CardType> allTypes = EnumSet.allOf(CardType.class);
+		allTypes.remove(CardType.ARTIFACT);
+		for(CardType type : allTypes){
+			filter.removeType(type);
+		}
+		ArrayList<AbstractCard> result = filter.filter(cards);
+		assertEquals("wrong number of cards returned",2,result.size());
+		assertTrue(result.contains(card3));
+		assertTrue(result.contains(card1));
+	}
+	
+	@Test
+	public void testFilterByMultipleTypes() {
+		Card card1 = new Card();
+		Card card2 = new Card();
+		Card card3 = new Card();
+		Card card4 = new Card();
+		CardType[] types1 = {CardType.ARTIFACT};
+		CardType[] types2 = {CardType.TROOP};
+		CardType[] types3 = {CardType.ARTIFACT,CardType.TROOP};
+		CardType[] types4 = {CardType.CHAMPION,CardType.BASICACTION};
+		card1.cardType=types1;
+		card2.cardType=types2;
+		card3.cardType=types3;
+		card4.cardType=types4;
+		
+		List<AbstractCard> cards= new ArrayList<AbstractCard>();
+		cards.add(card1);
+		cards.add(card2);
+		cards.add(card3);
+		cards.add(card4);
+		
+		EnumSet<CardType> allTypes = EnumSet.allOf(CardType.class);
+		allTypes.remove(CardType.ARTIFACT);
+		allTypes.remove(CardType.CHAMPION);
+		for(CardType type : allTypes){
+			filter.removeType(type);
+		}
+		ArrayList<AbstractCard> result = filter.filter(cards);
+		assertEquals("wrong number of cards returned",3,result.size());
+		assertTrue(result.contains(card3));
+		assertTrue(result.contains(card1));
+		assertTrue(result.contains(card4));
+	}
+	
+	
 }
