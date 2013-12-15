@@ -10,7 +10,7 @@ public enum Attribute {
 	@SerializedName("Defensive")
 	DEFENSIVE("Defensive"),
 	@SerializedName("Juggernaught")
-	JUGGERNAUGHT("Juggernaught"),
+	CRUSH("Crush"),
 	@SerializedName("ForceAttack")
 	FORCEATTACK("Force Attack"),
 	@SerializedName("CantReadyAutomatically")
@@ -18,7 +18,7 @@ public enum Attribute {
 	@SerializedName("CantBlock")
 	CANTBLOCK("Can't Block"),
 	@SerializedName("SpiritDrain")
-	SPIRITDRAIN("Spirit Drain"),
+	LIFEDRAIN("Lifedrain"),
 	@SerializedName("Escalation")
 	ESCALATION("Escalation"),
 	@SerializedName("CantAttack")
@@ -30,13 +30,13 @@ public enum Attribute {
 	@SerializedName("Inspire")
 	INSPIRE("Inspire"),
 	@SerializedName("FirstStrike")
-	FIRSTSTRIKE("First Strike"),
+	SWIFTSTRIKE("Swiftstrike"),
 	@SerializedName("SpellShield")
-	SPELLSHIELD("Spell Shield"),
+	SPELLSHIELD("Spellshield"),
 	@SerializedName("Immortal")
 	IMMORTAL("Immortal"),
 	@SerializedName("AllowYardInspire")
-	ALLOWYARDINSPIRE("Allow Yard Inspire"),
+	ALLOWYARDINSPIRE("Allow Graveyard Inspire"),
 	@SerializedName("Rage")
 	RAGE("Rage"),
 	@SerializedName("PreventCombatDamage")
