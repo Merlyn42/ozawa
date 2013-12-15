@@ -299,5 +299,37 @@ public class FilterTest {
 		assertTrue(result.contains(card4));
 	}
 	
+	@Test
+	public void testFilterByString(){
+		Card card1 = new Card();
+		Card card2 = new Card();
+		Card card3 = new Card();
+		Card card4 = new Card();
+		
+		card1.name="test";
+		card2.name="Name2";
+		card3.name="Name3";
+		card4.name="Name4";
+		
+		card1.gameText="text1";
+		card2.gameText="test";
+		card3.gameText="tetestxt3";
+		card4.gameText="text4";
+		
+		List<AbstractCard> cards= new ArrayList<AbstractCard>();
+		cards.add(card1);
+		cards.add(card2);
+		cards.add(card3);
+		cards.add(card4);
+		
+		filter.setFilterString("test");
+		ArrayList<AbstractCard> result = filter.filter(cards);
+		assertEquals("wrong number of cards returned",3,result.size());
+		assertTrue(result.contains(card1));
+		assertTrue(result.contains(card2));
+		assertTrue(result.contains(card3));
+		
+	}
+	
 	
 }

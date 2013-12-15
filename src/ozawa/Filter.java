@@ -80,7 +80,7 @@ public class Filter {
 		return (filter(Arrays.asList(cards)));
 	}
 
-	public ArrayList<AbstractCard> filter(List<AbstractCard> cards) {
+	public ArrayList<AbstractCard> filter(List<? extends AbstractCard> cards) {
 		ArrayList<AbstractCard> result = new ArrayList<AbstractCard>();
 		for (AbstractCard abstractCard : cards) {
 			if (filterCard(abstractCard)) {
@@ -92,6 +92,9 @@ public class Filter {
 	}
 
 	private boolean filterCard(AbstractCard abstractCard) {
+		if (filterString!=null&&filterString.length()!=0){
+			if(!(abstractCard.gameText.contains(filterString)||abstractCard.name.contains(filterString)))return false;
+		}
 		if (colors.size() != NUMBEROFCOLORS) {
 			if(!match(abstractCard.colorFlags,colors))return false;
 		}
