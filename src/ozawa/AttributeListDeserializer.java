@@ -4,7 +4,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import ozawa.Card.Attribute;
+import ozawa.enums.Attribute;
 
 import com.google.gson.*;
 
@@ -17,7 +17,7 @@ public class AttributeListDeserializer implements JsonDeserializer<List<Attribut
 		Gson gson = new Gson();
 		ArrayList<Attribute> list = new ArrayList<Attribute>();
 		for (String s : atts) {
-			list.add(gson.fromJson(s, Card.Attribute.class));
+			list.add(gson.fromJson(s, Attribute.class));
 		}
 		return list;
 	}

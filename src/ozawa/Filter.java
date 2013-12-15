@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-import ozawa.Card.Attribute;
+import ozawa.enums.Attribute;
 
 public class Filter {
 	private String filterString;

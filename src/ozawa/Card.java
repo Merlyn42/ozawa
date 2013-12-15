@@ -2,6 +2,8 @@ package ozawa;
 
 import java.util.List;
 
+import ozawa.enums.Attribute;
+
 import com.google.gson.annotations.SerializedName;
 
 public class Card {
@@ -41,47 +43,4 @@ public class Card {
 	public String gameText;
 	@SerializedName("m_DesignNotes")
 	public String designNotes;
-	
-	public enum Attribute{
-		@SerializedName("Unknown")
-		UNKNOWN,
-		@SerializedName("Flight")
-		FLIGHT,
-		@SerializedName("Defensive")
-		DEFENSIVE,
-		@SerializedName("Juggernaught")
-		JUGGERNAUGHT,
-		@SerializedName("ForceAttack")
-		FORCEATTACK,
-		@SerializedName("CantReadyAutomatically")
-		CANTREADYAUTOMATICALLY,
-		@SerializedName("CantBlock")
-		CANTBLOCK,
-		@SerializedName("SpiritDrain")
-		SPIRITDRAIN,
-		@SerializedName("Escalation")
-		ESCALATION,
-		@SerializedName("CantAttack")
-		CANTATTACK,
-		@SerializedName("Speed")
-		SPEED,
-		@SerializedName("Steadfast")
-		STEADFAST,
-		@SerializedName("Inspire")
-		INSPIRE,
-		@SerializedName("FirstStrike")
-		FIRSTSTRIKE,
-		@SerializedName("SpellShield")
-		SPELLSHIELD,
-		@SerializedName("Immortal")
-		IMMORTAL,
-		@SerializedName("AllowYardInspire")
-		ALLOWYARDINSPIRE,
-		@SerializedName("Rage")
-		RAGE,
-		@SerializedName("PreventCombatDamage")
-		PREVENTCOMBATDAMAGE,
-		@SerializedName("CantBeBlocked")
-		CANTBEBLOCKED      
-	}
 }
