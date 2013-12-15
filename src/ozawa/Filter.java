@@ -20,6 +20,9 @@ public class Filter {
 	private final EnumSet<CardType>		cardTypes;
 	private int							minCost;
 	private int							maxCost;
+	
+	private final static int NUMBEROFCARDTYPES = EnumSet.allOf(CardType.class).size();
+	private final static int NUMBEROFCOLORS = EnumSet.allOf(ColorFlag.class).size();
 
 	public Filter() {
 		attributes = EnumSet.noneOf(Attribute.class);
@@ -89,7 +92,7 @@ public class Filter {
 	}
 
 	private boolean filterCard(AbstractCard abstractCard) {
-		if (colors.size() != 6) {
+		if (colors.size() != NUMBEROFCOLORS) {
 			boolean include = false;
 			if (abstractCard.colorFlags != null) {
 				for (ColorFlag cardColor : abstractCard.colorFlags) {
@@ -98,8 +101,22 @@ public class Filter {
 					}
 				}
 			}
-			if (!include)
+			if (!include){
 				return false;
+			}
+		}
+		if (cardTypes.size() != NUMBEROFCARDTYPES) {
+			boolean include = false;
+			if (abstractCard.cardType != null) {
+				for (CardType type : abstractCard.cardType) {
+					if (cardTypes.contains(type)) {
+						include = true;
+					}
+				}
+			}
+			if (!include){
+				return false;
+			}
 		}
 		if (abstractCard instanceof hexentities.Card) {
 			hexentities.Card card;
