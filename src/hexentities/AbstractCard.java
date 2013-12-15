@@ -6,8 +6,15 @@ import enums.CardRarity;
 import enums.CardType;
 import enums.ColorFlag;
 
+/**
+ * An Abstract Card used to define common fields for all Hex Cards
+ * 
+ * @author Chad Kinsella
+ */
 public abstract class AbstractCard {
 	
+	@SerializedName("m_Id")
+	public GlobalIdentifier id;
 	@SerializedName("m_SetId")
 	public GlobalIdentifier setID;
 	@SerializedName("m_Name")

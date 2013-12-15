@@ -2,6 +2,11 @@ package enums;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Each card colour.
+ * 
+ * @author Chad Kinsella
+ */
 public enum ColorFlag {
 	
 	@SerializedName("Blood")

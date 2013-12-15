@@ -2,6 +2,11 @@ package enums;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Each different card type.
+ * 
+ * @author Chad Kinsella
+ */
 public enum CardType {
 	
 	@SerializedName("Troop")
@@ -16,8 +21,6 @@ public enum CardType {
 	ARTIFACT("Artifact"),
 	@SerializedName("Champion")
 	CHAMPION("Champion"),
-	@SerializedName("Mercenary")
-	MERCENARY("Mercenary"),
 	@SerializedName("Resource")
 	RESOURCE("Resource");
 	

@@ -9,7 +9,13 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 
-
+/**
+ * Generic serializer and deserializer for JSON values that consist of multiple values separated by "|".
+ * 
+ * @author Chad Kinsella
+ *
+ * @param <T>
+ */
 public class MultiValueSerializer<T> implements JsonDeserializer<T[]> {
 	
 	private Class<T> classType;

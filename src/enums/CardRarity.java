@@ -2,6 +2,11 @@ package enums;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * The rarity of each card.
+ * 
+ * @author Chad Kinsella
+ */
 public enum CardRarity {
 	
 	@SerializedName("Common")

@@ -4,6 +4,11 @@ import com.google.gson.annotations.SerializedName;
 
 import enums.Attribute;
 
+/**
+ * A non-resource card.
+ * 
+ * @author Chad Kinsella
+ */
 public class Card extends AbstractCard {
 	
 	@SerializedName("m_Faction")
