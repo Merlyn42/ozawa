@@ -21,9 +21,9 @@ public class JSONSerializer {
 	
 	public static Card convertJSONtoCard(String json){
 		GsonBuilder gsonBuilder = new GsonBuilder();
-		gsonBuilder.registerTypeAdapter(Attribute[].class, new AttributeFlagSerializer());
-		gsonBuilder.registerTypeAdapter(ColorFlag[].class, new ColorFlagSerializer());
-		gsonBuilder.registerTypeAdapter(CardType[].class, new CardTypeSerializer());
+		gsonBuilder.registerTypeAdapter(Attribute[].class, new MultiValueSerializer<Attribute>(Attribute.class));
+		gsonBuilder.registerTypeAdapter(ColorFlag[].class, new MultiValueSerializer<ColorFlag>(ColorFlag.class));
+		gsonBuilder.registerTypeAdapter(CardType[].class, new MultiValueSerializer<CardType>(CardType.class));
 		gsonBuilder.registerTypeAdapter(Boolean.class, new BooleanSerializer());
 		Gson gson = gsonBuilder.create();
 		
