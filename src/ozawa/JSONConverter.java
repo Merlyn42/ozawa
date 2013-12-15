@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ozawa.enums.Attribute;
+import ozawa.gson.AttributeListSerializer;
+import ozawa.gson.BooleanSerializer;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -19,9 +21,9 @@ public class JSONConverter {
 	
 	public static Card convertJSONtoCard(String json){
 		GsonBuilder gsonBuilder = new GsonBuilder();
-		gsonBuilder.registerTypeAdapter(List.class, new AttributeListDeserializer());
+		gsonBuilder.registerTypeAdapter(List.class, new AttributeListSerializer());
+		gsonBuilder.registerTypeAdapter(Boolean.class, new BooleanSerializer());
 		Gson gson = gsonBuilder.create();
-		
 		Card newCard = gson.fromJson(json, Card.class);
 		
 		return newCard;

@@ -1,4 +1,4 @@
-package ozawa;
+package ozawa.gson;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import ozawa.enums.Attribute;
 
 import com.google.gson.*;
 
-public class AttributeListDeserializer implements JsonDeserializer<List<Attribute>> {
+public class AttributeListSerializer implements JsonSerializer<List<Attribute>>,JsonDeserializer<List<Attribute>> {
 
 	@Override
 	public List<Attribute> deserialize(JsonElement json, Type arg1, JsonDeserializationContext arg2) throws JsonParseException {
@@ -20,5 +20,11 @@ public class AttributeListDeserializer implements JsonDeserializer<List<Attribut
 			list.add(gson.fromJson(s, Attribute.class));
 		}
 		return list;
+	}
+
+	@Override
+	public JsonElement serialize(List<Attribute> arg0, Type arg1, JsonSerializationContext arg2) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

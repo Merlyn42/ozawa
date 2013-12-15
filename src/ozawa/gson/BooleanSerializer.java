@@ -1,4 +1,4 @@
-package ozawa;
+package ozawa.gson;
 
 import java.lang.reflect.Type;
 
