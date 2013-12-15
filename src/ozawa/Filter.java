@@ -93,30 +93,10 @@ public class Filter {
 
 	private boolean filterCard(AbstractCard abstractCard) {
 		if (colors.size() != NUMBEROFCOLORS) {
-			boolean include = false;
-			if (abstractCard.colorFlags != null) {
-				for (ColorFlag cardColor : abstractCard.colorFlags) {
-					if (colors.contains(cardColor)) {
-						include = true;
-					}
-				}
-			}
-			if (!include){
-				return false;
-			}
+			if(!match(abstractCard.colorFlags,colors))return false;
 		}
 		if (cardTypes.size() != NUMBEROFCARDTYPES) {
-			boolean include = false;
-			if (abstractCard.cardType != null) {
-				for (CardType type : abstractCard.cardType) {
-					if (cardTypes.contains(type)) {
-						include = true;
-					}
-				}
-			}
-			if (!include){
-				return false;
-			}
+			if(!match(abstractCard.cardType,cardTypes))return false;
 		}
 		if (abstractCard instanceof hexentities.Card) {
 			hexentities.Card card;
@@ -130,7 +110,17 @@ public class Filter {
 			}
 		}
 		return true;
-
+	}
+	
+	private <T extends Enum<T>> boolean match(T[] cardValues,EnumSet<T> filterValues){
+		if (cardValues != null) {
+			for (T value : cardValues) {
+				if (filterValues.contains(value)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 }
