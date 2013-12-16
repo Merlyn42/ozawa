@@ -1,4 +1,4 @@
-package hexentities;
+package com.ozawa.android.hexentities;
 
 import com.google.gson.annotations.SerializedName;
 

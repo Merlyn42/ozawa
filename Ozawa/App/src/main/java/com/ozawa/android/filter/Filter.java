@@ -1,17 +1,17 @@
-package ozawa;
+package com.ozawa.android.filter;
 
-import hexentities.AbstractCard;
-import hexentities.Card;
-import hexentities.ResourceCard;
+import com.ozawa.android.hexentities.AbstractCard;
+import com.ozawa.android.hexentities.Card;
+import com.ozawa.android.hexentities.ResourceCard;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
-import enums.Attribute;
-import enums.CardType;
-import enums.ColorFlag;
+import com.ozawa.android.enums.Attribute;
+import com.ozawa.android.enums.CardType;
+import com.ozawa.android.enums.ColorFlag;
 
 public class Filter {
 	private String						filterString;
@@ -101,8 +101,8 @@ public class Filter {
 		if (cardTypes.size() != NUMBEROFCARDTYPES) {
 			if(!match(abstractCard.cardType,cardTypes))return false;
 		}
-		if (abstractCard instanceof hexentities.Card) {
-			hexentities.Card card;
+		if (abstractCard instanceof Card) {
+			Card card;
 			card = (Card) abstractCard;
 			if (!attributes.isEmpty()) {
 				for (Attribute att : attributes) {

@@ -1,8 +1,8 @@
-package hexentities;
+package com.ozawa.android.hexentities;
 
 import com.google.gson.annotations.SerializedName;
 
-import enums.ColorFlag;
+import com.ozawa.android.enums.ColorFlag;
 
 /**
  * Threshold data for a card.

@@ -1,4 +1,4 @@
-package hexentities;
+package com.ozawa.android.hexentities;
 
 import java.util.Comparator;
 

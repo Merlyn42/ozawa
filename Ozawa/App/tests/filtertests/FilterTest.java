@@ -6,15 +6,15 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-import hexentities.AbstractCard;
-import hexentities.Card;
+import com.ozawa.android.hexentities.AbstractCard;
+import com.ozawa.android.hexentities.Card;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import enums.Attribute;
-import enums.CardType;
-import enums.ColorFlag;
+import com.ozawa.android.enums.Attribute;
+import com.ozawa.android.enums.CardType;
+import com.ozawa.android.enums.ColorFlag;
 import ozawa.Filter;
 
 public class FilterTest {

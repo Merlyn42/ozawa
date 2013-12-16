@@ -1,4 +1,4 @@
-package json;
+package com.ozawa.android.json;
 
 import java.lang.reflect.Type;
 

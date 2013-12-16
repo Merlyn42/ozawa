@@ -1,5 +1,4 @@
-package enums;
-
+package com.ozawa.android.enums;
 import com.google.gson.annotations.SerializedName;
 
 /**

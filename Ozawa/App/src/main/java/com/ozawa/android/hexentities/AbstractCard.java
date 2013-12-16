@@ -1,10 +1,10 @@
-package hexentities;
+package com.ozawa.android.hexentities;
 
 import com.google.gson.annotations.SerializedName;
+import com.ozawa.android.enums.CardRarity;
+import com.ozawa.android.enums.CardType;
+import com.ozawa.android.enums.ColorFlag;
 
-import enums.CardRarity;
-import enums.CardType;
-import enums.ColorFlag;
 
 /**
  * An Abstract Card used to define common fields for all Hex Cards

@@ -1,10 +1,10 @@
-package json;
+package com.ozawa.android.json;
 
-import enums.Attribute;
-import hexentities.Card;
-import hexentities.Deck;
-import enums.CardType;
-import enums.ColorFlag;
+import com.ozawa.android.enums.Attribute;
+import com.ozawa.android.hexentities.Card;
+import com.ozawa.android.hexentities.Deck;
+import com.ozawa.android.enums.CardType;
+import com.ozawa.android.enums.ColorFlag;
 
 import java.io.BufferedReader;
 import java.io.File;

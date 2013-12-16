@@ -1,8 +1,8 @@
 package jsontests;
 
 import static org.junit.Assert.*;
-import hexentities.Card;
-import hexentities.Deck;
+import com.ozawa.android.hexentities.Card;
+import com.ozawa.android.hexentities.Deck;
 
 import java.io.BufferedReader;
 import java.io.File;

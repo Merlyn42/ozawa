@@ -1,8 +1,8 @@
-package hexentities;
+package com.ozawa.android.hexentities;
 
 import com.google.gson.annotations.SerializedName;
 
-import enums.Attribute;
+import com.ozawa.android.enums.Attribute;
 
 /**
  * A non-resource card.
