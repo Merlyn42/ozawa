@@ -1,6 +1,9 @@
 package com.ozawa.android;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -34,15 +37,36 @@ public class ImageAdapter extends BaseAdapter {
         ImageView imageView;
         if (convertView == null) {  // if it's not recycled, initialize some attributes
             imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(180, 240));
+            imageView.setLayoutParams(new GridView.LayoutParams(200, 240));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setPadding(8, 8, 8, 8);
         } else {
             imageView = (ImageView) convertView;
         }
 
-        imageView.setImageResource(mThumbIds[position]);
+
+
+        imageView.setImageBitmap(combineImages(R.drawable.cardbackground,mThumbIds[position]));
+        //imageView.setImageResource(mThumbIds[position]);
         return imageView;
+    }
+
+    private Bitmap combineImages(int card, int portrait){
+        Bitmap bg = BitmapFactory.decodeResource(mContext.getResources(),
+                card);
+        Bitmap fg = BitmapFactory.decodeResource(mContext.getResources(),
+                portrait);
+
+        Bitmap cardImage;
+
+        cardImage = Bitmap.createBitmap(bg.getWidth(), bg.getHeight(), Bitmap.Config.ARGB_8888);
+
+        Canvas combine = new Canvas(cardImage);
+
+        combine.drawBitmap (bg, 0f, 0f, null);
+        combine.drawBitmap(fg, bg.getWidth()/8, bg.getHeight()/2, null);
+
+        return cardImage;
     }
 
     // references to our images
@@ -100,6 +124,6 @@ public class ImageAdapter extends BaseAdapter {
             R.drawable.hex000305,
             R.drawable.hex000311,
             R.drawable.hex000312,
-            R.drawable.hex000314
+            R.drawable.hex000314,
     };
 }
