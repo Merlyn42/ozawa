@@ -1,4 +1,4 @@
-package tests;
+package filtertests;
 
 import static org.junit.Assert.*;
 
