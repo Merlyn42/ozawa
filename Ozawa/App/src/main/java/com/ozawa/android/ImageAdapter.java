@@ -46,7 +46,7 @@ public class ImageAdapter extends BaseAdapter {
 
 
 
-        imageView.setImageBitmap(combineImages(R.drawable.cardbackground,mThumbIds[position]));
+        imageView.setImageBitmap(combineImages(R.drawable.diamond_troop_cardtemplate,mThumbIds[position]));
         //imageView.setImageResource(mThumbIds[position]);
         return imageView;
     }
@@ -56,6 +56,7 @@ public class ImageAdapter extends BaseAdapter {
                 card);
         Bitmap fg = BitmapFactory.decodeResource(mContext.getResources(),
                 portrait);
+        fg = Bitmap.createScaledBitmap(fg,380,300,false);
 
         Bitmap cardImage;
 
@@ -63,8 +64,8 @@ public class ImageAdapter extends BaseAdapter {
 
         Canvas combine = new Canvas(cardImage);
 
-        combine.drawBitmap (bg, 0f, 0f, null);
-        combine.drawBitmap(fg, bg.getWidth()/8, bg.getHeight()/2, null);
+        combine.drawBitmap (fg, 30f, 10f, null);
+        combine.drawBitmap(bg, 0f, 0f,null);
 
         return cardImage;
     }
