@@ -1,0 +1,81 @@
+{
+"_v":[{ "DeckTemplate": 2 },{ "TemplateCardStack": 1 }],
+"_t":"Reckoning.Game.DeckTemplate", "m_MaximumDuplicates" : 4,
+"m_MaximumTotalCards" : 60,
+"m_Id" : {
+    "m_Guid" : 'd3c8ba11-89e0-4844-8889-19ef31318d04'},
+"m_DeckName" : "Demo_Deck_Shin'hare",
+"m_SetId" : {
+    "m_Guid" : '00000000-0000-0000-0000-000000000000'},
+"m_DeckResources" : [
+    {
+        "m_idTemplate" : {
+            "m_Guid" : '171dc660-b8b1-49cf-981d-1de17e8e2478'        }        ,
+        "m_Count" : 2    }    ,
+    {
+        "m_idTemplate" : {
+            "m_Guid" : 'ce5a8460-da75-44e6-873f-2c35586f5d8d'        }        ,
+        "m_Count" : 3    }    ,
+    {
+        "m_idTemplate" : {
+            "m_Guid" : 'a71f003d-76af-4a1d-8bb5-76f97cf4d9dd'        }        ,
+        "m_Count" : 1    }    ,
+    {
+        "m_idTemplate" : {
+            "m_Guid" : 'c93f16a7-6080-4776-b0da-c4f4bbbc81d6'        }        ,
+        "m_Count" : 2    }    ,
+    {
+        "m_idTemplate" : {
+            "m_Guid" : 'cd41bd00-7585-4762-a721-6163bdaee3c3'        }        ,
+        "m_Count" : 13    }    ,
+    {
+        "m_idTemplate" : {
+            "m_Guid" : '7c13526d-fce4-4607-99cb-bc8eaed7b89f'        }        ,
+        "m_Count" : 2    }    ,
+    {
+        "m_idTemplate" : {
+            "m_Guid" : '2c3e5bc9-3f5e-4ec7-b593-1f802e15d932'        }        ,
+        "m_Count" : 1    }    ,
+    {
+        "m_idTemplate" : {
+            "m_Guid" : 'd4fdd87f-0f95-4ce5-9a88-7e1f48e3e9b8'        }        ,
+        "m_Count" : 3    }    ,
+    {
+        "m_idTemplate" : {
+            "m_Guid" : '884c641e-b76b-4375-a7cc-b09f748840dc'        }        ,
+        "m_Count" : 3    }    ,
+    {
+        "m_idTemplate" : {
+            "m_Guid" : 'eeca14ff-e8f8-4d2c-93a8-a369ab811493'        }        ,
+        "m_Count" : 3    }    ,
+    {
+        "m_idTemplate" : {
+            "m_Guid" : 'b253393b-fdde-47c4-9288-4b8efb0698b1'        }        ,
+        "m_Count" : 12    }    ,
+    {
+        "m_idTemplate" : {
+            "m_Guid" : 'e316b8e3-e828-4475-9494-d2de482dfdab'        }        ,
+        "m_Count" : 3    }    ,
+    {
+        "m_idTemplate" : {
+            "m_Guid" : '188259f9-3ce2-4dd1-87b5-f0d1d6c91de9'        }        ,
+        "m_Count" : 1    }    ,
+    {
+        "m_idTemplate" : {
+            "m_Guid" : '97b138e1-b8dd-4f58-bf4d-7c8ba44bfba7'        }        ,
+        "m_Count" : 3    }    ,
+    {
+        "m_idTemplate" : {
+            "m_Guid" : 'c23fcd8e-9110-455d-bc93-3b58e14d1127'        }        ,
+        "m_Count" : 2    }    ,
+    {
+        "m_idTemplate" : {
+            "m_Guid" : '340bbb6c-0eb7-4c39-b0e1-9e8f98634ec8'        }        ,
+        "m_Count" : 3    }    ,
+    {
+        "m_idTemplate" : {
+            "m_Guid" : 'dba75e19-2bd4-48f1-bc80-ef0380d3862c'        }        ,
+        "m_Count" : 3    }],
+"m_ChampionId" : {
+    "m_Guid" : '260788d3-b1d6-4f74-8452-06107621d151'}
+}
