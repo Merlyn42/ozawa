@@ -2,3 +2,5 @@
 .project
 bin/
 .settings/org.eclipse.jdt.core.prefs
+Ozawa/.idea/
+Ozawa/App/App.iml
