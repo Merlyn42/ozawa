@@ -1,6 +1,7 @@
 package com.ozawa.android;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -10,18 +11,28 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.ozawa.android.enums.ColorFlag;
+import com.ozawa.android.hexentities.Card;
+
 /**
  * Created by dkerr on 12/16/13.
  */
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
+    private Card masterDeck[];
 
     public ImageAdapter(Context c) {
         mContext = c;
+        Card card = new Card();
+        card.name = "Pot";
+        card.cardImagePath = "hex000034";
+        ColorFlag [] flags = {ColorFlag.BLOOD};
+        card.colorFlags = flags;
+        masterDeck = new Card[]{card};
     }
 
     public int getCount() {
-        return mThumbIds.length;
+        return masterDeck.length;
     }
 
     public Object getItem(int position) {
@@ -46,16 +57,44 @@ public class ImageAdapter extends BaseAdapter {
 
 
 
-        imageView.setImageBitmap(combineImages(R.drawable.diamond_troop_cardtemplate,mThumbIds[position]));
-        //imageView.setImageResource(mThumbIds[position]);
+        imageView.setImageBitmap(combineImages(masterDeck[0]));
+        //imageView.setImageBitmap(combineImages(R.drawable.diamond_troop_cardtemplate,mThumbIds[position]));
         return imageView;
     }
 
+    private Bitmap combineImages(Card card){
+
+        Resources resources = mContext.getResources();
+        final int resourceId = resources.getIdentifier(card.cardImagePath, "drawable",
+                mContext.getPackageName());
+
+        Bitmap fg = BitmapFactory.decodeResource(resources, R.drawable.diamond_action_cardtemplate);
+        Bitmap bg = BitmapFactory.decodeResource(resources, resourceId);
+        fg = Bitmap.createScaledBitmap(fg,200,240,false);
+        bg = Bitmap.createScaledBitmap(bg,200,200,false);
+
+        Bitmap cardImage;
+
+        cardImage = Bitmap.createBitmap(fg.getWidth(), fg.getHeight(), Bitmap.Config.ARGB_8888);
+
+        Canvas combine = new Canvas(cardImage);
+
+        combine.drawBitmap(bg, 0f, 10f, null);
+        combine.drawBitmap(fg, 0f, 0f,null);
+
+        return cardImage;
+    }
+
     private Bitmap combineImages(int card, int portrait){
-        Bitmap bg = BitmapFactory.decodeResource(mContext.getResources(),
+
+        Resources resources = mContext.getResources();
+        final int resourceId = resources.getIdentifier("hex000034", "drawable",
+                mContext.getPackageName());
+
+        Bitmap bg = BitmapFactory.decodeResource(resources,
                 card);
-        Bitmap fg = BitmapFactory.decodeResource(mContext.getResources(),
-                portrait);
+        Bitmap fg = BitmapFactory.decodeResource(resources,
+                resourceId);
         fg = Bitmap.createScaledBitmap(fg,380,300,false);
 
         Bitmap cardImage;

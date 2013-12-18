@@ -76,11 +76,11 @@ public class Filter {
 		return colors.contains(color);
 	}
 
-	public ArrayList<AbstractCard> filter(AbstractCard[] cards) {
+	public List<AbstractCard> filter(AbstractCard[] cards) {
 		return (filter(Arrays.asList(cards)));
 	}
 
-	public ArrayList<AbstractCard> filter(List<? extends AbstractCard> cards) {
+	public List<AbstractCard> filter(List<? extends AbstractCard> cards) {
 		ArrayList<AbstractCard> result = new ArrayList<AbstractCard>();
 		for (AbstractCard abstractCard : cards) {
 			if (filterCard(abstractCard)) {
