@@ -67,6 +67,14 @@ public class ImageAdapter extends BaseAdapter {
 
         Bitmap fg = BitmapFactory.decodeResource(resources, R.drawable.diamond_action_cardtemplate);
         Bitmap bg = BitmapFactory.decodeResource(resources, resourceId);
+
+        if(c.getTag() != null) {
+            ((ImageGetter) c.getTag()).cancel(true);
+        }
+        ImageGetter task = new ImageGetter(c) ;
+        task.execute(new File(f.get(position)));
+        c.setTag(task);
+
         fg = Bitmap.createScaledBitmap(fg,200,240,false);
         bg = Bitmap.createScaledBitmap(bg,200,200,false);
 
