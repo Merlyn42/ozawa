@@ -8,6 +8,9 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
 /**
  * Generic serializer and deserializer for JSON values that consist of multiple values separated by "|".
@@ -16,7 +19,7 @@ import com.google.gson.JsonParseException;
  *
  * @param <T>
  */
-public class MultiValueSerializer<T> implements JsonDeserializer<T[]> {
+public class MultiValueSerializer<T> implements JsonDeserializer<T[]>,JsonSerializer<T[]> {
 	
 	private Class<T> classType;
 
@@ -37,5 +40,22 @@ public class MultiValueSerializer<T> implements JsonDeserializer<T[]> {
 			flags[i] = gson.fromJson(values[i], classType);			
 		}
 		return flags;
+	}
+
+	@Override
+	public JsonElement serialize(T[] arg0, Type arg1,
+			JsonSerializationContext arg2) {
+		StringBuilder builder = new StringBuilder();
+		Gson gson = new Gson();
+		boolean first= true;
+		for(T element : arg0){
+			if(first){
+				first = false;
+			}else{
+				builder.append("|");
+			}
+			builder.append(gson.toJson(element));
+		}
+		return new JsonPrimitive(builder.toString());
 	}
 }
