@@ -1,6 +1,7 @@
 package json;
 
 import enums.Attribute;
+import hexentities.AbstractCard;
 import hexentities.Card;
 import hexentities.Deck;
 import enums.CardType;
@@ -41,6 +42,25 @@ public class JSONSerializer {
 		Card newCard = gson.fromJson(json, Card.class);
 		
 		return newCard;
+	}
+	
+	/**
+	 * Deserialize a JSON String into a Card
+	 * 
+	 * @param json
+	 * @return A Card deserialized from the given JSON
+	 */
+	public static String serializeCardToJSON(AbstractCard card){
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.registerTypeAdapter(Attribute[].class, new MultiValueSerializer<Attribute>(Attribute.class));
+		gsonBuilder.registerTypeAdapter(ColorFlag[].class, new MultiValueSerializer<ColorFlag>(ColorFlag.class));
+		gsonBuilder.registerTypeAdapter(CardType[].class, new MultiValueSerializer<CardType>(CardType.class));
+		gsonBuilder.registerTypeAdapter(Boolean.class, new BooleanSerializer());
+		Gson gson = gsonBuilder.create();
+		
+		String newJSON = gson.toJson(card);
+		
+		return newJSON;
 	}
 	
 	/**
