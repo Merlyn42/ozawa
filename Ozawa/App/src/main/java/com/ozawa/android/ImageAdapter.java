@@ -11,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.ozawa.android.UI.ImageGetter;
 import com.ozawa.android.enums.ColorFlag;
 import com.ozawa.android.hexentities.Card;
 
@@ -22,6 +23,7 @@ import java.util.List;
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
     private List<Card> masterDeck;
+    private static int cardWidth = 200;
 
     public ImageAdapter(Context c, List<Card> deck ) {
         mContext = c;
@@ -53,13 +55,26 @@ public class ImageAdapter extends BaseAdapter {
         }
 
 
-
-        imageView.setImageBitmap(combineImages(masterDeck.get(position)));
+        buildCardImage(masterDeck.get(position), imageView);
+        //imageView.setImageBitmap(buildCardImage(masterDeck.get(position), imageView));
         //imageView.setImageBitmap(combineImages(R.drawable.diamond_troop_cardtemplate,mThumbIds[position]));
         return imageView;
     }
 
-    private Bitmap combineImages(Card card){
+    private void buildCardImage(Card card,ImageView imageView){
+        Resources resources = mContext.getResources();
+        final int resourceId = resources.getIdentifier(card.cardImagePath.split("\\.")[0], "drawable",
+                mContext.getPackageName());
+        if(imageView.getTag() != null) {
+            ((ImageGetter) imageView.getTag()).cancel(true);
+        }
+        imageView.setImageBitmap(null);
+        ImageGetter task = new ImageGetter(imageView) ;
+        task.execute(resources,resourceId);
+        imageView.setTag(task);
+    }
+
+    private Bitmap buildCardImage2(Card card,ImageView imageView){
 
         Resources resources = mContext.getResources();
         final int resourceId = resources.getIdentifier(card.cardImagePath.split("\\.")[0], "drawable",
@@ -68,12 +83,12 @@ public class ImageAdapter extends BaseAdapter {
         Bitmap fg = BitmapFactory.decodeResource(resources, R.drawable.diamond_action_cardtemplate);
         Bitmap bg = BitmapFactory.decodeResource(resources, resourceId);
 
-        if(c.getTag() != null) {
-            ((ImageGetter) c.getTag()).cancel(true);
+        if(imageView.getTag() != null) {
+            ((ImageGetter) imageView.getTag()).cancel(true);
         }
-        ImageGetter task = new ImageGetter(c) ;
-        task.execute(new File(f.get(position)));
-        c.setTag(task);
+        ImageGetter task = new ImageGetter(imageView) ;
+        task.execute(resources,resourceId);
+        imageView.setTag(task);
 
         fg = Bitmap.createScaledBitmap(fg,200,240,false);
         bg = Bitmap.createScaledBitmap(bg,200,200,false);
