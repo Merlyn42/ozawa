@@ -29,9 +29,13 @@ public class CardImagerMapperUtil {
 		// File("C:\\Program Files (x86)\\Hex\\Data\\Sets\\Set001\\CardDefinitions").listFiles();
 		try {
 			baseLocation.mkdir();
-			newImageLocation.mkdir();
+			newCardLocation.getParentFile().mkdir();
 			newCardLocation.mkdir();
+			newImageLocation.mkdir();
 		} catch (Exception e) {
+		}
+		if(!newCardLocation.exists()||!newImageLocation.exists()){
+			throw new RuntimeException("Location not found");
 		}
 		ArrayList<Card> allCards = new ArrayList<Card>();
 		try {
@@ -56,7 +60,7 @@ public class CardImagerMapperUtil {
 				try {
 					FileUtils.copyFile(imageFile, newImageFile);
 				} catch (IOException e) {
-					e.printStackTrace();
+					System.out.println("Skipping file as image not found");
 				}
 				card.cardImagePath = FilenameUtils.removeExtension(newImageFile.getName());
 				String newCardJSON = JSONSerializer.serializeCardToJSON(card);
