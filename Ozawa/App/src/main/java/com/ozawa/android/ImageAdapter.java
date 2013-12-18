@@ -24,10 +24,12 @@ public class ImageAdapter extends BaseAdapter {
     private Context mContext;
     private List<Card> masterDeck;
     private static int cardWidth = 200;
+    private Bitmap back;
 
     public ImageAdapter(Context c, List<Card> deck ) {
         mContext = c;
         masterDeck = deck;
+        back= BitmapFactory.decodeResource(c.getResources(), R.drawable.back);
     }
 
     public int getCount() {
@@ -68,7 +70,7 @@ public class ImageAdapter extends BaseAdapter {
         if(imageView.getTag() != null) {
             ((ImageGetter) imageView.getTag()).cancel(true);
         }
-        imageView.setImageBitmap(null);
+        imageView.setImageBitmap(back);
         ImageGetter task = new ImageGetter(imageView) ;
         task.execute(resources,resourceId);
         imageView.setTag(task);
