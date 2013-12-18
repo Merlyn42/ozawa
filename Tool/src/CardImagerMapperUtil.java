@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 
 import json.JSONSerializer;
 
@@ -57,8 +58,7 @@ public class CardImagerMapperUtil {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-
-				card.cardImagePath = newImageFile.getName();
+				card.cardImagePath = FilenameUtils.removeExtension(newImageFile.getName());
 				String newCardJSON = JSONSerializer.serializeCardToJSON(card);
 
 				File newCardFile = new File(newCardLocation, newCardName
