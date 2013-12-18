@@ -5,3 +5,4 @@ bin/
 Ozawa/.idea/
 Ozawa/App/App.iml
 Ozawa/Ozawa.iml
+Ozawa/App/src/main/gen/com/ozawa/android/R.java
