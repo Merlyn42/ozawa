@@ -14,25 +14,22 @@ import android.widget.ImageView;
 import com.ozawa.android.enums.ColorFlag;
 import com.ozawa.android.hexentities.Card;
 
+import java.util.List;
+
 /**
  * Created by dkerr on 12/16/13.
  */
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
-    private Card masterDeck[];
+    private List<Card> masterDeck;
 
-    public ImageAdapter(Context c) {
+    public ImageAdapter(Context c, List<Card> deck ) {
         mContext = c;
-        Card card = new Card();
-        card.name = "Pot";
-        card.cardImagePath = "hex000034";
-        ColorFlag [] flags = {ColorFlag.BLOOD};
-        card.colorFlags = flags;
-        masterDeck = new Card[]{card};
+        masterDeck = deck;
     }
 
     public int getCount() {
-        return masterDeck.length;
+        return masterDeck.size();
     }
 
     public Object getItem(int position) {
@@ -57,7 +54,7 @@ public class ImageAdapter extends BaseAdapter {
 
 
 
-        imageView.setImageBitmap(combineImages(masterDeck[0]));
+        imageView.setImageBitmap(combineImages(masterDeck.get(position)));
         //imageView.setImageBitmap(combineImages(R.drawable.diamond_troop_cardtemplate,mThumbIds[position]));
         return imageView;
     }
@@ -65,13 +62,14 @@ public class ImageAdapter extends BaseAdapter {
     private Bitmap combineImages(Card card){
 
         Resources resources = mContext.getResources();
-        final int resourceId = resources.getIdentifier(card.cardImagePath, "drawable",
+        final int resourceId = resources.getIdentifier(card.cardImagePath.split("\\.")[0], "drawable",
                 mContext.getPackageName());
 
         Bitmap fg = BitmapFactory.decodeResource(resources, R.drawable.diamond_action_cardtemplate);
         Bitmap bg = BitmapFactory.decodeResource(resources, resourceId);
         fg = Bitmap.createScaledBitmap(fg,200,240,false);
         bg = Bitmap.createScaledBitmap(bg,200,200,false);
+
 
         Bitmap cardImage;
 
@@ -91,6 +89,7 @@ public class ImageAdapter extends BaseAdapter {
         final int resourceId = resources.getIdentifier("hex000034", "drawable",
                 mContext.getPackageName());
 
+
         Bitmap bg = BitmapFactory.decodeResource(resources,
                 card);
         Bitmap fg = BitmapFactory.decodeResource(resources,
@@ -108,62 +107,4 @@ public class ImageAdapter extends BaseAdapter {
 
         return cardImage;
     }
-
-    // references to our images
-    private Integer[] mThumbIds = {
-            R.drawable.hex000034,
-            R.drawable.hex000038,
-            R.drawable.hex000039,
-            R.drawable.hex000040,
-            R.drawable.hex000045,
-            R.drawable.hex000053,
-            R.drawable.hex000054,
-            R.drawable.hex000060,
-            R.drawable.hex000061,
-            R.drawable.hex000070,
-            R.drawable.hex000071,
-            R.drawable.hex000072,
-            R.drawable.hex000091,
-            R.drawable.hex000105,
-            R.drawable.hex000110,
-            R.drawable.hex000114,
-            R.drawable.hex000121,
-            R.drawable.hex000122,
-            R.drawable.hex000131,
-            R.drawable.hex000132,
-            R.drawable.hex000138,
-            R.drawable.hex000144,
-            R.drawable.hex000148,
-            R.drawable.hex000153,
-            R.drawable.hex000154,
-            R.drawable.hex000155,
-            R.drawable.hex000157,
-            R.drawable.hex000164,
-            R.drawable.hex000166,
-            R.drawable.hex000171,
-            R.drawable.hex000176,
-            R.drawable.hex000181,
-            R.drawable.hex000184,
-            R.drawable.hex000191,
-            R.drawable.hex000204,
-            R.drawable.hex000211,
-            R.drawable.hex000214,
-            R.drawable.hex000219,
-            R.drawable.hex000220,
-            R.drawable.hex000223,
-            R.drawable.hex000237,
-            R.drawable.hex000239,
-            R.drawable.hex000247,
-            R.drawable.hex000259,
-            R.drawable.hex000266,
-            R.drawable.hex000270,
-            R.drawable.hex000280,
-            R.drawable.hex000283,
-            R.drawable.hex000286,
-            R.drawable.hex000299,
-            R.drawable.hex000305,
-            R.drawable.hex000311,
-            R.drawable.hex000312,
-            R.drawable.hex000314,
-    };
 }

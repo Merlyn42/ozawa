@@ -1,6 +1,7 @@
 package com.ozawa.android;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,14 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.ozawa.android.hexentities.Card;
+import com.ozawa.android.json.JsonReader;
+
+import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
 public class MasterDeckActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
@@ -32,14 +41,21 @@ public class MasterDeckActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+    private static List<Card> masterDeck;
+    private JsonReader jsonReader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_master_deck);
         GridView gridView = (GridView) findViewById(R.id.grid_view);
-        gridView.setAdapter(new ImageAdapter(this));
-
+        jsonReader = new JsonReader();
+        try {
+            masterDeck = jsonReader.deserializeJSONInputStreamsToCard(getJson());
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        gridView.setAdapter(new ImageAdapter(this,masterDeck));
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
@@ -49,6 +65,22 @@ public class MasterDeckActivity extends ActionBarActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
+    }
+
+    public InputStream[] getJson() throws IllegalAccessException {
+        Field[] rawFields = R.raw.class.getFields();
+        InputStream [] jsonFiles = new InputStream[rawFields.length];
+
+        for(int count=0; count < rawFields.length; count++){
+            int rid = rawFields[count].getInt(rawFields[count]);
+            try {
+                Resources res = getResources();
+                InputStream inputStream = res.openRawResource(rid);
+                jsonFiles[count] = inputStream;
+            } catch (Exception e) {
+            }
+        }
+        return  jsonFiles;
     }
 
     @Override
