@@ -811,3 +811,7 @@ Ozawa/App/src/main/res/raw/hexcard00400.json
 Ozawa/App/src/main/res/raw/hexcard00401.json
 Ozawa/App/src/main/res/raw/hexcard00402.json
 Ozawa/App/src/main/res/raw/hexcard00403.json
+Ozawa/App/src/main/gen/com/ozawa/android/BuildConfig.java
+Ozawa/App/src/main/gen/com/ozawa/android/Manifest.java
+Ozawa/App/src/main/java/com/ozawa/android/UI/DrawableManager.java
+Ozawa/App/src/main/main.iml
