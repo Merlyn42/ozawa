@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -57,22 +58,22 @@ public class Card extends AbstractCard {
                 if (colorFlags.length > 0) {
                     switch (colorFlags[0]) {
                         case BLOOD:
-                            fgID = R.drawable.blood_troop;
+                            fgID = R.drawable.blood_troop_thumbnail;
                             break;
                         case COLORLESS:
-                            fgID = R.drawable.colorless_troop;
+                            fgID = R.drawable.colorless_troop_thumbnail;
                             break;
                         case DIAMOND:
-                            fgID = R.drawable.diamond_troop_cardtemplate;
+                            fgID = R.drawable.diamond_troop_thumbnail;
                             break;
                         case RUBY:
-                            fgID = R.drawable.ruby_troop;
+                            fgID = R.drawable.ruby_troop_thumnail;
                             break;
                         case SAPPHIRE:
-                            fgID = R.drawable.sapphire_troop;
+                            fgID = R.drawable.sapphire_troop_thumbnail;
                             break;
                         case WILD:
-                            fgID = R.drawable.wild_troop;
+                            fgID = R.drawable.wild_troop_thumbnail;
                             break;
                     }
                 }
@@ -80,22 +81,22 @@ public class Card extends AbstractCard {
                 if (colorFlags.length > 0) {
                     switch (colorFlags[0]) {
                         case BLOOD:
-                            fgID = R.drawable.blood_action;
+                            fgID = R.drawable.blood_action_thumbnail;
                             break;
                         case COLORLESS:
-                            fgID = R.drawable.colorless_action;
+                            fgID = R.drawable.colorless_action_thumbnail;
                             break;
                         case DIAMOND:
-                            fgID = R.drawable.diamond_action_cardtemplate;
+                            fgID = R.drawable.diamond_action_thumbnail;
                             break;
                         case RUBY:
-                            fgID = R.drawable.ruby_action;
+                            fgID = R.drawable.ruby_action_thumnail;
                             break;
                         case SAPPHIRE:
-                            fgID = R.drawable.sapphire_action;
+                            fgID = R.drawable.sapphire_action_thumbnail;
                             break;
                         case WILD:
-                            fgID = R.drawable.wild_action;
+                            fgID = R.drawable.wild_action_thumbnail;
                             break;
                     }
                 }
@@ -123,10 +124,23 @@ public class Card extends AbstractCard {
         o2.inSampleSize = scale;
         Bitmap bg = BitmapFactory.decodeResource(resources, resourceId, o2);
 
+        Paint paint = new Paint();
+        paint.setTextAlign(Paint.Align.LEFT);
+        paint.setTextSize(14f);
+        paint.setColor(-1);
+        paint.setFakeBoldText(true);
+
         image = Bitmap.createBitmap(fg.getWidth(), fg.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas combine = new Canvas(image);
         combine.drawBitmap(bg, 0f, 10f, null);
         combine.drawBitmap(fg, 0f, 0f, null);
+        combine.drawText(name,50,20,paint);
+        combine.drawText(""+resourceCost,25,27,paint);
+        if(cardType[0].equals(CardType.TROOP)){
+        paint.setTextSize(21f);
+            combine.drawText(baseAttackValue,20,fg.getHeight()-19,paint);
+            combine.drawText(baseHealthValue,fg.getWidth()-32,fg.getHeight()-19,paint);
+        }
         return image;
     }
 }
