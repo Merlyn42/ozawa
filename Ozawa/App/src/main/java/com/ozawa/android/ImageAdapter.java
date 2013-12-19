@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
-    private List<AbstractCard> masterDeck;
+    public List<AbstractCard> masterDeck;
     private static int cardWidth = 200;
     private Bitmap back;
 
