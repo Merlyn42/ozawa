@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.ozawa.android.hexentities.AbstractCard;
 import com.ozawa.android.hexentities.Card;
 import com.ozawa.android.json.JsonReader;
 
@@ -41,7 +42,7 @@ public class MasterDeckActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
-    private static List<Card> masterDeck;
+    private static List<AbstractCard> masterDeck;
     private JsonReader jsonReader;
 
     @Override

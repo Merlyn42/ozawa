@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.ozawa.android.enums.Attribute;
 import com.ozawa.android.enums.CardType;
 import com.ozawa.android.enums.ColorFlag;
+import com.ozawa.android.hexentities.AbstractCard;
 import com.ozawa.android.hexentities.Card;
 
 import java.io.InputStream;
@@ -28,14 +29,14 @@ public class JsonReader {
         gson = gsonBuilder.create();
     }
 
-    public Card deserializeJSONInputStreamToCard(InputStream jsonStream){
+    public AbstractCard deserializeJSONInputStreamToCard(InputStream jsonStream){
         InputStreamReader reader = new InputStreamReader(jsonStream);
         Card newCard = gson.fromJson(reader,Card.class);
         return newCard;
     }
 
-    public List<Card> deserializeJSONInputStreamsToCard(InputStream[] jsonStreams){
-        Card[] newCards = new Card[jsonStreams.length];
+    public List<AbstractCard> deserializeJSONInputStreamsToCard(InputStream[] jsonStreams){
+        AbstractCard[] newCards = new AbstractCard[jsonStreams.length];
         for(int i = 0;i<jsonStreams.length;i++){
             newCards[i]=deserializeJSONInputStreamToCard(jsonStreams[i]);
         }
