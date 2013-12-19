@@ -21,26 +21,25 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by lreading on 18/12/13.
  */
-public class ImageGetter extends AsyncTask<Object, Void, Bitmap> {
+public class ImageGetter extends AsyncTask<AbstractCard, Void, Bitmap> {
     static volatile ConcurrentHashMap<Integer,Bitmap> map;
 
     private ImageView iv;
-    public ImageGetter(ImageView v) {
+    private Context context;
+    public ImageGetter(ImageView v, Context iContext) {
         if (map == null)map =  new ConcurrentHashMap<Integer,Bitmap>();
         iv = v;
+        this.context=iContext;
     }
 
     /**
-     * Generates or retrieves a card's iamge. Params is a two element array, the first element should be the Context the second should be the card
-     * @param params A two element array, the first element should be the Context the second should be the card
+     * Generates or retrieves a card's image. Params Should contain a single AbstractCard
+     * @param params Should be a single AbstractCard.
      * @return The card's image as a Bitmap
      */
     @Override
-    protected Bitmap doInBackground(Object... params) {
-        Context context = (Context) params[0];
-        AbstractCard card = (AbstractCard) params[1];
-
-        return card.getCardBitmap(context);
+    protected Bitmap doInBackground(AbstractCard... params) {
+        return params[0].getCardBitmap(context);
     }
     @Override
     protected void onPostExecute(Bitmap result) {

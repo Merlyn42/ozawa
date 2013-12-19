@@ -66,8 +66,8 @@ public class ImageAdapter extends BaseAdapter {
             ((ImageGetter) imageView.getTag()).cancel(true);
         }
         imageView.setImageBitmap(back);
-        ImageGetter task = new ImageGetter(imageView) ;
-        task.execute(mContext,card);
+        ImageGetter task = new ImageGetter(imageView,mContext) ;
+        task.execute(card);
         imageView.setTag(task);
     }
 }
