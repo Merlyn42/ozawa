@@ -19,6 +19,10 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.ozawa.android.enums.CardType;
+import com.ozawa.android.enums.ColorFlag;
+import com.ozawa.android.filter.Filter;
+import com.ozawa.android.hexentities.AbstractCard;
 import com.ozawa.android.hexentities.Card;
 import com.ozawa.android.json.JsonReader;
 
@@ -41,11 +45,14 @@ public class MasterDeckActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
-    private static List<Card> masterDeck;
+    private static List<AbstractCard> masterDeck;
     private JsonReader jsonReader;
+    private static Filter filter = new Filter();
+    private ImageAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        filter.removeColor(ColorFlag.COLORLESS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_master_deck);
         GridView gridView = (GridView) findViewById(R.id.grid_view);
@@ -55,7 +62,8 @@ public class MasterDeckActivity extends ActionBarActivity
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        gridView.setAdapter(new ImageAdapter(this,masterDeck));
+        adapter = new ImageAdapter(this,filter.filter(masterDeck));
+        gridView.setAdapter(adapter);
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
@@ -96,12 +104,27 @@ public class MasterDeckActivity extends ActionBarActivity
         switch (number) {
             case 1:
                 mTitle = getString(R.string.title_section1);
+                filter.removeColor(ColorFlag.COLORLESS);
+                filter.addType(CardType.BASICACTION);
+                filter.addType(CardType.TROOP);
+                adapter.masterDeck=filter.filter(masterDeck);
+                adapter.notifyDataSetChanged();
                 break;
             case 2:
                 mTitle = getString(R.string.title_section2);
+                filter.addColor(ColorFlag.COLORLESS);
+                filter.removeType(CardType.TROOP);
+                filter.addType(CardType.BASICACTION);
+                adapter.masterDeck=filter.filter(masterDeck);
+                adapter.notifyDataSetChanged();
                 break;
             case 3:
                 mTitle = getString(R.string.title_section3);
+                filter.addType(CardType.TROOP);
+                filter.addColor(ColorFlag.COLORLESS);
+                filter.removeType(CardType.BASICACTION);
+                adapter.masterDeck=filter.filter(masterDeck);
+                adapter.notifyDataSetChanged();
                 break;
         }
     }
@@ -168,8 +191,6 @@ public class MasterDeckActivity extends ActionBarActivity
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_master_deck, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
         }
 

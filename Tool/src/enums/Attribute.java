@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Each Attribute for a non-resource card.
  * 
+ * @author Laurence Reading
  * @author Chad Kinsella
  */
 public enum Attribute {
