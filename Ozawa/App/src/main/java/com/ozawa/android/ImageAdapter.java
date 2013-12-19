@@ -11,7 +11,9 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
+import com.ozawa.android.UI.ImageGetter;
 import com.ozawa.android.enums.ColorFlag;
+import com.ozawa.android.hexentities.AbstractCard;
 import com.ozawa.android.hexentities.Card;
 
 import java.util.List;
@@ -21,11 +23,14 @@ import java.util.List;
  */
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
-    private List<Card> masterDeck;
+    private List<AbstractCard> masterDeck;
+    private static int cardWidth = 200;
+    private Bitmap back;
 
-    public ImageAdapter(Context c, List<Card> deck ) {
+    public ImageAdapter(Context c, List<AbstractCard> deck ) {
         mContext = c;
         masterDeck = deck;
+        back= BitmapFactory.decodeResource(c.getResources(), R.drawable.back);
     }
 
     public int getCount() {
@@ -52,59 +57,17 @@ public class ImageAdapter extends BaseAdapter {
             imageView = (ImageView) convertView;
         }
 
-
-
-        imageView.setImageBitmap(combineImages(masterDeck.get(position)));
-        //imageView.setImageBitmap(combineImages(R.drawable.diamond_troop_cardtemplate,mThumbIds[position]));
+        buildCardImage(masterDeck.get(position), imageView);
         return imageView;
     }
 
-    private Bitmap combineImages(Card card){
-
-        Resources resources = mContext.getResources();
-        final int resourceId = resources.getIdentifier(card.cardImagePath.split("\\.")[0], "drawable",
-                mContext.getPackageName());
-
-        Bitmap fg = BitmapFactory.decodeResource(resources, R.drawable.diamond_action_cardtemplate);
-        Bitmap bg = BitmapFactory.decodeResource(resources, resourceId);
-        fg = Bitmap.createScaledBitmap(fg,200,240,false);
-        bg = Bitmap.createScaledBitmap(bg,200,200,false);
-
-
-        Bitmap cardImage;
-
-        cardImage = Bitmap.createBitmap(fg.getWidth(), fg.getHeight(), Bitmap.Config.ARGB_8888);
-
-        Canvas combine = new Canvas(cardImage);
-
-        combine.drawBitmap(bg, 0f, 10f, null);
-        combine.drawBitmap(fg, 0f, 0f,null);
-
-        return cardImage;
-    }
-
-    private Bitmap combineImages(int card, int portrait){
-
-        Resources resources = mContext.getResources();
-        final int resourceId = resources.getIdentifier("hex000034", "drawable",
-                mContext.getPackageName());
-
-
-        Bitmap bg = BitmapFactory.decodeResource(resources,
-                card);
-        Bitmap fg = BitmapFactory.decodeResource(resources,
-                resourceId);
-        fg = Bitmap.createScaledBitmap(fg,380,300,false);
-
-        Bitmap cardImage;
-
-        cardImage = Bitmap.createBitmap(bg.getWidth(), bg.getHeight(), Bitmap.Config.ARGB_8888);
-
-        Canvas combine = new Canvas(cardImage);
-
-        combine.drawBitmap (fg, 30f, 10f, null);
-        combine.drawBitmap(bg, 0f, 0f,null);
-
-        return cardImage;
+    private void buildCardImage(AbstractCard card,ImageView imageView){
+        if(imageView.getTag() != null) {
+            ((ImageGetter) imageView.getTag()).cancel(true);
+        }
+        imageView.setImageBitmap(back);
+        ImageGetter task = new ImageGetter(imageView) ;
+        task.execute(mContext,card);
+        imageView.setTag(task);
     }
 }

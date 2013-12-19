@@ -1,5 +1,9 @@
 package com.ozawa.android.hexentities;
 
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+
 import com.google.gson.annotations.SerializedName;
 import com.ozawa.android.enums.CardRarity;
 import com.ozawa.android.enums.CardType;
@@ -47,5 +51,14 @@ public abstract class AbstractCard {
 	public CardLayout defaultLayout;
 	@SerializedName("m_ExtendedLayout")
 	public CardLayout extendedLayout;
+    protected Bitmap image;
+
+    /**
+     * Generates the card's image and returns it as a bitmap
+     * @param context The context to use to retrieve the image.
+     * @return The card's image as a bitmap
+     */
+
+    public abstract Bitmap getCardBitmap(Context context);
 
 }
