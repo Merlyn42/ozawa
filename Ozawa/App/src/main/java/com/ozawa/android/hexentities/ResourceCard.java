@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -30,6 +31,7 @@ public class ResourceCard extends AbstractCard {
         final int resourceId = resources.getIdentifier(cardImagePath.split("\\.")[0], "drawable",
                 context.getPackageName());
 
+
         BitmapFactory.Options o = new BitmapFactory.Options();
         o.inJustDecodeBounds = true;
         BitmapFactory.decodeResource(resources, resourceId, o);
@@ -38,8 +40,11 @@ public class ResourceCard extends AbstractCard {
             scale *= 2;
         //Decode with inSampleSize
         BitmapFactory.Options o2 = new BitmapFactory.Options();
-        o2.inSampleSize = scale;
+
+     //   o2.inSampleSize = scale;
         Bitmap fg = BitmapFactory.decodeResource(resources, resourceId, o2);
+        image = Bitmap.createBitmap(fg.getWidth(), fg.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas combine = new Canvas(image);
         image = fg;
         return fg;
     }

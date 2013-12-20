@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -46,6 +48,10 @@ public class Card extends AbstractCard {
 
     @Override
     public Bitmap getCardBitmap(Context context) {
+        int fgWidth;
+        int fgHeight;
+        int bgWidth;
+        int bgHeight;
         Resources resources = context.getResources();
         final int resourceId = resources.getIdentifier(cardImagePath.split("\\.")[0], "drawable",
                 context.getPackageName());
@@ -107,21 +113,25 @@ public class Card extends AbstractCard {
         o.inJustDecodeBounds = true;
         BitmapFactory.decodeResource(resources, fgID, o);
         int scale = 1;
+        fgWidth=o.outWidth;
+        fgHeight=o.outHeight;
         while (o.outWidth / scale / 2 >= 200)
             scale *= 2;
         //Decode with inSampleSize
         BitmapFactory.Options o2 = new BitmapFactory.Options();
-        o2.inSampleSize = scale;
+      //  o2.inSampleSize = scale;
         Bitmap fg = BitmapFactory.decodeResource(resources, fgID, o2);
 
 
         BitmapFactory.decodeResource(resources, resourceId, o);
+        bgWidth=o.outWidth;
+        bgHeight=o.outHeight;
         scale = 1;
         while (o.outWidth / scale / 2 >= 140)
             scale *= 2;
         //Decode with inSampleSize
         o2 = new BitmapFactory.Options();
-        o2.inSampleSize = scale;
+     //   o2.inSampleSize = scale;
         Bitmap bg = BitmapFactory.decodeResource(resources, resourceId, o2);
 
         Paint paint = new Paint();
@@ -132,9 +142,19 @@ public class Card extends AbstractCard {
 
         image = Bitmap.createBitmap(fg.getWidth(), fg.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas combine = new Canvas(image);
-        combine.drawBitmap(bg, 0f, 10f, null);
+        Rect srcRect = new Rect();
+        Rect dstRect = new Rect();
+        dstRect.top=50;
+        dstRect.bottom=351;
+        dstRect.right=397;
+        dstRect.left=27;
+        srcRect.left=Double.valueOf(bgWidth*defaultLayout.portraitLeft).intValue();
+        srcRect.right=Double.valueOf(bgWidth*defaultLayout.portraitRight).intValue();
+        srcRect.top=Double.valueOf(bgWidth*defaultLayout.portraitTop).intValue();
+        srcRect.bottom=Double.valueOf(bgWidth*defaultLayout.portraitBottom).intValue();
+        combine.drawBitmap(bg, srcRect,dstRect, null);
         combine.drawBitmap(fg, 0f, 0f, null);
-        combine.drawText(name,50,20,paint);
+        combine.drawText(name, 50, 20, paint);
         paint.setTextSize(16f);
         combine.drawText(""+resourceCost,fg.getWidth()/6,fg.getHeight()/6,paint);
         if(cardType[0].equals(CardType.TROOP)){
