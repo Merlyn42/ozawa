@@ -1,40 +1,34 @@
 package com.ozawa.android;
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.support.v7.app.ActionBarActivity;;
 import android.app.Activity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.ozawa.android.UI.CardViewer;
-import com.ozawa.android.UI.FilterAdapter;
+import com.ozawa.android.UI.FilterButton;
+import com.ozawa.android.enums.CardType;
 import com.ozawa.android.enums.ColorFlag;
-import com.ozawa.android.filter.Filter;
+
+;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -140,60 +134,31 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     private void setUpButtons(){
-        ImageButton button;
-        button = (ImageButton) linearLayout.findViewById(R.id.imageButton);
-        button.setOnClickListener(new ToggleButton.OnClickListener() {
-            public void onClick(View v) {
-                cardViewer.toggleColor(ColorFlag.BLOOD);
-                ((ImageButton) v.findViewById(R.id.imageButton)).setImageBitmap(cardViewer.isActive(ColorFlag.BLOOD) ? BitmapFactory.decodeResource(context.getResources(), R.drawable.blood_on) : BitmapFactory.decodeResource(context.getResources(), R.drawable.blood_off));
-            }
-        });
-        button.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.blood_on));
+        Resources res= context.getResources();
+        FilterButton button;
+        button = (FilterButton) linearLayout.findViewById(R.id.blood);
+        button.setUp(BitmapFactory.decodeResource(res, R.drawable.blood_on),BitmapFactory.decodeResource(res, R.drawable.blood_off),ColorFlag.BLOOD,cardViewer);
+        button = (FilterButton) linearLayout.findViewById(R.id.wild);
+        button.setUp(BitmapFactory.decodeResource(res, R.drawable.wild_on),BitmapFactory.decodeResource(res, R.drawable.wild_off),ColorFlag.WILD,cardViewer);
+        button = (FilterButton) linearLayout.findViewById(R.id.ruby);
+        button.setUp(BitmapFactory.decodeResource(res, R.drawable.ruby_on),BitmapFactory.decodeResource(res, R.drawable.ruby_off),ColorFlag.RUBY,cardViewer);
+        button = (FilterButton) linearLayout.findViewById(R.id.sapphire);
+        button.setUp(BitmapFactory.decodeResource(res, R.drawable.sapphire_on),BitmapFactory.decodeResource(res, R.drawable.sapphire_off),ColorFlag.SAPPHIRE,cardViewer);
+        button = (FilterButton) linearLayout.findViewById(R.id.diamond);
+        button.setUp(BitmapFactory.decodeResource(res, R.drawable.diamond_on),BitmapFactory.decodeResource(res, R.drawable.diamond_off),ColorFlag.DIAMOND,cardViewer);
+        button = (FilterButton) linearLayout.findViewById(R.id.colorless);
+        button.setUp(BitmapFactory.decodeResource(res, R.drawable.colorless_on),BitmapFactory.decodeResource(res, R.drawable.colorless_off),ColorFlag.COLORLESS,cardViewer);
 
-        button = (ImageButton) linearLayout.findViewById(R.id.imageButton2);
-        button.setOnClickListener(new ToggleButton.OnClickListener() {
-            public void onClick(View v) {
-                cardViewer.toggleColor(ColorFlag.RUBY);
-                ((ImageButton)v.findViewById(R.id.imageButton2)).setImageBitmap(cardViewer.isActive(ColorFlag.RUBY)?BitmapFactory.decodeResource(context.getResources(), R.drawable.ruby_on):BitmapFactory.decodeResource(context.getResources(), R.drawable.ruby_off));
-            }
-        });
-        button.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ruby_on));
-
-        button = (ImageButton) linearLayout.findViewById(R.id.imageButton3);
-        button.setOnClickListener(new ToggleButton.OnClickListener() {
-            public void onClick(View v) {
-                cardViewer.toggleColor(ColorFlag.SAPPHIRE);
-                ((ImageButton) v.findViewById(R.id.imageButton3)).setImageBitmap(cardViewer.isActive(ColorFlag.SAPPHIRE) ? BitmapFactory.decodeResource(context.getResources(), R.drawable.sapphire_on) : BitmapFactory.decodeResource(context.getResources(), R.drawable.sapphire_off));
-            }
-        });
-        button.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.sapphire_on));
-
-        button = (ImageButton) linearLayout.findViewById(R.id.imageButton4);
-        button.setOnClickListener(new ToggleButton.OnClickListener() {
-            public void onClick(View v) {
-                cardViewer.toggleColor(ColorFlag.DIAMOND);
-                ((ImageButton) v.findViewById(R.id.imageButton4)).setImageBitmap(cardViewer.isActive(ColorFlag.DIAMOND) ? BitmapFactory.decodeResource(context.getResources(), R.drawable.diamond_on) : BitmapFactory.decodeResource(context.getResources(), R.drawable.diamond_off));
-            }
-        });
-        button.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.diamond_on));
-
-        button = (ImageButton) linearLayout.findViewById(R.id.imageButton5);
-        button.setOnClickListener(new ToggleButton.OnClickListener() {
-            public void onClick(View v) {
-                cardViewer.toggleColor(ColorFlag.WILD);
-                ((ImageButton) v.findViewById(R.id.imageButton5)).setImageBitmap(cardViewer.isActive(ColorFlag.WILD) ? BitmapFactory.decodeResource(context.getResources(), R.drawable.wild_on) : BitmapFactory.decodeResource(context.getResources(), R.drawable.wild_off));
-            }
-        });
-        button.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.blood_on));
-
-        button = (ImageButton) linearLayout.findViewById(R.id.imageButton6);
-        button.setOnClickListener(new ToggleButton.OnClickListener() {
-            public void onClick(View v) {
-                cardViewer.toggleColor(ColorFlag.COLORLESS);
-                ((ImageButton) v.findViewById(R.id.imageButton6)).setImageBitmap(cardViewer.isActive(ColorFlag.COLORLESS) ? BitmapFactory.decodeResource(context.getResources(), R.drawable.colorless_on) : BitmapFactory.decodeResource(context.getResources(), R.drawable.colorless_off));
-            }
-        });
-        button.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.colorless_on));
+        button = (FilterButton) linearLayout.findViewById(R.id.troop);
+        button.setUp(BitmapFactory.decodeResource(res, R.drawable.troop_on),BitmapFactory.decodeResource(res, R.drawable.troop_off), CardType.TROOP,cardViewer);
+        button = (FilterButton) linearLayout.findViewById(R.id.basicaction);
+        button.setUp(BitmapFactory.decodeResource(res, R.drawable.basic_on),BitmapFactory.decodeResource(res, R.drawable.basic_off),CardType.BASICACTION,cardViewer);
+        button = (FilterButton) linearLayout.findViewById(R.id.quickaction);
+        button.setUp(BitmapFactory.decodeResource(res, R.drawable.quick_on),BitmapFactory.decodeResource(res, R.drawable.quick_off),CardType.QUICKACTION,cardViewer);
+        button = (FilterButton) linearLayout.findViewById(R.id.constant);
+        button.setUp(BitmapFactory.decodeResource(res, R.drawable.constant_on),BitmapFactory.decodeResource(res, R.drawable.constant_off),CardType.CONSTANT,cardViewer);
+        button = (FilterButton) linearLayout.findViewById(R.id.resource);
+        button.setUp(BitmapFactory.decodeResource(res, R.drawable.resource_on),BitmapFactory.decodeResource(res, R.drawable.resource_off),CardType.RESOURCE,cardViewer);
     }
 
     /**

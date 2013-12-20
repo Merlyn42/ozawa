@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * 
  * @author Chad Kinsella
  */
-public enum Attribute {
+public enum Attribute implements CardEnum {
 	
     @SerializedName("Unknown")
     UNKNOWN("Unknown"),

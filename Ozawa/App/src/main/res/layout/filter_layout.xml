@@ -3,47 +3,48 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#aa333333">
+    android:background="#aa333333"
+    android:divider="#cccccc">
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        <ImageButton
+        <com.ozawa.android.UI.FilterButton
             android:layout_width="80px"
             android:layout_height="80px"
-            android:id="@+id/imageButton"
+            android:id="@+id/blood"
             android:background="#00000000" />
 
-        <ImageButton
+        <com.ozawa.android.UI.FilterButton
             android:layout_width="80px"
             android:layout_height="80px"
-            android:id="@+id/imageButton2"
+            android:id="@+id/ruby"
             android:background="#00000000" />
 
-        <ImageButton
+        <com.ozawa.android.UI.FilterButton
             android:layout_width="80px"
             android:layout_height="80px"
-            android:id="@+id/imageButton3"
+            android:id="@+id/wild"
             android:background="#00000000" />
 
-        <ImageButton
+        <com.ozawa.android.UI.FilterButton
             android:layout_width="80px"
             android:layout_height="80px"
-            android:id="@+id/imageButton4"
+            android:id="@+id/sapphire"
             android:background="#00000000" />
 
-        <ImageButton
+        <com.ozawa.android.UI.FilterButton
             android:layout_width="80px"
             android:layout_height="80px"
-            android:id="@+id/imageButton5"
+            android:id="@+id/diamond"
             android:background="#00000000" />
 
-        <ImageButton
+        <com.ozawa.android.UI.FilterButton
             android:layout_width="80px"
             android:layout_height="80px"
-            android:id="@+id/imageButton6"
+            android:id="@+id/colorless"
             android:background="#00000000" />
 
     </LinearLayout>
@@ -51,5 +52,36 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"></LinearLayout>
+        android:layout_height="wrap_content">
+        <com.ozawa.android.UI.FilterButton
+            android:layout_width="80px"
+            android:layout_height="80px"
+            android:id="@+id/troop"
+            android:background="#00000000" />
+
+        <com.ozawa.android.UI.FilterButton
+            android:layout_width="80px"
+            android:layout_height="80px"
+            android:id="@+id/constant"
+            android:background="#00000000" />
+
+        <com.ozawa.android.UI.FilterButton
+            android:layout_width="80px"
+            android:layout_height="80px"
+            android:id="@+id/quickaction"
+            android:background="#00000000" />
+
+        <com.ozawa.android.UI.FilterButton
+            android:layout_width="80px"
+            android:layout_height="80px"
+            android:id="@+id/basicaction"
+            android:background="#00000000" />
+
+        <com.ozawa.android.UI.FilterButton
+            android:layout_width="80px"
+            android:layout_height="80px"
+            android:id="@+id/resource"
+            android:background="#00000000" />
+
+    </LinearLayout>
 </LinearLayout>
