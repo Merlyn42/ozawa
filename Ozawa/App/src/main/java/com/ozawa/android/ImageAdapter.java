@@ -5,8 +5,12 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.text.BoringLayout;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -26,6 +30,8 @@ public class ImageAdapter extends BaseAdapter {
     public List<AbstractCard> masterDeck;
     private static int cardWidth = 200;
     private Bitmap back;
+    private static int numberOfColumns = 3;
+    private static int differenceInHeight = 26;
 
     public ImageAdapter(Context c, List<AbstractCard> deck ) {
         mContext = c;
@@ -49,8 +55,15 @@ public class ImageAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView imageView;
         if (convertView == null) {  // if it's not recycled, initialize some attributes
+            // Find the width and height of the screen and set the card dimensions
+            WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+            DisplayMetrics metrics = new DisplayMetrics();
+            wm.getDefaultDisplay().getMetrics(metrics);
+            int cardWidth = (metrics.widthPixels / numberOfColumns) - (metrics.widthPixels / 20);
+            int cardHeight = cardWidth + differenceInHeight;
+
             imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(200, 240));
+            imageView.setLayoutParams(new GridView.LayoutParams(cardWidth, cardHeight));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setPadding(8, 8, 8, 8);
         } else {
@@ -69,5 +82,11 @@ public class ImageAdapter extends BaseAdapter {
         ImageGetter task = new ImageGetter(imageView,mContext) ;
         task.execute(card);
         imageView.setTag(task);
+    }
+
+    public int getDPIFromPixels(Context context, float pixels){
+        float density = context.getResources().getDisplayMetrics().density;
+
+        return (int)(pixels / density);
     }
 }
