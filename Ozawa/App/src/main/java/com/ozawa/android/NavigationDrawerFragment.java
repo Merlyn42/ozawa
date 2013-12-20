@@ -139,6 +139,63 @@ public class NavigationDrawerFragment extends Fragment {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
     }
 
+    private void setUpButtons(){
+        ImageButton button;
+        button = (ImageButton) linearLayout.findViewById(R.id.imageButton);
+        button.setOnClickListener(new ToggleButton.OnClickListener() {
+            public void onClick(View v) {
+                cardViewer.toggleColor(ColorFlag.BLOOD);
+                ((ImageButton) v.findViewById(R.id.imageButton)).setImageBitmap(cardViewer.isActive(ColorFlag.BLOOD) ? BitmapFactory.decodeResource(context.getResources(), R.drawable.blood_on) : BitmapFactory.decodeResource(context.getResources(), R.drawable.blood_off));
+            }
+        });
+        button.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.blood_on));
+
+        button = (ImageButton) linearLayout.findViewById(R.id.imageButton2);
+        button.setOnClickListener(new ToggleButton.OnClickListener() {
+            public void onClick(View v) {
+                cardViewer.toggleColor(ColorFlag.RUBY);
+                ((ImageButton)v.findViewById(R.id.imageButton2)).setImageBitmap(cardViewer.isActive(ColorFlag.RUBY)?BitmapFactory.decodeResource(context.getResources(), R.drawable.ruby_on):BitmapFactory.decodeResource(context.getResources(), R.drawable.ruby_off));
+            }
+        });
+        button.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.ruby_on));
+
+        button = (ImageButton) linearLayout.findViewById(R.id.imageButton3);
+        button.setOnClickListener(new ToggleButton.OnClickListener() {
+            public void onClick(View v) {
+                cardViewer.toggleColor(ColorFlag.SAPPHIRE);
+                ((ImageButton) v.findViewById(R.id.imageButton3)).setImageBitmap(cardViewer.isActive(ColorFlag.SAPPHIRE) ? BitmapFactory.decodeResource(context.getResources(), R.drawable.sapphire_on) : BitmapFactory.decodeResource(context.getResources(), R.drawable.sapphire_off));
+            }
+        });
+        button.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.sapphire_on));
+
+        button = (ImageButton) linearLayout.findViewById(R.id.imageButton4);
+        button.setOnClickListener(new ToggleButton.OnClickListener() {
+            public void onClick(View v) {
+                cardViewer.toggleColor(ColorFlag.DIAMOND);
+                ((ImageButton) v.findViewById(R.id.imageButton4)).setImageBitmap(cardViewer.isActive(ColorFlag.DIAMOND) ? BitmapFactory.decodeResource(context.getResources(), R.drawable.diamond_on) : BitmapFactory.decodeResource(context.getResources(), R.drawable.diamond_off));
+            }
+        });
+        button.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.diamond_on));
+
+        button = (ImageButton) linearLayout.findViewById(R.id.imageButton5);
+        button.setOnClickListener(new ToggleButton.OnClickListener() {
+            public void onClick(View v) {
+                cardViewer.toggleColor(ColorFlag.WILD);
+                ((ImageButton) v.findViewById(R.id.imageButton5)).setImageBitmap(cardViewer.isActive(ColorFlag.WILD) ? BitmapFactory.decodeResource(context.getResources(), R.drawable.wild_on) : BitmapFactory.decodeResource(context.getResources(), R.drawable.wild_off));
+            }
+        });
+        button.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.blood_on));
+
+        button = (ImageButton) linearLayout.findViewById(R.id.imageButton6);
+        button.setOnClickListener(new ToggleButton.OnClickListener() {
+            public void onClick(View v) {
+                cardViewer.toggleColor(ColorFlag.COLORLESS);
+                ((ImageButton) v.findViewById(R.id.imageButton6)).setImageBitmap(cardViewer.isActive(ColorFlag.COLORLESS) ? BitmapFactory.decodeResource(context.getResources(), R.drawable.colorless_on) : BitmapFactory.decodeResource(context.getResources(), R.drawable.colorless_off));
+            }
+        });
+        button.setImageBitmap(BitmapFactory.decodeResource(context.getResources(), R.drawable.colorless_on));
+    }
+
     /**
      * Users of this fragment must call this method to set up the navigation drawer interactions.
      *
@@ -151,24 +208,6 @@ public class NavigationDrawerFragment extends Fragment {
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
 
-        ImageButton buttonone;
-        buttonone = (ImageButton) linearLayout.findViewById(R.id.imageButton);
-        buttonone.setOnClickListener(new ToggleButton.OnClickListener() {
-            public void onClick(View v) {
-                cardViewer.toggleColor(ColorFlag.BLOOD);
-            }
-        });
-        Resources res = context.getResources();
-        int id = R.drawable.back;
-        Bitmap bm = BitmapFactory.decodeResource(res, id);
-        buttonone.setImageBitmap(bm);
-        buttonone = (ImageButton) linearLayout.findViewById(R.id.imageButton2);
-        buttonone.setOnClickListener(new ToggleButton.OnClickListener() {
-            public void onClick(View v) {
-                cardViewer.toggleColor(ColorFlag.COLORLESS);
-            }
-        });
-        buttonone.setImageBitmap( BitmapFactory.decodeResource(context.getResources(), R.drawable.back));
 
         // set a custom shadow that overlays the main content when the drawer opens
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
@@ -232,6 +271,7 @@ public class NavigationDrawerFragment extends Fragment {
         });
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+        setUpButtons();
     }
 
     private void selectItem(int position) {

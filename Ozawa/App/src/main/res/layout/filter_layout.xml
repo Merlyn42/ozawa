@@ -2,7 +2,8 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#222222">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -12,27 +13,38 @@
         <ImageButton
             android:layout_width="80px"
             android:layout_height="80px"
-            android:id="@+id/imageButton" />
+            android:id="@+id/imageButton"
+            android:background="#00000000" />
 
         <ImageButton
             android:layout_width="80px"
             android:layout_height="80px"
-            android:id="@+id/imageButton2" />
+            android:id="@+id/imageButton2"
+            android:background="#00000000" />
 
         <ImageButton
             android:layout_width="80px"
             android:layout_height="80px"
-            android:id="@+id/imageButton3" />
+            android:id="@+id/imageButton3"
+            android:background="#00000000" />
 
         <ImageButton
             android:layout_width="80px"
             android:layout_height="80px"
-            android:id="@+id/imageButton4" />
+            android:id="@+id/imageButton4"
+            android:background="#00000000" />
 
         <ImageButton
             android:layout_width="80px"
             android:layout_height="80px"
-            android:id="@+id/imageButton5" />
+            android:id="@+id/imageButton5"
+            android:background="#00000000" />
+
+        <ImageButton
+            android:layout_width="80px"
+            android:layout_height="80px"
+            android:id="@+id/imageButton6"
+            android:background="#00000000" />
 
     </LinearLayout>
 

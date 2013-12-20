@@ -53,15 +53,15 @@ public class CardViewer {
     }
 
     public boolean isActive(Attribute attribute) {
-        return isActive(attribute);
+        return filter.isActive(attribute);
     }
 
     public boolean isActive(CardType type) {
-        return isActive(type);
+        return filter.isActive(type);
     }
 
     public boolean isActive(ColorFlag color) {
-        return isActive(color);
+        return filter.isActive(color);
     }
 
     public ImageAdapter getAdapter() {
