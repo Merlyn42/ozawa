@@ -67,7 +67,7 @@ public class Card extends AbstractCard {
                             fgID = R.drawable.diamond_troop_thumbnail;
                             break;
                         case RUBY:
-                            fgID = R.drawable.ruby_troop_thumnail;
+                            fgID = R.drawable.ruby_troop_thumbnail;
                             break;
                         case SAPPHIRE:
                             fgID = R.drawable.sapphire_troop_thumbnail;
