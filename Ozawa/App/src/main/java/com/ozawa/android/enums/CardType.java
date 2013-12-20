@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
  * 
  * @author Chad Kinsella
  */
-public enum CardType {
+public enum CardType implements CardEnum {
 	
 	@SerializedName("Troop")
 	TROOP("Troop"),

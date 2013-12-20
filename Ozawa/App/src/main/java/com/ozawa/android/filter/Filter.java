@@ -1,5 +1,6 @@
 package com.ozawa.android.filter;
 
+import com.ozawa.android.enums.CardEnum;
 import com.ozawa.android.hexentities.AbstractCard;
 import com.ozawa.android.hexentities.Card;
 import com.ozawa.android.hexentities.ResourceCard;
@@ -42,6 +43,31 @@ public class Filter {
 		this.filterString = filterString;
 	}
 
+    public void addFilter(CardEnum e){
+        if(e instanceof ColorFlag){
+            colors.add((ColorFlag)e);
+        }else if(e instanceof Attribute){
+            attributes.add((Attribute)e);
+        }else if(e instanceof CardType){
+            cardTypes.add((CardType) e);
+        }else{
+            throw new RuntimeException("Unknown enum type");
+        }
+    }
+
+    public void removeFilter(CardEnum e){
+        if(e instanceof ColorFlag){
+            colors.remove((ColorFlag) e);
+        }else if(e instanceof Attribute){
+            attributes.remove((Attribute) e);
+        }else if(e instanceof CardType){
+            cardTypes.remove((CardType) e);
+        }else{
+            throw new RuntimeException("Unknown enum type");
+        }
+    }
+
+
 	public void addAttribute(Attribute attribute) {
 		attributes.add(attribute);
 	}
@@ -66,16 +92,16 @@ public class Filter {
 		cardTypes.remove(type);
 	}
 
-	public boolean isActive(Attribute attribute) {
-		return attributes.contains(attribute);
-	}
-
-	public boolean isActive(CardType type) {
-		return cardTypes.contains(type);
-	}
-
-	public boolean isActive(ColorFlag color) {
-		return colors.contains(color);
+	public boolean isActive(CardEnum e) {
+        if(e instanceof ColorFlag){
+            return colors.contains(e);
+        }else if(e instanceof Attribute){
+            return attributes.contains(e);
+        }else if(e instanceof CardType){
+            return cardTypes.contains(e);
+        }else{
+            throw new RuntimeException("Unknown enum type");
+        }
 	}
 
 	public List<AbstractCard> filter(AbstractCard[] cards) {

@@ -26,12 +26,13 @@ public class JsonReader {
         gsonBuilder.registerTypeAdapter(ColorFlag[].class, new MultiValueSerializer<ColorFlag>(ColorFlag.class));
         gsonBuilder.registerTypeAdapter(CardType[].class, new MultiValueSerializer<CardType>(CardType.class));
         gsonBuilder.registerTypeAdapter(Boolean.class, new BooleanSerializer());
+        gsonBuilder.registerTypeAdapter(AbstractCard.class, new CardSerializer());
         gson = gsonBuilder.create();
     }
 
     public AbstractCard deserializeJSONInputStreamToCard(InputStream jsonStream){
         InputStreamReader reader = new InputStreamReader(jsonStream);
-        Card newCard = gson.fromJson(reader,Card.class);
+        AbstractCard newCard = gson.fromJson(reader,AbstractCard.class);
         return newCard;
     }
 

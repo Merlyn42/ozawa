@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * 
  * @author Chad Kinsella
  */
-public enum ColorFlag {
+public enum ColorFlag implements CardEnum {
 	
 	@SerializedName("Blood")
 	BLOOD("Blood"),

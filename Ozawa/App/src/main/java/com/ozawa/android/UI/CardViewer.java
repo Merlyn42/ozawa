@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.ozawa.android.ImageAdapter;
 import com.ozawa.android.enums.Attribute;
+import com.ozawa.android.enums.CardEnum;
 import com.ozawa.android.enums.CardType;
 import com.ozawa.android.enums.ColorFlag;
 import com.ozawa.android.filter.Filter;
@@ -43,6 +44,15 @@ public class CardViewer {
         adapter.updateDeck(filter.filter(cards));
     }
 
+    public void toggleFilter(CardEnum e){
+        if(filter.isActive(e)){
+            filter.removeFilter(e);
+        }else{
+            filter.addFilter(e);
+        }
+        adapter.updateDeck(filter.filter(cards));
+    }
+
     public void toggleType(CardType type) {
         if(filter.isActive(type)){
             filter.removeType(type);
@@ -52,16 +62,8 @@ public class CardViewer {
         adapter.updateDeck(filter.filter(cards));
     }
 
-    public boolean isActive(Attribute attribute) {
-        return filter.isActive(attribute);
-    }
-
-    public boolean isActive(CardType type) {
-        return filter.isActive(type);
-    }
-
-    public boolean isActive(ColorFlag color) {
-        return filter.isActive(color);
+    public boolean isActive(CardEnum e) {
+        return filter.isActive(e);
     }
 
     public ImageAdapter getAdapter() {

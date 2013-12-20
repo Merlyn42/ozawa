@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * 
  * @author Chad Kinsella
  */
-public enum CardRarity {
+public enum CardRarity implements CardEnum {
 	
 	@SerializedName("Common")
 	COMMON("Common"),
