@@ -1,6 +1,7 @@
 package com.ozawa.android;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -40,11 +41,13 @@ public class MasterDeckActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
-    private static List<AbstractCard> masterDeck;
+    public static List<AbstractCard> masterDeck;
     private JsonReader jsonReader;
     private static Filter filter = new Filter();
     private ImageAdapter adapter;
     private CardViewer cardViewer;
+    public final static String GETDECK = "GETDECK";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,8 +144,11 @@ public class MasterDeckActivity extends ActionBarActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            Toast.makeText(this, "I said don\'t press.", Toast.LENGTH_SHORT).show();
+        // Open the list view for the deck
+        if (id == R.id.list_view_option) {
+            Intent intent = new Intent(this, DeckListViewActivity.class);
+            intent.putExtra(GETDECK, false);
+            startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);

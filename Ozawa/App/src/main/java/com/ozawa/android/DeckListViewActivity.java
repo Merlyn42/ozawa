@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
@@ -31,12 +32,19 @@ public class DeckListViewActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.deck_list_layout);
-        jsonReader = new JsonReader();
-        try {
-            deck = jsonReader.deserializeJSONInputStreamsToCard(getJson());
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        Intent intent = getIntent();
+        // If the deck didn't come from the MasterDeckActivityScreen get the deck data.
+        if(intent.getBooleanExtra(MasterDeckActivity.GETDECK, true)){
+            jsonReader = new JsonReader();
+            try {
+                deck = jsonReader.deserializeJSONInputStreamsToCard(getJson());
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }else{
+            deck = MasterDeckActivity.masterDeck;
         }
+
 
         list=(ListView)findViewById(R.id.deck_list);
 
