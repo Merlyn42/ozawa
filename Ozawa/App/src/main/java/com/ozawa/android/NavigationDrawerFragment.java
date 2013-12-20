@@ -1,5 +1,9 @@
 package com.ozawa.android;
 
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.ActionBarActivity;;
 import android.app.Activity;
 import android.support.v7.app.ActionBar;
@@ -17,10 +21,20 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
+
+import com.ozawa.android.UI.CardViewer;
+import com.ozawa.android.UI.FilterAdapter;
+import com.ozawa.android.enums.ColorFlag;
+import com.ozawa.android.filter.Filter;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -51,14 +65,18 @@ public class NavigationDrawerFragment extends Fragment {
     private ActionBarDrawerToggle mDrawerToggle;
 
     private DrawerLayout mDrawerLayout;
-    private ListView mDrawerListView;
+    //private ListView mDrawerListView;
+    private LinearLayout linearLayout;
     private View mFragmentContainerView;
+    CardViewer cardViewer;
+    private Context context;
 
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
 
     public NavigationDrawerFragment() {
+
     }
 
     @Override
@@ -89,15 +107,19 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        mDrawerListView = (ListView) inflater.inflate(
+
+        /*mDrawerListView = (ListView) inflater.inflate(
                 R.layout.fragment_navigation_drawer, container, false);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectItem(position);
             }
-        });
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
+        });*/
+
+        linearLayout = (LinearLayout)inflater.inflate(R.layout.filter_layout, container, false);
+        /*mDrawerListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
                 android.R.layout.simple_list_item_1,
                 android.R.id.text1,
@@ -105,9 +127,12 @@ public class NavigationDrawerFragment extends Fragment {
                         getString(R.string.title_section1),
                         getString(R.string.title_section2),
                         getString(R.string.title_section3),
-                }));
-        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
-        return mDrawerListView;
+                }));*/
+        //mDrawerListView.setAdapter(new FilterAdapter(getActionBar().getThemedContext()));
+       // mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+
+
+        return linearLayout;
     }
 
     public boolean isDrawerOpen() {
@@ -120,9 +145,30 @@ public class NavigationDrawerFragment extends Fragment {
      * @param fragmentId   The android:id of this fragment in its activity's layout.
      * @param drawerLayout The DrawerLayout containing this fragment's UI.
      */
-    public void setUp(int fragmentId, DrawerLayout drawerLayout) {
+    public void setUp(CardViewer iCardViewer,Context iContext,int fragmentId, DrawerLayout drawerLayout) {
+        context=iContext;
+        cardViewer=iCardViewer;
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
+
+        ImageButton buttonone;
+        buttonone = (ImageButton) linearLayout.findViewById(R.id.imageButton);
+        buttonone.setOnClickListener(new ToggleButton.OnClickListener() {
+            public void onClick(View v) {
+                cardViewer.toggleColor(ColorFlag.BLOOD);
+            }
+        });
+        Resources res = context.getResources();
+        int id = R.drawable.back;
+        Bitmap bm = BitmapFactory.decodeResource(res, id);
+        buttonone.setImageBitmap(bm);
+        buttonone = (ImageButton) linearLayout.findViewById(R.id.imageButton2);
+        buttonone.setOnClickListener(new ToggleButton.OnClickListener() {
+            public void onClick(View v) {
+                cardViewer.toggleColor(ColorFlag.COLORLESS);
+            }
+        });
+        buttonone.setImageBitmap( BitmapFactory.decodeResource(context.getResources(), R.drawable.back));
 
         // set a custom shadow that overlays the main content when the drawer opens
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
@@ -190,9 +236,9 @@ public class NavigationDrawerFragment extends Fragment {
 
     private void selectItem(int position) {
         mCurrentSelectedPosition = position;
-        if (mDrawerListView != null) {
-            mDrawerListView.setItemChecked(position, true);
-        }
+//        if (mDrawerListView != null) {
+//            mDrawerListView.setItemChecked(position, true);
+        //}
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }

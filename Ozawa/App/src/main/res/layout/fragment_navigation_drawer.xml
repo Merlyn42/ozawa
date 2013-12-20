@@ -6,4 +6,5 @@
     android:divider="@android:color/transparent"
     android:dividerHeight="0dp"
     android:background="#cccc"
-    tools:context="com.ozawa.android.NavigationDrawerFragment" />
+    tools:context="com.ozawa.android.NavigationDrawerFragment"
+    tools:listitem="@android:layout/simple_list_item_1" />

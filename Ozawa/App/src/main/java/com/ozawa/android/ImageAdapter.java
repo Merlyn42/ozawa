@@ -70,4 +70,9 @@ public class ImageAdapter extends BaseAdapter {
         task.execute(card);
         imageView.setTag(task);
     }
+
+    public void updateDeck(List<AbstractCard> cards) {
+        masterDeck=cards;
+        notifyDataSetChanged();
+    }
 }

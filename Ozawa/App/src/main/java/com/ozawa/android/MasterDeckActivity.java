@@ -2,33 +2,27 @@ package com.ozawa.android;
 
 import android.app.Activity;
 import android.content.res.Resources;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.widget.DrawerLayout;
 import android.widget.GridView;
-import android.widget.TextView;
 
-
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.ozawa.android.enums.CardType;
-import com.ozawa.android.enums.ColorFlag;
+import com.ozawa.android.UI.CardViewer;
 import com.ozawa.android.filter.Filter;
 import com.ozawa.android.hexentities.AbstractCard;
-import com.ozawa.android.hexentities.Card;
 import com.ozawa.android.json.JsonReader;
 
 import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MasterDeckActivity extends ActionBarActivity
@@ -49,27 +43,32 @@ public class MasterDeckActivity extends ActionBarActivity
     private JsonReader jsonReader;
     private static Filter filter = new Filter();
     private ImageAdapter adapter;
+    private CardViewer cardViewer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        filter.removeColor(ColorFlag.COLORLESS);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_master_deck);
-        GridView gridView = (GridView) findViewById(R.id.grid_view);
+
         jsonReader = new JsonReader();
         try {
             masterDeck = jsonReader.deserializeJSONInputStreamsToCard(getJson());
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        adapter = new ImageAdapter(this,filter.filter(masterDeck));
-        gridView.setAdapter(adapter);
+
+        cardViewer = new CardViewer(this, masterDeck);
+        setContentView(R.layout.activity_master_deck);
+
+
+        GridView gridView = (GridView) findViewById(R.id.grid_view);
+
+        gridView.setAdapter(cardViewer.getAdapter());
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
-
-        // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
+        this.getResources();
+        //Set up the drawer.
+        mNavigationDrawerFragment.setUp(cardViewer,this,
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
@@ -77,9 +76,9 @@ public class MasterDeckActivity extends ActionBarActivity
 
     public InputStream[] getJson() throws IllegalAccessException {
         Field[] rawFields = R.raw.class.getFields();
-        InputStream [] jsonFiles = new InputStream[rawFields.length];
+        InputStream[] jsonFiles = new InputStream[rawFields.length];
 
-        for(int count=0; count < rawFields.length; count++){
+        for (int count = 0; count < rawFields.length; count++) {
             int rid = rawFields[count].getInt(rawFields[count]);
             try {
                 Resources res = getResources();
@@ -88,7 +87,7 @@ public class MasterDeckActivity extends ActionBarActivity
             } catch (Exception e) {
             }
         }
-        return  jsonFiles;
+        return jsonFiles;
     }
 
     @Override
@@ -104,27 +103,12 @@ public class MasterDeckActivity extends ActionBarActivity
         switch (number) {
             case 1:
                 mTitle = getString(R.string.title_section1);
-                filter.removeColor(ColorFlag.COLORLESS);
-                filter.addType(CardType.BASICACTION);
-                filter.addType(CardType.TROOP);
-                adapter.masterDeck=filter.filter(masterDeck);
-                adapter.notifyDataSetChanged();
                 break;
             case 2:
                 mTitle = getString(R.string.title_section2);
-                filter.addColor(ColorFlag.COLORLESS);
-                filter.removeType(CardType.TROOP);
-                filter.addType(CardType.BASICACTION);
-                adapter.masterDeck=filter.filter(masterDeck);
-                adapter.notifyDataSetChanged();
                 break;
             case 3:
                 mTitle = getString(R.string.title_section3);
-                filter.addType(CardType.TROOP);
-                filter.addColor(ColorFlag.COLORLESS);
-                filter.removeType(CardType.BASICACTION);
-                adapter.masterDeck=filter.filter(masterDeck);
-                adapter.notifyDataSetChanged();
                 break;
         }
     }
@@ -189,7 +173,7 @@ public class MasterDeckActivity extends ActionBarActivity
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
+                                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_master_deck, container, false);
             return rootView;
         }
