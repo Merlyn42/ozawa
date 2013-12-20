@@ -14,8 +14,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
+
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.ozawa.android.UI.CardViewer;
@@ -41,11 +42,11 @@ public class MasterDeckActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
-    public static List<AbstractCard> masterDeck;
+    private List<AbstractCard> masterDeck;
     private JsonReader jsonReader;
     private static Filter filter = new Filter();
     private ImageAdapter adapter;
-    private CardViewer cardViewer;
+    public static CardViewer cardViewer;
     public final static String GETDECK = "GETDECK";
 
 
@@ -75,6 +76,19 @@ public class MasterDeckActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(cardViewer,this,
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View v,
+                                    int position, long id) {
+
+                // Sending image id to FullScreenActivity
+                Intent i = new Intent(getApplicationContext(), FullImageActivity.class);
+                // passing array index
+                i.putExtra("id",position);
+                startActivity(i);
+            }
+        });
 
     }
 

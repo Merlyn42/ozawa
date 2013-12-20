@@ -29,6 +29,10 @@
             android:name="com.ozawa.android.DeckListViewActivity"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name="com.ozawa.android.FullImageActivity"
+            android:label="@string/app_name" >
+        </activity>
     </application>
 
 </manifest>

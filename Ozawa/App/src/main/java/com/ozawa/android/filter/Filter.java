@@ -29,7 +29,6 @@ public class Filter {
 		attributes = EnumSet.noneOf(Attribute.class);
 		colors = EnumSet.allOf(ColorFlag.class);
 		cardTypes = EnumSet.allOf(CardType.class);
-        cardTypes.remove(CardType.ARTIFACT);
         cardTypes.remove(CardType.CHAMPION);
 		minCost = -1;
 		maxCost = -1;

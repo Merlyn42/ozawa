@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class CardViewer {
     private Filter filter;
-    private static List<AbstractCard> cards;
+    public static List<AbstractCard> cards;
     private ImageAdapter adapter;
 
     public CardViewer(Context context,List<AbstractCard> abstractCards){
