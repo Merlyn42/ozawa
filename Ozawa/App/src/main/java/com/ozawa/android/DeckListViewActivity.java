@@ -42,7 +42,7 @@ public class DeckListViewActivity extends Activity {
                 e.printStackTrace();
             }
         }else{
-            deck = MasterDeckActivity.masterDeck;
+            deck = MasterDeckActivity.cardViewer.cards;
         }
 
 
