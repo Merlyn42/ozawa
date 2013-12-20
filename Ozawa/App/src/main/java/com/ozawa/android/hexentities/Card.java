@@ -90,7 +90,7 @@ public class Card extends AbstractCard {
                             fgID = R.drawable.diamond_action_thumbnail;
                             break;
                         case RUBY:
-                            fgID = R.drawable.ruby_action_thumnail;
+                            fgID = R.drawable.ruby_action_thumbnail;
                             break;
                         case SAPPHIRE:
                             fgID = R.drawable.sapphire_action_thumbnail;
@@ -135,11 +135,12 @@ public class Card extends AbstractCard {
         combine.drawBitmap(bg, 0f, 10f, null);
         combine.drawBitmap(fg, 0f, 0f, null);
         combine.drawText(name,50,20,paint);
-        combine.drawText(""+resourceCost,25,27,paint);
+        paint.setTextSize(16f);
+        combine.drawText(""+resourceCost,fg.getWidth()/6,fg.getHeight()/6,paint);
         if(cardType[0].equals(CardType.TROOP)){
         paint.setTextSize(21f);
-            combine.drawText(baseAttackValue,20,fg.getHeight()-19,paint);
-            combine.drawText(baseHealthValue,fg.getWidth()-32,fg.getHeight()-19,paint);
+            combine.drawText(baseAttackValue,fg.getWidth()/9,fg.getHeight()-(fg.getWidth()/10),paint);
+            combine.drawText(baseHealthValue,fg.getWidth()-(fg.getWidth()/6),fg.getHeight()-(fg.getWidth()/10),paint);
         }
         return image;
     }
