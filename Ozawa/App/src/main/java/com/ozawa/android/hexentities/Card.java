@@ -6,8 +6,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.os.Build;
+import android.view.Display;
+import android.view.WindowManager;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -48,17 +52,31 @@ public class Card extends AbstractCard {
 
     @Override
     public Bitmap getCardBitmap(Context context) {
-        int fgWidth;
-        int fgHeight;
-        int bgWidth;
-        int bgHeight;
-        Resources resources = context.getResources();
-        final int resourceId = resources.getIdentifier(cardImagePath.split("\\.")[0], "drawable",
-                context.getPackageName());
         if (image != null) {
             return image;
         }
-        int fgID = R.drawable.colorless_action;
+        Resources resources = context.getResources();
+        final int portraitId = resources.getIdentifier(cardImagePath.split("\\.")[0], "drawable",
+                context.getPackageName());
+
+        int Measuredwidth = 0;
+        int Measuredheight = 0;
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Point size = new Point();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2)
+        {
+            wm.getDefaultDisplay().getSize(size);
+            Measuredwidth = size.x;
+            Measuredheight = size.y;
+        }
+        else
+        {
+            Display d = wm.getDefaultDisplay();
+            Measuredwidth = d.getWidth();
+            Measuredheight = d.getHeight();
+        }
+
+        int fgID = R.drawable.colorless_action_thumbnail;
         if (cardType.length > 0) {
             if (cardType[0] == CardType.TROOP || (cardType.length > 1 && cardType[1] == CardType.TROOP)) {
                 if (colorFlags.length > 0) {
@@ -109,30 +127,32 @@ public class Card extends AbstractCard {
             }
         }
 
-        BitmapFactory.Options o = new BitmapFactory.Options();
-        o.inJustDecodeBounds = true;
-        BitmapFactory.decodeResource(resources, fgID, o);
+
+        BitmapFactory.Options templateFirstOptions = new BitmapFactory.Options();
+        templateFirstOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(resources, fgID, templateFirstOptions);
         int scale = 1;
-        fgWidth=o.outWidth;
-        fgHeight=o.outHeight;
-        while (o.outWidth / scale / 2 >= 200)
+        while (templateFirstOptions.outWidth / scale / 2 >= Measuredwidth/3)
             scale *= 2;
         //Decode with inSampleSize
-        BitmapFactory.Options o2 = new BitmapFactory.Options();
-      //  o2.inSampleSize = scale;
-        Bitmap fg = BitmapFactory.decodeResource(resources, fgID, o2);
+        BitmapFactory.Options templateSecondOptions = new BitmapFactory.Options();
+        templateSecondOptions.inSampleSize = scale;
+        Bitmap template = BitmapFactory.decodeResource(resources, fgID, templateSecondOptions);
 
+        BitmapFactory.Options portraitFirstOptions = new BitmapFactory.Options();
+        portraitFirstOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(resources, portraitId, portraitFirstOptions);
 
-        BitmapFactory.decodeResource(resources, resourceId, o);
-        bgWidth=o.outWidth;
-        bgHeight=o.outHeight;
+        int cutPortraitWidth = Double.valueOf(portraitFirstOptions.outWidth*defaultLayout.portraitRight-portraitFirstOptions.outWidth*defaultLayout.portraitLeft).intValue();
+
         scale = 1;
-        while (o.outWidth / scale / 2 >= 140)
+        while (cutPortraitWidth / scale / 2 >= Measuredwidth/3)
             scale *= 2;
         //Decode with inSampleSize
-        o2 = new BitmapFactory.Options();
-     //   o2.inSampleSize = scale;
-        Bitmap bg = BitmapFactory.decodeResource(resources, resourceId, o2);
+        BitmapFactory.Options portraitSecondOptions = new BitmapFactory.Options();
+        portraitSecondOptions = new BitmapFactory.Options();
+        portraitSecondOptions.inSampleSize = scale;
+        Bitmap portrait = BitmapFactory.decodeResource(resources, portraitId, portraitSecondOptions);
 
         Paint paint = new Paint();
         paint.setTextAlign(Paint.Align.LEFT);
@@ -140,27 +160,30 @@ public class Card extends AbstractCard {
         paint.setColor(-1);
         paint.setFakeBoldText(true);
 
-        image = Bitmap.createBitmap(fg.getWidth(), fg.getHeight(), Bitmap.Config.ARGB_8888);
+        image = Bitmap.createBitmap(template.getWidth(), template.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas combine = new Canvas(image);
-        Rect srcRect = new Rect();
         Rect dstRect = new Rect();
-        dstRect.top=50;
-        dstRect.bottom=351;
-        dstRect.right=397;
-        dstRect.left=27;
-        srcRect.left=Double.valueOf(bgWidth*defaultLayout.portraitLeft).intValue();
-        srcRect.right=Double.valueOf(bgWidth*defaultLayout.portraitRight).intValue();
-        srcRect.top=Double.valueOf(bgWidth*defaultLayout.portraitTop).intValue();
-        srcRect.bottom=Double.valueOf(bgWidth*defaultLayout.portraitBottom).intValue();
-        combine.drawBitmap(bg, srcRect,dstRect, null);
-        combine.drawBitmap(fg, 0f, 0f, null);
+        Rect srcRect = new Rect();
+        dstRect.top=(int)(template.getHeight()*0.1086);
+        dstRect.bottom=(int)(template.getHeight()*0.7918);
+        dstRect.right=(int)(template.getWidth()*0.9387);
+        dstRect.left=(int)(template.getWidth()*0.0660);
+        srcRect.left=Double.valueOf(portrait.getWidth()*defaultLayout.portraitLeft).intValue();
+        srcRect.right=Double.valueOf(portrait.getWidth()*defaultLayout.portraitRight).intValue();
+        srcRect.top=Double.valueOf(portrait.getWidth()*defaultLayout.portraitTop).intValue();
+        srcRect.bottom=Double.valueOf(portrait.getWidth()*defaultLayout.portraitBottom).intValue();
+        
+        combine.drawBitmap(portrait, srcRect ,dstRect, null);
+        combine.drawBitmap(template, 0f, 0f, null);
+
+
         combine.drawText(name, 50, 20, paint);
         paint.setTextSize(16f);
-        combine.drawText(""+resourceCost,fg.getWidth()/6,fg.getHeight()/6,paint);
+        combine.drawText(""+resourceCost,template.getWidth()/6,template.getHeight()/6,paint);
         if(cardType[0].equals(CardType.TROOP)){
         paint.setTextSize(21f);
-            combine.drawText(baseAttackValue,fg.getWidth()/9,fg.getHeight()-(fg.getWidth()/10),paint);
-            combine.drawText(baseHealthValue,fg.getWidth()-(fg.getWidth()/6),fg.getHeight()-(fg.getWidth()/10),paint);
+            combine.drawText(baseAttackValue,template.getWidth()/9,template.getHeight()-(template.getWidth()/10),paint);
+            combine.drawText(baseHealthValue,template.getWidth()-(template.getWidth()/6),template.getHeight()-(template.getWidth()/10),paint);
         }
         return image;
     }
