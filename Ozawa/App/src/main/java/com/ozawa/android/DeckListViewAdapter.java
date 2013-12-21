@@ -25,7 +25,7 @@ import com.ozawa.android.hexentities.AbstractCard;
  * Created by ckinsella on 19/12/13.
  */
 
-public class DeckListViewAdapter extends BaseAdapter{
+public class DeckListViewAdapter extends ImageAdapter{
 
     private Context mContext;
     private Activity activity;
@@ -40,18 +40,21 @@ public class DeckListViewAdapter extends BaseAdapter{
         back= BitmapFactory.decodeResource(c.getResources(), R.drawable.back);
     }
 
+    @Override
     public int getCount() {
         return deck.size();
     }
 
+    @Override
     public Object getItem(int position) {
         return position;
     }
-
+    @Override
     public long getItemId(int position) {
         return position;
     }
 
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View vi=convertView;
         if(convertView==null)

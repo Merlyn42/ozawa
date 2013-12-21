@@ -33,6 +33,7 @@ public class ImageAdapter extends BaseAdapter {
     private static int numberOfColumns = 3;
     private static int differenceInHeight = 26;
 
+    public ImageAdapter(){}
     public ImageAdapter(Context c, List<AbstractCard> deck ) {
         mContext = c;
         masterDeck = deck;

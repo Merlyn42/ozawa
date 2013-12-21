@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -137,20 +139,20 @@ public class NavigationDrawerFragment extends Fragment {
         Resources res= context.getResources();
         FilterButton button;
         button = (FilterButton) linearLayout.findViewById(R.id.blood);
-        button.setUp(BitmapFactory.decodeResource(res, R.drawable.blood_on),BitmapFactory.decodeResource(res, R.drawable.blood_off),ColorFlag.BLOOD,cardViewer);
+        button.setUp(BitmapFactory.decodeResource(res, R.drawable.blood_on), BitmapFactory.decodeResource(res, R.drawable.blood_off), ColorFlag.BLOOD, cardViewer);
         button = (FilterButton) linearLayout.findViewById(R.id.wild);
-        button.setUp(BitmapFactory.decodeResource(res, R.drawable.wild_on),BitmapFactory.decodeResource(res, R.drawable.wild_off),ColorFlag.WILD,cardViewer);
+        button.setUp(BitmapFactory.decodeResource(res, R.drawable.wild_on), BitmapFactory.decodeResource(res, R.drawable.wild_off), ColorFlag.WILD, cardViewer);
         button = (FilterButton) linearLayout.findViewById(R.id.ruby);
         button.setUp(BitmapFactory.decodeResource(res, R.drawable.ruby_on),BitmapFactory.decodeResource(res, R.drawable.ruby_off),ColorFlag.RUBY,cardViewer);
         button = (FilterButton) linearLayout.findViewById(R.id.sapphire);
-        button.setUp(BitmapFactory.decodeResource(res, R.drawable.sapphire_on),BitmapFactory.decodeResource(res, R.drawable.sapphire_off),ColorFlag.SAPPHIRE,cardViewer);
+        button.setUp(BitmapFactory.decodeResource(res, R.drawable.sapphire_on), BitmapFactory.decodeResource(res, R.drawable.sapphire_off), ColorFlag.SAPPHIRE, cardViewer);
         button = (FilterButton) linearLayout.findViewById(R.id.diamond);
-        button.setUp(BitmapFactory.decodeResource(res, R.drawable.diamond_on),BitmapFactory.decodeResource(res, R.drawable.diamond_off),ColorFlag.DIAMOND,cardViewer);
+        button.setUp(BitmapFactory.decodeResource(res, R.drawable.diamond_on), BitmapFactory.decodeResource(res, R.drawable.diamond_off), ColorFlag.DIAMOND, cardViewer);
         button = (FilterButton) linearLayout.findViewById(R.id.colorless);
         button.setUp(BitmapFactory.decodeResource(res, R.drawable.colorless_on),BitmapFactory.decodeResource(res, R.drawable.colorless_off),ColorFlag.COLORLESS,cardViewer);
 
         button = (FilterButton) linearLayout.findViewById(R.id.troop);
-        button.setUp(BitmapFactory.decodeResource(res, R.drawable.troop_on),BitmapFactory.decodeResource(res, R.drawable.troop_off), CardType.TROOP,cardViewer);
+        button.setUp(BitmapFactory.decodeResource(res, R.drawable.troop_on), BitmapFactory.decodeResource(res, R.drawable.troop_off), CardType.TROOP, cardViewer);
         button = (FilterButton) linearLayout.findViewById(R.id.basicaction);
         button.setUp(BitmapFactory.decodeResource(res, R.drawable.basic_on),BitmapFactory.decodeResource(res, R.drawable.basic_off),CardType.BASICACTION,cardViewer);
         button = (FilterButton) linearLayout.findViewById(R.id.quickaction);
@@ -158,7 +160,7 @@ public class NavigationDrawerFragment extends Fragment {
         button = (FilterButton) linearLayout.findViewById(R.id.constant);
         button.setUp(BitmapFactory.decodeResource(res, R.drawable.constant_on),BitmapFactory.decodeResource(res, R.drawable.constant_off),CardType.CONSTANT,cardViewer);
         button = (FilterButton) linearLayout.findViewById(R.id.resource);
-        button.setUp(BitmapFactory.decodeResource(res, R.drawable.resource_on),BitmapFactory.decodeResource(res, R.drawable.resource_off),CardType.RESOURCE,cardViewer);
+        button.setUp(BitmapFactory.decodeResource(res, R.drawable.resource_on), BitmapFactory.decodeResource(res, R.drawable.resource_off), CardType.RESOURCE, cardViewer);
     }
 
     /**
@@ -285,10 +287,11 @@ public class NavigationDrawerFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // If the drawer is open, show the global app actions in the action bar. See also
         // showGlobalContextActionBar, which controls the top-left area of the action bar.
-        if (mDrawerLayout != null && isDrawerOpen()) {
-            inflater.inflate(R.menu.global, menu);
+        /*if (mDrawerLayout != null && isDrawerOpen()) {
+            //inflater.inflate(R.menu.global, menu);
+            inflater.inflate(R.menu.action_bar_menu, menu);
             showGlobalContextActionBar();
-        }
+        }*/
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -330,4 +333,5 @@ public class NavigationDrawerFragment extends Fragment {
          */
         void onNavigationDrawerItemSelected(int position);
     }
+
 }

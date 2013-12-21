@@ -141,14 +141,16 @@ public class MasterDeckActivity extends ActionBarActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
+        /*if (!mNavigationDrawerFragment.isDrawerOpen()) {
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.master_deck, menu);
+            getMenuInflater().inflate(R.menu.action_bar_menu, menu);
             restoreActionBar();
             return true;
-        }
+        }*/
+        getMenuInflater().inflate(R.menu.action_bar_menu, menu);
+        //restoreActionBar();
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -159,13 +161,19 @@ public class MasterDeckActivity extends ActionBarActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         // Open the list view for the deck
-        if (id == R.id.list_view_option) {
-            Intent intent = new Intent(this, DeckListViewActivity.class);
-            intent.putExtra(GETDECK, false);
-            startActivity(intent);
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_deck_view:
+                return true;
+            case R.id.action_list_view:
+                Intent intent = new Intent(this, DeckListViewActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                intent.putExtra(GETDECK, false);
+                startActivity(intent);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
+
     }
 
     /**
@@ -203,8 +211,8 @@ public class MasterDeckActivity extends ActionBarActivity
         @Override
         public void onAttach(Activity activity) {
             super.onAttach(activity);
-            ((MasterDeckActivity) activity).onSectionAttached(
-                    getArguments().getInt(ARG_SECTION_NUMBER));
+            /*((MasterDeckActivity) activity).onSectionAttached(
+                    getArguments().getInt(ARG_SECTION_NUMBER));*/
         }
     }
 

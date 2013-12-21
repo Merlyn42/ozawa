@@ -2,7 +2,10 @@ package com.ozawa.android.UI;
 
 import android.content.Context;
 
+import com.ozawa.android.DeckListViewActivity;
+import com.ozawa.android.DeckListViewAdapter;
 import com.ozawa.android.ImageAdapter;
+import com.ozawa.android.MasterDeckActivity;
 import com.ozawa.android.enums.Attribute;
 import com.ozawa.android.enums.CardEnum;
 import com.ozawa.android.enums.CardType;
