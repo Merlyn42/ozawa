@@ -17,8 +17,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.ozawa.hextcgdeckbuilder.UI.CardViewer;
 import com.ozawa.hextcgdeckbuilder.filter.Filter;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
@@ -31,7 +29,6 @@ import java.util.List;
 public class MasterDeckActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
-    protected ImageLoader imageLoader = ImageLoader.getInstance();
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
