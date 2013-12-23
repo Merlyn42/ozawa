@@ -10,6 +10,7 @@ import com.ozawa.android.hexentities.Card;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,12 +37,11 @@ public class JsonReader {
         return newCard;
     }
 
-    public List<AbstractCard> deserializeJSONInputStreamsToCard(InputStream[] jsonStreams){
-        AbstractCard[] newCards = new AbstractCard[jsonStreams.length];
-        for(int i = 0;i<jsonStreams.length;i++){
-            newCards[i]=deserializeJSONInputStreamToCard(jsonStreams[i]);
+    public List<AbstractCard> deserializeJSONInputStreamsToCard(ArrayList<InputStream> jsonStreams){
+        AbstractCard[] newCards = new AbstractCard[jsonStreams.size()];
+        for(int i = 0;i<jsonStreams.size();i++){
+            newCards[i]=deserializeJSONInputStreamToCard(jsonStreams.get(i));
         }
         return Arrays.asList(newCards);
     }
-
 }

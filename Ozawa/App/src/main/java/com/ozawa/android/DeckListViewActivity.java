@@ -3,6 +3,7 @@ package com.ozawa.android;
 
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -98,20 +99,29 @@ public class DeckListViewActivity extends ActionBarActivity implements Navigatio
 
     }
 
-    public InputStream[] getJson() throws IllegalAccessException {
+    public ArrayList<InputStream> getJson() throws IllegalAccessException {
         Field[] rawFields = R.raw.class.getFields();
-        InputStream [] jsonFiles = new InputStream[rawFields.length];
+        ArrayList<InputStream> jsonFiles = new ArrayList<InputStream>();
+        //InputStream[] jsonFiles = new InputStream[rawFields.length];
 
-        for(int count=0; count < rawFields.length; count++){
+        for (int count = 0; count < rawFields.length; count++) {
             int rid = rawFields[count].getInt(rawFields[count]);
             try {
                 Resources res = getResources();
-                InputStream inputStream = res.openRawResource(rid);
-                jsonFiles[count] = inputStream;
+                String name = res.getResourceName(rid);
+                if(!name.contains("gestures")){
+                    InputStream inputStream = res.openRawResource(rid);
+                    if(inputStream != null){
+                        jsonFiles.add(inputStream);
+                    }
+                    else{
+                        String string = "String";
+                    }
+                }
             } catch (Exception e) {
             }
         }
-        return  jsonFiles;
+        return jsonFiles;
     }
 
     @Override
