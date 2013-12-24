@@ -13,6 +13,7 @@ import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
 import com.ozawa.hextcgdeckbuilder.filter.Filter;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,13 +21,25 @@ import java.util.List;
  */
 public class CardViewer {
     private Filter filter;
-    public static List<AbstractCard> cards;
+    private List<AbstractCard> cards;
     private ImageAdapter adapter;
 
     public CardViewer(Context context,List<AbstractCard> abstractCards){
         filter = new Filter();
-        cards=abstractCards;
+        cards= new ArrayList<AbstractCard>(abstractCards);
         adapter = new ImageAdapter(context,filter.filter(cards));
+    }
+    
+    public List<AbstractCard> getFilteredCardList(){
+    	return filter.filter(cards);
+    }
+    
+    public List<AbstractCard> getUnFilteredCardList(){
+    	return new ArrayList<AbstractCard>(cards);
+    }
+    
+    public void setCardList(List<AbstractCard> abstractCards){
+    	cards= new ArrayList<AbstractCard>(abstractCards);
     }
 
     public void toggleAttribute(Attribute attribute) {

@@ -50,7 +50,7 @@ public class DeckListViewActivity extends ActionBarActivity implements Navigatio
                 e.printStackTrace();
             }
         }else{
-            deck = MasterDeckActivity.cardViewer.cards;
+            deck = MasterDeckActivity.cardViewer.getUnFilteredCardList();
         }
 
         list=(ListView)findViewById(R.id.deck_list);
@@ -117,7 +117,7 @@ public class DeckListViewActivity extends ActionBarActivity implements Navigatio
     @Override
     public void onResume(){
         super.onResume();
-        deck = MasterDeckActivity.cardViewer.cards;
+        deck = MasterDeckActivity.cardViewer.getUnFilteredCardList();
     }
 
     @Override
