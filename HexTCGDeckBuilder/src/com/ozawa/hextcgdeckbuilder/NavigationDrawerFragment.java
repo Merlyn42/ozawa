@@ -22,6 +22,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -161,6 +162,8 @@ public class NavigationDrawerFragment extends Fragment {
         button.setUp(BitmapFactory.decodeResource(res, R.drawable.constant_on),BitmapFactory.decodeResource(res, R.drawable.constant_off),CardType.CONSTANT,cardViewer);
         button = (FilterButton) linearLayout.findViewById(R.id.resource);
         button.setUp(BitmapFactory.decodeResource(res, R.drawable.resource_on), BitmapFactory.decodeResource(res, R.drawable.resource_off), CardType.RESOURCE, cardViewer);
+        EditText text  = (EditText) linearLayout.findViewById(R.id.SearchTextField);
+        text.addTextChangedListener(cardViewer);
     }
 
     /**

@@ -1,6 +1,8 @@
 package com.ozawa.hextcgdeckbuilder.UI;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 
 import com.ozawa.hextcgdeckbuilder.DeckListViewActivity;
 import com.ozawa.hextcgdeckbuilder.DeckListViewAdapter;
@@ -19,7 +21,7 @@ import java.util.List;
 /**
  * Created by Laurence on 19/12/13.
  */
-public class CardViewer {
+public class CardViewer implements TextWatcher {
     private Filter filter;
     private List<AbstractCard> cards;
     private ImageAdapter adapter;
@@ -85,4 +87,24 @@ public class CardViewer {
     public ImageAdapter getAdapter() {
         return adapter;
     }
+
+	@Override
+	public void afterTextChanged(Editable arg0) {
+		filter.setFilterString(arg0.toString());
+		adapter.updateDeck(filter.filter(cards));
+		
+	}
+
+	@Override
+	public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
+			int arg3) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+		// TODO Auto-generated method stub
+		
+	}
 }
