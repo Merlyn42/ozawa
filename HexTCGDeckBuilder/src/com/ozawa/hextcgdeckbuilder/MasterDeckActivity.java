@@ -3,6 +3,11 @@ package com.ozawa.hextcgdeckbuilder;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.gesture.Gesture;
+import android.gesture.GestureLibraries;
+import android.gesture.GestureLibrary;
+import android.gesture.GestureOverlayView;
+import android.gesture.Prediction;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -24,10 +29,11 @@ import com.ozawa.hextcgdeckbuilder.json.JsonReader;
 
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MasterDeckActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, GestureOverlayView.OnGesturePerformedListener {
 
 
     /**
@@ -45,6 +51,7 @@ public class MasterDeckActivity extends ActionBarActivity
     private ImageAdapter adapter;
     public static CardViewer cardViewer;
     public final static String GETDECK = "GETDECK";
+    private GestureLibrary gesLibrary;
 
 
     @Override
@@ -57,6 +64,11 @@ public class MasterDeckActivity extends ActionBarActivity
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+        
+        gesLibrary = GestureLibraries.fromRawResource(this, R.raw.gestures);
+        if (!gesLibrary.load()) {
+            finish();
+        }        
 
         cardViewer = new CardViewer(this, masterDeck);
         setContentView(R.layout.activity_master_deck);
@@ -73,6 +85,10 @@ public class MasterDeckActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(cardViewer,this,
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+        
+        GestureOverlayView gestureOverlayView = (GestureOverlayView) findViewById(R.id.gestureOverlayView);
+
+        gestureOverlayView.addOnGesturePerformedListener(this);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -88,17 +104,49 @@ public class MasterDeckActivity extends ActionBarActivity
         });
 
     }
+    
+    @Override
+    public void onGesturePerformed(GestureOverlayView gestureOverlayView, Gesture gesture) {
 
-    public InputStream[] getJson() throws IllegalAccessException {
+        ArrayList<Prediction> predictions = gesLibrary.recognize(gesture);
+        if(predictions.size() > 0){
+            Prediction prediction = predictions.get(0);
+            if(prediction.score > 1.0){
+                if(prediction.name.equalsIgnoreCase("swipe left")){
+                    GridView gridView = (GridView)findViewById(R.id.grid_view);
+                    int x = (int)gesture.getStrokes().get(0).points[0];
+                    int y = (int)gesture.getStrokes().get(0).points[1];
+                    int test = gridView.pointToPosition(x,y);
+                    AbstractCard card = cardViewer.getFilteredCardList().get(test);
+                    Intent i = new Intent(getApplicationContext(), FullImageActivity.class);
+                    // passing array index
+                    i.putExtra("id",test);
+                    startActivity(i);
+
+                }
+            }
+        }
+    }    
+
+    public ArrayList<InputStream> getJson() throws IllegalAccessException {
         Field[] rawFields = R.raw.class.getFields();
-        InputStream[] jsonFiles = new InputStream[rawFields.length];
+        ArrayList<InputStream> jsonFiles = new ArrayList<InputStream>();
+        //InputStream[] jsonFiles = new InputStream[rawFields.length];
 
         for (int count = 0; count < rawFields.length; count++) {
             int rid = rawFields[count].getInt(rawFields[count]);
             try {
                 Resources res = getResources();
-                InputStream inputStream = res.openRawResource(rid);
-                jsonFiles[count] = inputStream;
+                String name = res.getResourceName(rid);
+                if(!name.contains("gestures")){
+                    InputStream inputStream = res.openRawResource(rid);
+                    if(inputStream != null){
+                        jsonFiles.add(inputStream);
+                    }
+                    else{
+                        String string = "String";
+                    }
+                }
             } catch (Exception e) {
             }
         }
