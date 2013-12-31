@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -242,6 +243,20 @@ public class NavigationDrawerFragment extends Fragment {
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         setUpButtons();
+    }
+    
+    public void setUp(View frag, CardViewer iCardViewer,Context iContext,int fragmentId, DrawerLayout drawerLayout) {
+        context=iContext;
+        cardViewer=iCardViewer;
+        mFragmentContainerView = frag.findViewById(fragmentId);
+        mDrawerLayout = drawerLayout;
+
+
+        // set a custom shadow that overlays the main content when the drawer opens
+        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        // set up the drawer's list view with items and click listener
+        setUpButtons();
+        
     }
 
     private void selectItem(int position) {
