@@ -24,7 +24,7 @@ public class FullImageActivity extends Activity {
         int position = i.getExtras().getInt("id");
 
         ImageView imageView = (ImageView) findViewById(R.id.full_image_view);
-        imageView.setImageBitmap(MasterDeckActivity.cardViewer.getFilteredCardList().get(position).getCardBitmap(this));
+        imageView.setImageBitmap(MasterDeckActivity.cardViewer.getFilteredCardList().get(position).getCardBitmap(this,true));
     }
 
 }

@@ -27,7 +27,7 @@ public class ResourceCard extends AbstractCard {
 	public int maxResourcesGranted;
 
     @Override
-    public Bitmap getCardBitmap(Context context) {
+    public Bitmap getCardBitmap(Context context, Boolean isFullScreen) {
         if (image != null) {
             return image;
         }

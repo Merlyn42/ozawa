@@ -55,8 +55,8 @@ public class Card extends AbstractCard {
      */
 
     @Override
-    public Bitmap getCardBitmap(Context context) {
-        if (image != null) {
+    public Bitmap getCardBitmap(Context context, Boolean isFullScreen) {
+        if (image != null && !isFullScreen) {
             return image;
         }
         Resources resources = context.getResources();
@@ -84,7 +84,7 @@ public class Card extends AbstractCard {
 
 
         // find the correct template
-        int templateId = determineTemplate();
+        int templateId = determineTemplate(isFullScreen);
         //get the template image
         BitmapFactory.Options templateFirstOptions = new BitmapFactory.Options();
         templateFirstOptions.inJustDecodeBounds = true;
@@ -113,13 +113,6 @@ public class Card extends AbstractCard {
         portraitSecondOptions.inSampleSize = scale;
         Bitmap portrait = BitmapFactory.decodeResource(resources, portraitId, portraitSecondOptions);
 
-
-        Paint paint = new Paint();
-        paint.setTextAlign(Paint.Align.LEFT);
-        paint.setTextSize(14f);
-        paint.setColor(-1);
-        paint.setFakeBoldText(true);
-
         image = Bitmap.createBitmap(template.getWidth(), template.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas combine = new Canvas(image);
         Rect dstRect = new Rect();
@@ -136,14 +129,18 @@ public class Card extends AbstractCard {
         combine.drawBitmap(portrait, srcRect, dstRect, null);
         combine.drawBitmap(template, 0f, 0f, null);
 
+        Paint paint = new Paint();
+        paint.setTextAlign(Paint.Align.LEFT);
+        paint.setTextSize(28f);
+        paint.setColor(-1);
+        paint.setFakeBoldText(true);
 
-        combine.drawText(name, 50, 20, paint);
-        paint.setTextSize(16f);
-        combine.drawText("" + resourceCost, template.getWidth() / 6, template.getHeight() / 6, paint);
+        combine.drawText(name, (float)(template.getWidth() / 3.25) , template.getHeight() / 11, paint);
+        combine.drawText("" + resourceCost, template.getWidth() / 7, (float)(template.getHeight() / 7.5), paint);
         if (cardType[0].equals(CardType.TROOP)) {
-            paint.setTextSize(21f);
-            combine.drawText(baseAttackValue, template.getWidth() / 9, template.getHeight() - (template.getWidth() / 10), paint);
-            combine.drawText(baseHealthValue, template.getWidth() - (template.getWidth() / 6), template.getHeight() - (template.getWidth() / 10), paint);
+            paint.setTextSize(36f);
+            combine.drawText(baseAttackValue, template.getWidth() / 9, template.getHeight() - (template.getHeight() / 10), paint);
+            combine.drawText(baseHealthValue, template.getWidth() - (template.getWidth() / 6), template.getHeight() - (template.getHeight() / 10), paint);
         }
         return image;
     }
@@ -153,29 +150,29 @@ public class Card extends AbstractCard {
      * TODO remove snowflakes
      * @return The ID of the template for this card as an int
      */
-    private int determineTemplate(){
+    private int determineTemplate(Boolean isFullScreen){
         int templateId = R.drawable.colorless_action_thumbnail;
         if (cardType.length > 0) {
             if (cardType[0] == CardType.TROOP || (cardType.length > 1 && cardType[1] == CardType.TROOP)) {
                 if (colorFlags.length > 0) {
                     switch (colorFlags[0]) {
                         case BLOOD:
-                            templateId = R.drawable.blood_troop_thumbnail;
+                            templateId = isFullScreen ? R.drawable.blood_troop : R.drawable.blood_troop_thumbnail;
                             break;
                         case COLORLESS:
-                            templateId = R.drawable.colorless_troop_thumbnail;
+                            templateId = isFullScreen ? R.drawable.colorless_troop : R.drawable.colorless_troop_thumbnail;
                             break;
                         case DIAMOND:
-                            templateId = R.drawable.diamond_troop_thumbnail;
+                            templateId = isFullScreen ? R.drawable.diamond_troop_cardtemplate : R.drawable.diamond_troop_thumbnail;
                             break;
                         case RUBY:
-                            templateId = R.drawable.ruby_troop_thumbnail;
+                            templateId = isFullScreen ? R.drawable.ruby_troop : R.drawable.ruby_troop_thumbnail;
                             break;
                         case SAPPHIRE:
-                            templateId = R.drawable.sapphire_troop_thumbnail;
+                            templateId = isFullScreen ? R.drawable.sapphire_troop : R.drawable.sapphire_troop_thumbnail;
                             break;
                         case WILD:
-                            templateId = R.drawable.wild_troop_thumbnail;
+                            templateId = isFullScreen ? R.drawable.wild_troop : R.drawable.wild_troop_thumbnail;
                             break;
                     }
                 }
@@ -183,22 +180,22 @@ public class Card extends AbstractCard {
                 if (colorFlags.length > 0) {
                     switch (colorFlags[0]) {
                         case BLOOD:
-                            templateId = R.drawable.blood_action_thumbnail;
+                            templateId = isFullScreen ? R.drawable.blood_action : R.drawable.blood_action_thumbnail;
                             break;
                         case COLORLESS:
-                            templateId = R.drawable.colorless_action_thumbnail;
+                            templateId = isFullScreen ? R.drawable.colorless_action : R.drawable.colorless_action_thumbnail;
                             break;
                         case DIAMOND:
-                            templateId = R.drawable.diamond_action_thumbnail;
+                            templateId = isFullScreen ? R.drawable.diamond_action_cardtemplate : R.drawable.diamond_action_thumbnail;
                             break;
                         case RUBY:
-                            templateId = R.drawable.ruby_action_thumbnail;
+                            templateId = isFullScreen ? R.drawable.ruby_action : R.drawable.ruby_action_thumbnail;
                             break;
                         case SAPPHIRE:
-                            templateId = R.drawable.sapphire_action_thumbnail;
+                            templateId = isFullScreen ? R.drawable.sapphire_action : R.drawable.sapphire_action_thumbnail;
                             break;
                         case WILD:
-                            templateId = R.drawable.wild_action_thumbnail;
+                            templateId = isFullScreen ? R.drawable.wild_action : R.drawable.wild_action_thumbnail;
                             break;
                     }
                 }

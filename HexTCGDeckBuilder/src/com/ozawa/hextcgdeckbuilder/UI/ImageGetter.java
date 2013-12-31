@@ -39,7 +39,7 @@ public class ImageGetter extends AsyncTask<AbstractCard, Void, Bitmap> {
      */
     @Override
     protected Bitmap doInBackground(AbstractCard... params) {
-        return params[0].getCardBitmap(context);
+        return params[0].getCardBitmap(context,false);
     }
     @Override
     protected void onPostExecute(Bitmap result) {

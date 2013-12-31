@@ -59,6 +59,6 @@ public abstract class AbstractCard {
      * @return The card's image as a bitmap
      */
 
-    public abstract Bitmap getCardBitmap(Context context);
+    public abstract Bitmap getCardBitmap(Context context, Boolean isFullScreen);
 
 }
