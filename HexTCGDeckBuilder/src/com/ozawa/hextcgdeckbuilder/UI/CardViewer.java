@@ -4,10 +4,7 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 
-import com.ozawa.hextcgdeckbuilder.DeckListViewActivity;
-import com.ozawa.hextcgdeckbuilder.DeckListViewAdapter;
 import com.ozawa.hextcgdeckbuilder.ImageAdapter;
-import com.ozawa.hextcgdeckbuilder.MasterDeckActivity;
 import com.ozawa.hextcgdeckbuilder.enums.Attribute;
 import com.ozawa.hextcgdeckbuilder.enums.CardEnum;
 import com.ozawa.hextcgdeckbuilder.enums.CardType;
@@ -86,6 +83,10 @@ public class CardViewer implements TextWatcher {
 
     public ImageAdapter getAdapter() {
         return adapter;
+    }
+    
+    public void setAdapter(ImageAdapter adapter){
+    	this.adapter = adapter;
     }
 
 	@Override

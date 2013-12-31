@@ -8,12 +8,14 @@ import android.graphics.Canvas;
 import android.text.BoringLayout;
 import android.util.DisplayMetrics;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.ozawa.hextcgdeckbuilder.UI.ImageGetter;
 import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
@@ -33,11 +35,16 @@ public class ImageAdapter extends BaseAdapter {
     private static int numberOfColumns = 3;
     private static int differenceInHeight = 26;
 
+    public boolean isListView = false;
+    private static LayoutInflater inflater=null;
+    
     public ImageAdapter(){}
     public ImageAdapter(Context c, List<AbstractCard> deck ) {
         mContext = c;
         masterDeck = deck;
         back= BitmapFactory.decodeResource(c.getResources(), R.drawable.back);
+        
+        inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     public int getCount() {
@@ -75,7 +82,7 @@ public class ImageAdapter extends BaseAdapter {
         return imageView;
     }
 
-    private void buildCardImage(AbstractCard card,ImageView imageView){
+    protected void buildCardImage(AbstractCard card,ImageView imageView){
         if(imageView.getTag() != null) {
             ((ImageGetter) imageView.getTag()).cancel(true);
         }
