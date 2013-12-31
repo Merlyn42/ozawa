@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ozawa.hextcgdeckbuilder.UI.ImageGetter;
+import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 
 /**
@@ -54,7 +55,36 @@ public class DeckListViewAdapter extends ImageAdapter{
         ImageView thumb_image=(ImageView)vi.findViewById(R.id.list_image); // thumb image
 
         AbstractCard card = masterDeck.get(position);
-
+        System.out.println("******** Flag: " + card.colorFlags[0]);
+        switch(card.colorFlags[0]){
+        	case COLORLESS:{
+        		vi.setBackgroundResource(R.drawable.list_selector_colorless);
+        		break;
+        	}
+        	case BLOOD:{
+        		vi.setBackgroundResource(R.drawable.list_selector_blood);
+        		break;
+        	}
+        	case DIAMOND:{
+        		vi.setBackgroundResource(R.drawable.list_selector_diamond);
+        		break;
+        	}
+        	case RUBY:{
+        		vi.setBackgroundResource(R.drawable.list_selector_ruby);
+        		break;
+        	}
+        	case SAPPHIRE:{
+        		vi.setBackgroundResource(R.drawable.list_selector_sapphire);
+        		break;
+        	}
+        	case WILD:{
+        		vi.setBackgroundResource(R.drawable.list_selector_wild);
+        		break;
+        	}
+        	default:{
+        		break;
+        	}
+        }
         // Setting all values in listview
         cardName.setText(card.name);
         gameText.setText(card.gameText);

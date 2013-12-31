@@ -226,7 +226,6 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 	            @Override
 	            public void onItemClick(AdapterView<?> parent, View view,
 	                                    int position, long id) {
-	
 	            }
 	        });
 	        
