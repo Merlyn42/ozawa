@@ -53,9 +53,9 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
                 // on changing the page
                 // make respected tab selected
                 actionBar.setSelectedNavigationItem(position);
-                if(position == 1){
+                /*if(position == 1){
                 	viewPager.setPagingEnabled(false);
-                }
+                }*/
             }
  
             @Override
@@ -66,6 +66,8 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
             public void onPageScrollStateChanged(int arg0) {
             }
         });
+        
+        viewPager.setCurrentItem(1); // Start app on MasterDeck view
     }
     
     @Override
@@ -102,9 +104,8 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 	}
 
 	@Override
-	public void onTabSelected(Tab arg0, FragmentTransaction arg1) {
-		// TODO Auto-generated method stub
-		
+	public void onTabSelected(Tab tab, FragmentTransaction fragTransaction) {
+		viewPager.setCurrentItem(tab.getPosition()); // Change to the tab when clicked
 	}
 
 	@Override
@@ -116,7 +117,6 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
 		// TODO Auto-generated method stub
-		
 	}
 
 }

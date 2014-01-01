@@ -55,7 +55,7 @@ public class DeckListViewAdapter extends ImageAdapter{
         ImageView thumb_image=(ImageView)vi.findViewById(R.id.list_image); // thumb image
 
         AbstractCard card = masterDeck.get(position);
-        System.out.println("******** Flag: " + card.colorFlags[0]);
+        
         switch(card.colorFlags[0]){
         	case COLORLESS:{
         		vi.setBackgroundResource(R.drawable.list_selector_colorless);
