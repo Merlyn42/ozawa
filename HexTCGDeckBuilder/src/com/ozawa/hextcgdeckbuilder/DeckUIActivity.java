@@ -77,13 +77,18 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Open the list view for the deck
+    	MasterDeckFragment masterDeckFragment = mAdapter.masterDeckFragment;
         switch (item.getItemId()) {
-            case R.id.action_deck_view: 
-            	mAdapter.masterDeckFragment.changeToGridView();
-                return true;
+            case R.id.action_deck_view:            	
+            	if(masterDeckFragment != null && !masterDeckFragment.isGridView){
+	            	masterDeckFragment.changeToGridView();	                
+            	}
+            	return true;
             case R.id.action_list_view:
-            	mAdapter.masterDeckFragment.changeToListView();
-                return true;
+            	if(masterDeckFragment != null && masterDeckFragment.isGridView){
+	            	masterDeckFragment.changeToListView();
+            	}
+            	return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
