@@ -3,6 +3,7 @@ package com.ozawa.hextcgdeckbuilder;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.ozawa.hextcgdeckbuilder.MasterDeckActivity.PlaceholderFragment;
@@ -199,11 +200,9 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
                     int position, long id) {
 				// Add card to custom deck
 				AbstractCard card = imAdapter.masterDeck.get(position);
-				((DeckUIActivity) mainActivity).customDeckList.add(card);
-				Toast.makeText(mainActivity.getApplicationContext(), card.name + " added to custom deck.", Toast.LENGTH_SHORT).show();
+				addCardToCustomDeck(card);
 				return true;
 			}
-			
 		});
         setIsGridView(true);
 	}
@@ -232,8 +231,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
                     int position, long id) {
 				// Add card to custom deck
 				AbstractCard card = lvAdapter.masterDeck.get(position);
-				((DeckUIActivity) mainActivity).customDeckList.add(card);
-				Toast.makeText(mainActivity.getApplicationContext(), card.name + " added to custom deck.", Toast.LENGTH_SHORT).show();
+				addCardToCustomDeck(card);
 				return true;
 			}
 			
@@ -245,5 +243,22 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 	
 	public void setIsGridView(boolean isGridView){
 		this.isGridView = isGridView;
+	}
+	
+	
+	/**
+	 * Add a card to the custom deck
+	 * 
+	 * @param card
+	 */
+	private void addCardToCustomDeck(AbstractCard card) {
+		HashMap<AbstractCard, Integer> customDeck = ((DeckUIActivity) mainActivity).customDeck;
+		if(customDeck.get(card) == null){
+			customDeck.put(card, 1);
+			((DeckUIActivity) mainActivity).customDeckCardList.add(card);
+		}else{
+			customDeck.put(card, customDeck.get(card) + 1);
+		}		
+		Toast.makeText(mainActivity.getApplicationContext(), card.name + " added to custom deck.", Toast.LENGTH_SHORT).show();
 	}
 }
