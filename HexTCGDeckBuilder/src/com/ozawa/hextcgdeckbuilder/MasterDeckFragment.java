@@ -132,23 +132,20 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
         	for(Prediction prediction : predictions){
         		if(prediction.score > 1.0){
                     if(prediction.name.equalsIgnoreCase("swipe left")){
-                        /*GridView gridView = (GridView) uiLayout.findViewById(R.id.grid_view);
+                    	GridView gridView = (GridView) uiLayout.findViewById(R.id.master_deck_grid_view);
                         int x = (int)gesture.getStrokes().get(0).points[0];
                         int y = (int)gesture.getStrokes().get(0).points[1];
-                        int test = gridView.pointToPosition(x,y);
-                        AbstractCard card = cardViewer.getFilteredCardList().get(test);
-                        Intent i = new Intent(mainActivity.getApplicationContext(), FullImageActivity.class);
-                        // passing array index
-                        i.putExtra("id",test);
-                        startActivity(i);*/
+                        int position = gridView.pointToPosition(x,y);                                               
+        				AbstractCard card = imAdapter.masterDeck.get(position);
+        				addCardToCustomDeck(card);
+        				Toast.makeText(mainActivity.getApplicationContext(), card.name + " added to custom deck.", Toast.LENGTH_SHORT).show();
                     }else if(prediction.name.equalsIgnoreCase("swipe right")){
                     	CustomViewPager pager = (CustomViewPager) mainActivity.findViewById(R.id.pager);
                     	pager.setCurrentItem(pager.getCurrentItem()-1); // ******* TEMPORARY FIX FOR SLIDING BETWEEN PAGES
                     }
                 }
         	}
-        }
-		
+        }		
 	}
 	
 	public void changeToListView(){
