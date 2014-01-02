@@ -1,6 +1,7 @@
 package com.ozawa.hextcgdeckbuilder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.ozawa.hextcgdeckbuilder.UI.CardViewer;
 import com.ozawa.hextcgdeckbuilder.UI.CustomViewPager;
@@ -27,7 +28,8 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
     private String[] tabs = {"Custom Deck", "Master Deck"};
     
     // Current Custom Deck
-    public ArrayList<AbstractCard> customDeckList;
+    public ArrayList<AbstractCard> customDeckCardList;
+    public HashMap<AbstractCard, Integer> customDeck;
  
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +40,9 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 	    viewPager = (CustomViewPager) findViewById(R.id.pager);
 	    actionBar = getActionBar();
 	    mAdapter = new TabPagerAdapter(getSupportFragmentManager());
-	    customDeckList = new ArrayList<AbstractCard>();
+	    customDeck = new HashMap<AbstractCard, Integer>();
+	    customDeckCardList = new ArrayList<AbstractCard>(customDeck.keySet());
+	    
 	 
 	    viewPager.setAdapter(mAdapter);
 	    //actionBar.setHomeButtonEnabled(false);

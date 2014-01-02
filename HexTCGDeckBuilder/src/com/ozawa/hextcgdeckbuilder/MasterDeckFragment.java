@@ -3,6 +3,7 @@ package com.ozawa.hextcgdeckbuilder;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.ozawa.hextcgdeckbuilder.MasterDeckActivity.PlaceholderFragment;
@@ -131,23 +132,20 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
         	for(Prediction prediction : predictions){
         		if(prediction.score > 1.0){
                     if(prediction.name.equalsIgnoreCase("swipe left")){
-                        /*GridView gridView = (GridView) uiLayout.findViewById(R.id.grid_view);
+                    	GridView gridView = (GridView) uiLayout.findViewById(R.id.master_deck_grid_view);
                         int x = (int)gesture.getStrokes().get(0).points[0];
                         int y = (int)gesture.getStrokes().get(0).points[1];
-                        int test = gridView.pointToPosition(x,y);
-                        AbstractCard card = cardViewer.getFilteredCardList().get(test);
-                        Intent i = new Intent(mainActivity.getApplicationContext(), FullImageActivity.class);
-                        // passing array index
-                        i.putExtra("id",test);
-                        startActivity(i);*/
+                        int position = gridView.pointToPosition(x,y);                                               
+        				AbstractCard card = imAdapter.masterDeck.get(position);
+        				addCardToCustomDeck(card);
+        				Toast.makeText(mainActivity.getApplicationContext(), card.name + " added to custom deck.", Toast.LENGTH_SHORT).show();
                     }else if(prediction.name.equalsIgnoreCase("swipe right")){
                     	CustomViewPager pager = (CustomViewPager) mainActivity.findViewById(R.id.pager);
                     	pager.setCurrentItem(pager.getCurrentItem()-1); // ******* TEMPORARY FIX FOR SLIDING BETWEEN PAGES
                     }
                 }
         	}
-        }
-		
+        }		
 	}
 	
 	public void changeToListView(){
@@ -199,11 +197,9 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
                     int position, long id) {
 				// Add card to custom deck
 				AbstractCard card = imAdapter.masterDeck.get(position);
-				((DeckUIActivity) mainActivity).customDeckList.add(card);
-				Toast.makeText(mainActivity.getApplicationContext(), card.name + " added to custom deck.", Toast.LENGTH_SHORT).show();
+				addCardToCustomDeck(card);
 				return true;
 			}
-			
 		});
         setIsGridView(true);
 	}
@@ -232,8 +228,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
                     int position, long id) {
 				// Add card to custom deck
 				AbstractCard card = lvAdapter.masterDeck.get(position);
-				((DeckUIActivity) mainActivity).customDeckList.add(card);
-				Toast.makeText(mainActivity.getApplicationContext(), card.name + " added to custom deck.", Toast.LENGTH_SHORT).show();
+				addCardToCustomDeck(card);
 				return true;
 			}
 			
@@ -245,5 +240,22 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 	
 	public void setIsGridView(boolean isGridView){
 		this.isGridView = isGridView;
+	}
+	
+	
+	/**
+	 * Add a card to the custom deck
+	 * 
+	 * @param card
+	 */
+	private void addCardToCustomDeck(AbstractCard card) {
+		HashMap<AbstractCard, Integer> customDeck = ((DeckUIActivity) mainActivity).customDeck;
+		if(customDeck.get(card) == null){
+			customDeck.put(card, 1);
+			((DeckUIActivity) mainActivity).customDeckCardList.add(card);
+		}else{
+			customDeck.put(card, customDeck.get(card) + 1);
+		}		
+		Toast.makeText(mainActivity.getApplicationContext(), card.name + " added to custom deck.", Toast.LENGTH_SHORT).show();
 	}
 }

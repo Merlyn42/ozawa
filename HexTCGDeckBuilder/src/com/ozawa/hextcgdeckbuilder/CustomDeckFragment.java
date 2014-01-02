@@ -3,6 +3,7 @@ package com.ozawa.hextcgdeckbuilder;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.ozawa.hextcgdeckbuilder.MasterDeckActivity.PlaceholderFragment;
@@ -68,7 +69,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }*/
-		deck = ((DeckUIActivity) mainActivity).customDeckList;
+		deck = ((DeckUIActivity) mainActivity).customDeckCardList;
         
         gesLibrary = GestureLibraries.fromRawResource(mainActivity, R.raw.gestures);
         if (!gesLibrary.load()) {
@@ -134,11 +135,19 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
                     if(prediction.name.equalsIgnoreCase("swipe left")){
                     	CustomViewPager pager = (CustomViewPager) mainActivity.findViewById(R.id.pager);
                     	pager.setCurrentItem(pager.getCurrentItem()+1); // ******* TEMPORARY FIX FOR SLIDING BETWEEN PAGES
+                    } else if(prediction.name.equalsIgnoreCase("swipe right")){
+                    	GridView gridView = (GridView) uiLayout.findViewById(R.id.custom_deck_grid_view);
+                        int x = (int)gesture.getStrokes().get(0).points[0];
+                        int y = (int)gesture.getStrokes().get(0).points[1];
+                        int position = gridView.pointToPosition(x,y);
+        				AbstractCard card = imAdapter.masterDeck.get(position);
+        				deck.remove(card);
+        				imAdapter.updateDeck(deck);
+        				Toast.makeText(mainActivity.getApplicationContext(), card.name + " removed to custom deck.", Toast.LENGTH_SHORT).show();        				        				        				        			
                     }
                 }
         	}
-        }
-		
+        }		
 	}
 	
 	public void changeToListView(){
@@ -190,9 +199,8 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
                     int position, long id) {
 				// Remove cards from custom deck
 				AbstractCard card = imAdapter.masterDeck.get(position);
-				deck.remove(card);
-				Toast.makeText(mainActivity.getApplicationContext(), card.name + " removed to custom deck.", Toast.LENGTH_SHORT).show();
-				imAdapter.updateDeck(deck);
+				removeCardFromCustomDeck(card);
+				imAdapter.updateDeckAndCardViewDeck(deck, cardViewer);
 				return true;
 			}
 			
@@ -225,9 +233,8 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
                     int position, long id) {
 				// Remove cards from custom deck
 				AbstractCard card = lvAdapter.masterDeck.get(position);
-				deck.remove(card);
-				Toast.makeText(mainActivity.getApplicationContext(), card.name + " removed to custom deck.", Toast.LENGTH_SHORT).show();
-				lvAdapter.updateDeck(deck);
+				removeCardFromCustomDeck(card);
+				lvAdapter.updateDeckAndCardViewDeck(deck, cardViewer);
 				return true;
 			}
 			
@@ -250,10 +257,30 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 	    // Update the view so the user can see the newly added cards
 	    if (this.isVisible() && isVisibleToUser) {
         	if(isGridView){
-				imAdapter.updateDeck(deck);
+				imAdapter.updateDeckAndCardViewDeck(deck, cardViewer);
 			}else{
-				lvAdapter.updateDeck(deck);
+				lvAdapter.updateDeckAndCardViewDeck(deck, cardViewer);
 			}	        
 	    }
+	}
+	
+	/**
+	 * Remove a card from the custom deck
+	 * 
+	 * @param card
+	 */
+	private void removeCardFromCustomDeck(AbstractCard card) {
+		HashMap<AbstractCard, Integer> customDeck = ((DeckUIActivity) mainActivity).customDeck;
+		if(customDeck.get(card) != null){
+			int cardCount = customDeck.get(card);
+			if(cardCount > 1){
+				customDeck.put(card, customDeck.get(card) - 1);
+			}else{
+				customDeck.remove(card);
+				((DeckUIActivity) mainActivity).customDeckCardList.remove(card);
+			}			
+		}
+		
+		Toast.makeText(mainActivity.getApplicationContext(), card.name + " removed from custom deck.", Toast.LENGTH_SHORT).show();
 	}
 }
