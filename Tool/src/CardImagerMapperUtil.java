@@ -16,7 +16,7 @@ import json.JSONSerializer;
 public class CardImagerMapperUtil {
 	private static File baseLocation = new File("C:\\data");
 	private static File newImageLocation = new File(baseLocation,
-			"\\res\\drawable-hdpi\\");
+			"\\res\\drawable-nodpi\\");
 	private static String imageName = "hex";
 	private static int fileNumber = 1;
 
