@@ -62,7 +62,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 		mainActivity = super.getActivity();
-		jsonReader = new JsonReader();
+		jsonReader = new JsonReader(container.getContext());
         /*try {
             deck = jsonReader.deserializeJSONInputStreamsToCard(getJson());
         } catch (IllegalAccessException e) {

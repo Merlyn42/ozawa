@@ -62,7 +62,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 		mainActivity = super.getActivity();
-		jsonReader = new JsonReader();
+		jsonReader = new JsonReader(container.getContext());
         try {
             deck = jsonReader.deserializeJSONInputStreamsToCard(getJson());
         } catch (IllegalAccessException e) {
@@ -103,7 +103,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
             try {
                 Resources res = getResources();
                 String name = res.getResourceName(rid);
-                if(!name.contains("gestures")){
+                if(name.contains("hexcard")){
                     InputStream inputStream = res.openRawResource(rid);
                     if(inputStream != null){
                         jsonFiles.add(inputStream);

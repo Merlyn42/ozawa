@@ -44,7 +44,7 @@ public class DeckListViewActivity extends ActionBarActivity implements Navigatio
         Intent intent = getIntent();
         // If the deck didn't come from the MasterDeckActivityScreen get the deck data.
         if(intent.getBooleanExtra(MasterDeckActivity.GETDECK, true)){
-            jsonReader = new JsonReader();
+            jsonReader = new JsonReader(this);
             try {
                 deck = jsonReader.deserializeJSONInputStreamsToCard(getJson());
             } catch (IllegalAccessException e) {
@@ -109,7 +109,7 @@ public class DeckListViewActivity extends ActionBarActivity implements Navigatio
             try {
                 Resources res = getResources();
                 String name = res.getResourceName(rid);
-                if(!name.contains("gestures")){
+                if(name.contains("hexcard")){
                     InputStream inputStream = res.openRawResource(rid);
                     if(inputStream != null){
                         jsonFiles.add(inputStream);

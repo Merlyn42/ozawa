@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import com.ozawa.hextcgdeckbuilder.UI.CardTemplate;
 import com.ozawa.hextcgdeckbuilder.UI.CardViewer;
 import com.ozawa.hextcgdeckbuilder.filter.Filter;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
@@ -30,6 +31,7 @@ import com.ozawa.hextcgdeckbuilder.json.JsonReader;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MasterDeckActivity extends ActionBarActivity
@@ -58,7 +60,7 @@ public class MasterDeckActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        jsonReader = new JsonReader();
+        jsonReader = new JsonReader(this);
         try {
             masterDeck = jsonReader.deserializeJSONInputStreamsToCard(getJson());
         } catch (IllegalAccessException e) {
@@ -68,7 +70,8 @@ public class MasterDeckActivity extends ActionBarActivity
         gesLibrary = GestureLibraries.fromRawResource(this, R.raw.gestures);
         if (!gesLibrary.load()) {
             finish();
-        }        
+        }
+        
 
         cardViewer = new CardViewer(this, masterDeck);
         setContentView(R.layout.activity_master_deck);
@@ -80,7 +83,7 @@ public class MasterDeckActivity extends ActionBarActivity
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
-        this.getResources();
+        
         //Set up the drawer.
         mNavigationDrawerFragment.setUp(cardViewer,this,
                 R.id.navigation_drawer,
@@ -138,7 +141,7 @@ public class MasterDeckActivity extends ActionBarActivity
             try {
                 Resources res = getResources();
                 String name = res.getResourceName(rid);
-                if(!name.contains("gestures")){
+                if(name.contains("hexcard")){
                     InputStream inputStream = res.openRawResource(rid);
                     if(inputStream != null){
                         jsonFiles.add(inputStream);
