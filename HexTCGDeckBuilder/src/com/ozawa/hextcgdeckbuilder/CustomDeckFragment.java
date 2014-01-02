@@ -135,14 +135,17 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
                     if(prediction.name.equalsIgnoreCase("swipe left")){
                     	CustomViewPager pager = (CustomViewPager) mainActivity.findViewById(R.id.pager);
                     	pager.setCurrentItem(pager.getCurrentItem()+1); // ******* TEMPORARY FIX FOR SLIDING BETWEEN PAGES
-                    } else if(prediction.name.equalsIgnoreCase("swipe right")){
-                    	GridView gridView = (GridView) uiLayout.findViewById(R.id.custom_deck_grid_view);
+                    } else if(prediction.name.equalsIgnoreCase("swipe right")){                    	
                         int x = (int)gesture.getStrokes().get(0).points[0];
-                        int y = (int)gesture.getStrokes().get(0).points[1];
-                        int position = gridView.pointToPosition(x,y);
+                        int y = (int)gesture.getStrokes().get(0).points[1];                        
+                        
                         if(isGridView){
+                        	GridView gridView = (GridView) uiLayout.findViewById(R.id.custom_deck_grid_view);
+                        	int position = gridView.pointToPosition(x,y);
                         	removeCardFromGridView(position);
-                        }else{
+                        }else{                        	
+                        	ListView listView = (ListView) uiLayout.findViewById(R.id.custom_deck_deck_list);
+                        	int position = listView.pointToPosition(x,y);
                         	removeCardFromListView(position);
                         }        				        				        				        				        			
                     }
