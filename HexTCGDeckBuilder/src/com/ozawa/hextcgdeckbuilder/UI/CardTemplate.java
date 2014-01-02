@@ -75,11 +75,10 @@ public class CardTemplate {
 	
 	public static List<CardTemplate> getAllTemplates(Context context){
 		if (ALLTEMPLATES == null){
-			
+			Resources res = context.getResources();
+			JsonReader jsonReader = new JsonReader(context);
+	        ALLTEMPLATES = Arrays.asList(jsonReader.deserializeJSONInputStreamToCardTemplates(res.openRawResource(R.raw.card_templates)));	
 		}
-		Resources res = context.getResources();
-		JsonReader jsonReader = new JsonReader(context);
-        ALLTEMPLATES = Arrays.asList(jsonReader.deserializeJSONInputStreamToCardTemplates(res.openRawResource(R.raw.card_templates)));
 		return ALLTEMPLATES;
 		
 	}
