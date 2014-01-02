@@ -2,7 +2,7 @@
 <android.support.v4.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/master_deck_drawer_layout"
+    android:id="@+id/custom_deck_drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.ozawa.hextcgdeckbuilder.DeckUIActivity">
@@ -10,16 +10,16 @@
     <!-- As the main content view, the view below consumes the entire
          space available using match_parent in both dimensions. -->
     <FrameLayout
-        android:id="@+id/master_deck_container"
+        android:id="@+id/custom_deck_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
         <android.gesture.GestureOverlayView
             android:layout_width="match_parent"
         	android:layout_height="match_parent" 
-            android:id="@+id/masterDeckGestureOverlayView">
+            android:id="@+id/customDeckGestureOverlayView">
 
         <GridView
-            android:id="@+id/master_deck_grid_view"
+            android:id="@+id/custom_deck_grid_view"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:numColumns="3"
@@ -34,7 +34,7 @@
 	        android:orientation="vertical">
 
 	        <ListView
-	            android:id="@+id/master_deck_deck_list"
+	            android:id="@+id/custom_deck_deck_list"
 	            android:layout_width="fill_parent"
 	            android:layout_height="wrap_content"
 	            android:divider="#b5b5b5"
@@ -45,10 +45,10 @@
      	</android.gesture.GestureOverlayView>
     </FrameLayout>
     
-    <fragment android:id="@+id/master_deck_navigation_drawer"
+    <fragment android:id="@+id/custom_deck_navigation_drawer"
         android:layout_width="@dimen/navigation_drawer_width"
         android:layout_height="match_parent"
-        android:layout_gravity="right"
+        android:layout_gravity="left"
         android:name="com.ozawa.hextcgdeckbuilder.NavigationDrawerFragment" />
 
 </android.support.v4.widget.DrawerLayout>

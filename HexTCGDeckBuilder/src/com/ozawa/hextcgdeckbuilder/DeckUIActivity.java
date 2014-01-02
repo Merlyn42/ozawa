@@ -1,8 +1,11 @@
 package com.ozawa.hextcgdeckbuilder;
 
+import java.util.ArrayList;
+
 import com.ozawa.hextcgdeckbuilder.UI.CardViewer;
 import com.ozawa.hextcgdeckbuilder.UI.CustomViewPager;
 import com.ozawa.hextcgdeckbuilder.UI.TabPagerAdapter;
+import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -22,6 +25,9 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
     public static ActionBar actionBar;
     // Tab titles
     private String[] tabs = {"Custom Deck", "Master Deck"};
+    
+    // Current Custom Deck
+    public ArrayList<AbstractCard> customDeckList;
  
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +38,7 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 	    viewPager = (CustomViewPager) findViewById(R.id.pager);
 	    actionBar = getActionBar();
 	    mAdapter = new TabPagerAdapter(getSupportFragmentManager());
+	    customDeckList = new ArrayList<AbstractCard>();
 	 
 	    viewPager.setAdapter(mAdapter);
 	    //actionBar.setHomeButtonEnabled(false);
@@ -80,15 +87,22 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
     public boolean onOptionsItemSelected(MenuItem item) {
         // Open the list view for the deck
     	MasterDeckFragment masterDeckFragment = mAdapter.masterDeckFragment;
+    	CustomDeckFragment customDeckFragment = mAdapter.customDeckFragment;
         switch (item.getItemId()) {
             case R.id.action_deck_view:            	
             	if(masterDeckFragment != null && !masterDeckFragment.isGridView){
 	            	masterDeckFragment.changeToGridView();	                
             	}
+            	if(customDeckFragment != null && !customDeckFragment.isGridView){
+            		customDeckFragment.changeToGridView();	                
+            	}
             	return true;
             case R.id.action_list_view:
             	if(masterDeckFragment != null && masterDeckFragment.isGridView){
 	            	masterDeckFragment.changeToListView();
+            	}
+            	if(customDeckFragment != null && customDeckFragment.isGridView){
+            		customDeckFragment.changeToListView();
             	}
             	return true;
             default:

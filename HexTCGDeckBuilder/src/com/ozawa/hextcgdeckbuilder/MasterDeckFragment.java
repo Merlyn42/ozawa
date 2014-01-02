@@ -28,9 +28,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class MasterDeckFragment extends Fragment implements NavigationDrawerFragment.NavigationDrawerCallbacks, GestureOverlayView.OnGesturePerformedListener{
 	
@@ -73,15 +76,15 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 
         cardViewer = new CardViewer(mainActivity, deck);
         imAdapter = cardViewer.getAdapter();
-        uiLayout = (DrawerLayout) inflater.inflate(R.layout.master_deck_fragment, container, false);
+        uiLayout = (DrawerLayout) inflater.inflate(R.layout.fragment_master_deck, container, false);
         
-        mNavigationDrawerFragment = (NavigationDrawerFragment) mainActivity.getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+        mNavigationDrawerFragment = (NavigationDrawerFragment) mainActivity.getSupportFragmentManager().findFragmentById(R.id.master_deck_navigation_drawer);
         //Set up the drawer.
         mNavigationDrawerFragment.setUp(uiLayout, cardViewer,mainActivity,
-                R.id.navigation_drawer,
-                (DrawerLayout) uiLayout.findViewById(R.id.drawer_layout));
+                R.id.master_deck_navigation_drawer,
+                (DrawerLayout) uiLayout.findViewById(R.id.master_deck_drawer_layout));
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.add(R.id.navigation_drawer, mNavigationDrawerFragment).commit();
+        transaction.add(R.id.master_deck_navigation_drawer, mNavigationDrawerFragment).commit();
         
         GestureOverlayView gestureOverlayView = (GestureOverlayView) uiLayout.findViewById(R.id.masterDeckGestureOverlayView);
         gestureOverlayView.addOnGesturePerformedListener(this);
@@ -127,7 +130,6 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
         if(predictions.size() > 0){
         	for(Prediction prediction : predictions){
         		if(prediction.score > 1.0){
-        			System.out.println("********** " + prediction.name + " ***********");
                     if(prediction.name.equalsIgnoreCase("swipe left")){
                         /*GridView gridView = (GridView) uiLayout.findViewById(R.id.grid_view);
                         int x = (int)gesture.getStrokes().get(0).points[0];
@@ -173,7 +175,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 	}
 	
 	private void setUpGridView(){
-		gridView = (GridView) uiLayout.findViewById(R.id.grid_view);
+		gridView = (GridView) uiLayout.findViewById(R.id.master_deck_grid_view);
 
         gridView.setAdapter(cardViewer.getAdapter());
 
@@ -190,11 +192,24 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
             }
         });
         
+        gridView.setOnItemLongClickListener(new OnItemLongClickListener(){
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view,
+                    int position, long id) {
+				// Add card to custom deck
+				AbstractCard card = imAdapter.masterDeck.get(position);
+				((DeckUIActivity) mainActivity).customDeckList.add(card);
+				Toast.makeText(mainActivity.getApplicationContext(), card.name + " added to custom deck.", Toast.LENGTH_SHORT).show();
+				return true;
+			}
+			
+		});
         setIsGridView(true);
 	}
 	
 	private void setUpListView(){
-		listView = (ListView) uiLayout.findViewById(R.id.deck_list);
+		listView = (ListView) uiLayout.findViewById(R.id.master_deck_deck_list);
 		        
         // Getting adapter by passing xml data ArrayList
         lvAdapter=new DeckListViewAdapter(mainActivity, cardViewer.getAdapter().masterDeck);
@@ -209,6 +224,21 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
             	
             }
         });
+		
+		listView.setOnItemLongClickListener(new OnItemLongClickListener(){
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view,
+                    int position, long id) {
+				// Add card to custom deck
+				AbstractCard card = lvAdapter.masterDeck.get(position);
+				((DeckUIActivity) mainActivity).customDeckList.add(card);
+				Toast.makeText(mainActivity.getApplicationContext(), card.name + " added to custom deck.", Toast.LENGTH_SHORT).show();
+				return true;
+			}
+			
+		});
+		
         
         setIsGridView(false);
 	}
