@@ -1885,3 +1885,5 @@ HexTCGDeckBuilder/res/drawable-nodpi/hex00400.png
 HexTCGDeckBuilder/res/drawable-nodpi/hex00401.png
 HexTCGDeckBuilder/res/drawable-nodpi/hex00402.png
 HexTCGDeckBuilder/res/drawable-nodpi/hex00403.png
+HexTCGDeckBuilder/gen/com/ozawa/hextcgdeckbuilder/BuildConfig.java
+HexTCGDeckBuilder/project.properties
