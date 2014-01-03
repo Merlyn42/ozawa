@@ -64,6 +64,10 @@ public abstract class AbstractCard {
 	public CardLayout extendedLayout;
     protected Bitmap image;
     protected int cachedImageWidthLimit;
+    
+    public String getID(){
+		return this.id.gUID;
+	}
 
     /**
      * Generates the card's image and returns it as a bitmap

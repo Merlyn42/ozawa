@@ -9,6 +9,9 @@ import com.google.gson.annotations.SerializedName;
  */
 public class GlobalIdentifier {
 	
+	public GlobalIdentifier(String id){
+		this.gUID = id;
+	}
 	@SerializedName("m_Guid")
 	public String gUID;
 

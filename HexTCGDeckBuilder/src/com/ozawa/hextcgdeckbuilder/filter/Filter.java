@@ -48,6 +48,9 @@ public class Filter {
         }else if(e instanceof Attribute){
             attributes.add((Attribute)e);
         }else if(e instanceof CardType){
+        	if(e==CardType.TROOP||e==CardType.CONSTANT){
+        		cardTypes.add(CardType.ARTIFACT);
+        	}
             cardTypes.add((CardType) e);
         }else{
             throw new RuntimeException("Unknown enum type");
@@ -60,6 +63,9 @@ public class Filter {
         }else if(e instanceof Attribute){
             attributes.remove((Attribute) e);
         }else if(e instanceof CardType){
+        	if(e==CardType.TROOP&&!isActive(CardType.CONSTANT)||e==CardType.CONSTANT&&!isActive(CardType.TROOP)){
+        		cardTypes.remove(CardType.ARTIFACT);
+        	}
             cardTypes.remove((CardType) e);
         }else{
             throw new RuntimeException("Unknown enum type");

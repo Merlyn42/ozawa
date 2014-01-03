@@ -135,15 +135,19 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
                     if(prediction.name.equalsIgnoreCase("swipe left")){
                     	CustomViewPager pager = (CustomViewPager) mainActivity.findViewById(R.id.pager);
                     	pager.setCurrentItem(pager.getCurrentItem()+1); // ******* TEMPORARY FIX FOR SLIDING BETWEEN PAGES
-                    } else if(prediction.name.equalsIgnoreCase("swipe right")){
-                    	GridView gridView = (GridView) uiLayout.findViewById(R.id.custom_deck_grid_view);
+                    } else if(prediction.name.equalsIgnoreCase("swipe right")){                    	
                         int x = (int)gesture.getStrokes().get(0).points[0];
-                        int y = (int)gesture.getStrokes().get(0).points[1];
-                        int position = gridView.pointToPosition(x,y);
-        				AbstractCard card = imAdapter.masterDeck.get(position);
-        				deck.remove(card);
-        				imAdapter.updateDeck(deck);
-        				Toast.makeText(mainActivity.getApplicationContext(), card.name + " removed to custom deck.", Toast.LENGTH_SHORT).show();        				        				        				        			
+                        int y = (int)gesture.getStrokes().get(0).points[1];                        
+                        
+                        if(isGridView){
+                        	GridView gridView = (GridView) uiLayout.findViewById(R.id.custom_deck_grid_view);
+                        	int position = gridView.pointToPosition(x,y);
+                        	removeCardFromGridView(position);
+                        }else{                        	
+                        	ListView listView = (ListView) uiLayout.findViewById(R.id.custom_deck_deck_list);
+                        	int position = listView.pointToPosition(x,y);
+                        	removeCardFromListView(position);
+                        }        				        				        				        				        			
                     }
                 }
         	}
@@ -188,6 +192,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
                 Intent i = new Intent(mainActivity.getApplicationContext(), FullImageActivity.class);
                 // passing array index
                 i.putExtra("id",position);
+                i.putExtra("isMaster", false);
                 startActivity(i);
             }
         });
@@ -198,9 +203,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
                     int position, long id) {
 				// Remove cards from custom deck
-				AbstractCard card = imAdapter.masterDeck.get(position);
-				removeCardFromCustomDeck(card);
-				imAdapter.updateDeckAndCardViewDeck(deck, cardViewer);
+				removeCardFromGridView(position);
 				return true;
 			}
 			
@@ -232,9 +235,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
                     int position, long id) {
 				// Remove cards from custom deck
-				AbstractCard card = lvAdapter.masterDeck.get(position);
-				removeCardFromCustomDeck(card);
-				lvAdapter.updateDeckAndCardViewDeck(deck, cardViewer);
+				removeCardFromListView(position);
 				return true;
 			}
 			
@@ -262,6 +263,26 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 				lvAdapter.updateDeckAndCardViewDeck(deck, cardViewer);
 			}	        
 	    }
+	}
+	
+	/**
+	 * Remove a card from the custom deck if in GridView
+	 */
+	private void removeCardFromGridView(int position){
+		AbstractCard card = imAdapter.masterDeck.get(position);
+		removeCardFromCustomDeck(card);
+		imAdapter.updateDeckAndCardViewDeck(deck, cardViewer);
+		Toast.makeText(mainActivity.getApplicationContext(), card.name + " removed to custom deck.", Toast.LENGTH_SHORT).show();
+	}
+	
+	/**
+	 * Remove a card from the custom deck if in GridView
+	 */
+	private void removeCardFromListView(int position){
+		AbstractCard card = lvAdapter.masterDeck.get(position);
+		removeCardFromCustomDeck(card);
+		lvAdapter.updateDeckAndCardViewDeck(deck, cardViewer);
+		Toast.makeText(mainActivity.getApplicationContext(), card.name + " removed to custom deck.", Toast.LENGTH_SHORT).show();
 	}
 	
 	/**

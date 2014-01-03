@@ -10,8 +10,8 @@ import com.google.gson.annotations.SerializedName;
 public class DeckResource {
 	
 	@SerializedName("m_idTemplate")
-	GlobalIdentifier cardID;
+	public GlobalIdentifier cardID;
 	@SerializedName("m_Count")
-	int cardCount;
+	public int cardCount;
 
 }

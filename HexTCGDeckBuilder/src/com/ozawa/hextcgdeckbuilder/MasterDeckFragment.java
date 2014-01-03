@@ -131,12 +131,21 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
         if(predictions.size() > 0){
         	for(Prediction prediction : predictions){
         		if(prediction.score > 1.0){
-                    if(prediction.name.equalsIgnoreCase("swipe left")){
-                    	GridView gridView = (GridView) uiLayout.findViewById(R.id.master_deck_grid_view);
+                    if(prediction.name.equalsIgnoreCase("swipe left")){                    	
                         int x = (int)gesture.getStrokes().get(0).points[0];
                         int y = (int)gesture.getStrokes().get(0).points[1];
-                        int position = gridView.pointToPosition(x,y);                                               
-        				AbstractCard card = imAdapter.masterDeck.get(position);
+                        AbstractCard card;
+                        int position;
+                        if(isGridView){
+                        	GridView gridView = (GridView) uiLayout.findViewById(R.id.master_deck_grid_view);
+                        	position = gridView.pointToPosition(x,y);
+                        	card = imAdapter.masterDeck.get(position);
+                        } else {
+                        	ListView listView = (ListView) uiLayout.findViewById(R.id.master_deck_deck_list);
+                        	position = listView.pointToPosition(x,y);
+                        	card = lvAdapter.masterDeck.get(position);
+                        }
+                                                                               				
         				addCardToCustomDeck(card);
         				Toast.makeText(mainActivity.getApplicationContext(), card.name + " added to custom deck.", Toast.LENGTH_SHORT).show();
                     }else if(prediction.name.equalsIgnoreCase("swipe right")){
@@ -186,6 +195,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
                 Intent i = new Intent(mainActivity.getApplicationContext(), FullImageActivity.class);
                 // passing array index
                 i.putExtra("id",position);
+                i.putExtra("isMaster", true);
                 startActivity(i);
             }
         });
