@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import com.google.gson.annotations.SerializedName;
 import com.ozawa.hextcgdeckbuilder.R;
 import com.ozawa.hextcgdeckbuilder.UI.CardTemplate;
+import com.ozawa.hextcgdeckbuilder.UI.ImageCache;
 import com.ozawa.hextcgdeckbuilder.enums.CardRarity;
 import com.ozawa.hextcgdeckbuilder.enums.CardType;
 import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
@@ -71,8 +72,22 @@ public abstract class AbstractCard {
      */
     
 	public Bitmap getThumbnailCardBitmap(Context context){
-		return getCardBitmap(context, CardTemplate.findCardTemplate(this, false, CardTemplate.getAllTemplates(context)), getScreenWidth(context)/3);
+		
+		int maxWidth = getScreenWidth(context)/3;
+		
+        if (image == null || cachedImageWidthLimit !=maxWidth) {
+        	image = getCardBitmap(context, CardTemplate.findCardTemplate(this, false, CardTemplate.getAllTemplates(context)), maxWidth);
+        	cachedImageWidthLimit=maxWidth;
+        	ImageCache.addToCache(this);
+        }
+         
+		return image;
     }
+	
+	public void clearImageCache(){
+		image.recycle();
+		image=null;
+	}
     
 	@SuppressLint("NewApi")
     private int getScreenWidth(Context context){

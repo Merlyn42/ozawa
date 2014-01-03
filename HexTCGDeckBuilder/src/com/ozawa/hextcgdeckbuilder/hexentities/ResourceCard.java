@@ -29,9 +29,6 @@ public class ResourceCard extends AbstractCard {
 
     @Override
     public Bitmap getCardBitmap(Context context, CardTemplate template, int maxWidth) {
-        if (image != null) {
-            return image;
-        }
         Resources resources = context.getResources();
         final int resourceId = resources.getIdentifier(cardImagePath.split("\\.")[0], "drawable",
                 context.getPackageName());
@@ -48,9 +45,6 @@ public class ResourceCard extends AbstractCard {
 
      //   o2.inSampleSize = scale;
         Bitmap fg = BitmapFactory.decodeResource(resources, resourceId, o2);
-        image = Bitmap.createBitmap(fg.getWidth(), fg.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas combine = new Canvas(image);
-        image = fg;
         return fg;
     }
 }

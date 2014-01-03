@@ -59,11 +59,7 @@ public class Card extends AbstractCard {
 
     
 	@Override
-    public Bitmap getCardBitmap(Context context, CardTemplate template, int maxWidth) {
-        if (image != null && cachedImageWidthLimit ==maxWidth) {
-            return image;
-        }
-        		
+    public Bitmap getCardBitmap(Context context, CardTemplate template, int maxWidth) {     		
         Resources resources = context.getResources();
         final int portraitId = resources.getIdentifier(cardImagePath.split("\\.")[0], "drawable",
                 context.getPackageName());
@@ -101,9 +97,8 @@ public class Card extends AbstractCard {
         portraitSecondOptions.inSampleSize = scale;
         Bitmap portrait = BitmapFactory.decodeResource(resources, portraitId, portraitSecondOptions);
 
-        image = Bitmap.createBitmap(templateImage.getWidth(), templateImage.getHeight(), Bitmap.Config.ARGB_8888);
-        cachedImageWidthLimit=maxWidth;
-        Canvas combine = new Canvas(image);
+        Bitmap result = Bitmap.createBitmap(templateImage.getWidth(), templateImage.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas combine = new Canvas(result);
         Rect dstRect = new Rect();
         Rect srcRect = new Rect();
         dstRect.top = (int) (templateImage.getHeight() * template.top);
@@ -131,7 +126,7 @@ public class Card extends AbstractCard {
             combine.drawText(baseAttackValue, templateImage.getWidth() / 9, templateImage.getHeight() - (templateImage.getHeight() / 10), paint);
             combine.drawText(baseHealthValue, templateImage.getWidth() - (templateImage.getWidth() / 6), templateImage.getHeight() - (templateImage.getHeight() / 10), paint);
         }
-        return image;
+        return result;
     }
 
 

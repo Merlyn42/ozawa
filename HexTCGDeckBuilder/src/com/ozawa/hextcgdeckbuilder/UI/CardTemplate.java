@@ -55,32 +55,32 @@ public class CardTemplate {
 				}
 			}
 		}
-		if(results.size()>1){
+		if (results.size() > 1) {
 			System.err.println("More than one valid template found");
-		}else if(results.size()==0){
+		} else if (results.size() == 0) {
 			StringBuilder message = new StringBuilder("Color:");
-			for(ColorFlag color :card.colorFlags){
+			for (ColorFlag color : card.colorFlags) {
 				message.append(color.toString());
 				message.append(" ");
 			}
 			message.append(" Type:");
-			for(CardType type : card.cardType){
+			for (CardType type : card.cardType) {
 				message.append(type.toString());
 				message.append(" ");
 			}
-			throw new RuntimeException("No valid card Template found, " +message.toString());
+			throw new RuntimeException("No valid card Template found, " + message.toString());
 		}
 		return results.get(0);
 	}
-	
-	public static List<CardTemplate> getAllTemplates(Context context){
-		if (ALLTEMPLATES == null){
-			
+
+	public static List<CardTemplate> getAllTemplates(Context context) {
+		if (ALLTEMPLATES == null) {
+
 		}
 		Resources res = context.getResources();
 		JsonReader jsonReader = new JsonReader(context);
-        ALLTEMPLATES = Arrays.asList(jsonReader.deserializeJSONInputStreamToCardTemplates(res.openRawResource(R.raw.card_templates)));
+		ALLTEMPLATES = Arrays.asList(jsonReader.deserializeJSONInputStreamToCardTemplates(res.openRawResource(R.raw.card_templates)));
 		return ALLTEMPLATES;
-		
+
 	}
 }
