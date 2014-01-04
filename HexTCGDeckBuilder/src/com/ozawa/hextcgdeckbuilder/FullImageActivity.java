@@ -22,9 +22,14 @@ public class FullImageActivity extends Activity {
 
         // Selected image id
         int position = i.getExtras().getInt("id");
+        boolean isMasterDeck = i.getExtras().getBoolean("isMaster");
 
         ImageView imageView = (ImageView) findViewById(R.id.full_image_view);
-        imageView.setImageBitmap(MasterDeckFragment.cardViewer.getFilteredCardList().get(position).getFullscreenCardBitmap(this));
+        if(isMasterDeck){
+        	imageView.setImageBitmap(MasterDeckFragment.cardViewer.getFilteredCardList().get(position).getFullscreenCardBitmap(this));
+        } else{
+        	imageView.setImageBitmap(CustomDeckFragment.cardViewer.getFilteredCardList().get(position).getFullscreenCardBitmap(this));
+        }
     }
 
 }

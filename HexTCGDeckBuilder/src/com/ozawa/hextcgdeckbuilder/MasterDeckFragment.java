@@ -195,6 +195,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
                 Intent i = new Intent(mainActivity.getApplicationContext(), FullImageActivity.class);
                 // passing array index
                 i.putExtra("id",position);
+                i.putExtra("isMaster", true);
                 startActivity(i);
             }
         });

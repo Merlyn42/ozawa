@@ -196,6 +196,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
                 Intent i = new Intent(mainActivity.getApplicationContext(), FullImageActivity.class);
                 // passing array index
                 i.putExtra("id",position);
+                i.putExtra("isMaster", false);
                 startActivity(i);
             }
         });
