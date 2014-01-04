@@ -124,6 +124,10 @@ public class CardImagerMapperUtil {
 
 		source = cmd.getOptionValue("source");
 		target = cmd.getOptionValue("target");
+		
+		System.out.println("Source: "+source);
+		System.out.println("Target: "+target);
+		
 		File targetFile = new File(target);
         File sourceFile = new File(source,"\\Data\\");
 
