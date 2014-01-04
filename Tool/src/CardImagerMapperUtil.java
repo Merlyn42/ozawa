@@ -1,5 +1,6 @@
 import hexentities.AbstractCard;
 import hexentities.Card;
+import hexentities.Champion;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,13 +18,18 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
+import com.google.gson.Gson;
+
 import json.JSONSerializer;
 
 public class CardImagerMapperUtil {
 	private static String imageName = "hex";
+	private static String championPortrait = "championportait";
+	private static String championPortraitSmall = "championportaitsmall";
 	private static int fileNumber = 1;
 
 	private static String newCardName = "hexcard";
+	private static String newChampionName = "champion";
 	public final static String VERSION = "v1.0";
 
 	public static void generateImageAndCardJSONData(File hexLocation,File target) {
@@ -87,12 +93,83 @@ public class CardImagerMapperUtil {
 						e.printStackTrace();
 					}
 				}
-
+				newCardOutput.close();
 				fileNumber++;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
+		
+		/**
+		 * Generate Champion JSON and Images
+		 */
+		fileNumber = 1;
+		Gson gson = new Gson();
+		ArrayList<Champion> allChampions = new ArrayList<Champion>();
+		try {
+			File[] championFiles = new File(hexLocation,
+					"Champions\\Templates").listFiles();
+			
+			for (File championFile : championFiles) {
+				String championJSON = JSONSerializer.getJSONFromFiles(championFile);
+				allChampions.add(gson.fromJson(championJSON, Champion.class));
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		for(Champion champ : allChampions){
+			try{
+				if(champ.gameText != null && !champ.gameText.trim().contentEquals("")){
+					if(champ.hudPortraitSmall != null){
+						String championImagePath = champ.hudPortraitSmall;
+						File imageFile = new File(hexLocation, championImagePath);
+						File newImageFile = new File(newImageLocation, championPortraitSmall
+								+ String.format("%05d", fileNumber) + ".png");
+						try {
+							FileUtils.copyFile(imageFile, newImageFile);
+						} catch (IOException e) {
+							System.out.println("Skipping file as image not found");
+						}
+						
+						champ.hudPortraitSmall = FilenameUtils.removeExtension(newImageFile.getName());					
+					}
+					
+					if(champ.hudPortrait != null){
+						String championImagePath = champ.hudPortrait;
+						File imageFile = new File(hexLocation, championImagePath);
+						File newImageFile = new File(newImageLocation, championPortrait
+								+ String.format("%05d", fileNumber) + ".png");
+						try {
+							FileUtils.copyFile(imageFile, newImageFile);
+						} catch (IOException e) {
+							System.out.println("Skipping file as image not found");
+						}
+						
+						champ.hudPortrait = FilenameUtils.removeExtension(newImageFile.getName());
+					}
+					String newChampionJSON = gson.toJson(champ);
+					
+					File newChampionFile = new File(newCardLocation, newChampionName
+							+ String.format("%05d", fileNumber) + ".json");
+					FileOutputStream newChampionOutput = new FileOutputStream(
+							newChampionFile);
+					for (byte b : newChampionJSON.getBytes()) {
+						try {
+							newChampionOutput.write(b);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+					newChampionOutput.close();
+					fileNumber++;
+				}
+			}catch(IOException e){
+				e.printStackTrace();
+			}
+		}
+			
 	}
 
 	public static void main(String args[]) throws ParseException {
@@ -124,10 +201,6 @@ public class CardImagerMapperUtil {
 
 		source = cmd.getOptionValue("source");
 		target = cmd.getOptionValue("target");
-		
-		System.out.println("Source: "+source);
-		System.out.println("Target: "+target);
-		
 		File targetFile = new File(target);
         File sourceFile = new File(source,"\\Data\\");
 
