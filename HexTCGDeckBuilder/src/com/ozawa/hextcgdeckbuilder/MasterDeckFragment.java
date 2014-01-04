@@ -44,7 +44,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 	ListView listView;
 	ImageAdapter imAdapter;
     DeckListViewAdapter lvAdapter;
-    private static List<AbstractCard> deck;
+    public List<AbstractCard> masterDeck;
     private JsonReader jsonReader;
     public boolean isGridView;
     
@@ -65,7 +65,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 		mainActivity = super.getActivity();
 		jsonReader = new JsonReader(container.getContext());
         try {
-            deck = jsonReader.deserializeJSONInputStreamsToCard(getJson());
+        	masterDeck = jsonReader.deserializeJSONInputStreamsToCard(getJson());
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -75,7 +75,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
         	mainActivity.finish();
         }        
 
-        cardViewer = new CardViewer(mainActivity, deck);
+        cardViewer = new CardViewer(mainActivity, masterDeck);
         imAdapter = cardViewer.getAdapter();
         uiLayout = (DrawerLayout) inflater.inflate(R.layout.fragment_master_deck, container, false);
         
@@ -265,6 +265,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 		}else{
 			customDeck.put(card, customDeck.get(card) + 1);
 		}		
+		((DeckUIActivity) mainActivity).deckChanged = true;
 		Toast.makeText(mainActivity.getApplicationContext(), card.name + " added to custom deck.", Toast.LENGTH_SHORT).show();
 	}
 }

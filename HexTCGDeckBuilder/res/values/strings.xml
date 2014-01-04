@@ -11,5 +11,10 @@
     <string name="action_settings">Don\'t Press!</string>
     <string name="deck_view">Deck View</string>
     <string name="list_view">List View</string>
+    <string name="new_deck">New Deck</string>
+    <string name="load_deck">Load Deck</string>
+    <string name="save_deck">Save Deck</string>
+    <string name="delete_deck">Delete Deck</string>
+    <string name="new_deck_name">New Deck Name</string>
 
 </resources>

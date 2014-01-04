@@ -3,10 +3,15 @@ package com.ozawa.hextcgdeckbuilder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.ozawa.hextcgdeckbuilder.LoadDeckDialogFragment.LoadDeckListener;
+import com.ozawa.hextcgdeckbuilder.NewDeckDialogFragment.NewDeckListener;
 import com.ozawa.hextcgdeckbuilder.UI.CardViewer;
 import com.ozawa.hextcgdeckbuilder.UI.CustomViewPager;
 import com.ozawa.hextcgdeckbuilder.UI.TabPagerAdapter;
+import com.ozawa.hextcgdeckbuilder.database.DatabaseHandler;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
+import com.ozawa.hextcgdeckbuilder.hexentities.Deck;
+import com.ozawa.hextcgdeckbuilder.hexentities.DeckResource;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -17,7 +22,7 @@ import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 
-public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabListener, NavigationDrawerFragment.NavigationDrawerCallbacks{
+public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabListener, NavigationDrawerFragment.NavigationDrawerCallbacks, NewDeckListener, LoadDeckListener{
 	
     public static CardViewer cardViewer;
     
@@ -30,6 +35,11 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
     // Current Custom Deck
     public ArrayList<AbstractCard> customDeckCardList;
     public HashMap<AbstractCard, Integer> customDeck;
+    public Deck currentCustomDeck;
+    public boolean deckChanged = false;
+    
+    // Database
+    public DatabaseHandler dbHandler;
  
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +52,7 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 	    mAdapter = new TabPagerAdapter(getSupportFragmentManager());
 	    customDeck = new HashMap<AbstractCard, Integer>();
 	    customDeckCardList = new ArrayList<AbstractCard>(customDeck.keySet());
+	    dbHandler = new DatabaseHandler(this);
 	    
 	 
 	    viewPager.setAdapter(mAdapter);
@@ -135,6 +146,72 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public boolean saveNewDeck(String deckName, boolean resetCustomDeck) {
+		if(mAdapter.customDeckFragment != null){
+			Deck savedDeck = mAdapter.customDeckFragment.saveNewDeck(deckName);			
+			if(savedDeck != null && savedDeck.name.contentEquals(String.valueOf(deckName))){
+				actionBar.getTabAt(0).setText("Custom Deck - " + deckName);
+				
+				if(resetCustomDeck){
+					resetCustomDeck();
+				}
+					
+				currentCustomDeck = savedDeck;
+				mAdapter.customDeckFragment.reloadCustomDeckView();
+				deckChanged = false;
+				return true;				
+			}
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean loadDeck(String deckID) {
+		if(mAdapter.customDeckFragment != null){
+			Deck loadedDeck = mAdapter.customDeckFragment.loadDeck(deckID);
+			if(loadedDeck.getID().contentEquals(deckID)){
+				updateCustomDeck(loadedDeck);
+				actionBar.getTabAt(0).setText("Custom Deck - " + loadedDeck.name);
+				mAdapter.customDeckFragment.reloadCustomDeckView();
+				return true;
+			}			
+		}
+		return false;
+	}
+	
+	public void deleteDeck(){
+		resetCustomDeck();
+	}
+	
+	public boolean isUnsavedDeck(){
+		return (currentCustomDeck == null && !customDeck.isEmpty());
+	}
+	
+	private void resetCustomDeck(){
+		customDeck = new HashMap<AbstractCard, Integer>();
+	    customDeckCardList = new ArrayList<AbstractCard>(customDeck.keySet());
+	    currentCustomDeck = null;
+	    actionBar.getTabAt(0).setText("Custom Deck");
+	}
+	
+	private void updateCustomDeck(Deck deck){
+		customDeck = new HashMap<AbstractCard, Integer>();
+		
+		if(deck.deckResources != null){
+			for(DeckResource card : deck.deckResources){
+				for(AbstractCard masterCard : mAdapter.masterDeckFragment.masterDeck){
+					if(masterCard.getID().contentEquals(card.cardID.gUID)){
+						customDeck.put(masterCard, card.cardCount);
+						break;
+					}
+				}
+			}
+		}
+		
+	    customDeckCardList = new ArrayList<AbstractCard>(customDeck.keySet());
 	}
 
 }

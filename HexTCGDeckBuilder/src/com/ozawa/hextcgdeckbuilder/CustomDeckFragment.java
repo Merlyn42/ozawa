@@ -2,6 +2,7 @@ package com.ozawa.hextcgdeckbuilder;
 
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,9 +10,12 @@ import java.util.List;
 import com.ozawa.hextcgdeckbuilder.MasterDeckActivity.PlaceholderFragment;
 import com.ozawa.hextcgdeckbuilder.UI.CardViewer;
 import com.ozawa.hextcgdeckbuilder.UI.CustomViewPager;
+import com.ozawa.hextcgdeckbuilder.database.DatabaseHandler;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
-import com.ozawa.hextcgdeckbuilder.json.JsonReader;
+import com.ozawa.hextcgdeckbuilder.hexentities.Deck;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.gesture.Gesture;
@@ -21,15 +25,16 @@ import android.gesture.GestureOverlayView;
 import android.gesture.Prediction;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnFocusChangeListener;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -38,14 +43,13 @@ import android.widget.AdapterView.OnItemLongClickListener;
 
 public class CustomDeckFragment extends Fragment implements NavigationDrawerFragment.NavigationDrawerCallbacks, GestureOverlayView.OnGesturePerformedListener{
 	
-	private FragmentActivity mainActivity;
+	private DeckUIActivity mainActivity;
 	private DrawerLayout uiLayout;
 	
 	ListView listView;
 	ImageAdapter imAdapter;
     DeckListViewAdapter lvAdapter;
     private static List<AbstractCard> deck;
-    private JsonReader jsonReader;
     public boolean isGridView;
     
     /**
@@ -58,19 +62,17 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
     private GestureLibrary gesLibrary;
 	private GridView gridView;
 	
+	// Database
+	DatabaseHandler dbHandler;
+	
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-		mainActivity = super.getActivity();
-		jsonReader = new JsonReader(container.getContext());
-        /*try {
-            deck = jsonReader.deserializeJSONInputStreamsToCard(getJson());
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }*/
-		deck = ((DeckUIActivity) mainActivity).customDeckCardList;
-        
+		mainActivity = (DeckUIActivity) super.getActivity();
+		deck = mainActivity.customDeckCardList;
+        dbHandler = mainActivity.dbHandler;
+		
         gesLibrary = GestureLibraries.fromRawResource(mainActivity, R.raw.gestures);
         if (!gesLibrary.load()) {
         	mainActivity.finish();
@@ -85,6 +87,8 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
         mNavigationDrawerFragment.setUp(uiLayout, cardViewer,mainActivity,
                 R.id.custom_deck_navigation_drawer,
                 (DrawerLayout) uiLayout.findViewById(R.id.custom_deck_drawer_layout));
+        mNavigationDrawerFragment.setUpCustomDeckButtons();
+        setCustomDeckButtonListeners();
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.add(R.id.custom_deck_navigation_drawer, mNavigationDrawerFragment).commit();
         
@@ -256,32 +260,41 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 
 	    // Update the view so the user can see the newly added cards
 	    if (this.isVisible() && isVisibleToUser) {
-        	if(isGridView){
-				imAdapter.updateDeckAndCardViewDeck(deck, cardViewer);
-			}else{
-				lvAdapter.updateDeckAndCardViewDeck(deck, cardViewer);
-			}	        
+	    	reloadCustomDeckView();
 	    }
+	}
+	
+	public void reloadCustomDeckView(){
+		deck = mainActivity.customDeckCardList;
+    	if(isGridView){
+			imAdapter.updateDeckAndCardViewDeck(deck, cardViewer);
+		}else{
+			lvAdapter.updateDeckAndCardViewDeck(deck, cardViewer);
+		}
 	}
 	
 	/**
 	 * Remove a card from the custom deck if in GridView
 	 */
 	private void removeCardFromGridView(int position){
-		AbstractCard card = imAdapter.masterDeck.get(position);
-		removeCardFromCustomDeck(card);
-		imAdapter.updateDeckAndCardViewDeck(deck, cardViewer);
-		Toast.makeText(mainActivity.getApplicationContext(), card.name + " removed to custom deck.", Toast.LENGTH_SHORT).show();
+		if(position >= 0){
+			AbstractCard card = imAdapter.masterDeck.get(position);
+			removeCardFromCustomDeck(card);
+			imAdapter.updateDeckAndCardViewDeck(deck, cardViewer);
+			Toast.makeText(mainActivity.getApplicationContext(), card.name + " removed to custom deck.", Toast.LENGTH_SHORT).show();
+		}
 	}
 	
 	/**
 	 * Remove a card from the custom deck if in GridView
 	 */
 	private void removeCardFromListView(int position){
-		AbstractCard card = lvAdapter.masterDeck.get(position);
-		removeCardFromCustomDeck(card);
-		lvAdapter.updateDeckAndCardViewDeck(deck, cardViewer);
-		Toast.makeText(mainActivity.getApplicationContext(), card.name + " removed to custom deck.", Toast.LENGTH_SHORT).show();
+		if(position >= 0){
+			AbstractCard card = lvAdapter.masterDeck.get(position);
+			removeCardFromCustomDeck(card);
+			lvAdapter.updateDeckAndCardViewDeck(deck, cardViewer);
+			Toast.makeText(mainActivity.getApplicationContext(), card.name + " removed to custom deck.", Toast.LENGTH_SHORT).show();
+		}
 	}
 	
 	/**
@@ -290,17 +303,254 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 	 * @param card
 	 */
 	private void removeCardFromCustomDeck(AbstractCard card) {
-		HashMap<AbstractCard, Integer> customDeck = ((DeckUIActivity) mainActivity).customDeck;
+		HashMap<AbstractCard, Integer> customDeck = mainActivity.customDeck;
 		if(customDeck.get(card) != null){
 			int cardCount = customDeck.get(card);
 			if(cardCount > 1){
 				customDeck.put(card, customDeck.get(card) - 1);
 			}else{
 				customDeck.remove(card);
-				((DeckUIActivity) mainActivity).customDeckCardList.remove(card);
+				mainActivity.customDeckCardList.remove(card);
 			}			
 		}
 		
 		Toast.makeText(mainActivity.getApplicationContext(), card.name + " removed from custom deck.", Toast.LENGTH_SHORT).show();
+	}
+	
+	/**
+	 * Set onClick functionality for Deck Buttons i.e. New Deck, Load Deck, Save Deck, etc.
+	 */
+	private void setCustomDeckButtonListeners(){
+		final CustomDeckFragment fragment = this;
+		Button newDeck = (Button) mNavigationDrawerFragment.getView().findViewById(R.id.buttonNewDeck);//.findViewById(NavigationDrawerFragment.NEW_DECK_BUTTON_ID);
+		newDeck.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				if(mainActivity.isUnsavedDeck() || mainActivity.deckChanged){
+					buildSaveUnsavedDeckDialog("showNewDeckPopup", fragment);
+				}else if(mainActivity.deckChanged){
+					
+				}else{
+					showNewDeckPopup();
+				}
+			}
+			
+		});
+		
+		Button loadDeck = (Button) mNavigationDrawerFragment.getView().findViewById(R.id.buttonLoadDeck);//.findViewById(NavigationDrawerFragment.LOAD_DECK_BUTTON_ID);
+		loadDeck.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				if(mainActivity.isUnsavedDeck() || mainActivity.deckChanged){
+					buildSaveUnsavedDeckDialog("showLoadDeckPopup", fragment);
+				}else{
+					showLoadDeckPopup();
+				}
+				
+			}
+			
+		});
+		
+		Button saveDeck = (Button) mNavigationDrawerFragment.getView().findViewById(R.id.buttonSaveDeck);//.findViewById(NavigationDrawerFragment.SAVE_DECK_BUTTON_ID);
+		saveDeck.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				saveDeck();				
+			}
+			
+		});
+		
+		Button deleteDeck = (Button) mNavigationDrawerFragment.getView().findViewById(R.id.buttonDeleteDeck);//.findViewById(NavigationDrawerFragment.SAVE_DECK_BUTTON_ID);
+		deleteDeck.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				buildDeleteDeckConfirmationDialog();		
+			}
+			
+		});
+	}
+	
+	/**
+	 * Display the New Deck Dialog
+	 */
+	private void showNewDeckPopup(){
+		NewDeckDialogFragment newDeckDialog = new NewDeckDialogFragment();
+		newDeckDialog.show(mainActivity.getSupportFragmentManager(), "New Deck Popup");		
+	}
+	
+	/**
+	 * Display the Load Deck Dialog
+	 */
+	private void showLoadDeckPopup(){
+		LoadDeckDialogFragment loadDeckDialog = new LoadDeckDialogFragment();
+		loadDeckDialog.show(mainActivity.getSupportFragmentManager(), "Load Deck Popup");
+	}
+	
+	/**
+	 * Save a new Deck
+	 * 
+	 * @param deckName
+	 * @return The newly saved Deck
+	 */
+	public Deck saveNewDeck(String deckName) {
+		Deck newDeck = new Deck();
+		newDeck.name = deckName;
+		
+		long newDeckID = dbHandler.addDeck(newDeck);
+		if(newDeckID == -1){
+			return null;
+		}
+		
+		return dbHandler.getDeck(String.valueOf(newDeckID));
+	}
+	
+	/**
+	 * Load a Deck from the database using the given ID
+	 * 
+	 * @param deckID
+	 * @return The Deck retrieved from the database with the given ID
+	 */
+	public Deck loadDeck(String deckID){
+		mainActivity.currentCustomDeck = dbHandler.getDeck(deckID);
+		
+		return mainActivity.currentCustomDeck;
+	}
+	
+	/**
+	 * Save the current Deck
+	 * 
+	 * @return true if the Deck saved successfully, otherwise false
+	 */
+	private boolean saveDeck(){
+		if(mainActivity.currentCustomDeck != null){
+			if(dbHandler.updateDeckResources(mainActivity.currentCustomDeck, mainActivity.customDeck)){
+				Toast.makeText(mainActivity.getApplicationContext(), "Deck successfully saved.", Toast.LENGTH_SHORT).show();
+				mainActivity.deckChanged = false;
+				return true;
+			}else{
+				Toast.makeText(mainActivity.getApplicationContext(), "Failed to save deck. Please try again.", Toast.LENGTH_SHORT).show();
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Delete the current Deck from the database
+	 */
+	private void deleteDeck(){
+		if(mainActivity.currentCustomDeck != null){
+			if(dbHandler.deleteDeck(mainActivity.currentCustomDeck)){
+				mainActivity.deleteDeck();
+				reloadCustomDeckView();	
+				Toast.makeText(mainActivity.getApplicationContext(), "Deck successfully deleted.", Toast.LENGTH_SHORT).show();
+			}else{
+				Toast.makeText(mainActivity.getApplicationContext(), "Failed to delete deck. Please try again.", Toast.LENGTH_SHORT).show();
+			}
+			
+		}
+	}
+	
+	/**
+	 * Save a new Deck that has not previously been saved
+	 * 
+	 * @param deckName
+	 * @return true if the Deck saved successfully, otherwise false
+	 */
+	private boolean saveUnsavedDeck(String deckName){
+		if(mainActivity.saveNewDeck(deckName, false)){
+			return saveDeck();
+		}
+		return false;
+	}
+	
+	/**
+	 * Build the Alert Dialog to confirm that the user wishes to delete the current deck
+	 */
+	private void buildDeleteDeckConfirmationDialog(){
+		AlertDialog.Builder builder = new AlertDialog.Builder(mainActivity);
+        builder.setTitle("Delete Deck");
+        builder.setMessage("Are you sure you want to delete deck: " + mainActivity.currentCustomDeck.name + "?");
+        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                deleteDeck();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                
+            }
+        });
+        
+        builder.show();
+    
+	}
+	
+	/**
+	 * Build the Alert Dialog to check if the user would like to save changes to the current deck
+	 * 
+	 * @param methodName - the method to invoke from the CustomDeckFragment using Reflection
+	 * @param fragment - the CustomDeckFragment to invoke the given method on
+	 */
+	private void buildSaveUnsavedDeckDialog(final String methodName, final CustomDeckFragment fragment){
+		AlertDialog.Builder builder = new AlertDialog.Builder(mainActivity);
+        builder.setTitle("Save Deck?");
+        final EditText input = new EditText(mainActivity);
+        
+        if(mainActivity.currentCustomDeck == null){
+	        builder.setMessage("This deck is not yet saved, would you like to save it before proceeding?");	        
+	        builder.setView(input);
+        }else{
+        	builder.setMessage("This deck has unsaved changes, would you like to save it before proceeding?");
+        }
+        
+        builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int position) {
+            	if(mainActivity.currentCustomDeck != null){
+            		saveDeck();
+            		invokeNoParamReflectiveMethod(methodName, fragment);
+            	}else if(!saveUnsavedDeck(input.getText().toString())){
+                	Toast.makeText(mainActivity.getApplicationContext(), "Failed to save deck. Please try again.", Toast.LENGTH_SHORT).show();
+                }else{
+                	invokeNoParamReflectiveMethod(methodName, fragment);
+                }
+            }
+        });
+        builder.setNegativeButton("No Thanks!", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int position) {
+            	invokeNoParamReflectiveMethod(methodName, fragment);
+            }
+        });
+        
+        builder.show(); //To show the AlertDialog
+    
+	}
+	
+	/**
+	 * Invoke a class method using Reflection
+	 * 
+	 * @param methodName - the method to invoke from the CustomDeckFragment using Reflection
+	 * @param fragment - the CustomDeckFragment to invoke the given method on
+	 */
+	private void invokeNoParamReflectiveMethod(final String methodName, final CustomDeckFragment fragment){
+		try {
+    		Method method = CustomDeckFragment.class.getDeclaredMethod(methodName);
+        	if(!method.isAccessible()){
+        		method.setAccessible(true);
+        	}
+        	method.invoke(fragment, new Object[0]);
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
 	}
 }

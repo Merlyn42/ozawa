@@ -23,11 +23,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.Toast;
 
 import com.ozawa.hextcgdeckbuilder.UI.CardViewer;
+import com.ozawa.hextcgdeckbuilder.UI.CustomViewPager;
 import com.ozawa.hextcgdeckbuilder.UI.FilterButton;
 import com.ozawa.hextcgdeckbuilder.enums.CardType;
 import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
@@ -166,6 +169,20 @@ public class NavigationDrawerFragment extends Fragment {
         EditText text  = (EditText) linearLayout.findViewById(R.id.SearchTextField);
         text.addTextChangedListener(cardViewer);
     }
+    
+    public void setUpCustomDeckButtons(){
+    	Button newDeck = (Button) linearLayout.findViewById(R.id.buttonNewDeck);
+        newDeck.setVisibility(View.VISIBLE);
+        
+        Button loadDeck = (Button) linearLayout.findViewById(R.id.buttonLoadDeck);
+        loadDeck.setVisibility(View.VISIBLE);
+        
+        Button saveDeck = (Button) linearLayout.findViewById(R.id.buttonSaveDeck);
+        saveDeck.setVisibility(View.VISIBLE);
+        
+        Button deleteDeck = (Button) linearLayout.findViewById(R.id.buttonDeleteDeck);
+        deleteDeck.setVisibility(View.VISIBLE);
+    }
 
     /**
      * Users of this fragment must call this method to set up the navigation drawer interactions.
@@ -254,9 +271,8 @@ public class NavigationDrawerFragment extends Fragment {
 
         // set a custom shadow that overlays the main content when the drawer opens
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        // set up the drawer's list view with items and click listener
-        setUpButtons();
         
+        setUpButtons();
     }
 
     private void selectItem(int position) {
@@ -351,5 +367,10 @@ public class NavigationDrawerFragment extends Fragment {
          */
         void onNavigationDrawerItemSelected(int position);
     }
+    
+    /*private void setPagingEnabled(boolean enabled){
+    	CustomViewPager pager = (CustomViewPager) super.getActivity().findViewById(R.id.pager);
+    	pager.setPagingEnabled(enabled);
+    }*/
 
 }

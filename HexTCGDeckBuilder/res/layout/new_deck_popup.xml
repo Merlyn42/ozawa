@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/newDeckPopupLayout" >
+
+    <TextView
+        android:id="@+id/tvNewDeck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/new_deck_name"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/etNewDeckName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+	
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2" >
+        
+         <Button
+	        android:id="@+id/buttonCancelSaveNewDeck"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="Cancel"
+	        android:layout_weight="1"
+	        style="?android:attr/buttonBarButtonStyle" />
+         
+	     <Button
+	        android:id="@+id/buttonSaveNewDeck"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/save_deck"
+	        android:layout_weight="1"
+	        style="?android:attr/buttonBarButtonStyle" />
+    
+    </LinearLayout>
+
+</LinearLayout>
