@@ -108,15 +108,30 @@ public class Card extends AbstractCard {
         paint.setColor(-1);
         paint.setFakeBoldText(true);
 
-        combine.drawText(name, (float)(templateImage.getWidth() / 3.25) , templateImage.getHeight() / 11, paint);
-        combine.drawText("" + resourceCost, templateImage.getWidth() / 7, (float)(templateImage.getHeight() / 7.5), paint);
+        String displayName = getDisplayName(name,18);
+        combine.drawText(displayName, templateImage.getWidth() / 2.8f , templateImage.getHeight() / 11, paint);
+        paint.setTextSize(36f);        
+        combine.drawText("" + resourceCost, templateImage.getWidth() / 6, templateImage.getHeight() / 6, paint);
         if (cardType[0].equals(CardType.TROOP)) {
-            paint.setTextSize(36f);
+
             combine.drawText(baseAttackValue, templateImage.getWidth() / 9, templateImage.getHeight() - (templateImage.getHeight() / 10), paint);
             combine.drawText(baseHealthValue, templateImage.getWidth() - (templateImage.getWidth() / 6), templateImage.getHeight() - (templateImage.getHeight() / 10), paint);
         }
         return result;
     }
 
+	private String getDisplayName(String name, int length) {		
+		String displayName = "";
+		if(name.length() > length){
+			String [] words = name.split(" ");
+			for(String word : words){
+				if((displayName + word).length() >= length){
+					return displayName.concat("..");
+				}
+				displayName += word + " ";
+			}
+		}
+		return name;
+	}
 
 }
