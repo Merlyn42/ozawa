@@ -68,18 +68,7 @@ public class Card extends AbstractCard {
         if(portraitId==0)return null;
 
         // find the correct template
-        int templateId = template.templateId;
-        //get the template image
-        BitmapFactory.Options templateFirstOptions = new BitmapFactory.Options();
-        templateFirstOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeResource(resources, templateId, templateFirstOptions);
-        int scale = 1;
-        while (templateFirstOptions.outWidth / scale / 2 >= maxWidth)
-            scale *= 2;
-        //Decode with inSampleSize
-        BitmapFactory.Options templateSecondOptions = new BitmapFactory.Options();
-        templateSecondOptions.inSampleSize = scale;
-        Bitmap templateImage = BitmapFactory.decodeResource(resources, templateId, templateSecondOptions);
+        Bitmap templateImage = template.getImage(context, maxWidth);
 
 
         //get the portrait image
@@ -88,7 +77,7 @@ public class Card extends AbstractCard {
         BitmapFactory.decodeResource(resources, portraitId, portraitFirstOptions);
         //used to scale the image, use only the part of the image to determine scaling.
         int cutPortraitWidth = Double.valueOf(portraitFirstOptions.outWidth * defaultLayout.portraitRight - portraitFirstOptions.outWidth * defaultLayout.portraitLeft).intValue();
-        scale = 1;
+        int scale = 1;
         while (cutPortraitWidth / scale / 2 >= maxWidth)
             scale *= 2;
         //Decode with inSampleSize

@@ -89,7 +89,7 @@ public abstract class AbstractCard {
     }
 	
 	public void clearImageCache(){
-		image.recycle();
+		//image.recycle();
 		image=null;
 	}
     
