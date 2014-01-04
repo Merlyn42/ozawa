@@ -108,21 +108,24 @@ public class Card extends AbstractCard {
         paint.setColor(-1);
         paint.setFakeBoldText(true);
 
-        String displayName = getDisplayName(name,18);
-        combine.drawText(displayName, templateImage.getWidth() / 2.8f , templateImage.getHeight() / 11, paint);
-        paint.setTextSize(36f);        
-        combine.drawText("" + resourceCost, templateImage.getWidth() / 6, templateImage.getHeight() / 6, paint);
+        combine.drawText(getDisplayName(name,18), templateImage.getWidth() / 2.8f , templateImage.getHeight() / 11, paint);
+        paint.setTextSize(34f);
+        if(resourceCost > 9){
+        	combine.drawText("" + resourceCost, templateImage.getWidth() / 7.5f, templateImage.getHeight() / 6, paint);
+        } else{
+        	combine.drawText("" + resourceCost, templateImage.getWidth() / 6.5f, templateImage.getHeight() / 6, paint);
+        }
         if (cardType[0].equals(CardType.TROOP)) {
-
+        	paint.setTextSize(36f);
             combine.drawText(baseAttackValue, templateImage.getWidth() / 9, templateImage.getHeight() - (templateImage.getHeight() / 10), paint);
             combine.drawText(baseHealthValue, templateImage.getWidth() - (templateImage.getWidth() / 6), templateImage.getHeight() - (templateImage.getHeight() / 10), paint);
         }
         return result;
     }
 
-	private String getDisplayName(String name, int length) {		
-		String displayName = "";
+	private String getDisplayName(String name, int length) {				
 		if(name.length() > length){
+			String displayName = "";
 			String [] words = name.split(" ");
 			for(String word : words){
 				if((displayName + word).length() >= length){
@@ -133,5 +136,4 @@ public class Card extends AbstractCard {
 		}
 		return name;
 	}
-
 }
