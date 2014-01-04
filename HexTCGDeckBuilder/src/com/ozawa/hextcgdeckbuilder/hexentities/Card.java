@@ -104,10 +104,35 @@ public class Card extends AbstractCard {
 
         Paint paint = new Paint();
         paint.setTextAlign(Paint.Align.LEFT);
-        paint.setTextSize(28f);
         paint.setColor(-1);
-        paint.setFakeBoldText(true);
+        paint.setFakeBoldText(true);       
 
+        if(template.fullCard){
+        	drawFullImageText(combine,templateImage,paint);
+        } else {
+        	drawThumbnailText(combine,templateImage,paint);
+        }
+
+        return result;
+    }
+	
+	private void drawFullImageText(Canvas combine,Bitmap templateImage,Paint paint) {
+		paint.setTextSize(20f);
+		combine.drawText(name, templateImage.getWidth() / 6 , templateImage.getHeight() / 14, paint);        
+        if(resourceCost > 9){
+        	combine.drawText("" + resourceCost, templateImage.getWidth() / 14f, templateImage.getHeight() / 14, paint);
+        } else{
+        	combine.drawText("" + resourceCost, templateImage.getWidth() / 13f, templateImage.getHeight() / 14, paint);
+        }
+        if (cardType[0].equals(CardType.TROOP)) {
+        	paint.setTextSize(28f);
+            combine.drawText(baseAttackValue, templateImage.getWidth() / 17, templateImage.getHeight() - (templateImage.getHeight() / 25), paint);
+            combine.drawText(baseHealthValue, templateImage.getWidth() - (templateImage.getWidth() / 10), templateImage.getHeight() - (templateImage.getHeight() / 25), paint);
+        }		
+	}
+
+	private void drawThumbnailText(Canvas combine,Bitmap templateImage,Paint paint){
+		paint.setTextSize(28f);
         combine.drawText(getDisplayName(name,18), templateImage.getWidth() / 2.8f , templateImage.getHeight() / 11, paint);
         paint.setTextSize(34f);
         if(resourceCost > 9){
@@ -120,8 +145,7 @@ public class Card extends AbstractCard {
             combine.drawText(baseAttackValue, templateImage.getWidth() / 9, templateImage.getHeight() - (templateImage.getHeight() / 10), paint);
             combine.drawText(baseHealthValue, templateImage.getWidth() - (templateImage.getWidth() / 6), templateImage.getHeight() - (templateImage.getHeight() / 10), paint);
         }
-        return result;
-    }
+	}
 
 	private String getDisplayName(String name, int length) {				
 		if(name.length() > length){
