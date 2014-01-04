@@ -4,6 +4,7 @@ import hexentities.Card;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -43,8 +44,13 @@ public class CardImagerMapperUtil {
 		}
 		ArrayList<Card> allCards = new ArrayList<Card>();
 		try {
+			FilenameFilter filter = new FilenameFilter() {
+		        public boolean accept(File directory, String fileName) {
+		            return !fileName.endsWith("~");
+		        }
+		    };
 			File[] cardFiles = new File(hexLocation,
-					"Sets\\Set001\\CardDefinitions").listFiles();
+					"Sets\\Set001\\CardDefinitions").listFiles(filter);
 
 			for (File cardFile : cardFiles) {
 				String cardJSON = JSONSerializer.getJSONFromFiles(cardFile);
