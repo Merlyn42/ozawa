@@ -124,11 +124,34 @@ public class Card extends AbstractCard {
         } else{
         	combine.drawText("" + resourceCost, templateImage.getWidth() / 13f, templateImage.getHeight() / 14, paint);
         }
+        
+        paint.setTextSize(12f);
+        drawGameText(gameText,62,combine,templateImage,paint);        
+        
         if (cardType[0].equals(CardType.TROOP)) {
         	paint.setTextSize(28f);
             combine.drawText(baseAttackValue, templateImage.getWidth() / 17, templateImage.getHeight() - (templateImage.getHeight() / 25), paint);
             combine.drawText(baseHealthValue, templateImage.getWidth() - (templateImage.getWidth() / 10), templateImage.getHeight() - (templateImage.getHeight() / 25), paint);
         }		
+	}
+	
+	private void drawGameText(String gameText, int length, Canvas combine, Bitmap templateImage,Paint paint){
+		if(gameText.length() < length)
+			combine.drawText(gameText, templateImage.getWidth() / 14, templateImage.getHeight() / 1.425f, paint);
+		else{
+			float line = 0f;
+			String displayText = "";
+			String [] words = gameText.split(" ");
+			for(String word : words){
+				if((displayText + word).length() >= length){
+					combine.drawText(displayText, templateImage.getWidth() / 14, templateImage.getHeight() / (1.425f - line), paint);
+					displayText = "";
+					line+= .05f;
+				}
+				displayText += word + " ";
+			}
+			combine.drawText(displayText, templateImage.getWidth() / 14, templateImage.getHeight() / (1.425f - line), paint);
+		}
 	}
 
 	private void drawThumbnailText(Canvas combine,Bitmap templateImage,Paint paint){
