@@ -98,6 +98,8 @@ public class SelectChampionDialogFragment extends DialogFragment {
 					
 					if(championPortraitID != -1){
 						selectedChampionPortrait.setImageResource(championPortraitID);
+					}else{
+						selectedChampionPortrait.setImageResource(R.drawable.championnoportait);
 					}
 					selectedChampion = allChampions.get(position);
 				}

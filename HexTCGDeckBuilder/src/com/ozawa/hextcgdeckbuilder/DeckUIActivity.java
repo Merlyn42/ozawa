@@ -200,11 +200,16 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 		if(mAdapter.customDeckFragment != null){
 			ImageView championPortrait = (ImageView) mAdapter.customDeckFragment.mNavigationDrawerFragment.getView().findViewById(R.id.imageChampionPortrait);
 			TextView championName = (TextView) mAdapter.customDeckFragment.mNavigationDrawerFragment.getView().findViewById(R.id.tvChampionName);
-			if(currentCustomDeck != null && currentCustomDeck.champion != null){				
-				championPortrait.setImageResource(getResourceID(currentCustomDeck.champion.hudPortraitSmall, R.drawable.class));				
+			if(currentCustomDeck != null && currentCustomDeck.champion != null){		
+				int portaitID = getResourceID(currentCustomDeck.champion.hudPortraitSmall, R.drawable.class);
+				if(portaitID != -1){
+					championPortrait.setImageResource(portaitID);
+				}else{
+					championPortrait.setImageResource(R.drawable.championnoportaitsmall);
+				}
 				championName.setText(currentCustomDeck.champion.name);
 			}else{
-				championPortrait.setImageResource(R.drawable.back);				
+				championPortrait.setImageResource(R.drawable.championnoportaitsmall);				
 				championName.setText("No Champion Selected");
 			}
 			if(customDeck != null){

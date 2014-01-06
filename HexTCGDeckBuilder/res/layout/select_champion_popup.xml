@@ -13,7 +13,7 @@
             	android:id="@+id/imageChampionPortrait"
             	android:layout_width="100dip"
             	android:layout_height="100dip"
-            	android:src="@drawable/back"
+            	android:src="@drawable/championnoportait"
             	android:layout_alignParentTop="true"
             	android:contentDescription="Champion Portrait"/>
 
