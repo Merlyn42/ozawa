@@ -118,6 +118,7 @@ public class Card extends AbstractCard {
 	
 	private void drawFullImageText(Canvas combine,Bitmap templateImage,Paint paint) {
 		paint.setTextSize(20f);
+		paint.setAntiAlias(true);
 		combine.drawText(name, templateImage.getWidth() / 6 , templateImage.getHeight() / 14, paint);        
         if(resourceCost > 9){
         	combine.drawText("" + resourceCost, templateImage.getWidth() / 14f, templateImage.getHeight() / 14, paint);
