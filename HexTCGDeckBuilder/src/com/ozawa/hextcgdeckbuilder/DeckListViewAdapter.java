@@ -56,7 +56,7 @@ public class DeckListViewAdapter extends ImageAdapter{
 
         AbstractCard card = masterDeck.get(position);
 
-		if (card.colorFlags.length > 0) {
+		if (card.colorFlags.length > 0&&card.colorFlags[0]!=null) {
 			switch (card.colorFlags[0]) {
 				case COLORLESS: {
 					vi.setBackgroundResource(R.drawable.list_selector_colorless);
