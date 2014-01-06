@@ -55,7 +55,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
-    private NavigationDrawerFragment mNavigationDrawerFragment;
+    public NavigationDrawerFragment mNavigationDrawerFragment;
 
     public static CardViewer cardViewer;
     public final static String GETDECK = "GETDECK";
@@ -64,6 +64,10 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 	
 	// Database
 	DatabaseHandler dbHandler;
+	
+	Button saveDeck;
+	Button deleteDeck;
+	Button selectChampion;
 	
     
     @Override
@@ -87,7 +91,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
         mNavigationDrawerFragment.setUp(uiLayout, cardViewer,mainActivity,
                 R.id.custom_deck_navigation_drawer,
                 (DrawerLayout) uiLayout.findViewById(R.id.custom_deck_drawer_layout));
-        mNavigationDrawerFragment.setUpCustomDeckButtons();
+        mNavigationDrawerFragment.setUpCustomDeckViews();
         setCustomDeckButtonListeners();
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.add(R.id.custom_deck_navigation_drawer, mNavigationDrawerFragment).commit();
@@ -272,6 +276,8 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 		}else{
 			lvAdapter.updateDeckAndCardViewDeck(deck, cardViewer);
 		}
+    	
+    	mainActivity.updateCustomDeckData();
 	}
 	
 	/**
@@ -323,15 +329,13 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 	 */
 	private void setCustomDeckButtonListeners(){
 		final CustomDeckFragment fragment = this;
-		Button newDeck = (Button) mNavigationDrawerFragment.getView().findViewById(R.id.buttonNewDeck);//.findViewById(NavigationDrawerFragment.NEW_DECK_BUTTON_ID);
+		Button newDeck = (Button) mNavigationDrawerFragment.getView().findViewById(R.id.buttonNewDeck);
 		newDeck.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
 				if(mainActivity.isUnsavedDeck() || mainActivity.deckChanged){
 					buildSaveUnsavedDeckDialog("showNewDeckPopup", fragment);
-				}else if(mainActivity.deckChanged){
-					
 				}else{
 					showNewDeckPopup();
 				}
@@ -339,7 +343,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 			
 		});
 		
-		Button loadDeck = (Button) mNavigationDrawerFragment.getView().findViewById(R.id.buttonLoadDeck);//.findViewById(NavigationDrawerFragment.LOAD_DECK_BUTTON_ID);
+		Button loadDeck = (Button) mNavigationDrawerFragment.getView().findViewById(R.id.buttonLoadDeck);
 		loadDeck.setOnClickListener(new OnClickListener(){
 
 			@Override
@@ -354,7 +358,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 			
 		});
 		
-		Button saveDeck = (Button) mNavigationDrawerFragment.getView().findViewById(R.id.buttonSaveDeck);//.findViewById(NavigationDrawerFragment.SAVE_DECK_BUTTON_ID);
+		saveDeck = (Button) mNavigationDrawerFragment.getView().findViewById(R.id.buttonSaveDeck);
 		saveDeck.setOnClickListener(new OnClickListener(){
 
 			@Override
@@ -364,12 +368,32 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 			
 		});
 		
-		Button deleteDeck = (Button) mNavigationDrawerFragment.getView().findViewById(R.id.buttonDeleteDeck);//.findViewById(NavigationDrawerFragment.SAVE_DECK_BUTTON_ID);
+		deleteDeck = (Button) mNavigationDrawerFragment.getView().findViewById(R.id.buttonDeleteDeck);
 		deleteDeck.setOnClickListener(new OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
-				buildDeleteDeckConfirmationDialog();		
+				if(mainActivity.currentCustomDeck != null){
+					buildDeleteDeckConfirmationDialog();
+		    	}else{
+		    		Toast.makeText(mainActivity.getApplicationContext(), "Deck isn't saved, no need to delete.", Toast.LENGTH_SHORT).show();
+		    	}
+						
+			}
+			
+		});
+		
+		selectChampion = (Button) mNavigationDrawerFragment.getView().findViewById(R.id.buttonSelectChampion);
+		selectChampion.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				if(mainActivity.currentCustomDeck != null){
+					showSelectChampionPopup();	
+		    	}else{
+		    		Toast.makeText(mainActivity.getApplicationContext(), "Deck must be saved before choosing a champion.", Toast.LENGTH_SHORT).show();
+		    	}
+				
 			}
 			
 		});
@@ -389,6 +413,14 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 	private void showLoadDeckPopup(){
 		LoadDeckDialogFragment loadDeckDialog = new LoadDeckDialogFragment();
 		loadDeckDialog.show(mainActivity.getSupportFragmentManager(), "Load Deck Popup");
+	}
+	
+	/**
+	 * Display the Load Deck Dialog
+	 */
+	private void showSelectChampionPopup(){
+		SelectChampionDialogFragment selectChampionDialog = new SelectChampionDialogFragment();
+		selectChampionDialog.show(mainActivity.getSupportFragmentManager(), "Select Champion Popup");
 	}
 	
 	/**
@@ -428,7 +460,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 	 */
 	private boolean saveDeck(){
 		if(mainActivity.currentCustomDeck != null){
-			if(dbHandler.updateDeckResources(mainActivity.currentCustomDeck, mainActivity.customDeck)){
+			if(dbHandler.updateDeck(mainActivity.currentCustomDeck) && dbHandler.updateDeckResources(mainActivity.currentCustomDeck, mainActivity.customDeck)){
 				Toast.makeText(mainActivity.getApplicationContext(), "Deck successfully saved.", Toast.LENGTH_SHORT).show();
 				mainActivity.deckChanged = false;
 				return true;

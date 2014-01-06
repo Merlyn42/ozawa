@@ -1,10 +1,12 @@
 package com.ozawa.hextcgdeckbuilder;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.ozawa.hextcgdeckbuilder.LoadDeckDialogFragment.LoadDeckListener;
 import com.ozawa.hextcgdeckbuilder.NewDeckDialogFragment.NewDeckListener;
+import com.ozawa.hextcgdeckbuilder.R.drawable;
 import com.ozawa.hextcgdeckbuilder.UI.CardViewer;
 import com.ozawa.hextcgdeckbuilder.UI.CustomViewPager;
 import com.ozawa.hextcgdeckbuilder.UI.TabPagerAdapter;
@@ -18,6 +20,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
@@ -152,9 +157,7 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 	public boolean saveNewDeck(String deckName, boolean resetCustomDeck) {
 		if(mAdapter.customDeckFragment != null){
 			Deck savedDeck = mAdapter.customDeckFragment.saveNewDeck(deckName);			
-			if(savedDeck != null && savedDeck.name.contentEquals(String.valueOf(deckName))){
-				actionBar.getTabAt(0).setText("Custom Deck - " + deckName);
-				
+			if(savedDeck != null && savedDeck.name.contentEquals(String.valueOf(deckName))){				
 				if(resetCustomDeck){
 					resetCustomDeck();
 				}
@@ -162,6 +165,8 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 				currentCustomDeck = savedDeck;
 				mAdapter.customDeckFragment.reloadCustomDeckView();
 				deckChanged = false;
+				updateCustomDeckData();
+				actionBar.getTabAt(0).setText("Custom Deck - " + deckName);
 				return true;				
 			}
 		}
@@ -176,6 +181,7 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 				updateCustomDeck(loadedDeck);
 				actionBar.getTabAt(0).setText("Custom Deck - " + loadedDeck.name);
 				mAdapter.customDeckFragment.reloadCustomDeckView();
+				updateCustomDeckData();
 				return true;
 			}			
 		}
@@ -190,11 +196,34 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 		return (currentCustomDeck == null && !customDeck.isEmpty());
 	}
 	
+	public void updateCustomDeckData(){
+		if(mAdapter.customDeckFragment != null){
+			ImageView championPortrait = (ImageView) mAdapter.customDeckFragment.mNavigationDrawerFragment.getView().findViewById(R.id.imageChampionPortrait);
+			TextView championName = (TextView) mAdapter.customDeckFragment.mNavigationDrawerFragment.getView().findViewById(R.id.tvChampionName);
+			if(currentCustomDeck != null && currentCustomDeck.champion != null){				
+				championPortrait.setImageResource(getResourceID(currentCustomDeck.champion.hudPortraitSmall, R.drawable.class));				
+				championName.setText(currentCustomDeck.champion.name);
+			}else{
+				championPortrait.setImageResource(R.drawable.back);				
+				championName.setText("No Champion Selected");
+			}
+			if(customDeck != null){
+				TextView deckCardCount = (TextView) mAdapter.customDeckFragment.mNavigationDrawerFragment.getView().findViewById(R.id.tvDeckCardCount);
+				int cardCount = 0;
+				for(int value : customDeck.values()){
+					cardCount += value;
+				}
+				deckCardCount.setText("Card Count: " + cardCount);
+			}
+		}
+	}
+	
 	private void resetCustomDeck(){
 		customDeck = new HashMap<AbstractCard, Integer>();
 	    customDeckCardList = new ArrayList<AbstractCard>(customDeck.keySet());
 	    currentCustomDeck = null;
 	    actionBar.getTabAt(0).setText("Custom Deck");
+	    updateCustomDeckData();
 	}
 	
 	private void updateCustomDeck(Deck deck){
@@ -212,6 +241,21 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 		}
 		
 	    customDeckCardList = new ArrayList<AbstractCard>(customDeck.keySet());
+	    updateCustomDeckData();
+	}
+	
+	private int getResourceID(String resourceName, Class mClass){
+		int id = -1;
+		try {
+		    Class res = mClass;
+		    Field field = res.getField(resourceName);
+		    id = field.getInt(null);
+		}
+		catch (Exception e) {
+			Toast.makeText(getApplicationContext(), "Could not requested resource" , Toast.LENGTH_SHORT).show();
+		}
+		
+		return id;
 	}
 
 }

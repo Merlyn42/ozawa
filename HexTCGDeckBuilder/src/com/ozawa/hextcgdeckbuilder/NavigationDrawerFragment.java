@@ -25,8 +25,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ozawa.hextcgdeckbuilder.UI.CardViewer;
@@ -170,7 +172,7 @@ public class NavigationDrawerFragment extends Fragment {
         text.addTextChangedListener(cardViewer);
     }
     
-    public void setUpCustomDeckButtons(){
+    public void setUpCustomDeckViews(){
     	Button newDeck = (Button) linearLayout.findViewById(R.id.buttonNewDeck);
         newDeck.setVisibility(View.VISIBLE);
         
@@ -182,6 +184,18 @@ public class NavigationDrawerFragment extends Fragment {
         
         Button deleteDeck = (Button) linearLayout.findViewById(R.id.buttonDeleteDeck);
         deleteDeck.setVisibility(View.VISIBLE);
+        
+        Button selectChampion = (Button) linearLayout.findViewById(R.id.buttonSelectChampion);
+        selectChampion.setVisibility(View.VISIBLE);
+        
+        ImageView championPortrait = (ImageView) linearLayout.findViewById(R.id.imageChampionPortrait);
+        championPortrait.setVisibility(View.VISIBLE);
+        
+        TextView championName = (TextView) linearLayout.findViewById(R.id.tvChampionName);
+        championName.setVisibility(View.VISIBLE);
+        
+        TextView deckCardCount = (TextView) linearLayout.findViewById(R.id.tvDeckCardCount);
+        deckCardCount.setVisibility(View.VISIBLE);
     }
 
     /**

@@ -24,6 +24,7 @@ public class Deck {
 	@SerializedName("m_ChampionId")
 	public GlobalIdentifier championID;
 	
+	public Champion champion;
 	public String getID(){
 		return this.id.gUID;
 	}
