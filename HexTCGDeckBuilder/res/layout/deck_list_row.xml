@@ -65,8 +65,9 @@
         android:gravity="right"
         android:layout_marginRight="5dip"
         android:contentDescription="Card Defense"
-        android:maxWidth="5dp"
-        android:maxHeight="5dp"/>
+        android:adjustViewBounds="true"
+        android:maxWidth="17dp"
+        android:maxHeight="17dp"/>
     
     <TextView
         android:id="@+id/tvCardDefense"
@@ -89,8 +90,9 @@
         android:layout_toLeftOf="@+id/tvCardDefense"
         android:layout_marginRight="5dip"
         android:contentDescription="Card Attack"
-        android:maxWidth="5dp"
-        android:maxHeight="5dp"/>
+        android:adjustViewBounds="true"
+        android:maxWidth="17dp"
+        android:maxHeight="17dp"/>
     
     <TextView
         android:id="@+id/tvCardAttack"

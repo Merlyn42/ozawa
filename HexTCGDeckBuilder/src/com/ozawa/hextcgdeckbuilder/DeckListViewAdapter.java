@@ -99,7 +99,7 @@ public class DeckListViewAdapter extends ImageAdapter{
 		
         // Setting all values in listview
 		int screenWidth = HexUtil.getScreenWidth(mContext);
-        gameText.setWidth((screenWidth / 4) * 3);
+        gameText.setWidth((screenWidth / 10) * 7);
         if(card instanceof ResourceCard){
         	imCardAttack.setImageBitmap(null);
         	imCardDefense.setImageBitmap(null);
