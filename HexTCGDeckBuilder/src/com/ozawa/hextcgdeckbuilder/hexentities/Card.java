@@ -230,13 +230,15 @@ public class Card extends AbstractCard {
 			
 			Bitmap allThresholds = null;
 			if(!thresholds.isEmpty()){
-				allThresholds = Bitmap.createBitmap(180, 22, Bitmap.Config.ARGB_8888);
+				allThresholds = Bitmap.createBitmap(HexUtil.convertDensityPixelsToPixels(mContext, 100), HexUtil.convertDensityPixelsToPixels(mContext, 8), Bitmap.Config.ARGB_8888);
 				
 				Canvas canvas = new Canvas(allThresholds);
 				canvas.drawColor(0, Mode.CLEAR);
-				int left = 128;
+				int left = HexUtil.convertDensityPixelsToPixels(mContext, 92);
 				int top = 0;
-				for(Bitmap image : thresholds){
+				int dimensions = HexUtil.convertDensityPixelsToPixels(mContext, 8);
+				for(Bitmap image : thresholds){	
+					image = Bitmap.createScaledBitmap(image, dimensions, dimensions, true);
 					canvas.drawBitmap(image, left, top, null);
 					left-=image.getWidth();
 				}

@@ -10,6 +10,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.Build;
+import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
 
@@ -97,6 +98,12 @@ public class HexUtil {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public static int convertDensityPixelsToPixels(Context mContext, int dp) {
+	    DisplayMetrics displayMetrics = mContext.getResources().getDisplayMetrics();
+	    int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));       
+	    return px;
 	}
 
 }
