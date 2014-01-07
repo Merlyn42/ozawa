@@ -54,9 +54,7 @@ public class Card extends AbstractCard {
      * @param context The context to use to retrieve the image.
      * @return The bitmap of the card or null if no portrait is found
      * @Author Laurence Reading
-     */
-    
-
+     */       
     
 	@Override
     public Bitmap getCardBitmap(Context context, CardTemplate template, int maxWidth) {     		
@@ -109,7 +107,7 @@ public class Card extends AbstractCard {
         paint.setAntiAlias(true); 
 
         if(template.fullCard){
-        	drawFullImageText(combine,templateImage,paint);
+        	drawFullImageText(combine,templateImage,paint,resources);
         } else {
         	drawThumbnailText(combine,templateImage,paint);
         }
@@ -117,7 +115,7 @@ public class Card extends AbstractCard {
         return result;
     }
 	
-	private void drawFullImageText(Canvas combine,Bitmap templateImage,Paint paint) {
+	private void drawFullImageText(Canvas combine,Bitmap templateImage,Paint paint, Resources resources) {
 		paint.setTextSize(20f);	
 		combine.drawText(name, templateImage.getWidth() / 6 , templateImage.getHeight() / 14, paint);        
         if(resourceCost > 9){
@@ -127,7 +125,7 @@ public class Card extends AbstractCard {
         }
         
         paint.setTextSize(12f);
-        drawGameText(gameText,62,combine,templateImage,paint);        
+        drawGameText(gameText,62,combine,templateImage,paint,resources);        
         
         if (cardType[0].equals(CardType.TROOP)) {
         	paint.setTextSize(28f);
@@ -136,7 +134,7 @@ public class Card extends AbstractCard {
         }		
 	}
 	
-	private void drawGameText(String gameText, int length, Canvas combine, Bitmap templateImage,Paint paint){
+	private void drawGameText(String gameText, int length, Canvas combine, Bitmap templateImage,Paint paint, Resources resources){
 		if(gameText.length() < length)
 			combine.drawText(gameText, templateImage.getWidth() / 14, templateImage.getHeight() / 1.425f, paint);
 		else{
@@ -145,14 +143,52 @@ public class Card extends AbstractCard {
 			String [] words = gameText.split(" ");
 			for(String word : words){
 				if((displayText + word).length() >= length){
-					combine.drawText(displayText, templateImage.getWidth() / 14, templateImage.getHeight() / (1.425f - line), paint);
-					displayText = "";
-					line+= .05f;
+					if(displayText.contains("[")){
+						drawText(displayText,templateImage,combine,paint,line,resources);
+						displayText = "";
+						line += .05f;
+					} else {
+						combine.drawText(displayText, templateImage.getWidth() / 14, templateImage.getHeight() / (1.425f - line), paint);
+						displayText = "";
+						line += .05f;
+					}
 				}
-				displayText += word + " ";
+				displayText += word + " ";				
 			}
-			combine.drawText(displayText, templateImage.getWidth() / 14, templateImage.getHeight() / (1.425f - line), paint);
+			if(displayText.contains("[")){
+				drawText(displayText,templateImage,combine,paint,line,resources);
+			}else {
+				combine.drawText(displayText, templateImage.getWidth() / 14, templateImage.getHeight() / (1.425f - line), paint);			
+			}			
 		}
+	}
+	
+	private void drawText(String displayText,Bitmap templateImage,Canvas combine,Paint paint, float line, Resources resources){
+		String []stuff = new String[3];
+		stuff[0] = displayText.split("\\[")[0];
+		stuff[1] = displayText.split("\\[")[1].split("\\]")[0];
+		stuff[2] = displayText.split("\\]")[0];
+		Bitmap startImage = textAsBitmap(stuff[0], paint, templateImage);
+		combine.drawBitmap(startImage, templateImage.getWidth() / 14, templateImage.getHeight() / (1.425f - line), paint);
+		Bitmap symbol = getSymbolImage(stuff[1], resources);		
+		combine.drawBitmap(Bitmap.createScaledBitmap(symbol,24,28,false), templateImage.getWidth() / 14 + startImage.getWidth(), templateImage.getHeight() / (1.425f - line), paint);
+		Bitmap endImage = textAsBitmap(stuff[2], paint, templateImage);
+		combine.drawBitmap(endImage, templateImage.getWidth() / 14 + startImage.getWidth() + symbol.getWidth(), templateImage.getHeight() / (1.425f - line), paint);
+	}
+
+	private Bitmap textAsBitmap(String DisplayText, Paint paint, Bitmap templateImage){
+		int width = (int)(paint.measureText(DisplayText) + 0.5f);
+		float baseline = (int)(-paint.ascent() + 0.5f);
+		int height = (int)(baseline + paint.descent() + 0.5f);
+		Bitmap displayTextImage = Bitmap.createBitmap(width,height,Bitmap.Config.ARGB_8888);
+		Canvas canvas = new Canvas(displayTextImage);
+		canvas.drawText(DisplayText, 0, baseline, paint);
+		return displayTextImage;
+	}
+	
+	//Temp just to see if it works
+	private Bitmap getSymbolImage(String image, Resources resources){		
+		return BitmapFactory.decodeResource(resources, R.drawable.gametext_bloodshard);				
 	}
 
 	private void drawThumbnailText(Canvas combine,Bitmap templateImage,Paint paint){
