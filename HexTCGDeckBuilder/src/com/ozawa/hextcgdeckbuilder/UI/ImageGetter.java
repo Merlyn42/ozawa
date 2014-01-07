@@ -26,10 +26,19 @@ public class ImageGetter extends AsyncTask<AbstractCard, Void, Bitmap> {
 
     private ImageView iv;
     private Context context;
+    private boolean portriatOnly = false;
+    
     public ImageGetter(ImageView v, Context iContext) {
         if (map == null)map =  new ConcurrentHashMap<Integer,Bitmap>();
         iv = v;
         this.context=iContext;
+    }
+    
+    public ImageGetter(ImageView v, Context iContext, boolean portaitOnly){
+    	if (map == null)map =  new ConcurrentHashMap<Integer,Bitmap>();
+        iv = v;
+        this.context=iContext;
+        this.portriatOnly = portaitOnly;
     }
 
     /**
@@ -39,6 +48,9 @@ public class ImageGetter extends AsyncTask<AbstractCard, Void, Bitmap> {
      */
     @Override
     protected Bitmap doInBackground(AbstractCard... params) {
+    	if(portriatOnly){
+    		return params[0].getCardPortait(context);
+    	}
         return params[0].getThumbnailCardBitmap(context);
     }
     @Override

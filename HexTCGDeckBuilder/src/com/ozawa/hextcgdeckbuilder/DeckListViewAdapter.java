@@ -159,7 +159,7 @@ public class DeckListViewAdapter extends ImageAdapter{
             ((ImageGetter) imageView.getTag()).cancel(true);
         }
         imageView.setImageBitmap(back);
-        ImageGetter task = new ImageGetter(imageView,mContext) ;
+        ImageGetter task = new ImageGetter(imageView,mContext, true) ;
         task.execute(card);
         imageView.setTag(task);
     }

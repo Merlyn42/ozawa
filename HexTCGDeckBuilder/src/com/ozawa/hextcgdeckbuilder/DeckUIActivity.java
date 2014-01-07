@@ -257,7 +257,7 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 		    id = field.getInt(null);
 		}
 		catch (Exception e) {
-			Toast.makeText(getApplicationContext(), "Could not requested resource" , Toast.LENGTH_SHORT).show();
+			
 		}
 		
 		return id;

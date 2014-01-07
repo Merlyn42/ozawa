@@ -7,12 +7,15 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Point;
 import android.os.Build;
 import android.view.Display;
 import android.view.WindowManager;
 
 import com.google.gson.annotations.SerializedName;
+import com.ozawa.hextcgdeckbuilder.DeckUIActivity;
 import com.ozawa.hextcgdeckbuilder.R;
 import com.ozawa.hextcgdeckbuilder.UI.CardTemplate;
 import com.ozawa.hextcgdeckbuilder.UI.ImageCache;
@@ -63,6 +66,7 @@ public abstract class AbstractCard {
 	@SerializedName("m_ExtendedLayout")
 	public CardLayout extendedLayout;
     protected Bitmap image;
+    protected Bitmap portrait;
     protected int cachedImageWidthLimit;
     
     public String getID(){
@@ -87,6 +91,33 @@ public abstract class AbstractCard {
          
 		return image;
     }
+	
+	/**
+	 * Generates the card portrait image, scaled for the listview of a deck
+	 * 
+	 * @param mContext
+	 * @return
+	 */
+	public Bitmap getCardPortait(Context mContext){
+		int maxWidth = getScreenWidth(mContext)/8;
+		
+        if (portrait == null || cachedImageWidthLimit !=maxWidth) {
+        	BitmapFactory.Options portraitOptions = new BitmapFactory.Options();
+        	portraitOptions.inSampleSize = 10;
+        	portrait = BitmapFactory.decodeResource(mContext.getResources(), ((DeckUIActivity) mContext).getResourceID(this.cardImagePath, R.drawable.class), portraitOptions);
+        	if(portrait != null){
+	        	Matrix matrix = new Matrix();
+	        	matrix.postScale(0.5f, 0.5f);
+	        	int dimensions = (portrait.getWidth() / 18);
+	        	portrait = Bitmap.createBitmap(portrait, dimensions*2, 0, dimensions*14, portrait.getHeight() - 1, matrix, true);
+	        	portrait = Bitmap.createScaledBitmap(portrait, maxWidth, maxWidth, true);
+	        	cachedImageWidthLimit=maxWidth;
+	        	ImageCache.addToCache(this);
+        	}
+        }
+         
+		return portrait;
+	}
 	
 	public void clearImageCache(){
 		//image.recycle();
