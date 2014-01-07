@@ -22,6 +22,7 @@ import com.ozawa.hextcgdeckbuilder.UI.ImageCache;
 import com.ozawa.hextcgdeckbuilder.enums.CardRarity;
 import com.ozawa.hextcgdeckbuilder.enums.CardType;
 import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
+import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 
 /**
@@ -81,7 +82,7 @@ public abstract class AbstractCard {
     
 	public Bitmap getThumbnailCardBitmap(Context context){
 		
-		int maxWidth = getScreenWidth(context)/3;
+		int maxWidth = HexUtil.getScreenWidth(context)/3;
 		
         if (image == null || cachedImageWidthLimit !=maxWidth) {
         	image = getCardBitmap(context, CardTemplate.findCardTemplate(this, false, CardTemplate.getAllTemplates(context)), maxWidth);
@@ -99,12 +100,12 @@ public abstract class AbstractCard {
 	 * @return
 	 */
 	public Bitmap getCardPortait(Context mContext){
-		int maxWidth = getScreenWidth(mContext)/8;
+		int maxWidth = HexUtil.getScreenWidth(mContext)/8;
 		
         if (portrait == null || cachedImageWidthLimit !=maxWidth) {
         	BitmapFactory.Options portraitOptions = new BitmapFactory.Options();
         	portraitOptions.inSampleSize = 10;
-        	portrait = BitmapFactory.decodeResource(mContext.getResources(), ((DeckUIActivity) mContext).getResourceID(this.cardImagePath, R.drawable.class), portraitOptions);
+        	portrait = BitmapFactory.decodeResource(mContext.getResources(), HexUtil.getResourceID(this.cardImagePath, R.drawable.class), portraitOptions);
         	if(portrait != null){
 	        	Matrix matrix = new Matrix();
 	        	matrix.postScale(0.5f, 0.5f);
@@ -124,25 +125,8 @@ public abstract class AbstractCard {
 		image=null;
 	}
     
-	@SuppressLint("NewApi")
-    private int getScreenWidth(Context context){
-    	int measuredWidth = 0;
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Point size = new Point();
-        //different methods based on SDK version
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            wm.getDefaultDisplay().getSize(size);
-            measuredWidth = size.x;
-        } else {
-            Display d = wm.getDefaultDisplay();
-            measuredWidth = d.getWidth();
-        }
-        return measuredWidth;
-    }
-
-    
     public Bitmap getFullscreenCardBitmap(Context context){
-        return getCardBitmap(context, CardTemplate.findCardTemplate(this, true, CardTemplate.getAllTemplates(context)), getScreenWidth(context));
+        return getCardBitmap(context, CardTemplate.findCardTemplate(this, true, CardTemplate.getAllTemplates(context)), HexUtil.getScreenWidth(context));
     }
 
 	public abstract Bitmap getCardBitmap(Context context, CardTemplate template,

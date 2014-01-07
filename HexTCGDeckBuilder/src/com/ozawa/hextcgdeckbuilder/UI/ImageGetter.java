@@ -1,21 +1,14 @@
 package com.ozawa.hextcgdeckbuilder.UI;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.os.AsyncTask;
 import android.widget.ImageView;
 
-import com.ozawa.hextcgdeckbuilder.R;
+import com.ozawa.hextcgdeckbuilder.enums.ImageGetterType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -26,7 +19,7 @@ public class ImageGetter extends AsyncTask<AbstractCard, Void, Bitmap> {
 
     private ImageView iv;
     private Context context;
-    private boolean portriatOnly = false;
+    private ImageGetterType imageType;
     
     public ImageGetter(ImageView v, Context iContext) {
         if (map == null)map =  new ConcurrentHashMap<Integer,Bitmap>();
@@ -34,11 +27,11 @@ public class ImageGetter extends AsyncTask<AbstractCard, Void, Bitmap> {
         this.context=iContext;
     }
     
-    public ImageGetter(ImageView v, Context iContext, boolean portaitOnly){
+    public ImageGetter(ImageView v, Context iContext, ImageGetterType imageType){
     	if (map == null)map =  new ConcurrentHashMap<Integer,Bitmap>();
         iv = v;
         this.context=iContext;
-        this.portriatOnly = portaitOnly;
+        this.imageType = imageType;
     }
 
     /**
@@ -48,10 +41,23 @@ public class ImageGetter extends AsyncTask<AbstractCard, Void, Bitmap> {
      */
     @Override
     protected Bitmap doInBackground(AbstractCard... params) {
-    	if(portriatOnly){
-    		return params[0].getCardPortait(context);
+    	switch(imageType){
+	    	case CARDTHUMBNAIL:{
+	    		return params[0].getThumbnailCardBitmap(context);
+	    	}
+			case CARDPORTRAIT:{
+				return params[0].getCardPortait(context);
+			}
+			case CARDTHRESHOLD:{
+				if(params[0] instanceof Card){
+					return ((Card)params[0]).getCardThresholdImage(context);
+				}
+				return null;
+			}
+			default:{
+				return null;
+			}
     	}
-        return params[0].getThumbnailCardBitmap(context);
     }
     @Override
     protected void onPostExecute(Bitmap result) {
