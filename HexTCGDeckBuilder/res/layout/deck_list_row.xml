@@ -23,7 +23,7 @@
 
     </LinearLayout>
 
-    <!-- Title Of Song-->
+    <!-- Card Name -->
     <TextView
         android:id="@+id/card_name"
         android:layout_width="wrap_content"
@@ -36,7 +36,7 @@
         android:textSize="15dip"
         android:textStyle="bold"/>
 
-    <!-- Artist Name -->
+    <!-- Game Text -->
     <TextView
         android:id="@+id/gametext"
         android:layout_width="fill_parent"
@@ -48,8 +48,17 @@
         android:layout_toRightOf="@+id/portrait_border"
         android:text="Just gona stand there and ..." />
 
+    <ImageView
+        android:id="@+id/cardthreshold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/card_name"
+        android:gravity="right"
+        android:layout_marginRight="5dip"
+        android:contentDescription="Card Threshold"/>
     <!-- Rightend Duration -->
-    <TextView
+    <!-- <TextView
         android:id="@+id/duration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -60,7 +69,7 @@
         android:layout_marginRight="5dip"
         android:textSize="10dip"
         android:textColor="@drawable/list_selector_text_color"
-        android:textStyle="bold"/>
+        android:textStyle="bold"/>-->
 
     <!-- Rightend Arrow
     <ImageView android:layout_width="wrap_content"

@@ -249,7 +249,7 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 	    updateCustomDeckData();
 	}
 	
-	private int getResourceID(String resourceName, Class mClass){
+	public int getResourceID(String resourceName, Class mClass){
 		int id = -1;
 		try {
 		    Class res = mClass;
