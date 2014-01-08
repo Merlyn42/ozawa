@@ -15,6 +15,7 @@ import android.graphics.PorterDuff.Mode;
 import com.google.gson.annotations.SerializedName;
 import com.ozawa.hextcgdeckbuilder.R;
 import com.ozawa.hextcgdeckbuilder.UI.CardTemplate;
+import com.ozawa.hextcgdeckbuilder.UI.SymbolTemplate;
 import com.ozawa.hextcgdeckbuilder.enums.Attribute;
 import com.ozawa.hextcgdeckbuilder.enums.CardType;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
@@ -106,7 +107,7 @@ public class Card extends AbstractCard {
         paint.setAntiAlias(true); 
 
         if(template.fullCard){
-        	drawFullImageText(combine,templateImage,paint,resources);
+        	drawFullImageText(combine,templateImage,paint,resources,context);
         } else {
         	drawThumbnailText(combine,templateImage,paint);
         }
@@ -114,7 +115,7 @@ public class Card extends AbstractCard {
         return result;
     }
 	
-	private void drawFullImageText(Canvas combine,Bitmap templateImage,Paint paint, Resources resources) {
+	private void drawFullImageText(Canvas combine,Bitmap templateImage,Paint paint, Resources resources, Context context) {
 		paint.setTextSize(20f);	
 		combine.drawText(name, templateImage.getWidth() / 6 , templateImage.getHeight() / 14, paint);        
         if(resourceCost > 9){
@@ -124,7 +125,7 @@ public class Card extends AbstractCard {
         }
         
         paint.setTextSize(12f);
-        drawGameText(gameText,62,combine,templateImage,paint,resources);        
+        drawGameText(gameText,62,combine,templateImage,paint,resources,context);        
         
         if (cardType[0].equals(CardType.TROOP)) {
         	paint.setTextSize(28f);
@@ -133,41 +134,40 @@ public class Card extends AbstractCard {
         }		
 	}
 	
-	private void drawGameText(String gameText, int length, Canvas combine, Bitmap templateImage,Paint paint, Resources resources){
+	private void drawGameText(String gameText, int length, Canvas combine, Bitmap templateImage,Paint paint, Resources resources, Context context){
 		if(gameText.length() < length)
-			drawTextWithImages(gameText, templateImage, combine, paint,0,resources);
+			drawTextWithImages(gameText, templateImage, combine, paint,0,resources,context);
 		else{
 			float line = 0f;
 			String displayText = "";
 			String [] words = gameText.split(" ");
 			for(String word : words){
 				if((displayText + word).length() >= length){
-						drawTextWithImages(displayText,templateImage,combine,paint,line,resources);
+						drawTextWithImages(displayText,templateImage,combine,paint,line,resources,context);
 						displayText = "";
 						line += .05f;
 				}
 				displayText += word + " ";				
 			}
-			drawTextWithImages(displayText,templateImage,combine,paint,line,resources);		
+			drawTextWithImages(displayText,templateImage,combine,paint,line,resources,context);		
 		}
 	}
 	
 	
-	private void drawTextWithImages(String displayText,Bitmap templateImage,Canvas combine,Paint paint, float line, Resources resources){
+	private void drawTextWithImages(String displayText,Bitmap templateImage,Canvas combine,Paint paint, float line, Resources resources, Context context){
 		String delims = "[\\[\\]<>]";
 		String []stuff = displayText.split(delims);
 		float width = templateImage.getWidth() / 14;
 		for(int i = 0; i < stuff.length; i++){
 			if(i % 2 == 0){
-				if(stuff[i].equals("")){ 
-					continue;
-				}else {
+				if(stuff[i].equals("")) continue;
 					Bitmap startImage = textAsBitmap(stuff[i], paint, templateImage);
 					combine.drawBitmap(startImage, width, templateImage.getHeight() / (1.47f - line), paint);
 					width += startImage.getWidth();
-				}
+
 			} else {
-				Bitmap symbolImage = getSymbolImage(stuff[i], resources);
+				if(stuff[i].equalsIgnoreCase("p") | stuff[i].equalsIgnoreCase("b") | stuff[i].equalsIgnoreCase("/b")) continue; //need to account for bold and paragraphs next
+				Bitmap symbolImage = getSymbolImage(stuff[i], context);
 				combine.drawBitmap(symbolImage, width, templateImage.getHeight() / (1.48f - line), paint);
 				width += symbolImage.getWidth();
 			}			
@@ -184,8 +184,8 @@ public class Card extends AbstractCard {
 		return displayTextImage;
 	}
 	
-	private Bitmap getSymbolImage(String image, Resources resources){		
-		return Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources, R.drawable.gametext_bloodshard),14,18,false);				
+	private Bitmap getSymbolImage(String symbol, Context context){		
+		return SymbolTemplate.findSymbolTemplate(symbol, SymbolTemplate.getAllTemplates(context)).getImage(context);				
 	}
 
 	private void drawThumbnailText(Canvas combine,Bitmap templateImage,Paint paint){

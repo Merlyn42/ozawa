@@ -1,0 +1,182 @@
+[
+	{
+		"cardText": "ARROWL",
+		"imageName": "gametext_arrowleft"
+	},
+	{
+		"cardText": "ARROWR",
+		"imageName": "gametext_arrowright"
+	},
+	{
+		"cardText": "(0)",
+		"imageName": "gametext_costzero"
+	},
+	{
+		"cardText": "(1)",
+		"imageName": "gametext_costone"
+	},
+	{
+		"cardText": "(2)",
+		"imageName": "gametext_costtwo"
+	},
+	{
+		"cardText": "(3)",
+		"imageName": "gametext_costthree"
+	},
+	{
+		"cardText": "(4)",
+		"imageName": "gametext_costfour"
+	},
+	{
+		"cardText": "(5)",
+		"imageName": "gametext_costfive"
+	},
+	{
+		"cardText": "(6)",
+		"imageName": "gametext_costsix"
+	},
+	{
+		"cardText": "(7)",
+		"imageName": "gametext_costseven"
+	},
+	{
+		"cardText": "(8)",
+		"imageName": "gametext_costeight"
+	},
+	{
+		"cardText": "(9)",
+		"imageName": "gametext_costnine"
+	},
+	{
+		"cardText": "(10)",
+		"imageName": "gametext_costten"
+	},	
+	{
+		"cardText": "(X)",
+		"imageName": "gametext_costx"
+	},
+	{
+		"cardText": "BASIC",
+		"imageName": "gametext_basic"
+	},
+	{
+		"cardText": "BLOOD",
+		"imageName": "gametext_bloodshard"
+	},
+	{
+		"cardText": "DIAMOND",
+		"imageName": "gametext_diamondshard"
+	},
+	{
+		"cardText": "RUBY",
+		"imageName": "gametext_rubyshard"
+	},
+	{
+		"cardText": "SAPPHIRE",
+		"imageName": "gametext_sapphireshard"
+	},
+	{
+		"cardText": "WILD",
+		"imageName": "gametext_wildshard"
+	},
+	{
+		"cardText": "ATK",
+		"imageName": "gametext_attack"
+	},
+	{
+		"cardText": "DEF",
+		"imageName": "gametext_defense"
+	},
+	{
+		"cardText": "L0",
+		"imageName": "gametext_resourcezero"
+	},
+	{
+		"cardText": "L1",
+		"imageName": "gametext_resourceone"
+	},
+	{
+		"cardText": "L2",
+		"imageName": "gametext_resourcetwo"
+	},
+	{
+		"cardText": "L3",
+		"imageName": "gametext_resourcethree"
+	},
+	{
+		"cardText": "L4",
+		"imageName": "gametext_resourcefour"
+	},
+	{
+		"cardText": "L5",
+		"imageName": "gametext_resourcefive"
+	},
+	{
+		"cardText": "L6",
+		"imageName": "gametext_resourcesix"
+	},
+	{
+		"cardText": "L7",
+		"imageName": "gametext_resourceseven"
+	},
+	{
+		"cardText": "L8",
+		"imageName": "gametext_resourceeight"
+	},
+	{
+		"cardText": "L9",
+		"imageName": "gametext_resourcenine"
+	},
+	{
+		"cardText": "L10",
+		"imageName": "gametext_resourceten"
+	},
+	{
+		"cardText": "R0",
+		"imageName": "gametext_resourcethresholdzero"
+	},
+	{
+		"cardText": "R1",
+		"imageName": "gametext_resourcethresholdone"
+	},
+	{
+		"cardText": "R2",
+		"imageName": "gametext_resourcethresholdtwo"
+	},
+	{
+		"cardText": "R3",
+		"imageName": "gametext_resourcethresholdthree"
+	},
+	{
+		"cardText": "R4",
+		"imageName": "gametext_resourcethresholdfour"
+	},
+	{
+		"cardText": "R5",
+		"imageName": "gametext_resourcethresholdfive"
+	},
+	{
+		"cardText": "R6",
+		"imageName": "gametext_resourcethresholdsix"
+	},
+	{
+		"cardText": "R7",
+		"imageName": "gametext_resourcethresholdseven"
+	},
+	{
+		"cardText": "R8",
+		"imageName": "gametext_resourcethresholdeight"
+	},
+	{
+		"cardText": "R9",
+		"imageName": "gametext_resourcethresholdnine"
+	},
+	{
+		"cardText": "R10",
+		"imageName": "gametext_resourcethresholdten"
+	},
+	{
+		"cardText": "ACT",
+		"imageName": "gametext_exhaustcard"
+	}	
+]

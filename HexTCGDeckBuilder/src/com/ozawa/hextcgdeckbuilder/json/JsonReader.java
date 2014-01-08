@@ -5,6 +5,7 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ozawa.hextcgdeckbuilder.UI.CardTemplate;
+import com.ozawa.hextcgdeckbuilder.UI.SymbolTemplate;
 import com.ozawa.hextcgdeckbuilder.enums.Attribute;
 import com.ozawa.hextcgdeckbuilder.enums.CardType;
 import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
@@ -32,6 +33,7 @@ public class JsonReader {
         gsonBuilder.registerTypeAdapter(Boolean.class, new BooleanSerializer());
         gsonBuilder.registerTypeAdapter(AbstractCard.class, new AbstractCardSerializer());
         gsonBuilder.registerTypeAdapter(CardTemplate.class, new CardTemplateSerializer(context));
+        gsonBuilder.registerTypeAdapter(SymbolTemplate.class, new SymbolImageSerializer(context));
         gson = gsonBuilder.create();
     }
 
@@ -55,4 +57,10 @@ public class JsonReader {
         return Arrays.asList(newCards);
     }
 
+    
+    public SymbolTemplate[] deserializeJSONInputStreamToSymbolTemplates(InputStream jsonStream){
+    	InputStreamReader reader = new InputStreamReader(jsonStream);
+    	SymbolTemplate[] templates = gson.fromJson(reader, SymbolTemplate[].class);
+    	return templates;    
+    }
 }
