@@ -1,5 +1,6 @@
 package com.ozawa.hextcgdeckbuilder.UI;
 
+import java.util.EnumMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import android.app.ActivityManager;
@@ -15,10 +16,39 @@ import com.ozawa.hextcgdeckbuilder.hexentities.Card;
  *
  */
 public class ImageCache {
-	private static ConcurrentLinkedQueue<AbstractCard> queue = new ConcurrentLinkedQueue<AbstractCard>();
-	private static int approxSize =0;
-	private static Integer maxCacheSize = null;
+	public enum ImageType {
+		WithoutTemplate,WithTemplate
+	}
 	
+	public enum CacheType {
+		ListView,GridView
+	}
+
+	private ConcurrentLinkedQueue<QueueEntry> queue = new ConcurrentLinkedQueue<QueueEntry>();
+	private int approxSize =0;
+	private Integer maxCacheSize = null;
+	private static EnumMap<CacheType,ImageCache> instances = new EnumMap<CacheType,ImageCache>(CacheType.class);
+	
+	public static ImageCache getInstance(CacheType cacheType){
+		ImageCache result  = instances.get(cacheType);
+		if(result==null){
+			result = new ImageCache();
+			instances.put(cacheType, result);
+		}
+		return result;
+	}
+	
+	
+	private class QueueEntry{
+		public QueueEntry(AbstractCard card, ImageType imageType) {
+			super();
+			this.card = card;
+			this.imageType = imageType;
+		}
+		public AbstractCard card;
+		public ImageType imageType;
+		
+	}
 	/**
 	 * Determines the maximum number of images to be cached.
 	 * @param context Used to get information about the system's heap size.
@@ -39,14 +69,15 @@ public class ImageCache {
 	 * @param context Used to determine a maxCacheSize the first time this method is called.
 	 * @param card The card to add to the queue.
 	 */
-	public static void queueForRemovalFromCache(Context context,AbstractCard card){
+	public void queueForRemovalFromCache(Context context,AbstractCard card,ImageType imageType){
 		if(maxCacheSize==null){
 			maxCacheSize=getMaxCacheSize(context);
 		}
-		queue.add(card);
+		QueueEntry entry = new QueueEntry(card, imageType);
+		queue.add(entry);
 		if(++approxSize>maxCacheSize){
-			AbstractCard removal = queue.remove();
-			removal.clearImageCache();
+			QueueEntry removal = queue.remove();
+			removal.card.clearImageCache(removal.imageType);
 			approxSize--;
 		}
 	}
