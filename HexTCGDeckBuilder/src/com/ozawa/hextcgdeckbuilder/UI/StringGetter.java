@@ -46,11 +46,11 @@ public class StringGetter extends AsyncTask<AbstractCard, Void, String> {
 			}
 			return (String) field.get(card);			
 		} catch (NoSuchFieldException e) {
-			e.printStackTrace();
+			
 		} catch (IllegalAccessException e) {
-			e.printStackTrace();
+			
 		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
+			
 		}
 		return null;
 	}
