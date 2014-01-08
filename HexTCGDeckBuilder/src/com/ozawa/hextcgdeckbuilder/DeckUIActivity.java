@@ -56,7 +56,6 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 	    customDeckCardList = new ArrayList<AbstractCard>(customDeck.keySet());
 	    dbHandler = new DatabaseHandler(this);
 	    
-	 
 	    viewPager.setAdapter(mAdapter);
 	    //actionBar.setHomeButtonEnabled(false);
 	    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);       
