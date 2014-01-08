@@ -163,12 +163,12 @@ public class Card extends AbstractCard {
 					continue;
 				}else {
 					Bitmap startImage = textAsBitmap(stuff[i], paint, templateImage);
-					combine.drawBitmap(startImage, width, templateImage.getHeight() / (1.425f - line), paint);
+					combine.drawBitmap(startImage, width, templateImage.getHeight() / (1.47f - line), paint);
 					width += startImage.getWidth();
 				}
 			} else {
 				Bitmap symbolImage = getSymbolImage(stuff[i], resources);
-				combine.drawBitmap(symbolImage, width, templateImage.getHeight() / (1.425f - line), paint);
+				combine.drawBitmap(symbolImage, width, templateImage.getHeight() / (1.48f - line), paint);
 				width += symbolImage.getWidth();
 			}			
 		}
