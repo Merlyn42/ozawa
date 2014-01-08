@@ -53,7 +53,7 @@ public class CardTemplate {
 		for (CardTemplate template : templates) {
 			if (template.fullCard == isFullscreen) {
 				if (Arrays.asList(card.colorFlags).contains(template.color)) {
-					if (Arrays.asList(card.cardType).contains(CardType.TROOP) ? template.isTroop : !template.isTroop) {
+					if (Arrays.asList(card.cardType).contains(CardType.TROOP) == template.isTroop) {
 						results.add(template);
 					}
 				}
