@@ -19,7 +19,7 @@ import java.util.Arrays;
 /**
  * Created by lreading on 19/12/13.
  */
-public class CardSerializer implements JsonDeserializer<AbstractCard> {
+public class AbstractCardSerializer implements JsonDeserializer<AbstractCard> {
     @Override
     public AbstractCard deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
         Card card = jsonDeserializationContext.deserialize(jsonElement, Card.class);
