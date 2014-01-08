@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.ozawa.hextcgdeckbuilder.enums.CardEnum;
 
@@ -34,6 +36,13 @@ public class FilterButton extends ImageButton implements View.OnClickListener {
         setImageBitmap(cardViewer.isActive(e) ? imageOn : imageOff);
     }
 
+    @Override
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {   	
+    	LinearLayout parent = (LinearLayout) getParent();
+    	int dim = parent.getMeasuredWidth()/6;
+    	System.out.println("Dimension is!:"+dim);
+    	setMeasuredDimension(dim, dim);
+    }
     public void setUp(Bitmap iImageOn, Bitmap iImageOff, CardEnum iE, CardViewer iCardViewer) {
         imageOff = iImageOff;
         imageOn = iImageOn;

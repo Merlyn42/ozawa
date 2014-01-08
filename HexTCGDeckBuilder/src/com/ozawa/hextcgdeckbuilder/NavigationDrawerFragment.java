@@ -20,9 +20,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -137,10 +139,12 @@ public class NavigationDrawerFragment extends Fragment {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
     }
 
-    private void setUpButtons(){
+    private void setUpButtons(){  	
         Resources res= context.getResources();
         FilterButton button;
+        
         button = (FilterButton) scrollView.findViewById(R.id.blood);
+        
         button.setUp(BitmapFactory.decodeResource(res, R.drawable.blood_on), BitmapFactory.decodeResource(res, R.drawable.blood_off), ColorFlag.BLOOD, cardViewer);
         button = (FilterButton) scrollView.findViewById(R.id.wild);
         button.setUp(BitmapFactory.decodeResource(res, R.drawable.wild_on), BitmapFactory.decodeResource(res, R.drawable.wild_off), ColorFlag.WILD, cardViewer);
@@ -268,7 +272,7 @@ public class NavigationDrawerFragment extends Fragment {
         });
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-        setUpButtons();
+        
     }
     
 	public void setUp(View frag, CardViewer iCardViewer,Context iContext,int fragmentId, DrawerLayout drawerLayout) {
