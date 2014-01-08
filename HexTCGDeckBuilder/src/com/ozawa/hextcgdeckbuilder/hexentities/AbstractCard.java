@@ -11,6 +11,8 @@ import com.google.gson.annotations.SerializedName;
 import com.ozawa.hextcgdeckbuilder.R;
 import com.ozawa.hextcgdeckbuilder.UI.CardTemplate;
 import com.ozawa.hextcgdeckbuilder.UI.ImageCache;
+import com.ozawa.hextcgdeckbuilder.UI.ImageCache.CacheType;
+import com.ozawa.hextcgdeckbuilder.UI.ImageCache.ImageType;
 import com.ozawa.hextcgdeckbuilder.enums.CardRarity;
 import com.ozawa.hextcgdeckbuilder.enums.CardType;
 import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
@@ -79,7 +81,7 @@ public abstract class AbstractCard {
         if (image == null || cachedImageWidthLimit !=maxWidth) {
         	image = getCardBitmap(context, CardTemplate.findCardTemplate(this, false, CardTemplate.getAllTemplates(context)), maxWidth);
         	cachedImageWidthLimit=maxWidth;
-        	ImageCache.queueForRemovalFromCache(context,this);
+        	ImageCache.getInstance(CacheType.GridView).queueForRemovalFromCache(context,this, ImageType.WithTemplate);
         }
          
 		return image;
@@ -105,7 +107,7 @@ public abstract class AbstractCard {
 	        	portrait = Bitmap.createBitmap(portrait, dimensions*2, 0, dimensions*14, portrait.getHeight() - 1, matrix, true);
 	        	portrait = Bitmap.createScaledBitmap(portrait, maxWidth, maxWidth, true);
 	        	cachedImageWidthLimit=maxWidth;
-	        	ImageCache.queueForRemovalFromCache(mContext,this);
+	        	ImageCache.getInstance(CacheType.ListView).queueForRemovalFromCache(mContext,this,ImageType.WithoutTemplate);
         	}
         }
          
@@ -115,10 +117,18 @@ public abstract class AbstractCard {
 	
 	/**
 	 * called when a card is removed from the cache queue. Should free the bitmap that was cached for this position in the queue.
+	 * @param imageType which type of image to free.
 	 */
-	public void clearImageCache(){
-		//image.recycle();
-		image=null;
+	public void clearImageCache(ImageType imageType){
+		switch(imageType){
+		case WithoutTemplate:
+			portrait=null;
+			break;
+		case WithTemplate:
+			image=null;
+			break;
+			
+		}
 	}
     
     public Bitmap getFullscreenCardBitmap(Context context){
