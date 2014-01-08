@@ -23,33 +23,90 @@
 
     </LinearLayout>
 
-    <!-- Title Of Song-->
+    <!-- Card Name -->
     <TextView
         android:id="@+id/card_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/portrait_border"
         android:layout_toRightOf="@+id/portrait_border"
-        android:text="Rihanna Love the way lie"
         android:textColor="@drawable/list_selector_text_color"
         android:typeface="sans"
         android:textSize="15dip"
         android:textStyle="bold"/>
 
-    <!-- Artist Name -->
+    <!-- Game Text -->
     <TextView
         android:id="@+id/gametext"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/card_name"
         android:textColor="@drawable/list_selector_text_color"
         android:textSize="10dip"
         android:layout_marginTop="1dip"
-        android:layout_toRightOf="@+id/portrait_border"
-        android:text="Just gona stand there and ..." />
+        android:layout_toRightOf="@+id/portrait_border" />
 
-    <!-- Rightend Duration -->
+    <ImageView
+        android:id="@+id/cardthreshold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/card_name"
+        android:gravity="right"
+        android:layout_marginRight="5dip"
+        android:contentDescription="Card Threshold"/>
+    
+    <ImageView
+        android:id="@+id/imCardDefense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:gravity="right"
+        android:layout_marginRight="5dip"
+        android:contentDescription="Card Defense"
+        android:adjustViewBounds="true"
+        android:maxWidth="17dp"
+        android:maxHeight="17dp"/>
+    
     <TextView
+        android:id="@+id/tvCardDefense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@drawable/list_selector_text_color"
+        android:textSize="15dip"
+        android:layout_alignParentBottom="true"
+        android:gravity="right"
+        android:layout_toLeftOf="@+id/imCardDefense"
+        android:layout_marginRight="5dip"
+        android:textStyle="bold" />
+    
+    <ImageView
+        android:id="@+id/imCardAttack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="right"
+        android:layout_toLeftOf="@+id/tvCardDefense"
+        android:layout_marginRight="5dip"
+        android:contentDescription="Card Attack"
+        android:adjustViewBounds="true"
+        android:maxWidth="17dp"
+        android:maxHeight="17dp"/>
+    
+    <TextView
+        android:id="@+id/tvCardAttack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@drawable/list_selector_text_color"
+        android:textSize="15dip"
+        android:layout_alignParentBottom="true"
+        android:gravity="right"
+        android:layout_toLeftOf="@+id/imCardAttack"
+        android:layout_marginRight="5dip"
+        android:textStyle="bold" />
+    <!-- Rightend Duration -->
+    <!-- <TextView
         android:id="@+id/duration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -60,7 +117,7 @@
         android:layout_marginRight="5dip"
         android:textSize="10dip"
         android:textColor="@drawable/list_selector_text_color"
-        android:textStyle="bold"/>
+        android:textStyle="bold"/>-->
 
     <!-- Rightend Arrow
     <ImageView android:layout_width="wrap_content"

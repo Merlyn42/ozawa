@@ -12,8 +12,8 @@ import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
 public class CardThreshold {
 	
 	@SerializedName("m_ColorFlags")
-	ColorFlag colorFlags;
+	public ColorFlag colorFlags;
 	@SerializedName("m_ThresholdColorRequirement")
-	int thresholdColorRequirement;
+	public int thresholdColorRequirement;
 
 }

@@ -1,5 +1,6 @@
 package com.ozawa.hextcgdeckbuilder;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,9 +11,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -27,12 +25,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ozawa.hextcgdeckbuilder.UI.CardViewer;
-import com.ozawa.hextcgdeckbuilder.UI.CustomViewPager;
 import com.ozawa.hextcgdeckbuilder.UI.FilterButton;
 import com.ozawa.hextcgdeckbuilder.enums.CardType;
 import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
@@ -276,7 +272,7 @@ public class NavigationDrawerFragment extends Fragment {
         setUpButtons();
     }
     
-    public void setUp(View frag, CardViewer iCardViewer,Context iContext,int fragmentId, DrawerLayout drawerLayout) {
+	public void setUp(View frag, CardViewer iCardViewer,Context iContext,int fragmentId, DrawerLayout drawerLayout) {
         context=iContext;
         cardViewer=iCardViewer;
         mFragmentContainerView = frag.findViewById(fragmentId);

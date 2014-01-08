@@ -8,17 +8,13 @@ import com.ozawa.hextcgdeckbuilder.UI.SelectChampionArrayAdapter;
 import com.ozawa.hextcgdeckbuilder.database.DatabaseHandler;
 import com.ozawa.hextcgdeckbuilder.hexentities.Champion;
 import com.ozawa.hextcgdeckbuilder.hexentities.Deck;
+import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.view.Display;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -74,7 +70,7 @@ public class SelectChampionDialogFragment extends DialogFragment {
 			selectedChampionPortrait.setImageResource(getResourceID(selectedChampion.hudPortraitSmall));
 		}
 		
-		int portraitDimensions = getScreenWidth(getActivity())/3;
+		int portraitDimensions = HexUtil.getScreenWidth(getActivity())/3;
 		selectedChampionPortrait.getLayoutParams().width = portraitDimensions;
 		selectedChampionPortrait.getLayoutParams().height = (int) (portraitDimensions * 1.22);
 		
@@ -151,20 +147,4 @@ public class SelectChampionDialogFragment extends DialogFragment {
 		
 		return id;
 	}
-	
-	@SuppressLint("NewApi")
-    private int getScreenWidth(Context context){
-    	int measuredWidth = 0;
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Point size = new Point();
-        //different methods based on SDK version
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            wm.getDefaultDisplay().getSize(size);
-            measuredWidth = size.x;
-        } else {
-            Display d = wm.getDefaultDisplay();
-            measuredWidth = d.getWidth();
-        }
-        return measuredWidth;
-    }
 }

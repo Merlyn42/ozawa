@@ -1,23 +1,23 @@
 package com.ozawa.hextcgdeckbuilder.hexentities;
 
-import android.annotation.SuppressLint;
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.Rect;
-import android.os.Build;
-import android.view.Display;
-import android.view.WindowManager;
+import android.graphics.PorterDuff.Mode;
 
 import com.google.gson.annotations.SerializedName;
 import com.ozawa.hextcgdeckbuilder.R;
 import com.ozawa.hextcgdeckbuilder.UI.CardTemplate;
 import com.ozawa.hextcgdeckbuilder.enums.Attribute;
 import com.ozawa.hextcgdeckbuilder.enums.CardType;
+import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 /**
  * A non-resource card.
@@ -217,4 +217,76 @@ public class Card extends AbstractCard {
 		}
 		return name;
 	}
+	
+	
+	/**
+	 * Create the bitmap for card threshold data
+	 * 
+	 * @param mContext - the context for the application
+	 * @return a bitmap of the card threshold, otherwise null
+	 */	
+	public Bitmap getCardThresholdImage(Context mContext){
+		if(this.threshold != null && this.threshold.length > 0){
+			ArrayList<Bitmap> thresholds = new ArrayList<Bitmap>();
+			for(CardThreshold threshold : this.threshold){
+				if (threshold.colorFlags != null) {
+					switch (threshold.colorFlags) {
+						case COLORLESS:{
+							break;
+						}
+						case BLOOD: {
+							addCardThresholdBitmapToList(mContext, thresholds, "cardthresholdblood", threshold.thresholdColorRequirement);
+							break;
+						}
+						case DIAMOND: {
+							addCardThresholdBitmapToList(mContext, thresholds, "cardthresholddiamond", threshold.thresholdColorRequirement);
+							break;
+						}
+						case RUBY: {
+							addCardThresholdBitmapToList(mContext, thresholds, "cardthresholdruby", threshold.thresholdColorRequirement);
+							break;
+						}
+						case SAPPHIRE: {
+							addCardThresholdBitmapToList(mContext, thresholds, "cardthresholdsapphire", threshold.thresholdColorRequirement);
+							break;
+						}
+						case WILD: {
+							addCardThresholdBitmapToList(mContext, thresholds, "cardthresholdwild", threshold.thresholdColorRequirement);
+							break;
+						}
+						default: {
+							break;
+						}
+					}
+				}
+			}
+			
+			Bitmap allThresholds = null;
+			if(!thresholds.isEmpty()){
+				allThresholds = Bitmap.createBitmap(HexUtil.convertDensityPixelsToPixels(mContext, 100), HexUtil.convertDensityPixelsToPixels(mContext, 8), Bitmap.Config.ARGB_8888);
+				
+				Canvas canvas = new Canvas(allThresholds);
+				canvas.drawColor(0, Mode.CLEAR);
+				int left = HexUtil.convertDensityPixelsToPixels(mContext, 92);
+				int top = 0;
+				int dimensions = HexUtil.convertDensityPixelsToPixels(mContext, 8);
+				for(Bitmap image : thresholds){	
+					image = Bitmap.createScaledBitmap(image, dimensions, dimensions, true);
+					canvas.drawBitmap(image, left, top, null);
+					left-=image.getWidth();
+				}
+			}
+			
+			return allThresholds;
+		}
+		
+		return null;
+	}
+	
+	private void addCardThresholdBitmapToList(Context mContext, List<Bitmap> thresholds, String resourcesName, int thresholdCount){
+    	for(int i = 0; i < thresholdCount; i++){
+			Bitmap thresh = BitmapFactory.decodeResource(mContext.getResources(), HexUtil.getResourceID(resourcesName, R.drawable.class), null);
+			thresholds.add(thresh);
+		}
+    }
 }

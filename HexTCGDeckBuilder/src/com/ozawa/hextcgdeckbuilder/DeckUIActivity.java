@@ -1,12 +1,10 @@
 package com.ozawa.hextcgdeckbuilder;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.ozawa.hextcgdeckbuilder.LoadDeckDialogFragment.LoadDeckListener;
 import com.ozawa.hextcgdeckbuilder.NewDeckDialogFragment.NewDeckListener;
-import com.ozawa.hextcgdeckbuilder.R.drawable;
 import com.ozawa.hextcgdeckbuilder.UI.CardViewer;
 import com.ozawa.hextcgdeckbuilder.UI.CustomViewPager;
 import com.ozawa.hextcgdeckbuilder.UI.TabPagerAdapter;
@@ -14,6 +12,7 @@ import com.ozawa.hextcgdeckbuilder.database.DatabaseHandler;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Deck;
 import com.ozawa.hextcgdeckbuilder.hexentities.DeckResource;
+import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -22,7 +21,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
@@ -201,7 +199,7 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 			ImageView championPortrait = (ImageView) mAdapter.customDeckFragment.mNavigationDrawerFragment.getView().findViewById(R.id.imageChampionPortrait);
 			TextView championName = (TextView) mAdapter.customDeckFragment.mNavigationDrawerFragment.getView().findViewById(R.id.tvChampionName);
 			if(currentCustomDeck != null && currentCustomDeck.champion != null){		
-				int portaitID = getResourceID(currentCustomDeck.champion.hudPortraitSmall, R.drawable.class);
+				int portaitID = HexUtil.getResourceID(currentCustomDeck.champion.hudPortraitSmall, R.drawable.class);
 				if(portaitID != -1){
 					championPortrait.setImageResource(portaitID);
 				}else{
@@ -247,20 +245,6 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 		
 	    customDeckCardList = new ArrayList<AbstractCard>(customDeck.keySet());
 	    updateCustomDeckData();
-	}
-	
-	private int getResourceID(String resourceName, Class mClass){
-		int id = -1;
-		try {
-		    Class res = mClass;
-		    Field field = res.getField(resourceName);
-		    id = field.getInt(null);
-		}
-		catch (Exception e) {
-			Toast.makeText(getApplicationContext(), "Could not requested resource" , Toast.LENGTH_SHORT).show();
-		}
-		
-		return id;
 	}
 
 }

@@ -12,8 +12,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ozawa.hextcgdeckbuilder.UI.ImageGetter;
-import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
+import com.ozawa.hextcgdeckbuilder.UI.StringGetter;
+import com.ozawa.hextcgdeckbuilder.enums.ImageGetterType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
+import com.ozawa.hextcgdeckbuilder.hexentities.ResourceCard;
+import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 /**
  * Created by ckinsella on 19/12/13.
@@ -49,11 +52,15 @@ public class DeckListViewAdapter extends ImageAdapter{
             vi = inflater.inflate(R.layout.deck_list_row, null);
         }
 
-        TextView cardName = (TextView)vi.findViewById(R.id.card_name); // title
-        TextView gameText = (TextView)vi.findViewById(R.id.gametext); // artist name
-        TextView duration = (TextView)vi.findViewById(R.id.duration); // duration
-        ImageView thumb_image=(ImageView)vi.findViewById(R.id.list_image); // thumb image
-
+        TextView cardName = (TextView)vi.findViewById(R.id.card_name);
+        TextView gameText = (TextView)vi.findViewById(R.id.gametext);
+        TextView cardAttack = (TextView)vi.findViewById(R.id.tvCardAttack);
+        TextView cardDefense = (TextView)vi.findViewById(R.id.tvCardDefense);
+        ImageView cardThreshold = (ImageView) vi.findViewById(R.id.cardthreshold);
+        ImageView thumb_image = (ImageView)vi.findViewById(R.id.list_image);
+        ImageView imCardAttack = (ImageView)vi.findViewById(R.id.imCardAttack);
+        ImageView imCardDefense = (ImageView)vi.findViewById(R.id.imCardDefense);
+        
         AbstractCard card = masterDeck.get(position);
 
 		if (card.colorFlags.length > 0&&card.colorFlags[0]!=null) {
@@ -89,10 +96,22 @@ public class DeckListViewAdapter extends ImageAdapter{
 		} else {
 			vi.setBackgroundResource(R.drawable.list_selector_colorless);
 		}
+		
         // Setting all values in listview
-        cardName.setText(card.name);
-        gameText.setText(card.gameText);
-        duration.setText(card.artistName);
+		int screenWidth = HexUtil.getScreenWidth(mContext);
+        gameText.setWidth((screenWidth / 10) * 7);
+        if(card instanceof ResourceCard){
+        	imCardAttack.setImageBitmap(null);
+        	imCardDefense.setImageBitmap(null);
+        }else{
+        	imCardAttack.setImageResource(R.drawable.gametext_attack);
+        	imCardDefense.setImageResource(R.drawable.gametext_defense);
+        }
+        buildCardTextView(card, cardName, "name");
+        buildCardTextView(card, gameText, "gameText");
+        buildCardTextView(card, cardAttack, "baseAttackValue");
+        buildCardTextView(card, cardDefense, "baseHealthValue");
+        buildCardThreshold(card, cardThreshold);
         buildCardImage(card, thumb_image);
         return vi;
     }
@@ -103,8 +122,28 @@ public class DeckListViewAdapter extends ImageAdapter{
             ((ImageGetter) imageView.getTag()).cancel(true);
         }
         imageView.setImageBitmap(back);
-        ImageGetter task = new ImageGetter(imageView,mContext) ;
+        ImageGetter task = new ImageGetter(imageView,mContext, ImageGetterType.CARDPORTRAIT) ;
         task.execute(card);
         imageView.setTag(task);
+    }
+    
+    private void buildCardThreshold(AbstractCard card,ImageView imageView){
+    	if(imageView.getTag() != null) {
+            ((ImageGetter) imageView.getTag()).cancel(true);
+        }
+    	
+        ImageGetter task = new ImageGetter(imageView,mContext, ImageGetterType.CARDTHRESHOLD) ;
+        task.execute(card);
+        imageView.setTag(task);
+    }
+    
+    private void buildCardTextView(AbstractCard card, TextView textView, String fieldName){
+    	if(textView.getTag() != null){
+    		((StringGetter) textView.getTag()).cancel(true);
+    	}
+    	
+    	StringGetter task = new StringGetter(mContext, textView, fieldName);
+    	task.execute(card);
+    	textView.setTag(task);
     }
 }

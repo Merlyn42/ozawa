@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.ozawa.hextcgdeckbuilder.UI.CardViewer;
 import com.ozawa.hextcgdeckbuilder.UI.ImageGetter;
 import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
+import com.ozawa.hextcgdeckbuilder.enums.ImageGetterType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 
@@ -88,7 +89,7 @@ public class ImageAdapter extends BaseAdapter {
             ((ImageGetter) imageView.getTag()).cancel(true);
         }
         imageView.setImageBitmap(back);
-        ImageGetter task = new ImageGetter(imageView,mContext) ;
+        ImageGetter task = new ImageGetter(imageView,mContext, ImageGetterType.CARDTHUMBNAIL) ;
         task.execute(card);
         imageView.setTag(task);
     }
