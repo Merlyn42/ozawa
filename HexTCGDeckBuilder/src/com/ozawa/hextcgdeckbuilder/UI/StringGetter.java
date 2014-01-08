@@ -37,6 +37,9 @@ public class StringGetter extends AsyncTask<AbstractCard, Void, String> {
 		try {
 			Field field;
 			if(card instanceof Card){
+				if((fieldName.contentEquals("baseAttackValue") || fieldName.contentEquals("baseHealthValue")) && !card.isTroop()){
+					return null;
+				}
 				field = Card.class.getField(fieldName);
 			}else{
 				field = ResourceCard.class.getField(fieldName);

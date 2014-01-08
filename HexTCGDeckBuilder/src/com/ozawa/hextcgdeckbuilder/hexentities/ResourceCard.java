@@ -4,11 +4,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Point;
-import android.os.Build;
-import android.view.Display;
-import android.view.WindowManager;
 
 import com.google.gson.annotations.SerializedName;
 import com.ozawa.hextcgdeckbuilder.UI.CardTemplate;

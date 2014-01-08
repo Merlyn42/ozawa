@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.ozawa.hextcgdeckbuilder.UI.ImageGetter;
 import com.ozawa.hextcgdeckbuilder.UI.StringGetter;
+import com.ozawa.hextcgdeckbuilder.enums.CardType;
 import com.ozawa.hextcgdeckbuilder.enums.ImageGetterType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.ResourceCard;
@@ -100,12 +101,12 @@ public class DeckListViewAdapter extends ImageAdapter{
         // Setting all values in listview
 		int screenWidth = HexUtil.getScreenWidth(mContext);
         gameText.setWidth((screenWidth / 10) * 7);
-        if(card instanceof ResourceCard){
+        if(card.isTroop()){
+        	imCardAttack.setImageResource(R.drawable.gametext_attack);
+        	imCardDefense.setImageResource(R.drawable.gametext_defense);        	
+        }else{
         	imCardAttack.setImageBitmap(null);
         	imCardDefense.setImageBitmap(null);
-        }else{
-        	imCardAttack.setImageResource(R.drawable.gametext_attack);
-        	imCardDefense.setImageResource(R.drawable.gametext_defense);
         }
         buildCardTextView(card, cardName, "name");
         buildCardTextView(card, gameText, "gameText");

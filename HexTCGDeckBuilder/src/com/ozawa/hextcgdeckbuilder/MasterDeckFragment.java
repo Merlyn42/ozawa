@@ -33,7 +33,6 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MasterDeckFragment extends Fragment implements NavigationDrawerFragment.NavigationDrawerCallbacks, GestureOverlayView.OnGesturePerformedListener{
@@ -134,20 +133,15 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
                     if(prediction.name.equalsIgnoreCase("swipe left")){                    	
                         int x = (int)gesture.getStrokes().get(0).points[0];
                         int y = (int)gesture.getStrokes().get(0).points[1];
-                        AbstractCard card;
                         int position;
                         if(isGridView){
                         	GridView gridView = (GridView) uiLayout.findViewById(R.id.master_deck_grid_view);
                         	position = gridView.pointToPosition(x,y);
-                        	card = imAdapter.masterDeck.get(position);
                         } else {
                         	ListView listView = (ListView) uiLayout.findViewById(R.id.master_deck_deck_list);
                         	position = listView.pointToPosition(x,y);
-                        	card = lvAdapter.masterDeck.get(position);
                         }
-                                                                               				
-        				addCardToCustomDeck(card);
-        				Toast.makeText(mainActivity.getApplicationContext(), card.name + " added to custom deck.", Toast.LENGTH_SHORT).show();
+                        addCardToCustomDeck(position);
                     }else if(prediction.name.equalsIgnoreCase("swipe right")){
                     	CustomViewPager pager = (CustomViewPager) mainActivity.findViewById(R.id.pager);
                     	pager.setCurrentItem(pager.getCurrentItem()-1); // ******* TEMPORARY FIX FOR SLIDING BETWEEN PAGES
@@ -206,8 +200,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
                     int position, long id) {
 				// Add card to custom deck
-				AbstractCard card = imAdapter.masterDeck.get(position);
-				addCardToCustomDeck(card);
+				addCardToCustomDeck(position);
 				return true;
 			}
 		});
@@ -237,8 +230,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
                     int position, long id) {
 				// Add card to custom deck
-				AbstractCard card = lvAdapter.masterDeck.get(position);
-				addCardToCustomDeck(card);
+				addCardToCustomDeck(position);
 				return true;
 			}
 			
@@ -258,15 +250,18 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 	 * 
 	 * @param card
 	 */
-	private void addCardToCustomDeck(AbstractCard card) {
-		HashMap<AbstractCard, Integer> customDeck = ((DeckUIActivity) mainActivity).customDeck;
-		if(customDeck.get(card) == null){
-			customDeck.put(card, 1);
-			((DeckUIActivity) mainActivity).customDeckCardList.add(card);
-		}else{
-			customDeck.put(card, customDeck.get(card) + 1);
-		}		
-		((DeckUIActivity) mainActivity).deckChanged = true;
-		Toast.makeText(mainActivity.getApplicationContext(), card.name + " added to custom deck.", Toast.LENGTH_SHORT).show();
+	private void addCardToCustomDeck(int position) {
+		if(position > 0){
+			AbstractCard card = isGridView == true ? imAdapter.masterDeck.get(position) : lvAdapter.masterDeck.get(position);
+			HashMap<AbstractCard, Integer> customDeck = ((DeckUIActivity) mainActivity).customDeck;
+			if(customDeck.get(card) == null){
+				customDeck.put(card, 1);
+				((DeckUIActivity) mainActivity).customDeckCardList.add(card);
+			}else{
+				customDeck.put(card, customDeck.get(card) + 1);
+			}		
+			((DeckUIActivity) mainActivity).deckChanged = true;
+			Toast.makeText(mainActivity.getApplicationContext(), card.name + " added to custom deck.", Toast.LENGTH_SHORT).show();
+		}
 	}
 }

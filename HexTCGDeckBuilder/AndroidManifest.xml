@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="11"
+        android:minSdkVersion="9"
         android:targetSdkVersion="19" />
 
     <application
@@ -17,8 +17,10 @@
         android:hardwareAccelerated="true"
         android:largeHeap="true">
         <activity
-            android:name="com.ozawa.hextcgdeckbuilder.DeckUIActivity"
-            android:label="@string/app_name" >
+            android:theme="@style/Theme.AppCompat"
+            android:name=".DeckUIActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,12 +28,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.ozawa.hextcgdeckbuilder.DeckListViewActivity"
-            android:label="@string/app_name" >
-        </activity>
-        <activity
             android:name="com.ozawa.hextcgdeckbuilder.FullImageActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 

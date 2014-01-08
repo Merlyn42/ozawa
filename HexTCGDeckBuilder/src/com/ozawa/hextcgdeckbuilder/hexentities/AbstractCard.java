@@ -1,21 +1,11 @@
 package com.ozawa.hextcgdeckbuilder.hexentities;
 
-import java.util.Arrays;
-import java.util.List;
-
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.Point;
-import android.os.Build;
-import android.view.Display;
-import android.view.WindowManager;
 
 import com.google.gson.annotations.SerializedName;
-import com.ozawa.hextcgdeckbuilder.DeckUIActivity;
 import com.ozawa.hextcgdeckbuilder.R;
 import com.ozawa.hextcgdeckbuilder.UI.CardTemplate;
 import com.ozawa.hextcgdeckbuilder.UI.ImageCache;
@@ -127,6 +117,16 @@ public abstract class AbstractCard {
     
     public Bitmap getFullscreenCardBitmap(Context context){
         return getCardBitmap(context, CardTemplate.findCardTemplate(this, true, CardTemplate.getAllTemplates(context)), HexUtil.getScreenWidth(context));
+    }
+    
+    public boolean isTroop(){
+    	for(CardType type : this.cardType){
+    		if(type == CardType.TROOP){
+    			return true;
+    		}
+    	}
+    	
+    	return false;
     }
 
 	public abstract Bitmap getCardBitmap(Context context, CardTemplate template,

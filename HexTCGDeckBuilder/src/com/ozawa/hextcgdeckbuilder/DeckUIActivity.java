@@ -21,9 +21,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.app.ActionBar;
-import android.app.ActionBar.Tab;
-import android.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBar.Tab;
 
 public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabListener, NavigationDrawerFragment.NavigationDrawerCallbacks, NewDeckListener, LoadDeckListener{
 	
@@ -51,7 +50,7 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
         
 	    // Initilization
 	    viewPager = (CustomViewPager) findViewById(R.id.pager);
-	    actionBar = getActionBar();
+	    actionBar = getSupportActionBar();
 	    mAdapter = new TabPagerAdapter(getSupportFragmentManager());
 	    customDeck = new HashMap<AbstractCard, Integer>();
 	    customDeckCardList = new ArrayList<AbstractCard>(customDeck.keySet());
@@ -129,9 +128,10 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 
     }
         
-	@Override
+	/*@Override
 	public void onTabReselected(Tab arg0, FragmentTransaction arg1) {
 		// TODO Auto-generated method stub
+		super.onTabReselected(arg0, arg1);
 		
 	}
 
@@ -144,7 +144,7 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 	public void onTabUnselected(Tab arg0, FragmentTransaction arg1) {
 		// TODO Auto-generated method stub
 		
-	}
+	}*/
 
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
@@ -245,6 +245,27 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 		
 	    customDeckCardList = new ArrayList<AbstractCard>(customDeck.keySet());
 	    updateCustomDeckData();
+	}
+
+	@Override
+	public void onTabReselected(Tab arg0,
+			android.support.v4.app.FragmentTransaction arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTabSelected(Tab tab,
+			android.support.v4.app.FragmentTransaction fragTransaction) {
+		viewPager.setCurrentItem(tab.getPosition()); // Change to the tab when clicked
+		
+	}
+
+	@Override
+	public void onTabUnselected(Tab arg0,
+			android.support.v4.app.FragmentTransaction arg1) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
