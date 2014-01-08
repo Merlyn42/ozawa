@@ -1,6 +1,5 @@
 package com.ozawa.hextcgdeckbuilder;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -24,7 +23,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,7 +64,7 @@ public class NavigationDrawerFragment extends Fragment {
 
     private DrawerLayout mDrawerLayout;
     //private ListView mDrawerListView;
-    private LinearLayout linearLayout;
+    private ScrollView scrollView;
     private View mFragmentContainerView;
     CardViewer cardViewer;
     private Context context;
@@ -117,7 +116,7 @@ public class NavigationDrawerFragment extends Fragment {
             }
         });*/
 
-        linearLayout = (LinearLayout)inflater.inflate(R.layout.filter_layout, container, false);
+        scrollView = (ScrollView)inflater.inflate(R.layout.filter_layout, container, false);
         /*mDrawerListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
                 android.R.layout.simple_list_item_1,
@@ -131,7 +130,7 @@ public class NavigationDrawerFragment extends Fragment {
        // mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 
 
-        return linearLayout;
+        return scrollView;
     }
 
     public boolean isDrawerOpen() {
@@ -141,56 +140,56 @@ public class NavigationDrawerFragment extends Fragment {
     private void setUpButtons(){
         Resources res= context.getResources();
         FilterButton button;
-        button = (FilterButton) linearLayout.findViewById(R.id.blood);
+        button = (FilterButton) scrollView.findViewById(R.id.blood);
         button.setUp(BitmapFactory.decodeResource(res, R.drawable.blood_on), BitmapFactory.decodeResource(res, R.drawable.blood_off), ColorFlag.BLOOD, cardViewer);
-        button = (FilterButton) linearLayout.findViewById(R.id.wild);
+        button = (FilterButton) scrollView.findViewById(R.id.wild);
         button.setUp(BitmapFactory.decodeResource(res, R.drawable.wild_on), BitmapFactory.decodeResource(res, R.drawable.wild_off), ColorFlag.WILD, cardViewer);
-        button = (FilterButton) linearLayout.findViewById(R.id.ruby);
+        button = (FilterButton) scrollView.findViewById(R.id.ruby);
         button.setUp(BitmapFactory.decodeResource(res, R.drawable.ruby_on),BitmapFactory.decodeResource(res, R.drawable.ruby_off),ColorFlag.RUBY,cardViewer);
-        button = (FilterButton) linearLayout.findViewById(R.id.sapphire);
+        button = (FilterButton) scrollView.findViewById(R.id.sapphire);
         button.setUp(BitmapFactory.decodeResource(res, R.drawable.sapphire_on), BitmapFactory.decodeResource(res, R.drawable.sapphire_off), ColorFlag.SAPPHIRE, cardViewer);
-        button = (FilterButton) linearLayout.findViewById(R.id.diamond);
+        button = (FilterButton) scrollView.findViewById(R.id.diamond);
         button.setUp(BitmapFactory.decodeResource(res, R.drawable.diamond_on), BitmapFactory.decodeResource(res, R.drawable.diamond_off), ColorFlag.DIAMOND, cardViewer);
-        button = (FilterButton) linearLayout.findViewById(R.id.colorless);
+        button = (FilterButton) scrollView.findViewById(R.id.colorless);
         button.setUp(BitmapFactory.decodeResource(res, R.drawable.colorless_on),BitmapFactory.decodeResource(res, R.drawable.colorless_off),ColorFlag.COLORLESS,cardViewer);
 
-        button = (FilterButton) linearLayout.findViewById(R.id.troop);
+        button = (FilterButton) scrollView.findViewById(R.id.troop);
         button.setUp(BitmapFactory.decodeResource(res, R.drawable.troop_on), BitmapFactory.decodeResource(res, R.drawable.troop_off), CardType.TROOP, cardViewer);
-        button = (FilterButton) linearLayout.findViewById(R.id.basicaction);
+        button = (FilterButton) scrollView.findViewById(R.id.basicaction);
         button.setUp(BitmapFactory.decodeResource(res, R.drawable.basic_on),BitmapFactory.decodeResource(res, R.drawable.basic_off),CardType.BASICACTION,cardViewer);
-        button = (FilterButton) linearLayout.findViewById(R.id.quickaction);
+        button = (FilterButton) scrollView.findViewById(R.id.quickaction);
         button.setUp(BitmapFactory.decodeResource(res, R.drawable.quick_on),BitmapFactory.decodeResource(res, R.drawable.quick_off),CardType.QUICKACTION,cardViewer);
-        button = (FilterButton) linearLayout.findViewById(R.id.constant);
+        button = (FilterButton) scrollView.findViewById(R.id.constant);
         button.setUp(BitmapFactory.decodeResource(res, R.drawable.constant_on),BitmapFactory.decodeResource(res, R.drawable.constant_off),CardType.CONSTANT,cardViewer);
-        button = (FilterButton) linearLayout.findViewById(R.id.resource);
+        button = (FilterButton) scrollView.findViewById(R.id.resource);
         button.setUp(BitmapFactory.decodeResource(res, R.drawable.resource_on), BitmapFactory.decodeResource(res, R.drawable.resource_off), CardType.RESOURCE, cardViewer);
-        EditText text  = (EditText) linearLayout.findViewById(R.id.SearchTextField);
+        EditText text  = (EditText) scrollView.findViewById(R.id.SearchTextField);
         text.addTextChangedListener(cardViewer);
     }
     
     public void setUpCustomDeckViews(){
-    	Button newDeck = (Button) linearLayout.findViewById(R.id.buttonNewDeck);
+    	Button newDeck = (Button) scrollView.findViewById(R.id.buttonNewDeck);
         newDeck.setVisibility(View.VISIBLE);
         
-        Button loadDeck = (Button) linearLayout.findViewById(R.id.buttonLoadDeck);
+        Button loadDeck = (Button) scrollView.findViewById(R.id.buttonLoadDeck);
         loadDeck.setVisibility(View.VISIBLE);
         
-        Button saveDeck = (Button) linearLayout.findViewById(R.id.buttonSaveDeck);
+        Button saveDeck = (Button) scrollView.findViewById(R.id.buttonSaveDeck);
         saveDeck.setVisibility(View.VISIBLE);
         
-        Button deleteDeck = (Button) linearLayout.findViewById(R.id.buttonDeleteDeck);
+        Button deleteDeck = (Button) scrollView.findViewById(R.id.buttonDeleteDeck);
         deleteDeck.setVisibility(View.VISIBLE);
         
-        Button selectChampion = (Button) linearLayout.findViewById(R.id.buttonSelectChampion);
+        Button selectChampion = (Button) scrollView.findViewById(R.id.buttonSelectChampion);
         selectChampion.setVisibility(View.VISIBLE);
         
-        ImageView championPortrait = (ImageView) linearLayout.findViewById(R.id.imageChampionPortrait);
+        ImageView championPortrait = (ImageView) scrollView.findViewById(R.id.imageChampionPortrait);
         championPortrait.setVisibility(View.VISIBLE);
         
-        TextView championName = (TextView) linearLayout.findViewById(R.id.tvChampionName);
+        TextView championName = (TextView) scrollView.findViewById(R.id.tvChampionName);
         championName.setVisibility(View.VISIBLE);
         
-        TextView deckCardCount = (TextView) linearLayout.findViewById(R.id.tvDeckCardCount);
+        TextView deckCardCount = (TextView) scrollView.findViewById(R.id.tvDeckCardCount);
         deckCardCount.setVisibility(View.VISIBLE);
     }
 
