@@ -65,7 +65,7 @@ public abstract class AbstractCard {
 	}
 
     /**
-     * Generates the card's image and returns it as a bitmap
+     * Generates the card's image and returns it as a bitmap also caches the image in the Card's image variable and adds this card to the cache queue.
      * @param context The context to use to retrieve the image.
      * @return The card's image as a bitmap
      */
@@ -110,6 +110,10 @@ public abstract class AbstractCard {
 		return portrait;
 	}
 	
+	
+	/**
+	 * called when a card is removed from the cache queue. Should free the bitmap that was cached for this position in the queue.
+	 */
 	public void clearImageCache(){
 		//image.recycle();
 		image=null;
