@@ -45,25 +45,13 @@
         android:textSize="10dip"
         android:layout_marginTop="1dip"
         android:layout_toRightOf="@+id/portrait_border" />
-    
-    <TextView
-        android:id="@+id/tvCardCost"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@id/card_name"
-        android:textColor="@drawable/list_selector_text_color"
-        android:typeface="sans"
-        android:textSize="15dip"
-        android:layout_marginRight="5dip"
-        android:textStyle="bold" />
 
     <ImageView
         android:id="@+id/cardthreshold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@id/tvCardCost"
+        android:layout_alignTop="@id/card_name"
         android:gravity="right"
         android:layout_marginRight="5dip"
         android:contentDescription="Card Threshold"/>

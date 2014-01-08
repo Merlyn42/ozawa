@@ -81,24 +81,21 @@ public class HexUtil {
 	 * @param fieldName - the name of the field
 	 * @return the value of the card's field
 	 */
-	public static String getCardFieldValueAsString(AbstractCard card, String fieldName){
+	public static String getCardStringFieldValue(AbstractCard card, String fieldName){
 		try {
 			Field field;
 			if(card instanceof Card){
-				if((fieldName.contentEquals("baseAttackValue") || fieldName.contentEquals("baseHealthValue")) && !card.isTroop()){
-					return null;
-				}
 				field = Card.class.getField(fieldName);
 			}else{
 				field = ResourceCard.class.getField(fieldName);
 			}
-			return String.valueOf(field.get(card));			
+			return (String) field.get(card);			
 		} catch (NoSuchFieldException e) {
-			
+			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			
+			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
-			
+			e.printStackTrace();
 		}
 		return null;
 	}

@@ -13,8 +13,10 @@ import android.widget.TextView;
 
 import com.ozawa.hextcgdeckbuilder.UI.ImageGetter;
 import com.ozawa.hextcgdeckbuilder.UI.StringGetter;
+import com.ozawa.hextcgdeckbuilder.enums.CardType;
 import com.ozawa.hextcgdeckbuilder.enums.ImageGetterType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
+import com.ozawa.hextcgdeckbuilder.hexentities.ResourceCard;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 /**
@@ -45,15 +47,14 @@ public class DeckListViewAdapter extends ImageAdapter{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View vi = convertView;
+        View vi=convertView;
         
-        if(convertView == null){
+        if(convertView==null){
             vi = inflater.inflate(R.layout.deck_list_row, null);
         }
 
         TextView cardName = (TextView)vi.findViewById(R.id.card_name);
         TextView gameText = (TextView)vi.findViewById(R.id.gametext);
-        TextView cardCost = (TextView)vi.findViewById(R.id.tvCardCost);
         TextView cardAttack = (TextView)vi.findViewById(R.id.tvCardAttack);
         TextView cardDefense = (TextView)vi.findViewById(R.id.tvCardDefense);
         ImageView cardThreshold = (ImageView) vi.findViewById(R.id.cardthreshold);
@@ -99,21 +100,18 @@ public class DeckListViewAdapter extends ImageAdapter{
 		
         // Setting all values in listview
 		int screenWidth = HexUtil.getScreenWidth(mContext);
-        gameText.setWidth((screenWidth / 10) * 6);
+        gameText.setWidth((screenWidth / 10) * 7);
         if(card.isTroop()){
         	imCardAttack.setImageResource(R.drawable.gametext_attack);
-        	imCardDefense.setImageResource(R.drawable.gametext_defense);           	
+        	imCardDefense.setImageResource(R.drawable.gametext_defense);        	
         }else{
         	imCardAttack.setImageBitmap(null);
         	imCardDefense.setImageBitmap(null);
         }
-        
-        
-        buildCardTextView(card, cardName, "name", null, null);
-        buildCardTextView(card, gameText, "gameText", null, null);
-        buildCardTextView(card, cardCost, "resourceCost", "Cost: ", null); 
-        buildCardTextView(card, cardAttack, "baseAttackValue", null, null);
-        buildCardTextView(card, cardDefense, "baseHealthValue", null, null);
+        buildCardTextView(card, cardName, "name");
+        buildCardTextView(card, gameText, "gameText");
+        buildCardTextView(card, cardAttack, "baseAttackValue");
+        buildCardTextView(card, cardDefense, "baseHealthValue");
         buildCardThreshold(card, cardThreshold);
         buildCardImage(card, thumb_image);
         return vi;
@@ -140,12 +138,12 @@ public class DeckListViewAdapter extends ImageAdapter{
         imageView.setTag(task);
     }
     
-    private void buildCardTextView(AbstractCard card, TextView textView, String fieldName, String prefix, String suffix){
+    private void buildCardTextView(AbstractCard card, TextView textView, String fieldName){
     	if(textView.getTag() != null){
     		((StringGetter) textView.getTag()).cancel(true);
     	}
     	
-    	StringGetter task = new StringGetter(mContext, textView, fieldName, prefix, suffix);
+    	StringGetter task = new StringGetter(mContext, textView, fieldName);
     	task.execute(card);
     	textView.setTag(task);
     }
