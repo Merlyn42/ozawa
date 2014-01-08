@@ -77,7 +77,7 @@ public abstract class AbstractCard {
         if (image == null || cachedImageWidthLimit !=maxWidth) {
         	image = getCardBitmap(context, CardTemplate.findCardTemplate(this, false, CardTemplate.getAllTemplates(context)), maxWidth);
         	cachedImageWidthLimit=maxWidth;
-        	ImageCache.addToCache(this);
+        	ImageCache.queueForRemovalFromCache(context,this);
         }
          
 		return image;
@@ -103,7 +103,7 @@ public abstract class AbstractCard {
 	        	portrait = Bitmap.createBitmap(portrait, dimensions*2, 0, dimensions*14, portrait.getHeight() - 1, matrix, true);
 	        	portrait = Bitmap.createScaledBitmap(portrait, maxWidth, maxWidth, true);
 	        	cachedImageWidthLimit=maxWidth;
-	        	ImageCache.addToCache(this);
+	        	ImageCache.queueForRemovalFromCache(mContext,this);
         	}
         }
          

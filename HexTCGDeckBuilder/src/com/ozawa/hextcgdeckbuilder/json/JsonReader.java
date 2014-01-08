@@ -30,7 +30,7 @@ public class JsonReader {
         gsonBuilder.registerTypeAdapter(ColorFlag[].class, new MultiValueSerializer<ColorFlag>(ColorFlag.class));
         gsonBuilder.registerTypeAdapter(CardType[].class, new MultiValueSerializer<CardType>(CardType.class));
         gsonBuilder.registerTypeAdapter(Boolean.class, new BooleanSerializer());
-        gsonBuilder.registerTypeAdapter(AbstractCard.class, new CardSerializer());
+        gsonBuilder.registerTypeAdapter(AbstractCard.class, new AbstractCardSerializer());
         gsonBuilder.registerTypeAdapter(CardTemplate.class, new CardTemplateSerializer(context));
         gson = gsonBuilder.create();
     }
