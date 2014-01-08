@@ -1,5 +1,7 @@
 package com.ozawa.hextcgdeckbuilder.hexentities;
 
+import java.util.Arrays;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
