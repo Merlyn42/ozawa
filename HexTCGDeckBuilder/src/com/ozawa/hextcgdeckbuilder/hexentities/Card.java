@@ -102,8 +102,7 @@ public class Card extends AbstractCard {
 
         Paint paint = new Paint();
         paint.setTextAlign(Paint.Align.LEFT);
-        paint.setColor(-1);
-        paint.setFakeBoldText(true);
+        paint.setColor(-1);        
         paint.setAntiAlias(true); 
 
         if(template.fullCard){
@@ -136,44 +135,43 @@ public class Card extends AbstractCard {
 	
 	private void drawGameText(String gameText, int length, Canvas combine, Bitmap templateImage,Paint paint, Resources resources){
 		if(gameText.length() < length)
-			combine.drawText(gameText, templateImage.getWidth() / 14, templateImage.getHeight() / 1.425f, paint);
+			drawTextWithImages(gameText, templateImage, combine, paint,0,resources);
 		else{
 			float line = 0f;
 			String displayText = "";
 			String [] words = gameText.split(" ");
 			for(String word : words){
 				if((displayText + word).length() >= length){
-					if(displayText.contains("[")){
-						drawText(displayText,templateImage,combine,paint,line,resources);
+						drawTextWithImages(displayText,templateImage,combine,paint,line,resources);
 						displayText = "";
 						line += .05f;
-					} else {
-						combine.drawText(displayText, templateImage.getWidth() / 14, templateImage.getHeight() / (1.425f - line), paint);
-						displayText = "";
-						line += .05f;
-					}
 				}
 				displayText += word + " ";				
 			}
-			if(displayText.contains("[")){
-				drawText(displayText,templateImage,combine,paint,line,resources);
-			}else {
-				combine.drawText(displayText, templateImage.getWidth() / 14, templateImage.getHeight() / (1.425f - line), paint);			
-			}			
+			drawTextWithImages(displayText,templateImage,combine,paint,line,resources);		
 		}
 	}
 	
-	private void drawText(String displayText,Bitmap templateImage,Canvas combine,Paint paint, float line, Resources resources){
-		String []stuff = new String[3];
-		stuff[0] = displayText.split("\\[")[0];
-		stuff[1] = displayText.split("\\[")[1].split("\\]")[0];
-		stuff[2] = displayText.split("\\]")[0];
-		Bitmap startImage = textAsBitmap(stuff[0], paint, templateImage);
-		combine.drawBitmap(startImage, templateImage.getWidth() / 14, templateImage.getHeight() / (1.425f - line), paint);
-		Bitmap symbol = getSymbolImage(stuff[1], resources);		
-		combine.drawBitmap(Bitmap.createScaledBitmap(symbol,24,28,false), templateImage.getWidth() / 14 + startImage.getWidth(), templateImage.getHeight() / (1.425f - line), paint);
-		Bitmap endImage = textAsBitmap(stuff[2], paint, templateImage);
-		combine.drawBitmap(endImage, templateImage.getWidth() / 14 + startImage.getWidth() + symbol.getWidth(), templateImage.getHeight() / (1.425f - line), paint);
+	
+	private void drawTextWithImages(String displayText,Bitmap templateImage,Canvas combine,Paint paint, float line, Resources resources){
+		String delims = "[\\[\\]<>]";
+		String []stuff = displayText.split(delims);
+		float width = templateImage.getWidth() / 14;
+		for(int i = 0; i < stuff.length; i++){
+			if(i % 2 == 0){
+				if(stuff[i].equals("")){ 
+					continue;
+				}else {
+					Bitmap startImage = textAsBitmap(stuff[i], paint, templateImage);
+					combine.drawBitmap(startImage, width, templateImage.getHeight() / (1.425f - line), paint);
+					width += startImage.getWidth();
+				}
+			} else {
+				Bitmap symbolImage = getSymbolImage(stuff[i], resources);
+				combine.drawBitmap(symbolImage, width, templateImage.getHeight() / (1.425f - line), paint);
+				width += symbolImage.getWidth();
+			}			
+		}
 	}
 
 	private Bitmap textAsBitmap(String DisplayText, Paint paint, Bitmap templateImage){
@@ -186,9 +184,8 @@ public class Card extends AbstractCard {
 		return displayTextImage;
 	}
 	
-	//Temp just to see if it works
 	private Bitmap getSymbolImage(String image, Resources resources){		
-		return BitmapFactory.decodeResource(resources, R.drawable.gametext_bloodshard);				
+		return Bitmap.createScaledBitmap(BitmapFactory.decodeResource(resources, R.drawable.gametext_bloodshard),14,18,false);				
 	}
 
 	private void drawThumbnailText(Canvas combine,Bitmap templateImage,Paint paint){
