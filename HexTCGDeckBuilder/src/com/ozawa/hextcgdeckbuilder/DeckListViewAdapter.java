@@ -55,6 +55,7 @@ public class DeckListViewAdapter extends ImageAdapter{
 
         TextView cardName = (TextView)vi.findViewById(R.id.card_name);
         TextView gameText = (TextView)vi.findViewById(R.id.gametext);
+        TextView cardCost = (TextView)vi.findViewById(R.id.tvCardCost);
         TextView cardAttack = (TextView)vi.findViewById(R.id.tvCardAttack);
         TextView cardDefense = (TextView)vi.findViewById(R.id.tvCardDefense);
         ImageView cardThreshold = (ImageView) vi.findViewById(R.id.cardthreshold);
@@ -108,10 +109,11 @@ public class DeckListViewAdapter extends ImageAdapter{
         	imCardAttack.setImageBitmap(null);
         	imCardDefense.setImageBitmap(null);
         }
-        buildCardTextView(card, cardName, "name");
-        buildCardTextView(card, gameText, "gameText");
-        buildCardTextView(card, cardAttack, "baseAttackValue");
-        buildCardTextView(card, cardDefense, "baseHealthValue");
+        buildCardTextView(card, cardName, "name", null, null);
+        buildCardTextView(card, gameText, "gameText", null, null);
+        buildCardTextView(card, cardCost, "resourceCost", "Cost: ", null);
+        buildCardTextView(card, cardAttack, "baseAttackValue", null, null);
+        buildCardTextView(card, cardDefense, "baseHealthValue", null, null);
         buildCardThreshold(card, cardThreshold);
         buildCardImage(card, thumb_image);
         return vi;
@@ -138,13 +140,19 @@ public class DeckListViewAdapter extends ImageAdapter{
         imageView.setTag(task);
     }
     
-    private void buildCardTextView(AbstractCard card, TextView textView, String fieldName){
+    private void buildCardTextView(AbstractCard card, TextView textView, String fieldName, String prefix, String suffix){
     	if(textView.getTag() != null){
     		((StringGetter) textView.getTag()).cancel(true);
     	}
     	
-    	StringGetter task = new StringGetter(mContext, textView, fieldName);
-    	task.execute(card);
-    	textView.setTag(task);
+    	if(prefix != null || suffix != null){
+    		StringGetter task = new StringGetter(mContext, textView, fieldName, prefix, suffix);
+        	task.execute(card);
+        	textView.setTag(task);
+    	}else{
+	    	StringGetter task = new StringGetter(mContext, textView, fieldName);
+	    	task.execute(card);
+	    	textView.setTag(task);
+    	}
     }
 }
