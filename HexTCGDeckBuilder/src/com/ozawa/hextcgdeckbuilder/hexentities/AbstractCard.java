@@ -1,5 +1,7 @@
 package com.ozawa.hextcgdeckbuilder.hexentities;
 
+import java.util.Arrays;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -134,13 +136,7 @@ public abstract class AbstractCard {
     }
     
     public boolean isTroop(){
-    	for(CardType type : this.cardType){
-    		if(type == CardType.TROOP){
-    			return true;
-    		}
-    	}
-    	
-    	return false;
+    	return Arrays.asList(this.cardType).contains(CardType.TROOP);
     }
 
 	public abstract Bitmap getCardBitmap(Context context, CardTemplate template,
