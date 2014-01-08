@@ -40,7 +40,7 @@ public class FilterButton extends ImageButton implements View.OnClickListener {
     public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {   	
     	LinearLayout parent = (LinearLayout) getParent();
     	int dim = parent.getMeasuredWidth()/6;
-    	System.out.println("Dimension is!:"+dim);
+    	
     	setMeasuredDimension(dim, dim);
     }
     public void setUp(Bitmap iImageOn, Bitmap iImageOff, CardEnum iE, CardViewer iCardViewer) {
