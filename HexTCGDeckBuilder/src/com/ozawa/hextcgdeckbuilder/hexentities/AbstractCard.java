@@ -124,13 +124,7 @@ public abstract class AbstractCard {
     }
     
     public boolean isTroop(){
-    	for(CardType type : this.cardType){
-    		if(type == CardType.TROOP){
-    			return true;
-    		}
-    	}
-    	
-    	return false;
+    	return Arrays.asList(this.cardType).contains(CardType.TROOP);
     }
 
 	public abstract Bitmap getCardBitmap(Context context, CardTemplate template,
