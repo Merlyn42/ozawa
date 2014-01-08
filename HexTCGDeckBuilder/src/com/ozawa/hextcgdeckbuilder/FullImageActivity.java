@@ -6,9 +6,9 @@ package com.ozawa.hextcgdeckbuilder;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
-
-import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 
 public class FullImageActivity extends Activity {
 
@@ -30,6 +30,20 @@ public class FullImageActivity extends Activity {
         } else{
         	imageView.setImageBitmap(CustomDeckFragment.cardViewer.getFilteredCardList().get(position).getFullscreenCardBitmap(this));
         }
+        
+        imageView.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
+    }
+    
+    @Override
+    protected void onPause(){
+    	super.onPause();
+    	finish();
     }
 
 }
