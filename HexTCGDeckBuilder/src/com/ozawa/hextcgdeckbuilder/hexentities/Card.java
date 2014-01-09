@@ -149,7 +149,7 @@ public class Card extends AbstractCard {
 				if((displayText + word).length() >= length){
 						drawTextWithImages(displayText,templateImage,combine,paint,line,resources,context);
 						displayText = "";
-						line += .05f;
+						line += .06f;
 				}
 				displayText += word + " ";				
 			}
@@ -162,34 +162,34 @@ public class Card extends AbstractCard {
 		String delims = "[\\[\\]<>]";
 		String []stuff = displayText.split(delims);
 		float width = templateImage.getWidth() / 14;
+		float baseline = (int)-paint.ascent();
+		int height = (int)(baseline + paint.descent());
 		for(int i = 0; i < stuff.length; i++){
 			if(i % 2 == 0){
 				if(stuff[i].equals("")) continue;
-					Bitmap startImage = textAsBitmap(stuff[i], paint, templateImage);
+					Bitmap startImage = textAsBitmap(stuff[i], paint, templateImage,baseline,height);
 					combine.drawBitmap(startImage, width, templateImage.getHeight() / (1.47f - line), paint);
 					width += startImage.getWidth();
 
 			} else {
 				if(stuff[i].equalsIgnoreCase("p") | stuff[i].equalsIgnoreCase("b") | stuff[i].equalsIgnoreCase("/b")) continue; //need to account for bold and paragraphs next
-				Bitmap symbolImage = getSymbolImage(stuff[i], context);
+				Bitmap symbolImage = getSymbolImage(stuff[i], context,height);
 				combine.drawBitmap(symbolImage, width, templateImage.getHeight() / (1.48f - line), paint);
 				width += symbolImage.getWidth();
 			}			
 		}
 	}
 
-	private Bitmap textAsBitmap(String DisplayText, Paint paint, Bitmap templateImage){
+	private Bitmap textAsBitmap(String DisplayText, Paint paint, Bitmap templateImage,float baseline,int height){
 		int width = (int)(paint.measureText(DisplayText) + 0.5f);
-		float baseline = (int)(-paint.ascent() + 0.5f);
-		int height = (int)(baseline + paint.descent() + 0.5f);
 		Bitmap displayTextImage = Bitmap.createBitmap(width,height,Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(displayTextImage);
 		canvas.drawText(DisplayText, 0, baseline, paint);
 		return displayTextImage;
 	}
 	
-	private Bitmap getSymbolImage(String symbol, Context context){		
-		return SymbolTemplate.findSymbolTemplate(symbol, SymbolTemplate.getAllTemplates(context)).getImage(context);				
+	private Bitmap getSymbolImage(String symbol, Context context, int size){		
+		return SymbolTemplate.findSymbolTemplate(symbol, SymbolTemplate.getAllTemplates(context)).getImage(context,size);				
 	}
 
 	private void drawThumbnailText(Canvas combine,Bitmap templateImage,Paint paint){
