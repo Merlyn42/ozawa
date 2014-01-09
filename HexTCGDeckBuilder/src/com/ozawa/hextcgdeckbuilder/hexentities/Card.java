@@ -50,6 +50,8 @@ public class Card extends AbstractCard {
     @SerializedName("m_EquipmentSlots")
     public GlobalIdentifier[] equipmentSlots;
 
+    private float line;
+    
     /**
      * Creates or retrives the card image including portrait, template and text.
      * @param context The context to use to retrieve the image.
@@ -139,26 +141,34 @@ public class Card extends AbstractCard {
 	}
 	
 	private void drawGameText(String gameText, int length, Canvas combine, Bitmap templateImage,Paint paint, Resources resources, Context context){
+		line = 0f;
 		if(gameText.length() < length)
-			drawTextWithImages(gameText, templateImage, combine, paint,0,resources,context);
-		else{
-			float line = 0f;
+			drawTextWithImages(gameText, templateImage, combine, paint,resources,context);
+		else{			
 			String displayText = "";
 			String [] words = gameText.split(" ");
 			for(String word : words){
-				if((displayText + word).length() >= length){
-						drawTextWithImages(displayText,templateImage,combine,paint,line,resources,context);
+				if(word.contains("<p>")){
+					int pLocation = word.lastIndexOf("<p>") + 3;
+					String paragraph = word.substring(0,pLocation);
+					displayText += paragraph;
+					drawTextWithImages(displayText, templateImage, combine, paint, resources, context);
+					displayText = "" + word.substring(pLocation, word.length());
+				}else{
+					if((displayText + word).length() >= length){					
+						drawTextWithImages(displayText,templateImage,combine,paint,resources,context);
 						displayText = "";
 						line += .06f;
+					}
+					displayText += word + " ";
 				}
-				displayText += word + " ";				
 			}
-			drawTextWithImages(displayText,templateImage,combine,paint,line,resources,context);		
+			drawTextWithImages(displayText,templateImage,combine,paint,resources,context);		
 		}
 	}
 	
 	
-	private void drawTextWithImages(String displayText,Bitmap templateImage,Canvas combine,Paint paint, float line, Resources resources, Context context){
+	private void drawTextWithImages(String displayText,Bitmap templateImage,Canvas combine,Paint paint, Resources resources, Context context){
 		String delims = "[\\[\\]<>]";
 		String []stuff = displayText.split(delims);
 		float width = templateImage.getWidth() / 14;
@@ -172,10 +182,25 @@ public class Card extends AbstractCard {
 					width += startImage.getWidth();
 
 			} else {
-				if(stuff[i].equalsIgnoreCase("p") | stuff[i].equalsIgnoreCase("b") | stuff[i].equalsIgnoreCase("/b")) continue; //need to account for bold and paragraphs next
-				Bitmap symbolImage = getSymbolImage(stuff[i], context,height);
-				combine.drawBitmap(symbolImage, width, templateImage.getHeight() / (1.48f - line), paint);
-				width += symbolImage.getWidth();
+				if(stuff[i].equalsIgnoreCase("p")){
+					line += 0.06f;
+				}
+				else if(stuff[i].equalsIgnoreCase("b")){
+					paint.setFakeBoldText(true);
+					paint.setTextSize(paint.getTextSize() + 1);
+				} else if(stuff[i].equalsIgnoreCase("/b")){
+					paint.setFakeBoldText(false);
+					paint.setTextSize(paint.getTextSize() - 1);
+				}else{
+					Bitmap symbolImage;
+					if(stuff[i].equalsIgnoreCase("BASIC")){
+						int basicSize = (int) paint.measureText("BASIC");
+						symbolImage = getSymbolImage(stuff[i], context, basicSize);
+					}
+					symbolImage = getSymbolImage(stuff[i], context,height);
+					combine.drawBitmap(symbolImage, width, templateImage.getHeight() / (1.48f - line), paint);
+					width += symbolImage.getWidth();
+				}
 			}			
 		}
 	}
