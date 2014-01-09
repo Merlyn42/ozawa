@@ -104,7 +104,7 @@ public abstract class AbstractCard {
 	        	Matrix matrix = new Matrix();
 	        	matrix.postScale(0.5f, 0.5f);
 	        	int dimensions = (portrait.getWidth() / 18);
-	        	portrait = Bitmap.createBitmap(portrait, dimensions*3, dimensions*2, dimensions*12, dimensions*12, matrix, true);
+	        	portrait = Bitmap.createBitmap(portrait, dimensions*3, dimensions, dimensions*12, dimensions*12, matrix, true);
 	        	portrait = Bitmap.createScaledBitmap(portrait, maxWidth, maxWidth, true);
 	        	cachedImageWidthLimit=maxWidth;
 	        	ImageCache.getInstance(CacheType.ListView).queueForRemovalFromCache(mContext,this,ImageType.WithoutTemplate);
