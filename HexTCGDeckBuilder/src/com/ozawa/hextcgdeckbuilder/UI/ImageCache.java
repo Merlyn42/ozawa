@@ -26,7 +26,7 @@ public class ImageCache {
 
 	private ConcurrentLinkedQueue<QueueEntry> queue = new ConcurrentLinkedQueue<QueueEntry>();
 	private int approxSize =0;
-	private Integer maxCacheSize = null;
+	private Integer maxCacheSize = 100000;
 	private static EnumMap<CacheType,ImageCache> instances = new EnumMap<CacheType,ImageCache>(CacheType.class);
 	
 	public static ImageCache getInstance(CacheType cacheType){
@@ -64,6 +64,22 @@ public class ImageCache {
 		return result;
 	}
 	
+	public void removeFromCache(){
+		QueueEntry removal = queue.remove();
+		removal.card.clearImageCache(removal.imageType);
+		--approxSize;
+	}
+	
+	public static void emergencyDump(CacheType type){
+		ImageCache cache = getInstance(type);
+		for( int i =0;i<10;i++){
+			cache.removeFromCache();
+		}
+		cache.maxCacheSize=cache.approxSize;
+		System.gc();
+		
+	}
+	
 	/**
 	 * Adds a card to the queue, when the queue grows over maxCacheSize cards will start to be removed and have clearImageCache called on them.
 	 * @param context Used to determine a maxCacheSize the first time this method is called.
@@ -76,9 +92,7 @@ public class ImageCache {
 		QueueEntry entry = new QueueEntry(card, imageType);
 		queue.add(entry);
 		if(++approxSize>maxCacheSize){
-			QueueEntry removal = queue.remove();
-			removal.card.clearImageCache(removal.imageType);
-			approxSize--;
+			removeFromCache();
 		}
 	}
 }

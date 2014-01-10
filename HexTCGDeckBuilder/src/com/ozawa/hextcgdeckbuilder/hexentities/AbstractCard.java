@@ -79,7 +79,13 @@ public abstract class AbstractCard {
 		int maxWidth = HexUtil.getScreenWidth(context)/3;
 		
         if (image == null || cachedImageWidthLimit !=maxWidth) {
+        	try{
         	image = getCardBitmap(context, CardTemplate.findCardTemplate(this, false, CardTemplate.getAllTemplates(context)), maxWidth);
+        	}catch(OutOfMemoryError e){
+        		System.err.println("Ran out of memory, dumping some images from the cache");
+        		ImageCache.emergencyDump(CacheType.GridView);
+        		image = getCardBitmap(context, CardTemplate.findCardTemplate(this, false, CardTemplate.getAllTemplates(context)), maxWidth);
+        	}
         	cachedImageWidthLimit=maxWidth;
         	ImageCache.getInstance(CacheType.GridView).queueForRemovalFromCache(context,this, ImageType.WithTemplate);
         }
