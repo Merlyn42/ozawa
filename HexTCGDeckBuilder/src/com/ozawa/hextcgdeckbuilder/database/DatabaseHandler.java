@@ -292,7 +292,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		boolean updated = true;
 		ContentValues values = new ContentValues();
 		values.put(NAME, deck.name);
-		values.put(CHAMPION_NAME, deck.champion.name);
+		if(deck.champion != null){
+			values.put(CHAMPION_NAME, deck.champion.name);
+		}
 		
 		try{
 			db.beginTransaction();
