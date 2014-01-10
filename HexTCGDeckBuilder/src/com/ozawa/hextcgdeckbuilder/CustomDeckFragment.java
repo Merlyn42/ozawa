@@ -161,7 +161,9 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 							int position = listView.pointToPosition(x, y);
 							removeCardFromCustomDeck(position);
 						}
-					}
+					}else if(prediction.name.equalsIgnoreCase("clear")){
+                    	cardViewer.clearFilter();
+                    }
 				}
 			}
 		}
