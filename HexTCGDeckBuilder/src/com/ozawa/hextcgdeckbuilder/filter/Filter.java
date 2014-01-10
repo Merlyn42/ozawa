@@ -129,7 +129,7 @@ public class Filter {
 			if(!(abstractCard.gameText.toLowerCase().contains(filterString.toLowerCase())||abstractCard.name.toLowerCase().contains(filterString.toLowerCase())))return false;
 		}
 		if (colors.size() != NUMBEROFCOLORS) {
-			if(!match(abstractCard.colorFlags,colors))return false;
+			if(!match(abstractCard.colorFlags,colors)&&abstractCard.resourceThresholdGranted==null?true:!match(abstractCard.resourceThresholdGranted.colorFlags,colors))return false;
 		}
 		if (cardTypes.size() != NUMBEROFCARDTYPES) {
 			if(!match(abstractCard.cardType,cardTypes))return false;

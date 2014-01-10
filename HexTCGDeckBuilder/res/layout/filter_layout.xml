@@ -22,6 +22,14 @@
         android:weightSum="6">
 
         <com.ozawa.hextcgdeckbuilder.UI.FilterButton
+            android:id="@+id/sapphire"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#00000000"
+            android:scaleType="fitXY" />
+
+        <com.ozawa.hextcgdeckbuilder.UI.FilterButton
             android:id="@+id/blood"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
@@ -30,9 +38,9 @@
             android:scaleType="fitXY" />
 
         <com.ozawa.hextcgdeckbuilder.UI.FilterButton
-            android:id="@+id/ruby"
+            android:id="@+id/diamond"
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="#00000000"
             android:scaleType="fitXY" />
@@ -46,17 +54,9 @@
             android:scaleType="fitXY" />
 
         <com.ozawa.hextcgdeckbuilder.UI.FilterButton
-            android:id="@+id/sapphire"
+            android:id="@+id/ruby"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="#00000000"
-            android:scaleType="fitXY" />
-
-        <com.ozawa.hextcgdeckbuilder.UI.FilterButton
-            android:id="@+id/diamond"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:layout_weight="1"
             android:background="#00000000"
             android:scaleType="fitXY" />
@@ -88,34 +88,34 @@
             android:scaleType="fitXY" />
 
         <com.ozawa.hextcgdeckbuilder.UI.FilterButton
+            android:id="@+id/basicaction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#00000000"
+            android:scaleType="fitXY" />
+
+        <com.ozawa.hextcgdeckbuilder.UI.FilterButton
+            android:id="@+id/resource"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#00000000"
+            android:scaleType="fitXY" />
+
+        <com.ozawa.hextcgdeckbuilder.UI.FilterButton
+            android:id="@+id/quickaction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#00000000"
+            android:scaleType="fitXY" />
+
+        <com.ozawa.hextcgdeckbuilder.UI.FilterButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:id="@+id/constant"
-            android:background="#00000000"
-            android:scaleType="fitXY" />
-
-        <com.ozawa.hextcgdeckbuilder.UI.FilterButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:id="@+id/quickaction"
-            android:background="#00000000"
-            android:scaleType="fitXY" />
-
-        <com.ozawa.hextcgdeckbuilder.UI.FilterButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:id="@+id/basicaction"
-            android:background="#00000000"
-            android:scaleType="fitXY" />
-
-        <com.ozawa.hextcgdeckbuilder.UI.FilterButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:id="@+id/resource"
             android:background="#00000000"
             android:scaleType="fitXY" />
 

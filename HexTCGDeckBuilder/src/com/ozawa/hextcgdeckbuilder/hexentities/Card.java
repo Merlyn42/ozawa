@@ -272,8 +272,8 @@ public class Card extends AbstractCard {
 		if(this.threshold != null && this.threshold.length > 0){
 			ArrayList<Bitmap> thresholds = new ArrayList<Bitmap>();
 			for(ResourceThreshold threshold : this.threshold){
-				if (threshold.colorFlags != null) {
-					switch (threshold.colorFlags) {
+				if (threshold.colorFlags != null&&threshold.colorFlags.length>0) {
+					switch (threshold.colorFlags[0]) {
 						case COLORLESS:{
 							break;
 						}

@@ -12,7 +12,7 @@ import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
 public class ResourceThreshold {
 	
 	@SerializedName("m_ColorFlags")
-	public ColorFlag colorFlags;
+	public ColorFlag[] colorFlags;
 	@SerializedName("m_ThresholdColorRequirement")
 	public int thresholdColorRequirement;
 
