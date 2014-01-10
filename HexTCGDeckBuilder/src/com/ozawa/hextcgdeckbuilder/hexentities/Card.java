@@ -36,7 +36,7 @@ public class Card extends AbstractCard {
     @SerializedName("m_ResourceCost")
     public int resourceCost;
     @SerializedName("m_Threshold")
-    public CardThreshold[] threshold;
+    public ResourceThreshold[] threshold;
     @SerializedName("m_BaseAttackValue")
     public String baseAttackValue;
     @SerializedName("m_BaseHealthValue")
@@ -271,7 +271,7 @@ public class Card extends AbstractCard {
 	public Bitmap getCardThresholdImage(Context mContext, boolean listView){
 		if(this.threshold != null && this.threshold.length > 0){
 			ArrayList<Bitmap> thresholds = new ArrayList<Bitmap>();
-			for(CardThreshold threshold : this.threshold){
+			for(ResourceThreshold threshold : this.threshold){
 				if (threshold.colorFlags != null) {
 					switch (threshold.colorFlags) {
 						case COLORLESS:{

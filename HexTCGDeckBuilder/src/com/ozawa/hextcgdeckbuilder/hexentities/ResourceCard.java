@@ -16,7 +16,7 @@ import com.ozawa.hextcgdeckbuilder.UI.CardTemplate;
 public class ResourceCard extends AbstractCard {
 	
 	@SerializedName("m_ResourceThresholdGranted")
-	public String resourceThresholdGranted;
+	public ResourceThreshold resourceThresholdGranted;
 	@SerializedName("m_CurrentResourcesGranted")
 	public int currentResourcesGranted;
 	@SerializedName("m_MaxResourcesGranted")
