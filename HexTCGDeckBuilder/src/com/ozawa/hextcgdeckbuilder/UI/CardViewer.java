@@ -11,8 +11,11 @@ import com.ozawa.hextcgdeckbuilder.enums.CardType;
 import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
 import com.ozawa.hextcgdeckbuilder.filter.Filter;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
+import com.ozawa.hextcgdeckbuilder.hexentities.CardComparatorColor;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -22,14 +25,17 @@ public class CardViewer implements TextWatcher {
     private Filter filter;
     private List<AbstractCard> cards;
     private ImageAdapter adapter;
+    private Comparator<AbstractCard> comparator = new CardComparatorColor();
 
     public CardViewer(Context context,List<AbstractCard> abstractCards){
         filter = new Filter();
         cards= new ArrayList<AbstractCard>(abstractCards);
-        adapter = new ImageAdapter(context,filter.filter(cards));
+        Collections.sort(cards,comparator);
+        adapter = new ImageAdapter(context,filter.filter(cards));       
     }
     
     public List<AbstractCard> getFilteredCardList(){
+    	
     	return filter.filter(cards);
     }
     

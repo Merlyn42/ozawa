@@ -9,18 +9,19 @@ import com.google.gson.annotations.SerializedName;
  */
 public enum ColorFlag implements CardEnum {
 	
+	@SerializedName("Colorless")
+	COLORLESS("Colorless"),
 	@SerializedName("Blood")
 	BLOOD("Blood"),
-	@SerializedName("Diamond")
-	DIAMOND("Diamond"),
 	@SerializedName("Ruby")
 	RUBY("Ruby"),
 	@SerializedName("Sapphire")
 	SAPPHIRE("Sapphire"),
 	@SerializedName("Wild")
 	WILD("Wild"),
-	@SerializedName("Colorless")
-	COLORLESS("Colorless");
+	@SerializedName("Diamond")
+	DIAMOND("Diamond");
+	
 	
 	private String color;
 	
