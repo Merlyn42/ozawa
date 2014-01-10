@@ -9,7 +9,7 @@ import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
  * 
  * @author Chad Kinsella
  */
-public class CardThreshold {
+public class ResourceThreshold {
 	
 	@SerializedName("m_ColorFlags")
 	public ColorFlag colorFlags;
