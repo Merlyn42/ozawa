@@ -60,6 +60,8 @@ public abstract class AbstractCard {
 	public CardLayout defaultLayout;
 	@SerializedName("m_ExtendedLayout")
 	public CardLayout extendedLayout;
+	@SerializedName("m_ResourceThresholdGranted")
+	public ResourceThreshold resourceThresholdGranted;
     protected Bitmap image;
     protected Bitmap portrait;
     protected int cachedImageWidthLimit;
