@@ -145,6 +145,8 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
                     }else if(prediction.name.equalsIgnoreCase("swipe right")){
                     	CustomViewPager pager = (CustomViewPager) mainActivity.findViewById(R.id.pager);
                     	pager.setCurrentItem(pager.getCurrentItem()-1); // ******* TEMPORARY FIX FOR SLIDING BETWEEN PAGES
+                    }else if(prediction.name.equalsIgnoreCase("clear")){
+                    	cardViewer.clearFilter();
                     }
                 }
         	}

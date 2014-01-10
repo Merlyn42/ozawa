@@ -11,6 +11,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.PorterDuff.Mode;
+import android.graphics.Typeface;
 
 import com.google.gson.annotations.SerializedName;
 import com.ozawa.hextcgdeckbuilder.R;
@@ -18,6 +19,7 @@ import com.ozawa.hextcgdeckbuilder.UI.CardTemplate;
 import com.ozawa.hextcgdeckbuilder.UI.SymbolTemplate;
 import com.ozawa.hextcgdeckbuilder.enums.Attribute;
 import com.ozawa.hextcgdeckbuilder.enums.CardType;
+import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 /**
@@ -120,6 +122,38 @@ public class Card extends AbstractCard {
         return result;
     }
 	
+	private void drawThumbnailText(Canvas combine,Bitmap templateImage,Paint paint){
+		paint.setTextSize(28f);
+        combine.drawText(getShortenedText(name,16), templateImage.getWidth() / 2.7f , templateImage.getHeight() / 11, paint);
+        paint.setTextSize(34f);
+        if(resourceCost > 9){
+        	combine.drawText("" + resourceCost, templateImage.getWidth() / 7f, templateImage.getHeight() / 6, paint);
+        } else{
+        	combine.drawText("" + resourceCost, templateImage.getWidth() / 6f, templateImage.getHeight() / 6, paint);
+        }
+        if (cardType[0].equals(CardType.TROOP)) {
+        	paint.setTextSize(36f);
+            combine.drawText(baseAttackValue, templateImage.getWidth() / 9, templateImage.getHeight() - (templateImage.getHeight() / 10), paint);
+            combine.drawText(baseHealthValue, templateImage.getWidth() - (templateImage.getWidth() / 6), templateImage.getHeight() - (templateImage.getHeight() / 10), paint);
+        } else{
+        	paint.setTextSize(22f);
+        	String cardTypes = "";
+        	for(int i = 0; i < cardType.length ;i++){
+        		cardTypes += cardType[i].getCardType();
+        		if(i != cardType.length - 1)
+        			cardTypes += ", ";
+        	}
+        	if(!cardSubtype.equals(""))
+        		cardTypes += " -- " + cardSubtype;
+        	
+        	if(colorFlags[0] == ColorFlag.COLORLESS){
+        		combine.drawText(getShortenedText(cardTypes, 24), templateImage.getWidth() / 11, templateImage.getHeight() - (templateImage.getHeight() / 6.3f), paint);
+        	}else {
+        		combine.drawText(getShortenedText(cardTypes, 24), templateImage.getWidth() / 11, templateImage.getHeight() - (templateImage.getHeight() / 5.9f), paint);
+        	}        
+        }
+	}
+	
 	private void drawFullImageText(Canvas combine,Bitmap templateImage,Paint paint, Resources resources, Context context) {
 		paint.setTextSize(20f);	
 		combine.drawText(name, templateImage.getWidth() / 6 , templateImage.getHeight() / 14, paint);        
@@ -136,7 +170,25 @@ public class Card extends AbstractCard {
         	paint.setTextSize(28f);
             combine.drawText(baseAttackValue, templateImage.getWidth() / 17, templateImage.getHeight() - (templateImage.getHeight() / 25), paint);
             combine.drawText(baseHealthValue, templateImage.getWidth() - (templateImage.getWidth() / 10), templateImage.getHeight() - (templateImage.getHeight() / 25), paint);
-        }		
+        	paint.setTextSize(22f);
+        }
+        paint.setTextSize(24f);
+		String cardTypes = "";
+		for (int i = 0; i < cardType.length; i++) {
+			cardTypes += cardType[i].getCardType();
+			if (i != cardType.length - 1)
+				cardTypes += ", ";
+		}
+		if (!cardSubtype.equals(""))
+			cardTypes += " -- " + cardSubtype;
+
+		if (colorFlags[0] == ColorFlag.COLORLESS) {
+			combine.drawText(cardTypes, templateImage.getWidth() / 13,
+					templateImage.getHeight() - (templateImage.getHeight() / 2.96f), paint);
+		} else {			
+			combine.drawText(cardTypes, templateImage.getWidth() / 13,
+					templateImage.getHeight() - (templateImage.getHeight() / 2.97f), paint);
+		}        
 	}
 	
 	private void drawGameText(String gameText, int length, Canvas combine, Bitmap templateImage,Paint paint, Resources resources, Context context){
@@ -198,7 +250,12 @@ public class Card extends AbstractCard {
 				} else if(stuff[i].equalsIgnoreCase("/b")){
 					paint.setFakeBoldText(false);
 					paint.setTextSize(paint.getTextSize() - 1);
-				}else{
+				}else if(stuff[i].equalsIgnoreCase("i")){
+					paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.ITALIC));
+				}else if(stuff[i].equalsIgnoreCase("/i")){
+					paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+				}
+				else{
 					Bitmap symbolImage;
 					if(stuff[i].equalsIgnoreCase("BASIC") ){
 						int basicSize = (int) paint.measureText("BASIC");
@@ -228,26 +285,13 @@ public class Card extends AbstractCard {
 	}
 	
 	private Bitmap getSymbolImage(String symbol, Context context, int width, int height){		
-		return SymbolTemplate.findSymbolTemplate(symbol, SymbolTemplate.getAllTemplates(context)).getImage(context,width,height);				
+		Bitmap symbolImage = SymbolTemplate.findSymbolTemplate(symbol, SymbolTemplate.getAllTemplates(context)).getImage(context,width,height); 
+		if(symbolImage != null)
+			return symbolImage;
+		return BitmapFactory.decodeResource(context.getResources(), R.drawable.blank);				
 	}
 
-	private void drawThumbnailText(Canvas combine,Bitmap templateImage,Paint paint){
-		paint.setTextSize(28f);
-        combine.drawText(getDisplayName(name,18), templateImage.getWidth() / 2.8f , templateImage.getHeight() / 11, paint);
-        paint.setTextSize(34f);
-        if(resourceCost > 9){
-        	combine.drawText("" + resourceCost, templateImage.getWidth() / 7.5f, templateImage.getHeight() / 6, paint);
-        } else{
-        	combine.drawText("" + resourceCost, templateImage.getWidth() / 6.5f, templateImage.getHeight() / 6, paint);
-        }
-        if (cardType[0].equals(CardType.TROOP)) {
-        	paint.setTextSize(36f);
-            combine.drawText(baseAttackValue, templateImage.getWidth() / 9, templateImage.getHeight() - (templateImage.getHeight() / 10), paint);
-            combine.drawText(baseHealthValue, templateImage.getWidth() - (templateImage.getWidth() / 6), templateImage.getHeight() - (templateImage.getHeight() / 10), paint);
-        }
-	}
-
-	private String getDisplayName(String name, int length) {				
+	private String getShortenedText(String name, int length) {				
 		if(name.length() > length){
 			String displayName = "";
 			String [] words = name.split(" ");
