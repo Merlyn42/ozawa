@@ -28,7 +28,6 @@ public class ResourceCard extends AbstractCard {
         final int resourceId = resources.getIdentifier(cardImagePath.split("\\.")[0], "drawable",
                 context.getPackageName());
 
-
         BitmapFactory.Options o = new BitmapFactory.Options();
         o.inJustDecodeBounds = true;
         BitmapFactory.decodeResource(resources, resourceId, o);
@@ -38,8 +37,8 @@ public class ResourceCard extends AbstractCard {
         //Decode with inSampleSize
         BitmapFactory.Options o2 = new BitmapFactory.Options();
 
-     //   o2.inSampleSize = scale;
-        Bitmap fg = BitmapFactory.decodeResource(resources, resourceId, o2);
-        return fg;
+        o2.inSampleSize = scale;
+        image = BitmapFactory.decodeResource(resources, resourceId, o2);
+        return image;
     }
 }
