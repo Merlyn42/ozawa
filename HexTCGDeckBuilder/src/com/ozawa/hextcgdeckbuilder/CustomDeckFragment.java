@@ -168,27 +168,27 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 	}
 
 	public void changeToListView() {
-		if (listView != null) {
-			listView.setVisibility(View.VISIBLE);
-			gridView.setVisibility(View.INVISIBLE);
+		if(listView != null){			
 			cardViewer.setAdapter(lvAdapter);
 			lvAdapter.updateDeck(imAdapter.masterDeck);
 			setIsGridView(false);
 		} else {
 			setUpListView();
 		}
+		listView.setVisibility(View.VISIBLE);
+		gridView.setVisibility(View.INVISIBLE);
 	}
 
 	public void changeToGridView() {
 		if (gridView != null) {
-			cardViewer.setAdapter(imAdapter);
-			listView.setVisibility(View.INVISIBLE);
-			gridView.setVisibility(View.VISIBLE);
+			cardViewer.setAdapter(imAdapter);			
 			imAdapter.updateDeck(lvAdapter.masterDeck);
 			setIsGridView(true);
 		} else {
 			setUpGridView();
-		}
+		}		
+		listView.setVisibility(View.INVISIBLE);
+		gridView.setVisibility(View.VISIBLE);
 	}
 
 	private void setUpGridView() {
