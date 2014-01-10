@@ -52,40 +52,17 @@ public class CardViewer implements TextWatcher {
     	cards= new ArrayList<AbstractCard>(abstractCards);
     }
 
-    public void toggleAttribute(Attribute attribute) {
-        if(filter.isActive(attribute)){
-            filter.removeAttribute(attribute);
-        }else{
-            filter.addAttribute(attribute);
-        }
-        adapter.updateDeck(filter.filter(cards));
-    }
-
-    public void toggleColor(ColorFlag color) {
-        if(filter.isActive(color)){
-            filter.removeColor(color);
-        }else{
-            filter.addColor(color);
-        }
-        adapter.updateDeck(filter.filter(cards));
-    }
-
-    public void toggleFilter(CardEnum e){
-        if(filter.isActive(e)){
+    public boolean toggleFilter(CardEnum e){
+        boolean result;
+    	if(filter.isActive(e)){
             filter.removeFilter(e);
+            result =false;
         }else{
             filter.addFilter(e);
+            result =true;
         }
         adapter.updateDeck(filter.filter(cards));
-    }
-
-    public void toggleType(CardType type) {
-        if(filter.isActive(type)){
-            filter.removeType(type);
-        }else{
-            filter.addType(type);
-        }
-        adapter.updateDeck(filter.filter(cards));
+        return result;
     }
 
     public boolean isActive(CardEnum e) {

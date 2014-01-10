@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import com.ozawa.hextcgdeckbuilder.enums.CardEnum;
 
@@ -19,6 +20,7 @@ public class FilterButton extends ImageButton implements View.OnClickListener {
     private Bitmap imageOn;
     private CardEnum e;
     private CardViewer cardViewer;
+    private String toastText;
 
     public FilterButton(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -33,9 +35,12 @@ public class FilterButton extends ImageButton implements View.OnClickListener {
     }
 
     public void onClick(View v) {
-        cardViewer.toggleFilter(e);
-        setImageBitmap(cardViewer.isActive(e) ? imageOn : imageOff);
+        boolean result  = cardViewer.toggleFilter(e);
+        setImageBitmap(result ? imageOn : imageOff);
         this.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+        String message = result?"Showing ":"Hiding ";
+        	message = e.toString()+" cards";
+        Toast.makeText(v.getContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -45,7 +50,7 @@ public class FilterButton extends ImageButton implements View.OnClickListener {
     	
     	setMeasuredDimension(dim, dim);
     }
-    public void setUp(Bitmap iImageOn, Bitmap iImageOff, CardEnum iE, CardViewer iCardViewer) {
+    public void setUp(Bitmap iImageOn, Bitmap iImageOff, CardEnum iE, CardViewer iCardViewer,String toastText) {
         imageOff = iImageOff;
         imageOn = iImageOn;
         e = iE;
