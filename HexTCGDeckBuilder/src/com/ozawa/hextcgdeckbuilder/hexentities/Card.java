@@ -117,7 +117,6 @@ public class Card extends AbstractCard {
         		combine.drawBitmap(threshold, (templateImage.getWidth() / 14), (templateImage.getHeight() / 4), null);
         	}
         }
-
         return result;
     }
 	
@@ -142,8 +141,16 @@ public class Card extends AbstractCard {
 	
 	private void drawGameText(String gameText, int length, Canvas combine, Bitmap templateImage,Paint paint, Resources resources, Context context){
 		line = 0f;
-		if(gameText.length() < length)
-			drawTextWithImages(gameText, templateImage, combine, paint,resources,context);
+		if(gameText.length() < length){
+			if(gameText.contains("<p>")){
+				int pLocation = gameText.lastIndexOf("<p>") + 3;
+				String paragraph = gameText.substring(0,pLocation);
+				drawTextWithImages(paragraph, templateImage, combine, paint, resources, context);
+				drawTextWithImages(gameText.substring(pLocation, gameText.length()), templateImage, combine, paint,resources,context);
+			} else{
+				drawTextWithImages(gameText, templateImage, combine, paint,resources,context);
+			}
+		}
 		else{			
 			String displayText = "";
 			String [] words = gameText.split(" ");
@@ -153,7 +160,7 @@ public class Card extends AbstractCard {
 					String paragraph = word.substring(0,pLocation);
 					displayText += paragraph;
 					drawTextWithImages(displayText, templateImage, combine, paint, resources, context);
-					displayText = "" + word.substring(pLocation, word.length());
+					displayText = "" + word.substring(pLocation, word.length()) + " ";
 				}else{
 					if((displayText + word).length() >= length){					
 						drawTextWithImages(displayText,templateImage,combine,paint,resources,context);
@@ -193,11 +200,18 @@ public class Card extends AbstractCard {
 					paint.setTextSize(paint.getTextSize() - 1);
 				}else{
 					Bitmap symbolImage;
-					if(stuff[i].equalsIgnoreCase("BASIC")){
+					if(stuff[i].equalsIgnoreCase("BASIC") ){
 						int basicSize = (int) paint.measureText("BASIC");
-						symbolImage = getSymbolImage(stuff[i], context, basicSize);
+						symbolImage = getSymbolImage(stuff[i], context, basicSize, height);						
+					} else if(stuff[i].startsWith("L") && i <= stuff.length - 2 && stuff[i+2].startsWith("R")){
+						int basicSize = (int) paint.measureText("SYM");
+						symbolImage = getSymbolImage(stuff[i], context, basicSize, basicSize);
+					}else if(stuff[i].startsWith("R") && i >= 2 && stuff[i-2].startsWith("L")){
+						int basicSize = (int) paint.measureText("SYM");
+						symbolImage = getSymbolImage(stuff[i], context, basicSize, basicSize);
+					}else{
+						symbolImage = getSymbolImage(stuff[i], context,height,height);						
 					}
-					symbolImage = getSymbolImage(stuff[i], context,height);
 					combine.drawBitmap(symbolImage, width, templateImage.getHeight() / (1.48f - line), paint);
 					width += symbolImage.getWidth();
 				}
@@ -213,8 +227,8 @@ public class Card extends AbstractCard {
 		return displayTextImage;
 	}
 	
-	private Bitmap getSymbolImage(String symbol, Context context, int size){		
-		return SymbolTemplate.findSymbolTemplate(symbol, SymbolTemplate.getAllTemplates(context)).getImage(context,size);				
+	private Bitmap getSymbolImage(String symbol, Context context, int width, int height){		
+		return SymbolTemplate.findSymbolTemplate(symbol, SymbolTemplate.getAllTemplates(context)).getImage(context,width,height);				
 	}
 
 	private void drawThumbnailText(Canvas combine,Bitmap templateImage,Paint paint){

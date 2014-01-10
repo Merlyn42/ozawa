@@ -51,16 +51,16 @@ public class SymbolTemplate {
 		return results.get(0);		
 	}
 	
-	public Bitmap getImage(Context context,int size) {
+	public Bitmap getImage(Context context,int width, int height) {
         if (image == null) {
-        	image = decodeImage(context,size);
+        	image = decodeImage(context,width,height);
         }
 		return image;
 	}
 	
-	private Bitmap decodeImage(Context context,int size){
+	private Bitmap decodeImage(Context context,int width, int height){
 		Resources resources = context.getResources();
         Bitmap symbolImage = BitmapFactory.decodeResource(resources, templateId, null);
-        return Bitmap.createScaledBitmap(symbolImage, size,size, false);
+        return Bitmap.createScaledBitmap(symbolImage, width,height, false);
 	}
 }
