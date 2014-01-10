@@ -60,8 +60,8 @@
     "fullCard": false
   },
   {
-    "top": 0.1086,
-    "bottom": 0.7918,
+    "top": 0.0881,
+    "bottom": 0.6265,
     "left": 0.0660,
     "right": 0.9387,
     "templateName": "colorless_action",
@@ -70,8 +70,8 @@
     "fullCard": true
   },
   {
-    "top": 0.1086,
-    "bottom": 0.7918,
+    "top": 0.0881,
+    "bottom": 0.6265,
     "left": 0.0660,
     "right": 0.9387,
     "templateName": "blood_action",
@@ -80,8 +80,8 @@
     "fullCard": true
   },
   {
-    "top": 0.1086,
-    "bottom": 0.7918,
+    "top": 0.0881,
+    "bottom": 0.6265,
     "left": 0.0660,
     "right": 0.9387,
     "templateName": "diamond_action_cardtemplate",
@@ -90,8 +90,8 @@
     "fullCard": true
   },
   {
-    "top": 0.1086,
-    "bottom": 0.7918,
+    "top": 0.0881,
+    "bottom": 0.6265,
     "left": 0.0660,
     "right": 0.9387,
     "templateName": "ruby_action",
@@ -100,8 +100,8 @@
     "fullCard": true
   },
   {
-    "top": 0.1086,
-    "bottom": 0.7918,
+    "top": 0.0881,
+    "bottom": 0.6265,
     "left": 0.0660,
     "right": 0.9387,
     "templateName": "sapphire_action",
@@ -110,8 +110,8 @@
     "fullCard": true
   },
   {
-    "top": 0.1086,
-    "bottom": 0.7918,
+    "top": 0.0881,
+    "bottom": 0.6265,
     "left": 0.0660,
     "right": 0.9387,
     "templateName": "wild_action",
@@ -180,8 +180,8 @@
     "fullCard": false
   },
   {
-    "top": 0.1086,
-    "bottom": 0.7918,
+    "top": 0.0881,
+    "bottom": 0.6265,
     "left": 0.0660,
     "right": 0.9387,
     "templateName": "colorless_troop",
@@ -190,8 +190,8 @@
     "fullCard": true
   },
   {
-    "top": 0.1086,
-    "bottom": 0.7918,
+    "top": 0.0881,
+    "bottom": 0.6265,
     "left": 0.0660,
     "right": 0.9387,
     "templateName": "blood_troop",
@@ -200,8 +200,8 @@
     "fullCard": true
   },
   {
-    "top": 0.1086,
-    "bottom": 0.7918,
+    "top": 0.0881,
+    "bottom": 0.6265,
     "left": 0.0660,
     "right": 0.9387,
     "templateName": "diamond_troop_cardtemplate",
@@ -210,8 +210,8 @@
     "fullCard": true
   },
   {
-    "top": 0.1086,
-    "bottom": 0.7918,
+    "top": 0.0881,
+    "bottom": 0.6265,
     "left": 0.0660,
     "right": 0.9387,
     "templateName": "ruby_troop",
@@ -220,8 +220,8 @@
     "fullCard": true
   },
   {
-    "top": 0.1086,
-    "bottom": 0.7918,
+    "top": 0.0881,
+    "bottom": 0.6265,
     "left": 0.0660,
     "right": 0.9387,
     "templateName": "sapphire_troop",
@@ -230,8 +230,8 @@
     "fullCard": true
   },
   {
-    "top": 0.1086,
-    "bottom": 0.7918,
+    "top": 0.0881,
+    "bottom": 0.6265,
     "left": 0.0660,
     "right": 0.9387,
     "templateName": "wild_troop",
