@@ -24,6 +24,11 @@ public enum CardRarity implements CardEnum {
 		this.rarity = rarity;
 	}
 	
+	@Override
+	public String toString(){
+		return getCardRarity();
+	}
+	
 	public String getCardRarity(){
 		return rarity;
 	}

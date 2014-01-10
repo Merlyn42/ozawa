@@ -20,7 +20,6 @@ public class FilterButton extends ImageButton implements View.OnClickListener {
     private Bitmap imageOn;
     private CardEnum e;
     private CardViewer cardViewer;
-    private String toastText;
 
     public FilterButton(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -38,9 +37,9 @@ public class FilterButton extends ImageButton implements View.OnClickListener {
         boolean result  = cardViewer.toggleFilter(e);
         setImageBitmap(result ? imageOn : imageOff);
         this.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-        String message = result?"Showing ":"Hiding ";
-        	message = e.toString()+" cards";
-        Toast.makeText(v.getContext(), message, Toast.LENGTH_SHORT).show();
+        StringBuilder toastBuilder = new StringBuilder(result?"Showing ":"Hiding ");
+        	toastBuilder.append(e.toString()).append(" cards");
+        Toast.makeText(v.getContext(), toastBuilder.toString(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -50,7 +49,7 @@ public class FilterButton extends ImageButton implements View.OnClickListener {
     	
     	setMeasuredDimension(dim, dim);
     }
-    public void setUp(Bitmap iImageOn, Bitmap iImageOff, CardEnum iE, CardViewer iCardViewer,String toastText) {
+    public void setUp(Bitmap iImageOn, Bitmap iImageOff, CardEnum iE, CardViewer iCardViewer) {
         imageOff = iImageOff;
         imageOn = iImageOn;
         e = iE;
