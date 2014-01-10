@@ -3,6 +3,7 @@ package com.ozawa.hextcgdeckbuilder.UI;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.AttributeSet;
+import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -34,6 +35,7 @@ public class FilterButton extends ImageButton implements View.OnClickListener {
     public void onClick(View v) {
         cardViewer.toggleFilter(e);
         setImageBitmap(cardViewer.isActive(e) ? imageOn : imageOff);
+        this.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
     }
 
     @Override

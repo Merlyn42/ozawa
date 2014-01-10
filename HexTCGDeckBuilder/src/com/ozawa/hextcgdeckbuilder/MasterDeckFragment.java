@@ -177,7 +177,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 	
 	private void setUpGridView(){
 		gridView = (GridView) uiLayout.findViewById(R.id.master_deck_grid_view);
-
+		gridView.setHapticFeedbackEnabled(true);
         gridView.setAdapter(cardViewer.getAdapter());
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -209,7 +209,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 	
 	private void setUpListView(){
 		listView = (ListView) uiLayout.findViewById(R.id.master_deck_deck_list);
-		        
+		listView.setHapticFeedbackEnabled(true);        
         // Getting adapter by passing xml data ArrayList
         lvAdapter=new DeckListViewAdapter(mainActivity, cardViewer.getAdapter().masterDeck);
 		cardViewer.setAdapter(lvAdapter);

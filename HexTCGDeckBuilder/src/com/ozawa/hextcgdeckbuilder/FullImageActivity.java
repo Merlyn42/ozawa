@@ -6,6 +6,7 @@ package com.ozawa.hextcgdeckbuilder;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -35,6 +36,7 @@ public class FullImageActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
+				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 				finish();
 			}
 		});

@@ -118,7 +118,7 @@ public class NavigationDrawerFragment extends Fragment {
             }
         });*/
 
-        scrollView = (ScrollView)inflater.inflate(R.layout.filter_layout, container, false);
+        scrollView = (ScrollView)inflater.inflate(R.layout.filter_layout, container, false);        
         /*mDrawerListView.setAdapter(new ArrayAdapter<String>(
                 getActionBar().getThemedContext(),
                 android.R.layout.simple_list_item_1,
@@ -144,7 +144,7 @@ public class NavigationDrawerFragment extends Fragment {
         FilterButton button;
         
         button = (FilterButton) scrollView.findViewById(R.id.blood);
-        
+        button.setHapticFeedbackEnabled(true);
         button.setUp(BitmapFactory.decodeResource(res, R.drawable.blood_on), BitmapFactory.decodeResource(res, R.drawable.blood_off), ColorFlag.BLOOD, cardViewer);
         button = (FilterButton) scrollView.findViewById(R.id.wild);
         button.setUp(BitmapFactory.decodeResource(res, R.drawable.wild_on), BitmapFactory.decodeResource(res, R.drawable.wild_off), ColorFlag.WILD, cardViewer);
@@ -173,18 +173,23 @@ public class NavigationDrawerFragment extends Fragment {
     
     public void setUpCustomDeckViews(){
     	Button newDeck = (Button) scrollView.findViewById(R.id.buttonNewDeck);
+    	newDeck.setHapticFeedbackEnabled(true);
         newDeck.setVisibility(View.VISIBLE);
         
         Button loadDeck = (Button) scrollView.findViewById(R.id.buttonLoadDeck);
+        loadDeck.setHapticFeedbackEnabled(true);
         loadDeck.setVisibility(View.VISIBLE);
         
         Button saveDeck = (Button) scrollView.findViewById(R.id.buttonSaveDeck);
+        saveDeck.setHapticFeedbackEnabled(true);
         saveDeck.setVisibility(View.VISIBLE);
         
         Button deleteDeck = (Button) scrollView.findViewById(R.id.buttonDeleteDeck);
+        deleteDeck.setHapticFeedbackEnabled(true);
         deleteDeck.setVisibility(View.VISIBLE);
         
         Button selectChampion = (Button) scrollView.findViewById(R.id.buttonSelectChampion);
+        selectChampion.setHapticFeedbackEnabled(true);
         selectChampion.setVisibility(View.VISIBLE);
         
         ImageView championPortrait = (ImageView) scrollView.findViewById(R.id.imageChampionPortrait);

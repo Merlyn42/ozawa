@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -98,6 +99,7 @@ public class MasterDeckActivity extends ActionBarActivity
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
 
+            	v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                 // Sending image id to FullScreenActivity
                 Intent i = new Intent(getApplicationContext(), FullImageActivity.class);
                 // passing array index

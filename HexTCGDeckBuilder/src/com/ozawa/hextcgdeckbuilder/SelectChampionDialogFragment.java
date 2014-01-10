@@ -15,6 +15,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -112,6 +113,7 @@ public class SelectChampionDialogFragment extends DialogFragment {
 			
 			@Override
 			public void onClick(View v) {
+				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 				((DeckUIActivity) getActivity()).currentCustomDeck.champion = selectedChampion;
 				 if(((DeckUIActivity) getActivity()).currentCustomDeck.champion == selectedChampion){
 					 Toast.makeText(getActivity().getApplicationContext(), "Champion selected." , Toast.LENGTH_SHORT).show();
@@ -127,6 +129,7 @@ public class SelectChampionDialogFragment extends DialogFragment {
 			
 			@Override
 			public void onClick(View v) {
+				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 				dialog.dismiss();
 			}
 		});
