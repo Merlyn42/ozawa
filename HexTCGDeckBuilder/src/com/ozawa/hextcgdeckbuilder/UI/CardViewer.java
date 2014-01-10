@@ -34,6 +34,11 @@ public class CardViewer implements TextWatcher {
         adapter = new ImageAdapter(context,filter.filter(cards));       
     }
     
+    public void clearFilter(){
+    	filter = new Filter();
+    	adapter.updateDeck(filter.filter(cards));
+    }
+    
     public List<AbstractCard> getFilteredCardList(){
     	
     	return filter.filter(cards);
