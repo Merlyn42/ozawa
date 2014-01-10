@@ -19,8 +19,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
+import android.webkit.WebView.FindListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -37,358 +40,366 @@ import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
 ;
 
 /**
- * Fragment used for managing interactions for and presentation of a navigation drawer.
- * See the <a href="https://developer.android.com/design/patterns/navigation-drawer.html#Interaction">
- * design guidelines</a> for a complete explanation of the behaviors implemented here.
+ * Fragment used for managing interactions for and presentation of a navigation
+ * drawer. See the <a href=
+ * "https://developer.android.com/design/patterns/navigation-drawer.html#Interaction"
+ * > design guidelines</a> for a complete explanation of the behaviors
+ * implemented here.
  */
 public class NavigationDrawerFragment extends Fragment {
 
-    /**
-     * Remember the position of the selected item.
-     */
-    private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
+	/**
+	 * Remember the position of the selected item.
+	 */
+	private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
 
-    /**
-     * Per the design guidelines, you should show the drawer on launch until the user manually
-     * expands it. This shared preference tracks this.
-     */
-    private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
+	/**
+	 * Per the design guidelines, you should show the drawer on launch until the
+	 * user manually expands it. This shared preference tracks this.
+	 */
+	private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
 
-    /**
-     * A pointer to the current callbacks instance (the Activity).
-     */
-    private NavigationDrawerCallbacks mCallbacks;
+	/**
+	 * A pointer to the current callbacks instance (the Activity).
+	 */
+	private NavigationDrawerCallbacks mCallbacks;
 
-    /**
-     * Helper component that ties the action bar to the navigation drawer.
-     */
-    private ActionBarDrawerToggle mDrawerToggle;
+	/**
+	 * Helper component that ties the action bar to the navigation drawer.
+	 */
+	private ActionBarDrawerToggle mDrawerToggle;
 
-    private DrawerLayout mDrawerLayout;
-    //private ListView mDrawerListView;
-    private ScrollView scrollView;
-    private View mFragmentContainerView;
-    CardViewer cardViewer;
-    private Context context;
+	private DrawerLayout mDrawerLayout;
+	// private ListView mDrawerListView;
+	private ScrollView scrollView;
+	private View mFragmentContainerView;
+	CardViewer cardViewer;
+	private Context context;
 
-    private int mCurrentSelectedPosition = 0;
-    private boolean mFromSavedInstanceState;
-    private boolean mUserLearnedDrawer;
+	private int mCurrentSelectedPosition = 0;
+	private boolean mFromSavedInstanceState;
+	private boolean mUserLearnedDrawer;
 
-    public NavigationDrawerFragment() {
+	public NavigationDrawerFragment() {
 
-    }
+	}
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        // Read in the flag indicating whether or not the user has demonstrated awareness of the
-        // drawer. See PREF_USER_LEARNED_DRAWER for details.
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
+		// Read in the flag indicating whether or not the user has demonstrated
+		// awareness of the
+		// drawer. See PREF_USER_LEARNED_DRAWER for details.
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+		mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
 
-        if (savedInstanceState != null) {
-            mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
-            mFromSavedInstanceState = true;
-        }
+		if (savedInstanceState != null) {
+			mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
+			mFromSavedInstanceState = true;
+		}
 
-        // Select either the default item (0) or the last selected item.
-        selectItem(mCurrentSelectedPosition);
-    }
+		// Select either the default item (0) or the last selected item.
+		selectItem(mCurrentSelectedPosition);
 
-    @Override
-    public void onActivityCreated (Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        // Indicate that this fragment would like to influence the set of actions in the action bar.
-        setHasOptionsMenu(true);
-    }
+	}
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		// Indicate that this fragment would like to influence the set of
+		// actions in the action bar.
+		setHasOptionsMenu(true);
+	}
 
-        /*mDrawerListView = (ListView) inflater.inflate(
-                R.layout.fragment_navigation_drawer, container, false);
-        mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		scrollView = (ScrollView) inflater.inflate(R.layout.filter_layout, container, false);
 
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectItem(position);
-            }
-        });*/
+		return scrollView;
+	}
 
-        scrollView = (ScrollView)inflater.inflate(R.layout.filter_layout, container, false);        
-        /*mDrawerListView.setAdapter(new ArrayAdapter<String>(
-                getActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_1,
-                android.R.id.text1,
-                new String[]{
-                        getString(R.string.title_section1),
-                        getString(R.string.title_section2),
-                        getString(R.string.title_section3),
-                }));*/
-        //mDrawerListView.setAdapter(new FilterAdapter(getActionBar().getThemedContext()));
-       // mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+	public boolean isDrawerOpen() {
+		return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
+	}
 
+	private void setUpButtons() {
+		Resources res = context.getResources();
+		FilterButton button;
 
-        return scrollView;
-    }
+		button = (FilterButton) scrollView.findViewById(R.id.blood);
+		button.setHapticFeedbackEnabled(true);
+		button.setUp(BitmapFactory.decodeResource(res, R.drawable.blood_on), BitmapFactory.decodeResource(res, R.drawable.blood_off),
+				ColorFlag.BLOOD, cardViewer);
+		button = (FilterButton) scrollView.findViewById(R.id.wild);
+		button.setUp(BitmapFactory.decodeResource(res, R.drawable.wild_on), BitmapFactory.decodeResource(res, R.drawable.wild_off),
+				ColorFlag.WILD, cardViewer);
+		button = (FilterButton) scrollView.findViewById(R.id.ruby);
+		button.setUp(BitmapFactory.decodeResource(res, R.drawable.ruby_on), BitmapFactory.decodeResource(res, R.drawable.ruby_off),
+				ColorFlag.RUBY, cardViewer);
+		button = (FilterButton) scrollView.findViewById(R.id.sapphire);
+		button.setUp(BitmapFactory.decodeResource(res, R.drawable.sapphire_on), BitmapFactory.decodeResource(res, R.drawable.sapphire_off),
+				ColorFlag.SAPPHIRE, cardViewer);
+		button = (FilterButton) scrollView.findViewById(R.id.diamond);
+		button.setUp(BitmapFactory.decodeResource(res, R.drawable.diamond_on), BitmapFactory.decodeResource(res, R.drawable.diamond_off),
+				ColorFlag.DIAMOND, cardViewer);
+		button = (FilterButton) scrollView.findViewById(R.id.colorless);
+		button.setUp(BitmapFactory.decodeResource(res, R.drawable.colorless_on),
+				BitmapFactory.decodeResource(res, R.drawable.colorless_off), ColorFlag.COLORLESS, cardViewer);
 
-    public boolean isDrawerOpen() {
-        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
-    }
+		button = (FilterButton) scrollView.findViewById(R.id.troop);
+		button.setUp(BitmapFactory.decodeResource(res, R.drawable.troop_on), BitmapFactory.decodeResource(res, R.drawable.troop_off),
+				CardType.TROOP, cardViewer);
+		button = (FilterButton) scrollView.findViewById(R.id.basicaction);
+		button.setUp(BitmapFactory.decodeResource(res, R.drawable.basic_on), BitmapFactory.decodeResource(res, R.drawable.basic_off),
+				CardType.BASICACTION, cardViewer);
+		button = (FilterButton) scrollView.findViewById(R.id.quickaction);
+		button.setUp(BitmapFactory.decodeResource(res, R.drawable.quick_on), BitmapFactory.decodeResource(res, R.drawable.quick_off),
+				CardType.QUICKACTION, cardViewer);
+		button = (FilterButton) scrollView.findViewById(R.id.constant);
+		button.setUp(BitmapFactory.decodeResource(res, R.drawable.constant_on), BitmapFactory.decodeResource(res, R.drawable.constant_off),
+				CardType.CONSTANT, cardViewer);
+		button = (FilterButton) scrollView.findViewById(R.id.resource);
+		button.setUp(BitmapFactory.decodeResource(res, R.drawable.resource_on), BitmapFactory.decodeResource(res, R.drawable.resource_off),
+				CardType.RESOURCE, cardViewer);
+		EditText text = (EditText) scrollView.findViewById(R.id.SearchTextField);
+		text.addTextChangedListener(cardViewer);
+		text.setOnFocusChangeListener(new OnFocusChangeListener() {
+		    @Override
+		    public void onFocusChange(View v, boolean hasFocus) {
+		        if(!hasFocus){			    	
+			        InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE); 		        
+			        
+			        if (inputManager.isActive()){
+			        	inputManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+			        }
+		        }
+		    }
+		});
+	}
 
-    private void setUpButtons(){  	
-        Resources res= context.getResources();
-        FilterButton button;
-        
-        button = (FilterButton) scrollView.findViewById(R.id.blood);
-        button.setHapticFeedbackEnabled(true);
-        button.setUp(BitmapFactory.decodeResource(res, R.drawable.blood_on), BitmapFactory.decodeResource(res, R.drawable.blood_off), ColorFlag.BLOOD, cardViewer);
-        button = (FilterButton) scrollView.findViewById(R.id.wild);
-        button.setUp(BitmapFactory.decodeResource(res, R.drawable.wild_on), BitmapFactory.decodeResource(res, R.drawable.wild_off), ColorFlag.WILD, cardViewer);
-        button = (FilterButton) scrollView.findViewById(R.id.ruby);
-        button.setUp(BitmapFactory.decodeResource(res, R.drawable.ruby_on),BitmapFactory.decodeResource(res, R.drawable.ruby_off),ColorFlag.RUBY,cardViewer);
-        button = (FilterButton) scrollView.findViewById(R.id.sapphire);
-        button.setUp(BitmapFactory.decodeResource(res, R.drawable.sapphire_on), BitmapFactory.decodeResource(res, R.drawable.sapphire_off), ColorFlag.SAPPHIRE, cardViewer);
-        button = (FilterButton) scrollView.findViewById(R.id.diamond);
-        button.setUp(BitmapFactory.decodeResource(res, R.drawable.diamond_on), BitmapFactory.decodeResource(res, R.drawable.diamond_off), ColorFlag.DIAMOND, cardViewer);
-        button = (FilterButton) scrollView.findViewById(R.id.colorless);
-        button.setUp(BitmapFactory.decodeResource(res, R.drawable.colorless_on),BitmapFactory.decodeResource(res, R.drawable.colorless_off),ColorFlag.COLORLESS,cardViewer);
+	public void setUpCustomDeckViews() {
+		Button newDeck = (Button) scrollView.findViewById(R.id.buttonNewDeck);
+		newDeck.setHapticFeedbackEnabled(true);
+		newDeck.setVisibility(View.VISIBLE);
 
-        button = (FilterButton) scrollView.findViewById(R.id.troop);
-        button.setUp(BitmapFactory.decodeResource(res, R.drawable.troop_on), BitmapFactory.decodeResource(res, R.drawable.troop_off), CardType.TROOP, cardViewer);
-        button = (FilterButton) scrollView.findViewById(R.id.basicaction);
-        button.setUp(BitmapFactory.decodeResource(res, R.drawable.basic_on),BitmapFactory.decodeResource(res, R.drawable.basic_off),CardType.BASICACTION,cardViewer);
-        button = (FilterButton) scrollView.findViewById(R.id.quickaction);
-        button.setUp(BitmapFactory.decodeResource(res, R.drawable.quick_on),BitmapFactory.decodeResource(res, R.drawable.quick_off),CardType.QUICKACTION,cardViewer);
-        button = (FilterButton) scrollView.findViewById(R.id.constant);
-        button.setUp(BitmapFactory.decodeResource(res, R.drawable.constant_on),BitmapFactory.decodeResource(res, R.drawable.constant_off),CardType.CONSTANT,cardViewer);
-        button = (FilterButton) scrollView.findViewById(R.id.resource);
-        button.setUp(BitmapFactory.decodeResource(res, R.drawable.resource_on), BitmapFactory.decodeResource(res, R.drawable.resource_off), CardType.RESOURCE, cardViewer);
-        EditText text  = (EditText) scrollView.findViewById(R.id.SearchTextField);
-        text.addTextChangedListener(cardViewer);
-    }
-    
-    public void setUpCustomDeckViews(){
-    	Button newDeck = (Button) scrollView.findViewById(R.id.buttonNewDeck);
-    	newDeck.setHapticFeedbackEnabled(true);
-        newDeck.setVisibility(View.VISIBLE);
-        
-        Button loadDeck = (Button) scrollView.findViewById(R.id.buttonLoadDeck);
-        loadDeck.setHapticFeedbackEnabled(true);
-        loadDeck.setVisibility(View.VISIBLE);
-        
-        Button saveDeck = (Button) scrollView.findViewById(R.id.buttonSaveDeck);
-        saveDeck.setHapticFeedbackEnabled(true);
-        saveDeck.setVisibility(View.VISIBLE);
-        
-        Button deleteDeck = (Button) scrollView.findViewById(R.id.buttonDeleteDeck);
-        deleteDeck.setHapticFeedbackEnabled(true);
-        deleteDeck.setVisibility(View.VISIBLE);
-        
-        Button selectChampion = (Button) scrollView.findViewById(R.id.buttonSelectChampion);
-        selectChampion.setHapticFeedbackEnabled(true);
-        selectChampion.setVisibility(View.VISIBLE);
-        
-        ImageView championPortrait = (ImageView) scrollView.findViewById(R.id.imageChampionPortrait);
-        championPortrait.setVisibility(View.VISIBLE);
-        
-        TextView championName = (TextView) scrollView.findViewById(R.id.tvChampionName);
-        championName.setVisibility(View.VISIBLE);
-        
-        TextView deckCardCount = (TextView) scrollView.findViewById(R.id.tvDeckCardCount);
-        deckCardCount.setVisibility(View.VISIBLE);
-    }
+		Button loadDeck = (Button) scrollView.findViewById(R.id.buttonLoadDeck);
+		loadDeck.setHapticFeedbackEnabled(true);
+		loadDeck.setVisibility(View.VISIBLE);
 
-    /**
-     * Users of this fragment must call this method to set up the navigation drawer interactions.
-     *
-     * @param fragmentId   The android:id of this fragment in its activity's layout.
-     * @param drawerLayout The DrawerLayout containing this fragment's UI.
-     */
-    public void setUp(CardViewer iCardViewer,Context iContext,int fragmentId, DrawerLayout drawerLayout) {
-        context=iContext;
-        cardViewer=iCardViewer;
-        mFragmentContainerView = getActivity().findViewById(fragmentId);
-        mDrawerLayout = drawerLayout;
+		Button saveDeck = (Button) scrollView.findViewById(R.id.buttonSaveDeck);
+		saveDeck.setHapticFeedbackEnabled(true);
+		saveDeck.setVisibility(View.VISIBLE);
 
+		Button deleteDeck = (Button) scrollView.findViewById(R.id.buttonDeleteDeck);
+		deleteDeck.setHapticFeedbackEnabled(true);
+		deleteDeck.setVisibility(View.VISIBLE);
 
-        // set a custom shadow that overlays the main content when the drawer opens
-        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        // set up the drawer's list view with items and click listener
+		Button selectChampion = (Button) scrollView.findViewById(R.id.buttonSelectChampion);
+		selectChampion.setHapticFeedbackEnabled(true);
+		selectChampion.setVisibility(View.VISIBLE);
 
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
+		ImageView championPortrait = (ImageView) scrollView.findViewById(R.id.imageChampionPortrait);
+		championPortrait.setVisibility(View.VISIBLE);
 
-        // ActionBarDrawerToggle ties together the the proper interactions
-        // between the navigation drawer and the action bar app icon.
-        mDrawerToggle = new ActionBarDrawerToggle(
-                getActivity(),                    /* host Activity */
-                mDrawerLayout,                    /* DrawerLayout object */
-                R.drawable.ic_drawer,             /* nav drawer image to replace 'Up' caret */
-                R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
-                R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
-        ) {
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                if (!isAdded()) {
-                    return;
-                }
+		TextView championName = (TextView) scrollView.findViewById(R.id.tvChampionName);
+		championName.setVisibility(View.VISIBLE);
 
-                getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
-            }
+		TextView deckCardCount = (TextView) scrollView.findViewById(R.id.tvDeckCardCount);
+		deckCardCount.setVisibility(View.VISIBLE);
+	}
 
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                if (!isAdded()) {
-                    return;
-                }
+	/**
+	 * Users of this fragment must call this method to set up the navigation
+	 * drawer interactions.
+	 * 
+	 * @param fragmentId
+	 *            The android:id of this fragment in its activity's layout.
+	 * @param drawerLayout
+	 *            The DrawerLayout containing this fragment's UI.
+	 */
+	public void setUp(CardViewer iCardViewer, Context iContext, int fragmentId, DrawerLayout drawerLayout) {
+		context = iContext;
+		cardViewer = iCardViewer;
+		mFragmentContainerView = getActivity().findViewById(fragmentId);
+		mDrawerLayout = drawerLayout;
 
-                if (!mUserLearnedDrawer) {
-                    // The user manually opened the drawer; store this flag to prevent auto-showing
-                    // the navigation drawer automatically in the future.
-                    mUserLearnedDrawer = true;
-                    SharedPreferences sp = PreferenceManager
-                            .getDefaultSharedPreferences(getActivity());
-                    sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
-                }
+		// set a custom shadow that overlays the main content when the drawer
+		// opens
+		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+		// set up the drawer's list view with items and click listener
 
-                getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
-            }
-        };
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setHomeButtonEnabled(true);
 
-        // If the user hasn't 'learned' about the drawer, open it to introduce them to the drawer,
-        // per the navigation drawer design guidelines.
-        if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
-            mDrawerLayout.openDrawer(mFragmentContainerView);
-        }
+		// ActionBarDrawerToggle ties together the the proper interactions
+		// between the navigation drawer and the action bar app icon.
+		mDrawerToggle = new ActionBarDrawerToggle(getActivity(), mDrawerLayout, R.drawable.ic_drawer, R.string.navigation_drawer_open,
+				R.string.navigation_drawer_close) {
+			@Override
+			public void onDrawerClosed(View drawerView) {
+				super.onDrawerClosed(drawerView);
+				if (!isAdded()) {
+					return;
+				}
+			}
 
-        // Defer code dependent on restoration of previous instance state.
-        mDrawerLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mDrawerToggle.syncState();
-            }
-        });
+			@Override
+			public void onDrawerOpened(View drawerView) {
+				super.onDrawerOpened(drawerView);
+				if (!isAdded()) {
+					return;
+				}
 
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-        
-    }
-    
-	public void setUp(View frag, CardViewer iCardViewer,Context iContext,int fragmentId, DrawerLayout drawerLayout) {
-        context=iContext;
-        cardViewer=iCardViewer;
-        mFragmentContainerView = frag.findViewById(fragmentId);
-        mDrawerLayout = drawerLayout;
+				if (!mUserLearnedDrawer) {
+					// The user manually opened the drawer; store this flag to
+					// prevent auto-showing
+					// the navigation drawer automatically in the future.
+					mUserLearnedDrawer = true;
+					SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+					sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
+				}
 
+				getActivity().supportInvalidateOptionsMenu(); // calls
+																// onPrepareOptionsMenu()
+			}
+		};
 
-        // set a custom shadow that overlays the main content when the drawer opens
-        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-        
-        setUpButtons();
-    }
+		// If the user hasn't 'learned' about the drawer, open it to introduce
+		// them to the drawer,
+		// per the navigation drawer design guidelines.
+		if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
+			mDrawerLayout.openDrawer(mFragmentContainerView);
+		}
 
-    private void selectItem(int position) {
-        mCurrentSelectedPosition = position;
-//        if (mDrawerListView != null) {
-//            mDrawerListView.setItemChecked(position, true);
-        //}
-        if (mDrawerLayout != null) {
-            mDrawerLayout.closeDrawer(mFragmentContainerView);
-        }
-        if (mCallbacks != null) {
-            mCallbacks.onNavigationDrawerItemSelected(position);
-        }
-    }
+		// Defer code dependent on restoration of previous instance state.
+		mDrawerLayout.post(new Runnable() {
+			@Override
+			public void run() {
+				mDrawerToggle.syncState();
+			}
+		});
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mCallbacks = (NavigationDrawerCallbacks) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException("Activity must implement NavigationDrawerCallbacks.");
-        }
-    }
+		mDrawerLayout.setDrawerListener(mDrawerToggle);
+	}
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mCallbacks = null;
-    }
+	public void setUp(View frag, CardViewer iCardViewer, Context iContext, int fragmentId, DrawerLayout drawerLayout) {
+		context = iContext;
+		cardViewer = iCardViewer;
+		mFragmentContainerView = frag.findViewById(fragmentId);
+		mDrawerLayout = drawerLayout;
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
-    }
+		// set a custom shadow that overlays the main content when the drawer
+		// opens
+		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        // Forward the new configuration the drawer toggle component.
-        mDrawerToggle.onConfigurationChanged(newConfig);
-    }
+		setUpButtons();
+	}
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // If the drawer is open, show the global app actions in the action bar. See also
-        // showGlobalContextActionBar, which controls the top-left area of the action bar.
-        /*if (mDrawerLayout != null && isDrawerOpen()) {
-            //inflater.inflate(R.menu.global, menu);
-            inflater.inflate(R.menu.action_bar_menu, menu);
-            showGlobalContextActionBar();
-        }*/
-        super.onCreateOptionsMenu(menu, inflater);
-    }
+	private void selectItem(int position) {
+		mCurrentSelectedPosition = position;
+		// if (mDrawerListView != null) {
+		// mDrawerListView.setItemChecked(position, true);
+		// }
+		if (mDrawerLayout != null) {
+			mDrawerLayout.closeDrawer(mFragmentContainerView);
+		}
+		if (mCallbacks != null) {
+			mCallbacks.onNavigationDrawerItemSelected(position);
+		}
+	}
+	
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		try {
+			mCallbacks = (NavigationDrawerCallbacks) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException("Activity must implement NavigationDrawerCallbacks.");
+		}
+	}
 
-        if (item.getItemId() == R.id.action_example) {
-            Toast.makeText(getActivity(), "I said don\'t press.", Toast.LENGTH_SHORT).show();
-            return true;
-        }
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		mCallbacks = null;
+	}
 
-        return super.onOptionsItemSelected(item);
-    }
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
+	}
 
-    /**
-     * Per the navigation drawer design guidelines, updates the action bar to show the global app
-     * 'context', rather than just what's in the current screen.
-     */
-    private void showGlobalContextActionBar() {
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setTitle(R.string.app_name);
-    }
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		// Forward the new configuration the drawer toggle component.
+		mDrawerToggle.onConfigurationChanged(newConfig);
+	}
 
-    private ActionBar getActionBar() {
-        return ((ActionBarActivity) getActivity()).getSupportActionBar();
-    }
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		// If the drawer is open, show the global app actions in the action bar.
+		// See also
+		// showGlobalContextActionBar, which controls the top-left area of the
+		// action bar.
+		/*
+		 * if (mDrawerLayout != null && isDrawerOpen()) {
+		 * //inflater.inflate(R.menu.global, menu);
+		 * inflater.inflate(R.menu.action_bar_menu, menu);
+		 * showGlobalContextActionBar(); }
+		 */
+		super.onCreateOptionsMenu(menu, inflater);
+	}
 
-    /**
-     * Callbacks interface that all activities using this fragment must implement.
-     */
-    public static interface NavigationDrawerCallbacks {
-        /**
-         * Called when an item in the navigation drawer is selected.
-         */
-        void onNavigationDrawerItemSelected(int position);
-    }
-    
-    /*private void setPagingEnabled(boolean enabled){
-    	CustomViewPager pager = (CustomViewPager) super.getActivity().findViewById(R.id.pager);
-    	pager.setPagingEnabled(enabled);
-    }*/
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (mDrawerToggle.onOptionsItemSelected(item)) {
+			return true;
+		}
+
+		if (item.getItemId() == R.id.action_example) {
+			Toast.makeText(getActivity(), "I said don\'t press.", Toast.LENGTH_SHORT).show();
+			return true;
+		}
+
+		return super.onOptionsItemSelected(item);
+	}
+
+	/**
+	 * Per the navigation drawer design guidelines, updates the action bar to
+	 * show the global app 'context', rather than just what's in the current
+	 * screen.
+	 */
+	private void showGlobalContextActionBar() {
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayShowTitleEnabled(true);
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+		actionBar.setTitle(R.string.app_name);
+	}
+
+	private ActionBar getActionBar() {
+		return ((ActionBarActivity) getActivity()).getSupportActionBar();
+	}
+
+	/**
+	 * Callbacks interface that all activities using this fragment must
+	 * implement.
+	 */
+	public static interface NavigationDrawerCallbacks {
+		/**
+		 * Called when an item in the navigation drawer is selected.
+		 */
+		void onNavigationDrawerItemSelected(int position);
+	}
+
+	/*
+	 * private void setPagingEnabled(boolean enabled){ CustomViewPager pager =
+	 * (CustomViewPager) super.getActivity().findViewById(R.id.pager);
+	 * pager.setPagingEnabled(enabled); }
+	 */
 
 }
