@@ -251,7 +251,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 	 * @param card
 	 */
 	private void addCardToCustomDeck(int position) {
-		if(position > 0){
+		if(position >= 0){
 			AbstractCard card = isGridView == true ? imAdapter.masterDeck.get(position) : lvAdapter.masterDeck.get(position);
 			HashMap<AbstractCard, Integer> customDeck = ((DeckUIActivity) mainActivity).customDeck;
 			if(customDeck.get(card) == null){
