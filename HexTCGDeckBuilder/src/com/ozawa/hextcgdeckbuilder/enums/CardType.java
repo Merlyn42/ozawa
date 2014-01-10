@@ -29,6 +29,11 @@ public enum CardType implements CardEnum {
 		this.cardType = type;
 	}
 	
+	@Override
+	public String toString(){
+		return getCardType();
+	}
+	
 	public String getCardType(){
 		return cardType;
 	}
