@@ -153,26 +153,26 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 	
 	public void changeToListView(){
 		if(listView != null){
-			listView.setVisibility(View.VISIBLE);
-			gridView.setVisibility(View.INVISIBLE);
-			cardViewer.setAdapter(lvAdapter);
+			cardViewer.setAdapter(lvAdapter);		
 			lvAdapter.updateDeck(imAdapter.masterDeck);
 			setIsGridView(false);
 		}else{
-			setUpListView();
+			setUpListView();			
 		}
+		gridView.setVisibility(View.INVISIBLE);
+		listView.setVisibility(View.VISIBLE);
 	}
 	
 	public void changeToGridView(){
 		if(gridView != null){
 			cardViewer.setAdapter(imAdapter);
-			listView.setVisibility(View.INVISIBLE);
-			gridView.setVisibility(View.VISIBLE);
 			imAdapter.updateDeck(lvAdapter.masterDeck);
 			setIsGridView(true);
 		}else{
-	        setUpGridView();
+	        setUpGridView();	        
 		}
+		listView.setVisibility(View.INVISIBLE);
+		gridView.setVisibility(View.VISIBLE);
 	}
 	
 	private void setUpGridView(){
