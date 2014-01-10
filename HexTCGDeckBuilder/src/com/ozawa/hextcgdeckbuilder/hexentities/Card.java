@@ -172,6 +172,7 @@ public class Card extends AbstractCard {
             combine.drawText(baseHealthValue, templateImage.getWidth() - (templateImage.getWidth() / 10), templateImage.getHeight() - (templateImage.getHeight() / 25), paint);
         	paint.setTextSize(22f);
         }
+        paint.setTextSize(24f);
 		String cardTypes = "";
 		for (int i = 0; i < cardType.length; i++) {
 			cardTypes += cardType[i].getCardType();
@@ -182,11 +183,11 @@ public class Card extends AbstractCard {
 			cardTypes += " -- " + cardSubtype;
 
 		if (colorFlags[0] == ColorFlag.COLORLESS) {
-			combine.drawText(getShortenedText(cardTypes, 24), templateImage.getWidth() / 13,
-					templateImage.getHeight() - (templateImage.getHeight() / 2.99f), paint);
-		} else {
-			combine.drawText(getShortenedText(cardTypes, 24), templateImage.getWidth() / 13,
-					templateImage.getHeight() - (templateImage.getHeight() / 3f), paint);
+			combine.drawText(cardTypes, templateImage.getWidth() / 13,
+					templateImage.getHeight() - (templateImage.getHeight() / 2.96f), paint);
+		} else {			
+			combine.drawText(cardTypes, templateImage.getWidth() / 13,
+					templateImage.getHeight() - (templateImage.getHeight() / 2.97f), paint);
 		}        
 	}
 	
