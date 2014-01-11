@@ -17,5 +17,6 @@
     <string name="delete_deck">Delete Deck</string>
     <string name="new_deck_name">New Deck Name</string>
     <string name="select_champion">Select Champion</string>
+    <string name="full_image_description">Full card view</string>
 
 </resources>
