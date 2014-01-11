@@ -16,7 +16,9 @@
         <android.gesture.GestureOverlayView
             android:layout_width="match_parent"
         	android:layout_height="match_parent" 
-            android:id="@+id/customDeckGestureOverlayView">
+            android:id="@+id/customDeckGestureOverlayView"
+            android:gestureStrokeType="single"
+			android:fadeOffset="1">
 
         <GridView
             android:id="@+id/custom_deck_grid_view"
