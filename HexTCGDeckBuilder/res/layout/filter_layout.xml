@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/filter_parent_layout"
     android:layout_width="match_parent"
     android:layout_height="fill_parent"
-     android:orientation="vertical"
-     android:id="@+id/filter_parent_layout">
+    android:background="#aa333333"
+    android:orientation="vertical" >
     
 <LinearLayout
-    
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#aa333333"
     android:divider="#cccccc"
-    android:paddingBottom="5dp">
+    android:orientation="vertical"
+    android:paddingBottom="5dp" >
 
     <LinearLayout
         android:id="@+id/colorLayout"
