@@ -84,7 +84,7 @@
     "bottom": 0.6265,
     "left": 0.0660,
     "right": 0.9387,
-    "templateName": "diamond_action_cardtemplate",
+    "templateName": "diamond_action",
     "isTroop": false,
     "color": "Diamond",
     "fullCard": true
@@ -204,7 +204,7 @@
     "bottom": 0.6265,
     "left": 0.0660,
     "right": 0.9387,
-    "templateName": "diamond_troop_cardtemplate",
+    "templateName": "diamond_troop",
     "isTroop": true,
     "color": "Diamond",
     "fullCard": true
