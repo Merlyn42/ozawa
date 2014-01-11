@@ -26,6 +26,7 @@ public class CardViewer implements TextWatcher {
     private List<AbstractCard> cards;
     private ImageAdapter adapter;
     private Comparator<AbstractCard> comparator = new CardComparatorColor();
+    private ArrayList<FilterButton> associatedButtons = new ArrayList<FilterButton>();
 
     public CardViewer(Context context,List<AbstractCard> abstractCards){
         filter = new Filter();
@@ -34,13 +35,19 @@ public class CardViewer implements TextWatcher {
         adapter = new ImageAdapter(context,filter.filter(cards));       
     }
     
+    public void addAssociatedButton(FilterButton button){
+    	associatedButtons.add(button);
+    }
+    
     public void clearFilter(){
     	filter = new Filter();
     	adapter.updateDeck(filter.filter(cards));
+    	for (FilterButton f:associatedButtons){
+    		f.updateImage();
+    	}
     }
     
     public List<AbstractCard> getFilteredCardList(){
-    	
     	return filter.filter(cards);
     }
     

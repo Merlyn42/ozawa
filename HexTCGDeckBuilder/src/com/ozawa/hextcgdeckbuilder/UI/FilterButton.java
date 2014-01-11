@@ -57,4 +57,8 @@ public class FilterButton extends ImageButton implements View.OnClickListener {
         setImageBitmap(imageOn);
         setOnClickListener(this);
     }
+
+	public void updateImage() {
+		setImageBitmap(cardViewer.isActive(e) ? imageOn : imageOff);
+	}
 }

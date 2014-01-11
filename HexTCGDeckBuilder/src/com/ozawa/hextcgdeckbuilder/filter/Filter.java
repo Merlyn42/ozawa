@@ -1,9 +1,9 @@
 package com.ozawa.hextcgdeckbuilder.filter;
 
+import com.ozawa.hextcgdeckbuilder.UI.FilterButton;
 import com.ozawa.hextcgdeckbuilder.enums.CardEnum;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Card;
-import com.ozawa.hextcgdeckbuilder.hexentities.ResourceCard;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -129,7 +129,8 @@ public class Filter {
 			if(!(abstractCard.gameText.toLowerCase().contains(filterString.toLowerCase())||abstractCard.name.toLowerCase().contains(filterString.toLowerCase())))return false;
 		}
 		if (colors.size() != NUMBEROFCOLORS) {
-			if(!match(abstractCard.colorFlags,colors)&&abstractCard.resourceThresholdGranted==null?true:!match(abstractCard.resourceThresholdGranted.colorFlags,colors))return false;
+			System.out.println(abstractCard.resourceThresholdGranted==null?true:!match(abstractCard.resourceThresholdGranted.colorFlags,colors));
+			if(!match(abstractCard.colorFlags,colors)&&(abstractCard.resourceThresholdGranted==null?false:!match(abstractCard.resourceThresholdGranted.colorFlags,colors)))return false;
 		}
 		if (cardTypes.size() != NUMBEROFCARDTYPES) {
 			if(!match(abstractCard.cardType,cardTypes))return false;
