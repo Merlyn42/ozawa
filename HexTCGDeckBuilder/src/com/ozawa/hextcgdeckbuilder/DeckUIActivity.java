@@ -218,6 +218,7 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 				deckCardCount.setText("Card Count: " + cardCount);
 			}
 		}
+		deckChanged = false;
 	}
 	
 	private void resetCustomDeck(){

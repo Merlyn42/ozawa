@@ -350,7 +350,11 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 			@Override
 			public void onClick(View v) {
 				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-				saveDeck();
+				if (mainActivity.isUnsavedDeck() || mainActivity.deckChanged) {
+					buildSaveUnsavedDeckDialog(null, fragment);
+				} else {
+					saveDeck();
+				}
 			}
 
 		});
@@ -458,6 +462,8 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 			} else {
 				Toast.makeText(mainActivity.getApplicationContext(), "Failed to save deck. Please try again.", Toast.LENGTH_SHORT).show();
 			}
+		}else{
+			Toast.makeText(mainActivity.getApplicationContext(), "No deck to save.", Toast.LENGTH_SHORT).show();
 		}
 
 		return false;
@@ -574,16 +580,16 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 	 *            - the CustomDeckFragment to invoke the given method on
 	 */
 	private void invokeNoParamReflectiveMethod(final String methodName, final CustomDeckFragment fragment) {
-		try {
-			Method method = CustomDeckFragment.class.getDeclaredMethod(methodName);
-			if (!method.isAccessible()) {
-				method.setAccessible(true);
+		if(methodName != null){
+			try {
+				Method method = CustomDeckFragment.class.getDeclaredMethod(methodName);
+				if (!method.isAccessible()) {
+					method.setAccessible(true);
+				}
+				method.invoke(fragment, new Object[0]);
+			} catch (NoSuchMethodException e) {
+			} catch (Exception ex) {
 			}
-			method.invoke(fragment, new Object[0]);
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (Exception ex) {
-			ex.printStackTrace();
 		}
 	}
 }
