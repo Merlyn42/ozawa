@@ -57,6 +57,7 @@ public class JSONSerializer {
 		gsonBuilder.registerTypeAdapter(ColorFlag[].class, new MultiValueSerializer<ColorFlag>(ColorFlag.class));
 		gsonBuilder.registerTypeAdapter(CardType[].class, new MultiValueSerializer<CardType>(CardType.class));
 		gsonBuilder.registerTypeAdapter(Boolean.class, new BooleanSerializer());
+		gsonBuilder.setPrettyPrinting();
 		Gson gson = gsonBuilder.create();
 		
 		String newJSON = gson.toJson(card);
