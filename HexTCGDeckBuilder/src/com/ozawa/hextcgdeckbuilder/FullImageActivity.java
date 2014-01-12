@@ -57,7 +57,8 @@ public class FullImageActivity extends Activity implements GestureOverlayView.On
 		});
         
 		GestureOverlayView gestureOverlayView = (GestureOverlayView) findViewById(R.id.fullImageGestureOverlayView);
-		gestureOverlayView.addOnGesturePerformedListener(this);		
+		gestureOverlayView.addOnGesturePerformedListener(this);	
+		gestureOverlayView.setGestureVisible(false);
     }
     
     @Override
