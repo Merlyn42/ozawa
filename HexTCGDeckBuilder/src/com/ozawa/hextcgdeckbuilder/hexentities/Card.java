@@ -12,6 +12,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.Typeface;
+import android.text.InputFilter.LengthFilter;
 
 import com.google.gson.annotations.SerializedName;
 import com.ozawa.hextcgdeckbuilder.R;
@@ -127,9 +128,9 @@ public class Card extends AbstractCard {
         combine.drawText(getShortenedText(name,16), templateImage.getWidth() / 2.7f , templateImage.getHeight() / 11, paint);
         paint.setTextSize(34f);
         if(resourceCost > 9){
-        	combine.drawText("" + resourceCost, templateImage.getWidth() / 7f, templateImage.getHeight() / 6, paint);
+        	combine.drawText("" + resourceCost, templateImage.getWidth() / 7.2f, templateImage.getHeight() / 5.8f, paint);
         } else{
-        	combine.drawText("" + resourceCost, templateImage.getWidth() / 6f, templateImage.getHeight() / 6, paint);
+        	combine.drawText("" + resourceCost, templateImage.getWidth() / 6.2f, templateImage.getHeight() / 5.8f, paint);
         }
         if (cardType[0].equals(CardType.TROOP)) {
         	paint.setTextSize(36f);
@@ -145,17 +146,17 @@ public class Card extends AbstractCard {
         	}
         	if(!cardSubtype.equals(""))
         		cardTypes += " -- " + cardSubtype;
-        	
+
         	if(colorFlags[0] == ColorFlag.COLORLESS){
         		combine.drawText(getShortenedText(cardTypes, 24), templateImage.getWidth() / 11, templateImage.getHeight() - (templateImage.getHeight() / 6.3f), paint);
         	}else {
         		combine.drawText(getShortenedText(cardTypes, 24), templateImage.getWidth() / 11, templateImage.getHeight() - (templateImage.getHeight() / 5.9f), paint);
-        	}        
+        	}
         }
 	}
 	
 	private void drawFullImageText(Canvas combine,Bitmap templateImage,Paint paint, Resources resources, Context context) {
-		paint.setTextSize(20f);	
+		paint.setTextSize(40f);	
 		combine.drawText(name, templateImage.getWidth() / 6 , templateImage.getHeight() / 14, paint);        
         if(resourceCost > 9){
         	combine.drawText("" + resourceCost, templateImage.getWidth() / 14f, templateImage.getHeight() / 14, paint);
@@ -163,16 +164,16 @@ public class Card extends AbstractCard {
         	combine.drawText("" + resourceCost, templateImage.getWidth() / 13f, templateImage.getHeight() / 14, paint);
         }
         
-        paint.setTextSize(12f);
-        drawGameText(gameText,62,combine,templateImage,paint,resources,context);        
-        
         if (cardType[0].equals(CardType.TROOP)) {
-        	paint.setTextSize(28f);
             combine.drawText(baseAttackValue, templateImage.getWidth() / 17, templateImage.getHeight() - (templateImage.getHeight() / 25), paint);
-            combine.drawText(baseHealthValue, templateImage.getWidth() - (templateImage.getWidth() / 10), templateImage.getHeight() - (templateImage.getHeight() / 25), paint);
+            combine.drawText(baseHealthValue, templateImage.getWidth() - (templateImage.getWidth() / 11.5f), templateImage.getHeight() - (templateImage.getHeight() / 25), paint);
         	paint.setTextSize(22f);
         }
-        paint.setTextSize(24f);
+        
+        paint.setTextSize(24f);        
+        drawGameText(gameText,64,combine,templateImage,paint,resources,context);        
+                
+        paint.setTextSize(27f);
 		String cardTypes = "";
 		for (int i = 0; i < cardType.length; i++) {
 			cardTypes += cardType[i].getCardType();
@@ -181,19 +182,15 @@ public class Card extends AbstractCard {
 		}
 		if (!cardSubtype.equals(""))
 			cardTypes += " -- " + cardSubtype;
-
-		if (colorFlags[0] == ColorFlag.COLORLESS) {
-			combine.drawText(cardTypes, templateImage.getWidth() / 13,
-					templateImage.getHeight() - (templateImage.getHeight() / 2.96f), paint);
-		} else {			
-			combine.drawText(cardTypes, templateImage.getWidth() / 13,
-					templateImage.getHeight() - (templateImage.getHeight() / 2.97f), paint);
-		}        
+		
+		combine.drawText(cardTypes,	templateImage.getWidth() / 13,templateImage.getHeight() - (templateImage.getHeight() / 2.97f),paint);
 	}
 	
 	private void drawGameText(String gameText, int length, Canvas combine, Bitmap templateImage,Paint paint, Resources resources, Context context){
 		line = 0f;
-		if(gameText.length() < length){
+		ArrayList<Integer> lengths = new ArrayList<Integer>();
+		adjust(length,gameText,lengths);
+		if(gameText.length() < lengths.get(0)){
 			if(gameText.contains("<p>")){
 				int pLocation = gameText.lastIndexOf("<p>") + 3;
 				String paragraph = gameText.substring(0,pLocation);
@@ -206,6 +203,7 @@ public class Card extends AbstractCard {
 		else{			
 			String displayText = "";
 			String [] words = gameText.split(" ");
+			int lineCount = 0;
 			for(String word : words){
 				if(word.contains("<p>")){
 					int pLocation = word.lastIndexOf("<p>") + 3;
@@ -213,11 +211,13 @@ public class Card extends AbstractCard {
 					displayText += paragraph;
 					drawTextWithImages(displayText, templateImage, combine, paint, resources, context);
 					displayText = "" + word.substring(pLocation, word.length()) + " ";
+					lineCount++;
 				}else{
-					if((displayText + word).length() >= length){					
+					if((displayText + word).length() >= lengths.get(lineCount)){					
 						drawTextWithImages(displayText,templateImage,combine,paint,resources,context);
 						displayText = "";
 						line += .06f;
+						lineCount++;
 					}
 					displayText += word + " ";
 				}
@@ -225,19 +225,46 @@ public class Card extends AbstractCard {
 			drawTextWithImages(displayText,templateImage,combine,paint,resources,context);		
 		}
 	}
-	
-	
+		
+	private void adjust(int length, String gameText,ArrayList<Integer> lengths) {
+		String displayText = "";
+		String [] words = gameText.split(" ");
+		for(String word : words){			
+			if ((displayText + word).length() >= length) {
+				if(displayText.contains("[")){
+					int adjuster = length + ((displayText.split("\\[").length - 1) * 4);
+					lengths.add(adjuster);
+				} else{
+					lengths.add(length);
+				}
+				if(displayText.contains("<p>"))
+					lengths.add(length);
+				displayText = "";
+			}
+			displayText += word + " ";
+		}
+		if(displayText.contains("[")){
+			int adjuster = length + ((displayText.split("\\[").length - 1) * 4);
+			lengths.add(adjuster);
+		} else{
+			lengths.add(length);
+		}
+		if(displayText.contains("<p>"))
+			lengths.add(length);
+	}
+
 	private void drawTextWithImages(String displayText,Bitmap templateImage,Canvas combine,Paint paint, Resources resources, Context context){
 		String delims = "[\\[\\]<>]";
 		String []stuff = displayText.split(delims);
 		float width = templateImage.getWidth() / 14;
 		float baseline = (int)-paint.ascent();
 		int height = (int)(baseline + paint.descent());
+		
 		for(int i = 0; i < stuff.length; i++){
 			if(i % 2 == 0){
 				if(stuff[i].equals("")) continue;
 					Bitmap startImage = textAsBitmap(stuff[i], paint, templateImage,baseline,height);
-					combine.drawBitmap(startImage, width, templateImage.getHeight() / (1.47f - line), paint);
+					combine.drawBitmap(startImage, width, templateImage.getHeight() / (1.46f - line), paint);
 					width += startImage.getWidth();
 
 			} else {
@@ -269,7 +296,7 @@ public class Card extends AbstractCard {
 					}else{
 						symbolImage = getSymbolImage(stuff[i], context,height,height);						
 					}
-					combine.drawBitmap(symbolImage, width, templateImage.getHeight() / (1.48f - line), paint);
+					combine.drawBitmap(symbolImage, width, templateImage.getHeight() / (1.46f - line), paint);
 					width += symbolImage.getWidth();
 				}
 			}			
