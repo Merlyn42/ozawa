@@ -88,7 +88,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
         
         GestureOverlayView gestureOverlayView = (GestureOverlayView) uiLayout.findViewById(R.id.masterDeckGestureOverlayView);
         gestureOverlayView.addOnGesturePerformedListener(this);
-
+        gestureOverlayView.setGestureVisible(false);
         setUpGridView(); // Set up the card grid view
         
         return uiLayout;

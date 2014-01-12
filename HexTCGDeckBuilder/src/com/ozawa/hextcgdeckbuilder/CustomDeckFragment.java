@@ -99,7 +99,8 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 
 		GestureOverlayView gestureOverlayView = (GestureOverlayView) uiLayout.findViewById(R.id.customDeckGestureOverlayView);
 		gestureOverlayView.addOnGesturePerformedListener(this);
-
+		gestureOverlayView.setGestureVisible(false);
+		
 		setUpGridView(); // Set up the card grid view
 
 		return uiLayout;
