@@ -196,17 +196,14 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
             }
         });
         
-        gridView.setOnItemLongClickListener(new OnItemLongClickListener(){
+		gridView.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
-			public boolean onItemLongClick(AdapterView<?> parent, View view,
-                    int position, long id) {
-				// Add card to custom deck
-				addCardToCustomDeck(position);
-				return true;
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+				return makeAddMultipleCardsDialog(position);
 			}
 		});
-        setIsGridView(true);
+		setIsGridView(true);
 	}
 	
 	private void setUpListView(){
@@ -231,9 +228,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
                     int position, long id) {
-				// Add card to custom deck
-				addCardToCustomDeck(position);
-				return true;
+				return makeAddMultipleCardsDialog(position);
 			}
 			
 		});
@@ -244,6 +239,19 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 	
 	public void setIsGridView(boolean isGridView){
 		this.isGridView = isGridView;
+	}
+	
+	private boolean makeAddMultipleCardsDialog(int position){
+		if (position >= 0) {
+			AbstractCard card = isGridView == true ? imAdapter.masterDeck.get(position) : lvAdapter.masterDeck.get(position);
+
+			AddMultipleCardsDialogFragment addMultipleCardsDialog = new AddMultipleCardsDialogFragment();
+			addMultipleCardsDialog.card = card;
+			addMultipleCardsDialog.mainActivity = ((DeckUIActivity) mainActivity);
+			addMultipleCardsDialog.show(mainActivity.getSupportFragmentManager(), "Add Multiple Cards");
+			return true;
+		}
+		return false;
 	}
 	
 	
