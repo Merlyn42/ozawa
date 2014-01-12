@@ -110,16 +110,21 @@ public class Card extends AbstractCard {
         paint.setTextAlign(Paint.Align.LEFT);
         paint.setColor(-1);        
         paint.setAntiAlias(true); 
-
+        
+        Bitmap threshold = getCardThresholdImage(context, template);
         if(template.fullCard){
         	drawFullImageText(combine,templateImage,paint,resources,context);
+        	if(threshold != null){
+        		combine.drawBitmap(threshold, (templateImage.getWidth() / 15), (templateImage.getHeight() / 10), null);
+        	}
         } else {
-        	drawThumbnailText(combine,templateImage,paint);
-        	Bitmap threshold = getCardThresholdImage(context, false);
+        	drawThumbnailText(combine,templateImage,paint);   
         	if(threshold != null){
         		combine.drawBitmap(threshold, (templateImage.getWidth() / 14), (templateImage.getHeight() / 4.2f), null);
         	}
         }
+        
+    	
         return result;
     }
 	
@@ -339,7 +344,7 @@ public class Card extends AbstractCard {
 	 * @param mContext - the context for the application
 	 * @return a bitmap of the card threshold, otherwise null
 	 */	
-	public Bitmap getCardThresholdImage(Context mContext, boolean listView){
+	public Bitmap getCardThresholdImage(Context mContext, CardTemplate template){
 		if(this.threshold != null && this.threshold.length > 0){
 			ArrayList<Bitmap> thresholds = new ArrayList<Bitmap>();
 			for(ResourceThreshold threshold : this.threshold){
@@ -377,7 +382,7 @@ public class Card extends AbstractCard {
 			
 			Bitmap allThresholds = null;
 			if(!thresholds.isEmpty()){
-				if(listView){
+				if(template == null){
 					allThresholds = Bitmap.createBitmap(HexUtil.convertDensityPixelsToPixels(mContext, 100), HexUtil.convertDensityPixelsToPixels(mContext, 8), Bitmap.Config.ARGB_8888);
 					
 					Canvas canvas = new Canvas(allThresholds);
@@ -389,6 +394,20 @@ public class Card extends AbstractCard {
 						image = Bitmap.createScaledBitmap(image, dimensions, dimensions, true);
 						canvas.drawBitmap(image, left, top, null);
 						left-=image.getWidth();
+					}
+				}else if(template.fullCard){
+					allThresholds = Bitmap.createBitmap(HexUtil.convertDensityPixelsToPixels(mContext, 18), HexUtil.convertDensityPixelsToPixels(mContext, 200), Bitmap.Config.ARGB_8888);
+					
+					Canvas canvas = new Canvas(allThresholds);
+					canvas.drawColor(0, Mode.CLEAR);
+					int left = 0;
+					int top = 0;
+					int padding = HexUtil.convertDensityPixelsToPixels(mContext, 10);
+					int dimensions = HexUtil.convertDensityPixelsToPixels(mContext, 18);
+					for(Bitmap image : thresholds){	
+						image = Bitmap.createScaledBitmap(image, dimensions, dimensions, true);
+						canvas.drawBitmap(image, left, top, null);
+						top += image.getHeight() + padding;
 					}
 				}else{
 					allThresholds = Bitmap.createBitmap(HexUtil.convertDensityPixelsToPixels(mContext, 8), HexUtil.convertDensityPixelsToPixels(mContext, 100), Bitmap.Config.ARGB_8888);
