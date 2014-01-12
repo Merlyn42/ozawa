@@ -51,34 +51,34 @@ public class NavigationDrawerFragment extends Fragment {
 	/**
 	 * Remember the position of the selected item.
 	 */
-	private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
+	private static final String			STATE_SELECTED_POSITION		= "selected_navigation_drawer_position";
 
 	/**
 	 * Per the design guidelines, you should show the drawer on launch until the
 	 * user manually expands it. This shared preference tracks this.
 	 */
-	private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
+	private static final String			PREF_USER_LEARNED_DRAWER	= "navigation_drawer_learned";
 
 	/**
 	 * A pointer to the current callbacks instance (the Activity).
 	 */
-	private NavigationDrawerCallbacks mCallbacks;
+	private NavigationDrawerCallbacks	mCallbacks;
 
 	/**
 	 * Helper component that ties the action bar to the navigation drawer.
 	 */
-	private ActionBarDrawerToggle mDrawerToggle;
+	private ActionBarDrawerToggle		mDrawerToggle;
 
-	private DrawerLayout mDrawerLayout;
+	private DrawerLayout				mDrawerLayout;
 	// private ListView mDrawerListView;
-	private ScrollView scrollView;
-	private View mFragmentContainerView;
-	CardViewer cardViewer;
-	private Context context;
+	private ScrollView					scrollView;
+	private View						mFragmentContainerView;
+	CardViewer							cardViewer;
+	private Context						context;
 
-	private int mCurrentSelectedPosition = 0;
-	private boolean mFromSavedInstanceState;
-	private boolean mUserLearnedDrawer;
+	private int							mCurrentSelectedPosition	= 0;
+	private boolean						mFromSavedInstanceState;
+	private boolean						mUserLearnedDrawer;
 
 	public NavigationDrawerFragment() {
 
@@ -128,53 +128,62 @@ public class NavigationDrawerFragment extends Fragment {
 		FilterButton button;
 
 		button = (FilterButton) scrollView.findViewById(R.id.blood);
-		button.setHapticFeedbackEnabled(true);
+		cardViewer.addAssociatedButton(button);
 		button.setUp(BitmapFactory.decodeResource(res, R.drawable.blood_on), BitmapFactory.decodeResource(res, R.drawable.blood_off),
 				ColorFlag.BLOOD, cardViewer);
 		button = (FilterButton) scrollView.findViewById(R.id.wild);
+		cardViewer.addAssociatedButton(button);
 		button.setUp(BitmapFactory.decodeResource(res, R.drawable.wild_on), BitmapFactory.decodeResource(res, R.drawable.wild_off),
 				ColorFlag.WILD, cardViewer);
 		button = (FilterButton) scrollView.findViewById(R.id.ruby);
+		cardViewer.addAssociatedButton(button);
 		button.setUp(BitmapFactory.decodeResource(res, R.drawable.ruby_on), BitmapFactory.decodeResource(res, R.drawable.ruby_off),
 				ColorFlag.RUBY, cardViewer);
 		button = (FilterButton) scrollView.findViewById(R.id.sapphire);
+		cardViewer.addAssociatedButton(button);
 		button.setUp(BitmapFactory.decodeResource(res, R.drawable.sapphire_on), BitmapFactory.decodeResource(res, R.drawable.sapphire_off),
 				ColorFlag.SAPPHIRE, cardViewer);
 		button = (FilterButton) scrollView.findViewById(R.id.diamond);
+		cardViewer.addAssociatedButton(button);
 		button.setUp(BitmapFactory.decodeResource(res, R.drawable.diamond_on), BitmapFactory.decodeResource(res, R.drawable.diamond_off),
 				ColorFlag.DIAMOND, cardViewer);
 		button = (FilterButton) scrollView.findViewById(R.id.colorless);
+		cardViewer.addAssociatedButton(button);
 		button.setUp(BitmapFactory.decodeResource(res, R.drawable.colorless_on),
 				BitmapFactory.decodeResource(res, R.drawable.colorless_off), ColorFlag.COLORLESS, cardViewer);
-
 		button = (FilterButton) scrollView.findViewById(R.id.troop);
+		cardViewer.addAssociatedButton(button);
 		button.setUp(BitmapFactory.decodeResource(res, R.drawable.troop_on), BitmapFactory.decodeResource(res, R.drawable.troop_off),
 				CardType.TROOP, cardViewer);
 		button = (FilterButton) scrollView.findViewById(R.id.basicaction);
+		cardViewer.addAssociatedButton(button);
 		button.setUp(BitmapFactory.decodeResource(res, R.drawable.basic_on), BitmapFactory.decodeResource(res, R.drawable.basic_off),
 				CardType.BASICACTION, cardViewer);
 		button = (FilterButton) scrollView.findViewById(R.id.quickaction);
+		cardViewer.addAssociatedButton(button);
 		button.setUp(BitmapFactory.decodeResource(res, R.drawable.quick_on), BitmapFactory.decodeResource(res, R.drawable.quick_off),
 				CardType.QUICKACTION, cardViewer);
 		button = (FilterButton) scrollView.findViewById(R.id.constant);
+		cardViewer.addAssociatedButton(button);
 		button.setUp(BitmapFactory.decodeResource(res, R.drawable.constant_on), BitmapFactory.decodeResource(res, R.drawable.constant_off),
 				CardType.CONSTANT, cardViewer);
 		button = (FilterButton) scrollView.findViewById(R.id.resource);
+		cardViewer.addAssociatedButton(button);
 		button.setUp(BitmapFactory.decodeResource(res, R.drawable.resource_on), BitmapFactory.decodeResource(res, R.drawable.resource_off),
 				CardType.RESOURCE, cardViewer);
 		EditText text = (EditText) scrollView.findViewById(R.id.SearchTextField);
 		text.addTextChangedListener(cardViewer);
 		text.setOnFocusChangeListener(new OnFocusChangeListener() {
-		    @Override
-		    public void onFocusChange(View v, boolean hasFocus) {
-		        if(!hasFocus){			    	
-			        InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE); 		        
-			        
-			        if (inputManager.isActive()){
-			        	inputManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-			        }
-		        }
-		    }
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if (!hasFocus) {
+					InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+					if (inputManager.isActive()) {
+						inputManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+					}
+				}
+			}
 		});
 	}
 
@@ -309,7 +318,6 @@ public class NavigationDrawerFragment extends Fragment {
 			mCallbacks.onNavigationDrawerItemSelected(position);
 		}
 	}
-	
 
 	@Override
 	public void onAttach(Activity activity) {

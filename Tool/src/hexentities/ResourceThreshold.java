@@ -9,11 +9,11 @@ import enums.ColorFlag;
  * 
  * @author Chad Kinsella
  */
-public class CardThreshold {
+public class ResourceThreshold {
 	
 	@SerializedName("m_ColorFlags")
-	ColorFlag colorFlags;
+	public ColorFlag[] colorFlags;
 	@SerializedName("m_ThresholdColorRequirement")
-	int thresholdColorRequirement;
+	public int thresholdColorRequirement;
 
 }

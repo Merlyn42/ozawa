@@ -128,13 +128,14 @@ public class Filter {
 		if (filterString!=null&&filterString.length()!=0){
 			if(!(abstractCard.gameText.toLowerCase().contains(filterString.toLowerCase())||abstractCard.name.toLowerCase().contains(filterString.toLowerCase())))return false;
 		}
-		if (colors.size() != NUMBEROFCOLORS) {
-			System.out.println(abstractCard.resourceThresholdGranted==null?true:!match(abstractCard.resourceThresholdGranted.colorFlags,colors));
-			if(!match(abstractCard.colorFlags,colors)&&(abstractCard.resourceThresholdGranted==null?false:!match(abstractCard.resourceThresholdGranted.colorFlags,colors)))return false;
-		}
 		if (cardTypes.size() != NUMBEROFCARDTYPES) {
 			if(!match(abstractCard.cardType,cardTypes))return false;
 		}
+		if (colors.size() != NUMBEROFCOLORS) {
+			System.out.println(abstractCard.resourceThresholdGranted==null?true:!match(abstractCard.resourceThresholdGranted[0].colorFlags,colors));
+			if(!match(abstractCard.colorFlags,colors)&&(abstractCard.resourceThresholdGranted==null?true:!match(abstractCard.resourceThresholdGranted[0].colorFlags,colors)))return false;
+		}
+
 		if (abstractCard instanceof Card) {
 			Card card;
 			card = (Card) abstractCard;

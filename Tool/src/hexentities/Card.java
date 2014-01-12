@@ -20,7 +20,7 @@ public class Card extends AbstractCard {
 	@SerializedName("m_ResourceCost")
 	public int resourceCost;
 	@SerializedName("m_Threshold")
-	public CardThreshold[] threshold;
+	public ResourceThreshold[] threshold;
 	@SerializedName("m_BaseAttackValue")
 	public String baseAttackValue;
 	@SerializedName("m_BaseHealthValue")
