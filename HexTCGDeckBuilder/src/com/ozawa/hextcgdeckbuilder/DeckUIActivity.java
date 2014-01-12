@@ -54,6 +54,8 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 	    mAdapter = new TabPagerAdapter(getSupportFragmentManager());
 	    customDeck = new HashMap<AbstractCard, Integer>();
 	    customDeckCardList = new ArrayList<AbstractCard>(customDeck.keySet());
+	    
+	    Bundle bundle = getIntent().getExtras();
 	    dbHandler = new DatabaseHandler(this);
 	    
 	    viewPager.setAdapter(mAdapter);

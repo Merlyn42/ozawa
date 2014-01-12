@@ -19,7 +19,7 @@
         <activity
             
             android:theme="@style/Theme.AppCompat"
-            android:name=".DeckUIActivity"
+            android:name=".SplashActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -27,6 +27,11 @@
 				<category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".DeckUIActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.ozawa.hextcgdeckbuilder.FullImageActivity"
