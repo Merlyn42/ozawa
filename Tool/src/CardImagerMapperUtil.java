@@ -32,6 +32,8 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
+import sun.java2d.loops.ProcessPath.EndSubPathHandler;
+
 import com.google.gson.Gson;
 
 import json.JSONSerializer;
@@ -262,9 +264,43 @@ public class CardImagerMapperUtil {
 		target = cmd.getOptionValue("target");
 		File targetFile = new File(target);
 		File sourceFile = new File(source, "\\Data\\");
+		
+		cleanTarget(targetFile);
 
 		generateImageAndCardJSONData(sourceFile, targetFile);
 
+	}
+
+	private static void cleanTarget(File targetFile) {
+		File res =new File(targetFile,"res") ;
+		if(res.exists()){
+			File images =new File(res,"drawable-nodpi") ;
+			if(images.exists()){
+				File[] files = images.listFiles(new FilenameFilter(){
+					@Override
+					public boolean accept(File dir, String name) {
+						return (name.startsWith("hex0")&&name.endsWith(".jpg")||(name.startsWith("championportait")&&name.endsWith(".png")));
+					}
+				});
+				for (File f :files){
+					f.delete();
+				}
+			}
+			File raw =new File(res,"raw") ;
+			if(raw.exists()){
+				File[] files = raw.listFiles(new FilenameFilter(){
+					@Override
+					public boolean accept(File dir, String name) {
+						return ((name.startsWith("hexcard0")||name.startsWith("champion"))&&name.endsWith(".json"));
+					}
+				});
+				for (File f :files){
+					f.delete();
+				}
+			}
+		}
+		
+		
 	}
 
 }
