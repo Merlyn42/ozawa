@@ -129,20 +129,20 @@ public class Card extends AbstractCard {
     }
 	
 	private void drawThumbnailText(Canvas combine,Bitmap templateImage,Paint paint){
-		paint.setTextSize(28f);
-        combine.drawText(getShortenedText(name,16), templateImage.getWidth() / 2.7f , templateImage.getHeight() / 11, paint);
+		paint.setTextSize(32f);
+        combine.drawText(getShortenedText(name,19), templateImage.getWidth() / 3.3f , templateImage.getHeight() / 11f, paint);
         paint.setTextSize(34f);
         if(resourceCost > 9){
-        	combine.drawText("" + resourceCost, templateImage.getWidth() / 7.2f, templateImage.getHeight() / 5.8f, paint);
+        	combine.drawText("" + resourceCost, templateImage.getWidth() / 8.5f, templateImage.getHeight() / 7.5f, paint);
         } else{
-        	combine.drawText("" + resourceCost, templateImage.getWidth() / 6.2f, templateImage.getHeight() / 5.8f, paint);
+        	combine.drawText("" + resourceCost, templateImage.getWidth() / 7.2f, templateImage.getHeight() / 7.5f, paint);
         }
         if (cardType[0].equals(CardType.TROOP)) {
         	paint.setTextSize(36f);
-            combine.drawText(baseAttackValue, templateImage.getWidth() / 9, templateImage.getHeight() - (templateImage.getHeight() / 10), paint);
-            combine.drawText(baseHealthValue, templateImage.getWidth() - (templateImage.getWidth() / 6), templateImage.getHeight() - (templateImage.getHeight() / 10), paint);
+            combine.drawText(baseAttackValue, templateImage.getWidth() / 9, templateImage.getHeight() - (templateImage.getHeight() / 11f), paint);
+            combine.drawText(baseHealthValue, templateImage.getWidth() - (templateImage.getWidth() / 6.8f), templateImage.getHeight() - (templateImage.getHeight() / 11f), paint);
         } else{
-        	paint.setTextSize(22f);
+        	paint.setTextSize(25f);
         	String cardTypes = "";
         	for(int i = 0; i < cardType.length ;i++){
         		cardTypes += cardType[i].getCardType();
@@ -152,11 +152,7 @@ public class Card extends AbstractCard {
         	if(!cardSubtype.equals(""))
         		cardTypes += " -- " + cardSubtype;
 
-        	if(colorFlags[0] == ColorFlag.COLORLESS){
-        		combine.drawText(getShortenedText(cardTypes, 24), templateImage.getWidth() / 11, templateImage.getHeight() - (templateImage.getHeight() / 6.3f), paint);
-        	}else {
-        		combine.drawText(getShortenedText(cardTypes, 24), templateImage.getWidth() / 11, templateImage.getHeight() - (templateImage.getHeight() / 5.9f), paint);
-        	}
+    		combine.drawText(getShortenedText(cardTypes, 24), templateImage.getWidth() / 11, templateImage.getHeight() - (templateImage.getHeight() / 5.9f), paint);
         }
 	}
 	
