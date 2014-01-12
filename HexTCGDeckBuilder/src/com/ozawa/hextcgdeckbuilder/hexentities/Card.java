@@ -281,8 +281,7 @@ public class Card extends AbstractCard {
 					paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.ITALIC));
 				}else if(stuff[i].equalsIgnoreCase("/i")){
 					paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-				}
-				else{
+				}else{
 					Bitmap symbolImage;
 					if(stuff[i].equalsIgnoreCase("BASIC") ){
 						int basicSize = (int) paint.measureText("BASIC");
@@ -293,6 +292,8 @@ public class Card extends AbstractCard {
 					}else if(stuff[i].startsWith("R") && i >= 2 && stuff[i-2].startsWith("L")){
 						int basicSize = (int) paint.measureText("SYM");
 						symbolImage = getSymbolImage(stuff[i], context, basicSize, basicSize);
+					}else if(stuff[i].equalsIgnoreCase("ONE-SHOT")){
+						symbolImage = textAsBitmap("[ONE-SHOT]", paint, templateImage, baseline, height);
 					}else{
 						symbolImage = getSymbolImage(stuff[i], context,height,height);						
 					}
@@ -312,9 +313,11 @@ public class Card extends AbstractCard {
 	}
 	
 	private Bitmap getSymbolImage(String symbol, Context context, int width, int height){		
-		Bitmap symbolImage = SymbolTemplate.findSymbolTemplate(symbol, SymbolTemplate.getAllTemplates(context)).getImage(context,width,height); 
-		if(symbolImage != null)
+		SymbolTemplate symTemp = SymbolTemplate.findSymbolTemplate(symbol, SymbolTemplate.getAllTemplates(context));		 
+		if(symTemp != null){
+			Bitmap symbolImage = symTemp.getImage(context,width,height);
 			return symbolImage;
+		}
 		return BitmapFactory.decodeResource(context.getResources(), R.drawable.blank);				
 	}
 
