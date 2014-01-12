@@ -32,16 +32,14 @@
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:text="Cancel"
-	        android:layout_weight="1"
-	        style="?android:attr/buttonBarButtonStyle" />
+	        android:layout_weight="1" />
          
 	     <Button
 	        android:id="@+id/buttonSaveNewDeck"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:text="@string/save_deck"
-	        android:layout_weight="1"
-	        style="?android:attr/buttonBarButtonStyle" />
+	        android:layout_weight="1" />
     
     </LinearLayout>
 

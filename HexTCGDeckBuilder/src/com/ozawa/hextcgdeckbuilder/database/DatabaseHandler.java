@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
@@ -341,16 +342,22 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 */
 	public Deck getDeck(String id){
 		SQLiteDatabase db = this.getReadableDatabase();
-		
-		Cursor results = db.query(TABLE_DECKS, new String[]{ID, NAME, CHAMPION_NAME}, ID + "= ?", new String[]{id}, null, null, null, null);
-		
-		if(results == null){
-			return null;
+		Deck deck = null;
+		try{
+			Cursor results = db.query(TABLE_DECKS, new String[]{ID, NAME, CHAMPION_NAME}, ID + "= ?", new String[]{id}, null, null, null, null);
+			
+			if(results == null){
+				return null;
+			}
+			
+			results.moveToFirst();
+			
+			deck = createNewDeck(results);
+		}catch(SQLiteException ex){
+			
+		}finally{
+			db.close();
 		}
-		
-		results.moveToFirst();
-		
-		Deck deck = createNewDeck(results);
 		
 		return deck;
 	}
@@ -365,11 +372,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	    String selectQuery = "SELECT * FROM " + TABLE_DECKS;
 		SQLiteDatabase db = this.getReadableDatabase();
 		
-		Cursor results = db.rawQuery(selectQuery, null);
-		if(results.moveToFirst()){
-			do{
-				decks.add(createNewDeck(results));
-			}while(results.moveToNext());
+		try{
+			Cursor results = db.rawQuery(selectQuery, null);
+			if(results.moveToFirst()){
+				do{
+					decks.add(createNewDeck(results));
+				}while(results.moveToNext());
+			}
+		}catch(SQLiteException ex){
+			
+		}finally{
+			db.close();
 		}
 		
 		return decks;
@@ -567,16 +580,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 */
 	public DeckResource getDeckResource(String deckID, String cardID){
 		SQLiteDatabase db = this.getReadableDatabase();
-		
-		Cursor results = db.query(TABLE_DECKS, new String[]{ID, NAME}, DECK_ID + "= ? AND " + CARD_ID + "= ?", new String[]{deckID, cardID}, null, null, null, null);
-		
-		if(results == null){
-			return null;
+		DeckResource deckResource = null;
+		try{
+			Cursor results = db.query(TABLE_DECKS, new String[]{ID, NAME}, DECK_ID + "= ? AND " + CARD_ID + "= ?", new String[]{deckID, cardID}, null, null, null, null);
+			
+			if(results == null){
+				return null;
+			}
+			
+			results.moveToFirst();
+			deckResource = createNewDeckResource(results);
+		}catch(SQLiteException ex){
+			
+		}finally{
+			db.close();
 		}
-		
-		results.moveToFirst();
-		
-		DeckResource deckResource = createNewDeckResource(results);
 		
 		return deckResource;
 	}
@@ -592,11 +610,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	    String selectQuery = "SELECT  * FROM " + TABLE_DECK_RESOURCES + " WHERE " + DECK_ID + " = '" + deckID + "'";
 		SQLiteDatabase db = this.getReadableDatabase();
 		
-		Cursor results = db.rawQuery(selectQuery, null);
-		if(results.moveToFirst()){
-			do{
-				deckResources.add(createNewDeckResource(results));
-			}while(results.moveToNext());
+		try{
+			Cursor results = db.rawQuery(selectQuery, null);
+			if(results.moveToFirst()){
+				do{
+					deckResources.add(createNewDeckResource(results));
+				}while(results.moveToNext());
+			}
+		}catch(SQLiteException ex){
+			
+		}finally{
+			db.close();
 		}
 		
 		return deckResources;
@@ -612,11 +636,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	    String selectQuery = "SELECT  * FROM " + TABLE_DECK_RESOURCES;
 		SQLiteDatabase db = this.getReadableDatabase();
 		
-		Cursor results = db.rawQuery(selectQuery, null);
-		if(results.moveToFirst()){
-			do{
-				deckResources.add(createNewDeckResource(results));
-			}while(results.moveToNext());
+		try{
+			Cursor results = db.rawQuery(selectQuery, null);
+			if(results.moveToFirst()){
+				do{
+					deckResources.add(createNewDeckResource(results));
+				}while(results.moveToNext());
+			}
+		}catch(SQLiteException ex){
+			
+		}finally{
+			db.close();
 		}
 		
 		return deckResources;

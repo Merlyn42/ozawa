@@ -50,7 +50,7 @@ public class ImageGetter extends AsyncTask<AbstractCard, Void, Bitmap> {
 			}
 			case CARDTHRESHOLD:{
 				if(params[0] instanceof Card){
-					return ((Card)params[0]).getCardThresholdImage(context, true);
+					return ((Card)params[0]).getCardThresholdImage(context, null);
 				}
 				return null;
 			}
