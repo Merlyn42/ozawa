@@ -4,7 +4,10 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +19,7 @@ import com.ozawa.hextcgdeckbuilder.UI.StringGetter;
 import com.ozawa.hextcgdeckbuilder.enums.CardType;
 import com.ozawa.hextcgdeckbuilder.enums.ImageGetterType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
+import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 import com.ozawa.hextcgdeckbuilder.hexentities.ResourceCard;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
@@ -54,7 +58,7 @@ public class DeckListViewAdapter extends ImageAdapter{
         }
 
         TextView cardName = (TextView)vi.findViewById(R.id.card_name);
-        TextView gameText = (TextView)vi.findViewById(R.id.gametext);
+        ImageView gameText = (ImageView)vi.findViewById(R.id.gametext);
         TextView cardCost = (TextView)vi.findViewById(R.id.tvCardCost);
         TextView cardAttack = (TextView)vi.findViewById(R.id.tvCardAttack);
         TextView cardDefense = (TextView)vi.findViewById(R.id.tvCardDefense);
@@ -101,7 +105,7 @@ public class DeckListViewAdapter extends ImageAdapter{
 		
         // Setting all values in listview
 		int screenWidth = HexUtil.getScreenWidth(mContext);
-        gameText.setWidth((screenWidth / 10) * 7);
+        gameText.setMaxWidth((screenWidth / 10) * 7);
         if(card.isTroop()){
         	imCardAttack.setImageResource(R.drawable.gametext_attack);
         	imCardDefense.setImageResource(R.drawable.gametext_defense);        	
@@ -110,7 +114,8 @@ public class DeckListViewAdapter extends ImageAdapter{
         	imCardDefense.setImageBitmap(null);
         }
         buildCardTextView(card, cardName, "name", null, null);
-        buildCardTextView(card, gameText, "gameText", null, null);
+        //buildCardTextView(card, gameText, "gameText", null, null);
+        buildCardGameText(card, gameText, "gameText", null, null,vi);
         buildCardTextView(card, cardCost, "resourceCost", "Cost: ", null);
         buildCardTextView(card, cardAttack, "baseAttackValue", null, null);
         buildCardTextView(card, cardDefense, "baseHealthValue", null, null);
@@ -154,5 +159,18 @@ public class DeckListViewAdapter extends ImageAdapter{
 	    	task.execute(card);
 	    	textView.setTag(task);
     	}
+    }
+    
+    private void buildCardGameText(AbstractCard card,ImageView imageView, String fieldName, String prefix, String suffix, View vi){
+        Paint paint = new Paint();
+        paint.setTextAlign(Paint.Align.LEFT);
+        paint.setColor(-1);        
+        paint.setAntiAlias(true);
+        Bitmap image = Bitmap.createBitmap(HexUtil.getScreenHeigth(mContext) - HexUtil.getScreenHeigth(mContext) /10,HexUtil.getScreenWidth(mContext) / 12,Config.ARGB_8888);
+        Canvas gameText = new Canvas(image);
+        if(card instanceof Card){
+        	((Card) card).drawGameText(card.gameText, 120, gameText, image, paint, mContext.getResources(), mContext);
+        }
+    	imageView.setImageBitmap(image);
     }
 }

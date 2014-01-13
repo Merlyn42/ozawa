@@ -36,7 +36,17 @@
         android:textStyle="bold"/>
 
     <!-- Game Text -->
-    <TextView
+<!-- <TextView
+        android:id="@+id/gametext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/card_name"
+        android:textColor="@drawable/list_selector_text_color"
+        android:textSize="10dip"
+        android:layout_marginTop="1dip"
+        android:layout_toRightOf="@+id/portrait_border" />-->
+
+	<ImageView
         android:id="@+id/gametext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

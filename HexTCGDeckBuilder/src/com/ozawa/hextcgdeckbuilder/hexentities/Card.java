@@ -187,7 +187,7 @@ public class Card extends AbstractCard {
 		combine.drawText(cardTypes,	templateImage.getWidth() / 13,templateImage.getHeight() - (templateImage.getHeight() / 2.97f),paint);
 	}
 	
-	private void drawGameText(String gameText, int length, Canvas combine, Bitmap templateImage,Paint paint, Resources resources, Context context){
+	public void drawGameText(String gameText, int length, Canvas combine, Bitmap templateImage,Paint paint, Resources resources, Context context){
 		line = 0f;
 		ArrayList<Integer> lengths = new ArrayList<Integer>();
 		adjust(length,gameText,lengths);
