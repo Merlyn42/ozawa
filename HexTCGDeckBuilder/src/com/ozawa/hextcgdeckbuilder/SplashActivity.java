@@ -24,6 +24,7 @@ public class SplashActivity extends Activity {
 		InputStream stream = null;
 		stream = getResources().openRawResource(R.drawable.splash);
 		GifView splash = new GifView(this, stream);
+		splash.getRootView().setBackgroundColor(getResources().getColor(android.R.color.black));
 		setContentView(splash);
 		
 		mHandler.postDelayed(new Runnable() {

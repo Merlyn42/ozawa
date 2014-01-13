@@ -23,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -106,25 +107,8 @@ public class SelectChampionDialogFragment extends DialogFragment {
 		
 		linearLayout = (LinearLayout) dialog.findViewById(R.id.linLayoutSelectChampButtons);
 		
-		Button selectChampion = (Button) linearLayout.findViewById(R.id.buttonSaveSelectedChampion);
+		
 		Button cancel = (Button) linearLayout.findViewById(R.id.buttonCancelSelectChampion);
-		
-		selectChampion.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-				((DeckUIActivity) getActivity()).currentCustomDeck.champion = selectedChampion;
-				 if(((DeckUIActivity) getActivity()).currentCustomDeck.champion == selectedChampion){
-					 Toast.makeText(getActivity().getApplicationContext(), "Champion selected." , Toast.LENGTH_SHORT).show();
-					 ((DeckUIActivity) getActivity()).updateCustomDeckData();
-					 dialog.dismiss();
-				 }else{
-					 Toast.makeText(getActivity().getApplicationContext(), "Failed to select champion. Please try again." , Toast.LENGTH_SHORT).show();
-				 }
-			}
-		});
-		
 		cancel.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -133,6 +117,34 @@ public class SelectChampionDialogFragment extends DialogFragment {
 				dialog.dismiss();
 			}
 		});
+		
+		Button selectChampion = (Button) linearLayout.findViewById(R.id.buttonSaveSelectedChampion);
+	
+		selectChampion.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+				if(((DeckUIActivity) getActivity()).currentCustomDeck != null){
+					((DeckUIActivity) getActivity()).currentCustomDeck.champion = selectedChampion;
+					 if(((DeckUIActivity) getActivity()).currentCustomDeck.champion == selectedChampion){
+						 Toast.makeText(getActivity().getApplicationContext(), "Champion selected." , Toast.LENGTH_SHORT).show();
+						 ((DeckUIActivity) getActivity()).updateCustomDeckData();
+						 dialog.dismiss();
+					 }else{
+						 Toast.makeText(getActivity().getApplicationContext(), "Failed to select champion. Please try again." , Toast.LENGTH_SHORT).show();
+					 }
+				}else{
+					Toast.makeText(getActivity().getApplicationContext(), "Deck must be saved before champion can be selected." , Toast.LENGTH_SHORT).show();
+					dialog.dismiss();
+				}
+				}
+			});
+		
+		
+		
+		
+		
 	
 		return dialog;
 	}

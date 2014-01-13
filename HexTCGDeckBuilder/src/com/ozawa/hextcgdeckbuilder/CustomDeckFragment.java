@@ -381,13 +381,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 			@Override
 			public void onClick(View v) {
 				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-				if (mainActivity.currentCustomDeck != null) {
-					showSelectChampionPopup();
-				} else {
-					Toast.makeText(mainActivity.getApplicationContext(), "Deck must be saved before choosing a champion.",
-							Toast.LENGTH_SHORT).show();
-				}
-
+				showSelectChampionPopup();
 			}
 
 		});
