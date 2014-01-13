@@ -128,7 +128,7 @@ public class Card extends AbstractCard {
         	}
         }
         
-    	
+    	paint = null;
         return result;
     }
 	
@@ -223,11 +223,13 @@ public class Card extends AbstractCard {
 						displayText = "";
 						line += .06f;
 						lineCount++;
+						combine.scale(0, 2);
 					}
 					displayText += word + " ";
 				}
 			}
-			drawTextWithImages(displayText,combine,paint,resources,context,width,height);		
+			drawTextWithImages(displayText,combine,paint,resources,context,width,height);
+			combine.scale(0, 2);
 		}
 	}
 		
