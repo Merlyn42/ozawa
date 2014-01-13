@@ -33,6 +33,12 @@ public class SplashActivity extends Activity {
         }, 5000);
 	}
 	
+	@Override
+	protected void onPause(){
+		super.onPause();
+		finish();
+	}
+	
 	private void startDeckActivity(){
 		Intent intent = new Intent(getBaseContext(), DeckUIActivity.class);
 		startActivity(intent);
