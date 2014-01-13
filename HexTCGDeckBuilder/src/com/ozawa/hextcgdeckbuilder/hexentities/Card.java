@@ -54,6 +54,8 @@ public class Card extends AbstractCard {
     public GlobalIdentifier[] equipmentSlots;
 
     private float line;
+    private static final int fullTemplateWidth = 890;
+    private static final int fullTemplateHeigth = 1240;
     
     /**
      * Creates or retrives the card image including portrait, template and text.
@@ -111,11 +113,11 @@ public class Card extends AbstractCard {
         paint.setColor(-1);        
         paint.setAntiAlias(true); 
         
-        Bitmap threshold = getCardThresholdImage(context, template);
+        Bitmap threshold = getCardThresholdImage(context, template, templateImage);
         if(template.fullCard){
         	drawFullImageText(combine,templateImage,paint,resources,context);
         	if(threshold != null){
-        		combine.drawBitmap(threshold, (templateImage.getWidth() / 15), (templateImage.getHeight() / 10), null);
+        		combine.drawBitmap(threshold, (templateImage.getWidth() / 14), (templateImage.getHeight() / 9.5f), null);
         	}
         } else {
         	drawThumbnailText(combine,templateImage,paint);   
@@ -343,7 +345,7 @@ public class Card extends AbstractCard {
 	 * @param mContext - the context for the application
 	 * @return a bitmap of the card threshold, otherwise null
 	 */	
-	public Bitmap getCardThresholdImage(Context mContext, CardTemplate template){
+	public Bitmap getCardThresholdImage(Context mContext, CardTemplate template, Bitmap templateImage){
 		if(this.threshold != null && this.threshold.length > 0){
 			ArrayList<Bitmap> thresholds = new ArrayList<Bitmap>();
 			for(ResourceThreshold threshold : this.threshold){
@@ -395,14 +397,16 @@ public class Card extends AbstractCard {
 						left-=image.getWidth();
 					}
 				}else if(template.fullCard){
-					allThresholds = Bitmap.createBitmap(HexUtil.convertDensityPixelsToPixels(mContext, 18), HexUtil.convertDensityPixelsToPixels(mContext, 200), Bitmap.Config.ARGB_8888);
+					int width = templateImage.getWidth() / fullTemplateWidth;
+					int height = templateImage.getHeight() / fullTemplateHeigth;
+					allThresholds = Bitmap.createBitmap(width * 30, height*250, Bitmap.Config.ARGB_8888);
 					
 					Canvas canvas = new Canvas(allThresholds);
 					canvas.drawColor(0, Mode.CLEAR);
 					int left = 0;
 					int top = 0;
-					int padding = HexUtil.convertDensityPixelsToPixels(mContext, 10);
-					int dimensions = HexUtil.convertDensityPixelsToPixels(mContext, 18);
+					int padding = height*16;
+					int dimensions = width*30;
 					for(Bitmap image : thresholds){	
 						image = Bitmap.createScaledBitmap(image, dimensions, dimensions, true);
 						canvas.drawBitmap(image, left, top, null);
