@@ -169,7 +169,7 @@ public class DeckListViewAdapter extends ImageAdapter{
         Bitmap image = Bitmap.createBitmap(HexUtil.getScreenHeigth(mContext) - HexUtil.getScreenHeigth(mContext) /10,HexUtil.getScreenWidth(mContext) / 12,Config.ARGB_8888);
         Canvas gameText = new Canvas(image);
         if(card instanceof Card){
-        	((Card) card).drawGameText(card.gameText, 120, gameText, image, paint, mContext.getResources(), mContext);
+        	((Card) card).drawGameText(card.gameText, 120, gameText, paint, mContext.getResources(), mContext,1,1);
         }
     	imageView.setImageBitmap(image);
     }

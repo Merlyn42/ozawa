@@ -176,7 +176,7 @@ public class Card extends AbstractCard {
         }
         
         paint.setTextSize(24f);        
-        drawGameText(gameText,64,combine,templateImage,paint,resources,context);        
+        drawGameText(gameText,64,combine,paint,resources,context,templateImage.getWidth()/14,templateImage.getHeight());        
                 
         paint.setTextSize(27f);
 		String cardTypes = "";
@@ -191,7 +191,7 @@ public class Card extends AbstractCard {
 		combine.drawText(cardTypes,	templateImage.getWidth() / 13,templateImage.getHeight() - (templateImage.getHeight() / 2.97f),paint);
 	}
 	
-	public void drawGameText(String gameText, int length, Canvas combine, Bitmap templateImage,Paint paint, Resources resources, Context context){
+	public void drawGameText(String gameText, int length, Canvas combine,Paint paint, Resources resources, Context context, float width, float height){
 		line = 0f;
 		ArrayList<Integer> lengths = new ArrayList<Integer>();
 		adjust(length,gameText,lengths);
@@ -199,10 +199,10 @@ public class Card extends AbstractCard {
 			if(gameText.contains("<p>")){
 				int pLocation = gameText.lastIndexOf("<p>") + 3;
 				String paragraph = gameText.substring(0,pLocation);
-				drawTextWithImages(paragraph, templateImage, combine, paint, resources, context);
-				drawTextWithImages(gameText.substring(pLocation, gameText.length()), templateImage, combine, paint,resources,context);
+				drawTextWithImages(paragraph, combine, paint, resources, context,width, height);
+				drawTextWithImages(gameText.substring(pLocation, gameText.length()),combine, paint,resources,context,width,height);
 			} else{
-				drawTextWithImages(gameText, templateImage, combine, paint,resources,context);
+				drawTextWithImages(gameText, combine, paint,resources,context,width,height);
 			}
 		}
 		else{			
@@ -214,12 +214,12 @@ public class Card extends AbstractCard {
 					int pLocation = word.lastIndexOf("<p>") + 3;
 					String paragraph = word.substring(0,pLocation);
 					displayText += paragraph;
-					drawTextWithImages(displayText, templateImage, combine, paint, resources, context);
+					drawTextWithImages(displayText,combine, paint, resources, context,width,height);
 					displayText = "" + word.substring(pLocation, word.length()) + " ";
 					lineCount++;
 				}else{
 					if((displayText + word).length() >= lengths.get(lineCount)){					
-						drawTextWithImages(displayText,templateImage,combine,paint,resources,context);
+						drawTextWithImages(displayText,combine,paint,resources,context,width,height);
 						displayText = "";
 						line += .06f;
 						lineCount++;
@@ -227,7 +227,7 @@ public class Card extends AbstractCard {
 					displayText += word + " ";
 				}
 			}
-			drawTextWithImages(displayText,templateImage,combine,paint,resources,context);		
+			drawTextWithImages(displayText,combine,paint,resources,context,width,height);		
 		}
 	}
 		
@@ -256,20 +256,20 @@ public class Card extends AbstractCard {
 		}
 		if(displayText.contains("<p>"))
 			lengths.add(length);
+		lengths.add(length);
 	}
 
-	private void drawTextWithImages(String displayText,Bitmap templateImage,Canvas combine,Paint paint, Resources resources, Context context){
+	private void drawTextWithImages(String displayText, Canvas combine,Paint paint, Resources resources, Context context,float width, float height){
 		String delims = "[\\[\\]<>]";
 		String []stuff = displayText.split(delims);
-		float width = templateImage.getWidth() / 14;
 		float baseline = (int)-paint.ascent();
-		int height = (int)(baseline + paint.descent());
+		int textHeight = (int)(baseline + paint.descent());
 		
 		for(int i = 0; i < stuff.length; i++){
 			if(i % 2 == 0){
 				if(stuff[i].equals("")) continue;
-					Bitmap startImage = textAsBitmap(stuff[i], paint, templateImage,baseline,height);
-					combine.drawBitmap(startImage, width, templateImage.getHeight() / (1.46f - line), paint);
+					Bitmap startImage = textAsBitmap(stuff[i], paint, baseline,textHeight);
+					combine.drawBitmap(startImage, width, height / (1.46f - line), paint);
 					width += startImage.getWidth();
 
 			} else {
@@ -290,7 +290,7 @@ public class Card extends AbstractCard {
 					Bitmap symbolImage;
 					if(stuff[i].equalsIgnoreCase("BASIC") ){
 						int basicSize = (int) paint.measureText("BASIC");
-						symbolImage = getSymbolImage(stuff[i], context, basicSize, height);						
+						symbolImage = getSymbolImage(stuff[i], context, basicSize, textHeight);						
 					} else if(stuff[i].startsWith("L") && i <= stuff.length - 2 && stuff[i+2].startsWith("R")){
 						int basicSize = (int) paint.measureText("SYM");
 						symbolImage = getSymbolImage(stuff[i], context, basicSize, basicSize);
@@ -298,18 +298,18 @@ public class Card extends AbstractCard {
 						int basicSize = (int) paint.measureText("SYM");
 						symbolImage = getSymbolImage(stuff[i], context, basicSize, basicSize);
 					}else if(stuff[i].equalsIgnoreCase("ONE-SHOT")){
-						symbolImage = textAsBitmap("[ONE-SHOT]", paint, templateImage, baseline, height);
+						symbolImage = textAsBitmap("[ONE-SHOT]", paint, baseline, textHeight);
 					}else{
-						symbolImage = getSymbolImage(stuff[i], context,height,height);						
+						symbolImage = getSymbolImage(stuff[i], context,textHeight,textHeight);						
 					}
-					combine.drawBitmap(symbolImage, width, templateImage.getHeight() / (1.46f - line), paint);
+					combine.drawBitmap(symbolImage, width, height / (1.46f - line), paint);
 					width += symbolImage.getWidth();
 				}
 			}			
 		}
 	}
 
-	private Bitmap textAsBitmap(String DisplayText, Paint paint, Bitmap templateImage,float baseline,int height){
+	private Bitmap textAsBitmap(String DisplayText, Paint paint,float baseline,int height){
 		int width = (int)(paint.measureText(DisplayText) + 0.5f);
 		Bitmap displayTextImage = Bitmap.createBitmap(width,height,Bitmap.Config.ARGB_8888);
 		Canvas canvas = new Canvas(displayTextImage);
