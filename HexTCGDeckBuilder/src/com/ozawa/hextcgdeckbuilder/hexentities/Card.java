@@ -56,6 +56,8 @@ public class Card extends AbstractCard {
     private float line;
     private static final int fullTemplateWidth = 890;
     private static final int fullTemplateHeigth = 1240;
+    private static final int thumbnailTemplateWidth = 500;
+    private static final int thumbnailTemplateHeigth = 560;
     
     /**
      * Creates or retrives the card image including portrait, template and text.
@@ -399,13 +401,13 @@ public class Card extends AbstractCard {
 				}else if(template.fullCard){
 					int width = templateImage.getWidth() / fullTemplateWidth;
 					int height = templateImage.getHeight() / fullTemplateHeigth;
-					allThresholds = Bitmap.createBitmap(width * 30, height*250, Bitmap.Config.ARGB_8888);
+					allThresholds = Bitmap.createBitmap(width * 30, height*500, Bitmap.Config.ARGB_8888);
 					
 					Canvas canvas = new Canvas(allThresholds);
 					canvas.drawColor(0, Mode.CLEAR);
 					int left = 0;
 					int top = 0;
-					int padding = height*16;
+					int padding = height*23;
 					int dimensions = width*30;
 					for(Bitmap image : thresholds){	
 						image = Bitmap.createScaledBitmap(image, dimensions, dimensions, true);
@@ -413,14 +415,16 @@ public class Card extends AbstractCard {
 						top += image.getHeight() + padding;
 					}
 				}else{
-					allThresholds = Bitmap.createBitmap(HexUtil.convertDensityPixelsToPixels(mContext, 8), HexUtil.convertDensityPixelsToPixels(mContext, 100), Bitmap.Config.ARGB_8888);
+					int width = templateImage.getWidth() / thumbnailTemplateWidth;
+					int height = templateImage.getHeight() / thumbnailTemplateHeigth;
+					allThresholds = Bitmap.createBitmap(width*18, height*300, Bitmap.Config.ARGB_8888);
 					
 					Canvas canvas = new Canvas(allThresholds);
 					canvas.drawColor(0, Mode.CLEAR);
 					int left = 0;
 					int top = 0;
-					int padding = HexUtil.convertDensityPixelsToPixels(mContext, 4);
-					int dimensions = HexUtil.convertDensityPixelsToPixels(mContext, 8);
+					int padding = height*12;
+					int dimensions = width*18;
 					for(Bitmap image : thresholds){	
 						image = Bitmap.createScaledBitmap(image, dimensions, dimensions, true);
 						canvas.drawBitmap(image, left, top, null);
