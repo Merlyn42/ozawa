@@ -8,6 +8,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
         android:orientation="horizontal" >
 
         <NumberPicker
@@ -25,21 +27,21 @@
             android:orientation="vertical" >
 
             <Button
-                android:id="@+id/buttonAddCards"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Add Cards"
-                tools:targetApi="11" />
-
-            <Button
                 android:id="@+id/buttonCancelAddCards"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Cancel"
+                tools:targetApi="11" />
+
+            <Button
+                android:id="@+id/buttonAddCards"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Add Cards"
                 tools:targetApi="11" />
 
         </LinearLayout>
