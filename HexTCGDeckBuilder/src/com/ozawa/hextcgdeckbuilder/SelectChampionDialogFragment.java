@@ -15,6 +15,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.text.Html;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -64,7 +65,7 @@ public class SelectChampionDialogFragment extends DialogFragment {
 		final TextView selectedChampionName = (TextView) relativeLayout.findViewById(R.id.tvChampionName);
 		selectedChampionName.setText(selectedChampion.name);
 		final TextView selectedChampionGameText = (TextView) relativeLayout.findViewById(R.id.tvChampionGameText);
-		selectedChampionGameText.setText(selectedChampion.gameText);
+		HexUtil.populateTextViewWithHexHtml(selectedChampionGameText,selectedChampion.gameText);
 		final ImageView selectedChampionPortrait = (ImageView) relativeLayout.findViewById(R.id.imageChampionPortrait);		
 		if(selectedChampion.hudPortrait != null){
 			selectedChampionPortrait.setImageResource(getResourceID(selectedChampion.hudPortrait));						
@@ -85,7 +86,7 @@ public class SelectChampionDialogFragment extends DialogFragment {
 				Champion champion = (Champion) listView.getItemAtPosition(position);
 				if(champion != null){
 					selectedChampionName.setText(champion.name);
-					selectedChampionGameText.setText(champion.gameText);
+					HexUtil.populateTextViewWithHexHtml(selectedChampionGameText,champion.gameText);
 					
 					int championPortraitID = -1;
 					if(champion.hudPortrait != null){

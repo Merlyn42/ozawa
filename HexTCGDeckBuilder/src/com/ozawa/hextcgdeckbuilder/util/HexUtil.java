@@ -2,6 +2,7 @@ package com.ozawa.hextcgdeckbuilder.util;
 
 import java.lang.reflect.Field;
 
+import com.ozawa.hextcgdeckbuilder.HtmlImageGetter;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 import com.ozawa.hextcgdeckbuilder.hexentities.ResourceCard;
@@ -10,9 +11,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.Build;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 public class HexUtil {
 	
@@ -107,6 +111,18 @@ public class HexUtil {
 	    DisplayMetrics displayMetrics = mContext.getResources().getDisplayMetrics();
 	    int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));       
 	    return px;
+	}
+	
+	public static Spanned parseStringAsHexHtml(String text,Context context,int height){
+		text=text.replaceAll("\\[([0-9])\\]", "{$1}");
+		text=text.replace("[", "<img src=\"");
+		text=text.replace("]", "\"/>");
+		text=text.replaceAll("\\{([0-9])\\}", "[$1]");
+		return Html.fromHtml(text,new HtmlImageGetter(context,height),null);
+	}
+	
+	public static void populateTextViewWithHexHtml(TextView view,String text){
+		view.setText(parseStringAsHexHtml(text, view.getContext(), Float.valueOf(view.getTextSize()).intValue()));
 	}
 
 }

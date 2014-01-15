@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ozawa.hextcgdeckbuilder.R;
 import com.ozawa.hextcgdeckbuilder.hexentities.Champion;
+import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -36,7 +37,7 @@ public class SelectChampionArrayAdapter extends ArrayAdapter<Champion> {
 			TextView championName = (TextView) view.findViewById(R.id.tvChampionName_Row);
 			championName.setText(champion.name);
 			TextView championGameText = (TextView) view.findViewById(R.id.tvChampionGameText_Row);
-			championGameText.setText(champion.gameText);
+			HexUtil.populateTextViewWithHexHtml(championGameText, champion.gameText);
 		}
 		
 		return view;

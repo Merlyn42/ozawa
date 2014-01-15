@@ -20,6 +20,7 @@ public class SymbolTemplate {
 	public int templateId;
 	public String cardText;
 	public String imageName;
+	public double sizeRatio;
 	private Bitmap image;
 	
 	private static Map<String,SymbolTemplate>	ALLTEMPLATES;

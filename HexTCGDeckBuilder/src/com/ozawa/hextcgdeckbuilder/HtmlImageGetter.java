@@ -34,8 +34,8 @@ public class HtmlImageGetter implements Html.ImageGetter{
 		}
 		Drawable d=context.getResources().getDrawable(template.templateId);
 		
-		int dim = textSize;//int dim = HexUtil.convertDensityPixelsToPixels(context, textSize); 
-		d.setBounds(0,0,dim,dim);
+		
+		d.setBounds(0,0,(int) Math.round(textSize*template.sizeRatio),textSize);
 		return d;
 	}
 

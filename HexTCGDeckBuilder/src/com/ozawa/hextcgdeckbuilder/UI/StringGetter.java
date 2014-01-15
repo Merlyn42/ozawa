@@ -52,9 +52,7 @@ public class StringGetter extends AsyncTask<AbstractCard, Void, String> {
 	        if(suffix != null){
 	        	result.concat(suffix);
 	        }
-	        result=result.replace("[", "<img src=\"");
-	        result=result.replace("]", "\"/>");
-	        textView.setText(Html.fromHtml(result,new HtmlImageGetter(mContext,new Float(textView.getTextSize()).intValue()),null));
+	        HexUtil.populateTextViewWithHexHtml(textView, result);
         }
     }
 
