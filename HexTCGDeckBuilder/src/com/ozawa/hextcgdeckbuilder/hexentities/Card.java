@@ -415,16 +415,16 @@ public class Card extends AbstractCard {
 						top += image.getHeight() + padding;
 					}
 				}else{
-					int width = templateImage.getWidth() / thumbnailTemplateWidth;
-					int height = templateImage.getHeight() / thumbnailTemplateHeigth;
-					allThresholds = Bitmap.createBitmap(width*18, height*300, Bitmap.Config.ARGB_8888);
+					int width = templateImage.getWidth();
+					int height = templateImage.getHeight();
+					allThresholds = Bitmap.createBitmap((width*18) / thumbnailTemplateWidth, (height*300)/thumbnailTemplateHeigth, Bitmap.Config.ARGB_8888);
 					
 					Canvas canvas = new Canvas(allThresholds);
 					canvas.drawColor(0, Mode.CLEAR);
 					int left = 0;
 					int top = 0;
-					int padding = height*12;
-					int dimensions = width*18;
+					int padding = height*12/thumbnailTemplateHeigth;
+					int dimensions = width*18 / thumbnailTemplateWidth;
 					for(Bitmap image : thresholds){	
 						image = Bitmap.createScaledBitmap(image, dimensions, dimensions, true);
 						canvas.drawBitmap(image, left, top, null);

@@ -2,6 +2,7 @@ package com.ozawa.hextcgdeckbuilder.UI;
 
 import java.lang.reflect.Field;
 
+import com.ozawa.hextcgdeckbuilder.HtmlImageGetter;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 import com.ozawa.hextcgdeckbuilder.hexentities.ResourceCard;
@@ -9,6 +10,7 @@ import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.text.Html;
 import android.widget.TextView;
 
 public class StringGetter extends AsyncTask<AbstractCard, Void, String> {
@@ -50,7 +52,9 @@ public class StringGetter extends AsyncTask<AbstractCard, Void, String> {
 	        if(suffix != null){
 	        	result.concat(suffix);
 	        }
-	        textView.setText(result);
+	        result=result.replace("[", "<img src=\"");
+	        result=result.replace("]", "\"/>");
+	        textView.setText(Html.fromHtml(result,new HtmlImageGetter(mContext,new Float(textView.getTextSize()).intValue()),null));
         }
     }
 

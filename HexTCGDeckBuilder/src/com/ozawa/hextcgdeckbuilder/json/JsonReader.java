@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -58,9 +59,13 @@ public class JsonReader {
     }
 
     
-    public SymbolTemplate[] deserializeJSONInputStreamToSymbolTemplates(InputStream jsonStream){
+    public HashMap<String,SymbolTemplate> deserializeJSONInputStreamToSymbolTemplates(InputStream jsonStream){
     	InputStreamReader reader = new InputStreamReader(jsonStream);
     	SymbolTemplate[] templates = gson.fromJson(reader, SymbolTemplate[].class);
-    	return templates;    
+    	HashMap<String,SymbolTemplate> result = new HashMap<String,SymbolTemplate>();
+    	for(SymbolTemplate template:templates){
+    		result.put(template.cardText, template);
+    	}
+    	return result;    
     }
 }

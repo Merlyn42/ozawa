@@ -3,6 +3,7 @@ package com.ozawa.hextcgdeckbuilder.UI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -21,34 +22,19 @@ public class SymbolTemplate {
 	public String imageName;
 	private Bitmap image;
 	
-	private static List<SymbolTemplate>	ALLTEMPLATES;
+	private static Map<String,SymbolTemplate>	ALLTEMPLATES;
 	
-	public static List<SymbolTemplate> getAllTemplates(Context context) {
+	public static Map<String, SymbolTemplate> getAllTemplates(Context context) {
 		if (ALLTEMPLATES == null) {
 			Resources res = context.getResources();
 			JsonReader jsonReader = new JsonReader(context);
-			ALLTEMPLATES = Arrays.asList(jsonReader.deserializeJSONInputStreamToSymbolTemplates(res.openRawResource(R.raw.symbols)));
+			ALLTEMPLATES = jsonReader.deserializeJSONInputStreamToSymbolTemplates(res.openRawResource(R.raw.symbols));
 		}		
 		return ALLTEMPLATES;
 	}
 	
-	public static SymbolTemplate findSymbolTemplate(String symbol, List<SymbolTemplate> templates){
-		ArrayList<SymbolTemplate> results = new ArrayList<SymbolTemplate>();
-		for (SymbolTemplate template : templates) {
-			if(template.cardText.equalsIgnoreCase(symbol)){
-				results.add(template);
-			}
-		}
-		if (results.size() > 1) {
-			System.err.println("More than one valid template found for symbol:" + symbol);
-			return null;
-		} else if (results.size() == 0) {
-			StringBuilder message = new StringBuilder("No valid card template found for card:");
-			message.append(symbol);			
-			System.err.println(message.toString());
-			return null;
-		}
-		return results.get(0);		
+	public static SymbolTemplate findSymbolTemplate(String symbol, Map<String,SymbolTemplate> templates){
+		return templates.get(symbol);
 	}
 	
 	public Bitmap getImage(Context context,int width, int height) {
