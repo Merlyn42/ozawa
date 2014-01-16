@@ -117,12 +117,12 @@ public class Card extends AbstractCard {
         
         Bitmap threshold = getCardThresholdImage(context, template, templateImage);
         if(template.fullCard){
-        	drawFullImageText(combine,templateImage,paint,resources,context);
+        	drawFullImageText(combine,templateImage,paint,resources,context,template);
         	if(threshold != null){
         		combine.drawBitmap(threshold, (templateImage.getWidth() / 14), (templateImage.getHeight() / 9.5f), null);
         	}
         } else {
-        	drawThumbnailText(combine,templateImage,paint);   
+        	drawThumbnailText(combine,templateImage,paint,template);   
         	if(threshold != null){
         		combine.drawBitmap(threshold, (templateImage.getWidth() / 14), (templateImage.getHeight() / 4.2f), null);
         	}
@@ -132,21 +132,21 @@ public class Card extends AbstractCard {
         return result;
     }
 	
-	private void drawThumbnailText(Canvas combine,Bitmap templateImage,Paint paint){
-		paint.setTextSize(32f);
+	private void drawThumbnailText(Canvas combine,Bitmap templateImage,Paint paint,CardTemplate template){
+		float imageHeight = templateImage.getHeight();
+		paint.setTextSize(imageHeight * template.nameFontRatio);
         combine.drawText(getShortenedText(name,19), templateImage.getWidth() / 3.3f , templateImage.getHeight() / 11f, paint);
-        paint.setTextSize(34f);
+        paint.setTextSize(imageHeight * template.costFontRatio);
         if(resourceCost > 9){
         	combine.drawText("" + resourceCost, templateImage.getWidth() / 8.5f, templateImage.getHeight() / 7.5f, paint);
         } else{
         	combine.drawText("" + resourceCost, templateImage.getWidth() / 7.2f, templateImage.getHeight() / 7.5f, paint);
         }
         if (cardType[0].equals(CardType.TROOP)) {
-        	paint.setTextSize(36f);
             combine.drawText(baseAttackValue, templateImage.getWidth() / 9, templateImage.getHeight() - (templateImage.getHeight() / 11f), paint);
             combine.drawText(baseHealthValue, templateImage.getWidth() - (templateImage.getWidth() / 6.8f), templateImage.getHeight() - (templateImage.getHeight() / 11f), paint);
         } else{
-        	paint.setTextSize(25f);
+        	paint.setTextSize(imageHeight * template.typeFontRatio);
         	String cardTypes = "";
         	for(int i = 0; i < cardType.length ;i++){
         		cardTypes += cardType[i].getCardType();
@@ -155,13 +155,13 @@ public class Card extends AbstractCard {
         	}
         	if(!cardSubtype.equals(""))
         		cardTypes += " -- " + cardSubtype;
-
     		combine.drawText(getShortenedText(cardTypes, 24), templateImage.getWidth() / 11, templateImage.getHeight() - (templateImage.getHeight() / 5.9f), paint);
         }
 	}
 	
-	private void drawFullImageText(Canvas combine,Bitmap templateImage,Paint paint, Resources resources, Context context) {
-		paint.setTextSize(40f);	
+	private void drawFullImageText(Canvas combine,Bitmap templateImage,Paint paint, Resources resources, Context context,CardTemplate template) {
+		float imageHeight = templateImage.getHeight();
+		paint.setTextSize(imageHeight * template.nameFontRatio);	
 		combine.drawText(name, templateImage.getWidth() / 6 , templateImage.getHeight() / 14, paint);        
         if(resourceCost > 9){
         	combine.drawText("" + resourceCost, templateImage.getWidth() / 14f, templateImage.getHeight() / 14, paint);
@@ -172,13 +172,12 @@ public class Card extends AbstractCard {
         if (cardType[0].equals(CardType.TROOP)) {
             combine.drawText(baseAttackValue, templateImage.getWidth() / 17, templateImage.getHeight() - (templateImage.getHeight() / 25), paint);
             combine.drawText(baseHealthValue, templateImage.getWidth() - (templateImage.getWidth() / 11.5f), templateImage.getHeight() - (templateImage.getHeight() / 25), paint);
-        	paint.setTextSize(22f);
         }
-        
-        paint.setTextSize(24f);        
+ 
+        paint.setTextSize(imageHeight * template.costFontRatio);        
         drawGameText(gameText,64,combine,templateImage,paint,resources,context);        
-                
-        paint.setTextSize(27f);
+
+        paint.setTextSize(imageHeight * template.typeFontRatio);
 		String cardTypes = "";
 		for (int i = 0; i < cardType.length; i++) {
 			cardTypes += cardType[i].getCardType();

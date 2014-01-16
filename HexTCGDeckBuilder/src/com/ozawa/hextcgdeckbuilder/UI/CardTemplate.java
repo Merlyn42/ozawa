@@ -31,8 +31,12 @@ public class CardTemplate {
 	public boolean						isTroop;
 	public ColorFlag					color;
 	public boolean						fullCard;
+	public float						nameFontRatio;
+	public float						costFontRatio;
+	public float						typeFontRatio;
 	private Bitmap						image;
 	private int							cachedImageWidthLimit;
+	
 
 	private static List<CardTemplate>	ALLTEMPLATES;
 
