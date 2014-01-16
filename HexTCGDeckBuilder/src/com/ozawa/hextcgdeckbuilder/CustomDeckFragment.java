@@ -217,7 +217,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 				// Remove cards from custom deck
-				removeCardFromCustomDeck(position);
+				makeRemoveMultipleCardsDialog(position);
 				return true;
 			}
 
@@ -247,13 +247,27 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 				// Remove cards from custom deck
-				removeCardFromCustomDeck(position);
+				makeRemoveMultipleCardsDialog(position);
 				return true;
 			}
 
 		});
 
 		setIsGridView(false);
+	}
+	
+	private boolean makeRemoveMultipleCardsDialog(int position){
+		if (position >= 0) {
+			AbstractCard card = isGridView == true ? imAdapter.masterDeck.get(position) : lvAdapter.masterDeck.get(position);
+
+			RemoveMultipleCardsDialogFragment removeMultipleCardsDialog = new RemoveMultipleCardsDialogFragment();
+			removeMultipleCardsDialog.card = card;
+			removeMultipleCardsDialog.mainActivity = ((DeckUIActivity) mainActivity);
+			removeMultipleCardsDialog.fragment = this;
+			removeMultipleCardsDialog.show(mainActivity.getSupportFragmentManager(), "Add Multiple Cards");
+			return true;
+		}
+		return false;
 	}
 
 	public void setIsGridView(boolean isGridView) {
@@ -300,9 +314,10 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 				} else {
 					customDeck.remove(card);
 					mainActivity.customDeckCardList.remove(card);
+					reloadCustomDeckView();
 				}
 			}
-			reloadCustomDeckView();
+			
 			Toast.makeText(mainActivity.getApplicationContext(), card.name + " removed to custom deck.", Toast.LENGTH_SHORT).show();
 		}
 	}

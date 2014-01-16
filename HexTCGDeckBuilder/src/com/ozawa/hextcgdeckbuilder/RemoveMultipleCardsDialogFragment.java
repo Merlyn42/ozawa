@@ -1,4 +1,5 @@
 package com.ozawa.hextcgdeckbuilder;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -21,48 +22,47 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
-
 @SuppressLint("NewApi")
-public class AddMultipleCardsDialogFragment extends DialogFragment {
-	Button addCards;
+public class RemoveMultipleCardsDialogFragment extends DialogFragment {
+	Button removeCards;
 	Button cancel;
 	DeckUIActivity mainActivity;
 	NumberPicker picker;
-	
+
 	AbstractCard card;
-	
-	public AddMultipleCardsDialogFragment(){
+	public CustomDeckFragment fragment;
+
+	public RemoveMultipleCardsDialogFragment() {
 	}
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		final Dialog dialog = new Dialog(getActivity());
 
-		dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		dialog.setContentView(R.layout.add_multiple_cards_popup);
 
-		dialog.getWindow().setBackgroundDrawable(
-				new ColorDrawable(0xaa000000));
+		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0xaa000000));
 
-		addCards = (Button) dialog.findViewById(R.id.buttonAddCards);
+		removeCards = (Button) dialog.findViewById(R.id.buttonAddCards);
+		removeCards.setText("Remove Cards");
 		cancel = (Button) dialog.findViewById(R.id.buttonCancelAddCards);
 		picker = (NumberPicker) dialog.findViewById(R.id.addCardsNumberPicker);
 
 		dialog.setTitle("Add Multiple Cards");
-		
+
 		picker.setMaxValue(40);
 		picker.setMinValue(1);
 		picker.setValue(4);
-		
-		addCards.setOnClickListener(new OnClickListener() {
+
+		removeCards.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-				addCardsToCustomDeck();
+				removeCardsFromCustomDeck();
 				dialog.dismiss();
-				
+
 			}
 		});
 
@@ -76,24 +76,25 @@ public class AddMultipleCardsDialogFragment extends DialogFragment {
 
 		return dialog;
 	}
-	
+
 	/**
 	 * Add cards to the custom deck
 	 * 
 	 * @param card
 	 */
-	private void addCardsToCustomDeck() {
-		{
-			if(mainActivity.customDeck.get(card) == null){
-				mainActivity.customDeck.put(card, picker.getValue());
-				mainActivity.customDeckCardList.add(card);
-			}else{
-				mainActivity.customDeck.put(card, mainActivity.customDeck.get(card) + picker.getValue());
-			}		
-			mainActivity.deckChanged = true;
-			Toast.makeText(mainActivity.getApplicationContext(), card.name + " added to custom deck.", Toast.LENGTH_SHORT).show();
+	private void removeCardsFromCustomDeck() {
+		HashMap<AbstractCard, Integer> customDeck = mainActivity.customDeck;
+		if (customDeck.get(card) != null) {
+			int cardCount = customDeck.get(card);
+			if (cardCount > picker.getValue()) {
+				customDeck.put(card, customDeck.get(card) - picker.getValue());
+			} else {
+				customDeck.remove(card);
+				mainActivity.customDeckCardList.remove(card);
+				fragment.reloadCustomDeckView();
+			}
 		}
+		Toast.makeText(mainActivity.getApplicationContext(),picker.getValue() +" "+ card.name+(picker.getValue()>1?"s":"") + " removed from custom deck.", Toast.LENGTH_SHORT).show();
 	}
-	
 
 }
