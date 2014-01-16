@@ -47,6 +47,19 @@
      	</android.gesture.GestureOverlayView>
     </FrameLayout>
     
+    <RelativeLayout
+        android:id="@+id/cardAnimationLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+        
+        <ImageView
+            android:id="@+id/cardAnimation"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:src="@drawable/back"
+            android:contentDescription="Card Animation."/>
+    </RelativeLayout>
+    
     <fragment android:id="@+id/custom_deck_navigation_drawer"
         android:layout_width="@dimen/navigation_drawer_width"
         android:layout_height="match_parent"

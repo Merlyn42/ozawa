@@ -102,17 +102,15 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
         gestureOverlayView.setGestureVisible(false);
         setUpGridView(); // Set up the card grid view
         
-        RelativeLayout cardAnimationView = new RelativeLayout(mainActivity);
+        /**
+         * Card Animation
+         */
+        RelativeLayout cardAnimationView = (RelativeLayout) uiLayout.findViewById(R.id.cardAnimationLayout);
         cardBackDimension = HexUtil.getScreenWidth(mainActivity) / 3;
-        cardBack = new ImageView(mainActivity);
+        cardBack = (ImageView) cardAnimationView.findViewById(R.id.cardAnimation);
 		cardBack.setImageResource(R.drawable.back);  
-		//cardBack.setMaxWidth(cardBackDimension);
-		//cardBack.setMaxHeight(cardBackDimension);
-		//DrawerLayout.LayoutParams layoutParams = new DrawerLayout.LayoutParams(cardBackDimension, cardBackDimension);
-		cardBack.setLayoutParams(new DrawerLayout.LayoutParams(cardBackDimension, cardBackDimension));
+		cardBack.setLayoutParams(new RelativeLayout.LayoutParams(cardBackDimension, cardBackDimension));
 		cardBack.setVisibility(View.INVISIBLE);
-		cardAnimationView.addView(cardBack);
-		uiLayout.addView(cardAnimationView);
 		
         return uiLayout;
     }
@@ -165,8 +163,10 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
                         	position = listView.pointToPosition(x,y);
                         }
                         
-                        addCardToCustomDeck(position);
-                        throwCardAnimation(x-(cardBackDimension/2), -cardBack.getLayoutParams().width, y-(cardBackDimension/2), (int) y - (y /3));
+                        if(position >= 0){
+                        	addCardToCustomDeck(position);
+                        	throwCardAnimation(x-(cardBackDimension/2), -cardBack.getLayoutParams().width, y-(cardBackDimension/2), (int) y - (y /3));
+                        }
                     }else if(prediction.name.equalsIgnoreCase("swipe right")){
                     	CustomViewPager pager = (CustomViewPager) mainActivity.findViewById(R.id.pager);
                     	pager.setCurrentItem(pager.getCurrentItem()-1); // ******* TEMPORARY FIX FOR SLIDING BETWEEN PAGES
@@ -286,29 +286,25 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 	 * @param card
 	 */
 	private void addCardToCustomDeck(int position) {
-		if(position >= 0){
-			AbstractCard card = isGridView == true ? imAdapter.masterDeck.get(position) : lvAdapter.masterDeck.get(position);
-			HashMap<AbstractCard, Integer> customDeck = ((DeckUIActivity) mainActivity).customDeck;
-			if(customDeck.get(card) == null){
-				customDeck.put(card, 1);
-				((DeckUIActivity) mainActivity).customDeckCardList.add(card);
-			}else{
-				customDeck.put(card, customDeck.get(card) + 1);
-			}		
-			((DeckUIActivity) mainActivity).deckChanged = true;
-			Toast.makeText(mainActivity.getApplicationContext(), card.name + " added to custom deck.", Toast.LENGTH_SHORT).show();
-		}
+		
+		AbstractCard card = isGridView == true ? imAdapter.masterDeck.get(position) : lvAdapter.masterDeck.get(position);
+		HashMap<AbstractCard, Integer> customDeck = ((DeckUIActivity) mainActivity).customDeck;
+		if(customDeck.get(card) == null){
+			customDeck.put(card, 1);
+			((DeckUIActivity) mainActivity).customDeckCardList.add(card);
+		}else{
+			customDeck.put(card, customDeck.get(card) + 1);
+		}		
+		((DeckUIActivity) mainActivity).deckChanged = true;
+		//Toast.makeText(mainActivity.getApplicationContext(), card.name + " added to custom deck.", Toast.LENGTH_SHORT).show();
+		
 	}
 	
-	private void throwCardAnimation(int fromX, int toX, int fromY, int toY){
-		AnimationSet cardAnimationSet = new AnimationSet(false);
-		RotateAnimation rotateCard = new RotateAnimation(0, -90, cardBackDimension /2, cardBackDimension /2);
-		
-		rotateCard.setDuration(400);
+	public void throwCardAnimation(int fromX, int toX, int fromY, int toY){
 		TranslateAnimation moveCard = new TranslateAnimation(fromX, toX, fromY, toY);
 		moveCard.setDuration(400);
 		moveCard.setFillAfter(true);
-		cardAnimationSet.setAnimationListener(new AnimationListener() {    
+		moveCard.setAnimationListener(new AnimationListener() {    
 			@Override
 			public void onAnimationEnd(Animation animation) {
 				cardBack.setVisibility(View.INVISIBLE);
@@ -322,9 +318,6 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 				cardBack.setVisibility(View.VISIBLE);
 			}
 	    });
-		cardAnimationSet.addAnimation(moveCard);
-		//cardAnimationSet.addAnimation(rotateCard);
-		cardAnimationSet.setDuration(400);
-	    cardBack.startAnimation(cardAnimationSet);
+	    cardBack.startAnimation(moveCard);
 	}
 }
