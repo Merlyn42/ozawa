@@ -1,7 +1,6 @@
 package com.ozawa.hextcgdeckbuilder;
 
 import android.app.Dialog;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -36,8 +35,7 @@ public class NewDeckDialogFragment extends DialogFragment {
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		dialog.setContentView(R.layout.new_deck_popup);
 
-		dialog.getWindow().setBackgroundDrawable(
-				new ColorDrawable(Color.TRANSPARENT));
+		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0xaa000000));
 
 		saveNewDeck = (Button) dialog.findViewById(R.id.buttonSaveNewDeck);
 		cancel = (Button) dialog.findViewById(R.id.buttonCancelSaveNewDeck);
