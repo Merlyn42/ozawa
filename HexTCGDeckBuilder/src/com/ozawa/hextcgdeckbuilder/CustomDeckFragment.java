@@ -254,7 +254,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 		listView = (ListView) uiLayout.findViewById(R.id.custom_deck_deck_list);
 
 		// Getting adapter by passing xml data ArrayList
-		lvAdapter = new DeckListViewAdapter(mainActivity, cardViewer.getAdapter().masterDeck);
+		lvAdapter = new DeckListViewAdapter(mainActivity, cardViewer.getAdapter().masterDeck,mainActivity.customDeck);
 		cardViewer.setAdapter(lvAdapter);
 		listView.setAdapter(cardViewer.getAdapter());
 		// Click event for single list row

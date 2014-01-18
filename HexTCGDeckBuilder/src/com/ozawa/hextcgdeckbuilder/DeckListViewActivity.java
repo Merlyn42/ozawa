@@ -57,7 +57,7 @@ public class DeckListViewActivity extends ActionBarActivity implements Navigatio
         list=(ListView)findViewById(R.id.deck_list);
 
         // Getting adapter by passing xml data ArrayList
-        adapter=new DeckListViewAdapter(this, deck);
+        adapter=new DeckListViewAdapter(this, deck,null);
         list.setAdapter(adapter);
 
         // Click event for single list row

@@ -44,7 +44,9 @@
         android:textColor="@drawable/list_selector_text_color"
         android:textSize="10dip"
         android:layout_marginTop="1dip"
-        android:layout_toRightOf="@+id/portrait_border" />
+        android:layout_toRightOf="@+id/portrait_border"
+        android:layout_toLeftOf="@+id/tvCardAttack" />
+    	
 	
    	<TextView
         android:id="@+id/tvCardCost"
@@ -117,6 +119,19 @@
         android:layout_toLeftOf="@+id/imCardAttack"
         android:layout_marginRight="5dip"
         android:textStyle="bold" />
+    
+    <TextView
+        android:id="@+id/tvCardCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/portrait_border"
+        android:layout_marginTop="1dip"
+        android:layout_toLeftOf="@+id/gametext"
+        android:gravity="left"
+        android:textColor="@drawable/list_selector_text_color"
+        android:textSize="10dip" />
+
     <!-- Rightend Duration -->
     <!-- <TextView
         android:id="@+id/duration"

@@ -31,10 +31,10 @@ import java.util.Map;
  * Created by dkerr on 12/16/13.
  */
 public class ImageAdapter extends BaseAdapter {
-    private Context mContext;
+    protected Context mContext;
     public List<AbstractCard> masterDeck;
     private static int cardWidth = 200;
-    private Bitmap back;
+    protected Bitmap back;
     private static int numberOfColumns = 3;
     private static int differenceInHeight = 26;
     Map<AbstractCard, Integer> customDeck;

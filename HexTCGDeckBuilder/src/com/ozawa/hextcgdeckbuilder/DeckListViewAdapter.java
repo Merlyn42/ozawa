@@ -1,6 +1,7 @@
 package com.ozawa.hextcgdeckbuilder;
 
 import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -24,15 +25,11 @@ import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 public class DeckListViewAdapter extends ImageAdapter{
 
-    private Context mContext;
     private static LayoutInflater inflater=null;
-    private Bitmap back;
 
-    public DeckListViewAdapter(Context c, List<AbstractCard> deck) {
-        mContext = c;
+    public DeckListViewAdapter(Context c, List<AbstractCard> deck, Map<AbstractCard, Integer> customDeck) {
+        super(c,deck,customDeck);
         inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        this.masterDeck = deck;
-        back= BitmapFactory.decodeResource(c.getResources(), R.drawable.back);
     }
 
     @Override
@@ -58,6 +55,7 @@ public class DeckListViewAdapter extends ImageAdapter{
         TextView cardCost = (TextView)vi.findViewById(R.id.tvCardCost);
         TextView cardAttack = (TextView)vi.findViewById(R.id.tvCardAttack);
         TextView cardDefense = (TextView)vi.findViewById(R.id.tvCardDefense);
+        TextView cardCount = (TextView)vi.findViewById(R.id.tvCardCount);
         ImageView cardThreshold = (ImageView) vi.findViewById(R.id.cardthreshold);
         ImageView thumb_image = (ImageView)vi.findViewById(R.id.list_image);
         ImageView imCardAttack = (ImageView)vi.findViewById(R.id.imCardAttack);
@@ -128,6 +126,9 @@ public class DeckListViewAdapter extends ImageAdapter{
         buildCardTextView(card, cardDefense, "baseHealthValue", null, null);
         buildCardThreshold(card, cardThreshold);
         buildCardImage(card, thumb_image);
+        if(customDeck!=null&&customDeck.get(card)!=null){
+        	cardCount.setText("Count:"+customDeck.get(card));
+        }
         return vi;
     }
 

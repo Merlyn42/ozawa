@@ -235,7 +235,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 		listView = (ListView) uiLayout.findViewById(R.id.master_deck_deck_list);
 		listView.setHapticFeedbackEnabled(true);        
         // Getting adapter by passing xml data ArrayList
-        lvAdapter=new DeckListViewAdapter(mainActivity, cardViewer.getAdapter().masterDeck);
+        lvAdapter=new DeckListViewAdapter(mainActivity, cardViewer.getAdapter().masterDeck,null);
 		cardViewer.setAdapter(lvAdapter);
 		listView.setAdapter(cardViewer.getAdapter());
         // Click event for single list row
