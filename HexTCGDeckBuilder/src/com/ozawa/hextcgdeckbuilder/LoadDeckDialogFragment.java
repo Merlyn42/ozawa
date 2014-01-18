@@ -8,7 +8,6 @@ import com.ozawa.hextcgdeckbuilder.database.DatabaseHandler;
 import com.ozawa.hextcgdeckbuilder.hexentities.Deck;
 
 import android.app.Dialog;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -43,11 +42,10 @@ public class LoadDeckDialogFragment extends DialogFragment {
 		final Dialog dialog = new Dialog(getActivity());
 		DatabaseHandler dbHandler = new DatabaseHandler(getActivity());
 		List<Deck> allDecks = dbHandler.getAllDecks();
-		//ArrayList<String> deckNames = getArguments().getStringArrayList(DECK_NAMES);
 		dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		dialog.setContentView(R.layout.load_deck_popup);
 		
-		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0xaa000000));
 		dialog.setTitle("Load Deck");
 		
 		LoadDeckArrayAdapter adapter = new LoadDeckArrayAdapter(getActivity(), R.layout.load_deck_popup, allDecks);

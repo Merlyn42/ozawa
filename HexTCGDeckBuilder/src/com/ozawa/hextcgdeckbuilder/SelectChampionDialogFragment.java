@@ -11,11 +11,9 @@ import com.ozawa.hextcgdeckbuilder.hexentities.Deck;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 import android.app.Dialog;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.text.Html;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,7 +22,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -55,7 +52,7 @@ public class SelectChampionDialogFragment extends DialogFragment {
 		dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		dialog.setContentView(R.layout.select_champion_popup);
 		
-		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0xaa000000));
 		dialog.setTitle("Load Deck");
 		
 		SelectChampionArrayAdapter adapter = new SelectChampionArrayAdapter(getActivity(), R.layout.select_champion_popup, allChampions);
