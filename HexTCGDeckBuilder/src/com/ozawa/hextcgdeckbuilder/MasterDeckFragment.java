@@ -244,7 +244,12 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-            	
+				// Sending image id to FullScreenActivity
+				Intent i = new Intent(mainActivity.getApplicationContext(), FullImageActivity.class);
+				// passing array index
+				i.putExtra("id", position);
+				i.putExtra("isMaster", true);
+				startActivity(i);
             }
         });
 		
