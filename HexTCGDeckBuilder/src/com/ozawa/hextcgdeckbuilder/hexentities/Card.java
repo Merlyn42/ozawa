@@ -134,14 +134,13 @@ public class Card extends AbstractCard {
 	
 	private void drawThumbnailText(Canvas combine,Bitmap templateImage,Paint paint,CardTemplate template){
 		float imageHeight = templateImage.getHeight();
-		float tempRatio = 0.06f;
-		paint.setTextSize(imageHeight * tempRatio);
+		paint.setTextSize(imageHeight * template.nameFontRatio);
         combine.drawText(getShortenedText(name,17), templateImage.getWidth() / 3.3f , templateImage.getHeight() / 11f, paint);
         paint.setTextSize(imageHeight * template.costFontRatio);
         if(resourceCost > 9){
-        	combine.drawText("" + resourceCost, templateImage.getWidth() / 8.5f, templateImage.getHeight() / 7.5f, paint);
+        	combine.drawText("" + resourceCost, templateImage.getWidth() / 9.5f, templateImage.getHeight() / 7.2f, paint);
         } else{
-        	combine.drawText("" + resourceCost, templateImage.getWidth() / 7.2f, templateImage.getHeight() / 7.5f, paint);
+        	combine.drawText("" + resourceCost, templateImage.getWidth() / 7.7f, templateImage.getHeight() / 7.2f, paint);
         }
         if (cardType[0].equals(CardType.TROOP)) {
             combine.drawText(baseAttackValue, templateImage.getWidth() / 9, templateImage.getHeight() - (templateImage.getHeight() / 11f), paint);
@@ -167,10 +166,12 @@ public class Card extends AbstractCard {
 		float tempRatio = template.nameFontRatio;
 		paint.setTextSize(imageHeight * tempRatio);	
 		combine.drawText(name, templateImage.getWidth() / 6 , templateImage.getHeight() / 14, paint);        
+		float tempHeight = 14;
+		float tempWdith = 14;
         if(resourceCost > 9){
-        	combine.drawText("" + resourceCost, templateImage.getWidth() / 14f, templateImage.getHeight() / 14, paint);
+        	combine.drawText("" + resourceCost, templateImage.getWidth() / 15, templateImage.getHeight() / 15, paint);
         } else{
-        	combine.drawText("" + resourceCost, templateImage.getWidth() / 13f, templateImage.getHeight() / 14, paint);
+        	combine.drawText("" + resourceCost, templateImage.getWidth() / 13, templateImage.getHeight() / 15, paint);
         }
         
         if (cardType[0].equals(CardType.TROOP)) {
@@ -221,7 +222,7 @@ public class Card extends AbstractCard {
 					displayText = "" + word.substring(pLocation, word.length()) + " ";
 					lineCount++;
 				}else{
-					if((displayText + word).length() >= lengths.get(lineCount)){					
+					if((displayText + word).length() > lengths.get(lineCount)){					
 						drawTextWithImages(displayText,templateImage,combine,paint,resources,context);
 						displayText = "";
 						line += .06f;
@@ -293,19 +294,17 @@ public class Card extends AbstractCard {
 				}else{
 					Bitmap symbolImage;
 					if(stuff[i].equalsIgnoreCase("BASIC") ){
-						int basicSize = (int) paint.measureText("BASIC");
-						symbolImage = getSymbolImage(stuff[i], context, basicSize, height);						
+						symbolImage = getSymbolImage(stuff[i], context,height);						
 					} else if(stuff[i].startsWith("L") && i <= stuff.length - 2 && stuff[i+2].startsWith("R")){
-						int basicSize = (int) paint.measureText("SYM");
-						symbolImage = getSymbolImage(stuff[i], context, basicSize, basicSize);
+						symbolImage = getSymbolImage(stuff[i], context,height);
+						if(stuff[i+1].equals("/"))
+							stuff[i+1] = "";
 					}else if(stuff[i].startsWith("R") && i >= 2 && stuff[i-2].startsWith("L")){
-						int basicSize = (int) paint.measureText("SYM");
-						symbolImage = getSymbolImage(stuff[i], context, basicSize, basicSize);
-					}else if(stuff[i].equalsIgnoreCase("ONE-SHOT")){
-						int basicSize = (int) paint.measureText("BASIC");
-						symbolImage = getSymbolImage(stuff[i], context, basicSize, height);
+						symbolImage = getSymbolImage(stuff[i], context,height);
+					}else if(stuff[i].equalsIgnoreCase("ONE-SHOT")){						
+						symbolImage = getSymbolImage(stuff[i], context,height);
 					}else{
-						symbolImage = getSymbolImage(stuff[i], context,height,height);						
+						symbolImage = getSymbolImage(stuff[i], context,height);						
 					}
 					combine.drawBitmap(symbolImage, width, templateImage.getHeight() / (1.46f - line), paint);
 					width += symbolImage.getWidth();
@@ -322,10 +321,10 @@ public class Card extends AbstractCard {
 		return displayTextImage;
 	}
 	
-	private Bitmap getSymbolImage(String symbol, Context context, int width, int height){		
+	private Bitmap getSymbolImage(String symbol, Context context, int height){		
 		SymbolTemplate symTemp = SymbolTemplate.findSymbolTemplate(symbol, SymbolTemplate.getAllTemplates(context));		 
 		if(symTemp != null){
-			Bitmap symbolImage = symTemp.getImage(context,width,height);
+			Bitmap symbolImage = symTemp.getImage(context,(int)(height * symTemp.sizeRatio),height);
 			return symbolImage;
 		}
 		return BitmapFactory.decodeResource(context.getResources(), R.drawable.blank);				
