@@ -134,8 +134,9 @@ public class Card extends AbstractCard {
 	
 	private void drawThumbnailText(Canvas combine,Bitmap templateImage,Paint paint,CardTemplate template){
 		float imageHeight = templateImage.getHeight();
-		paint.setTextSize(imageHeight * template.nameFontRatio);
-        combine.drawText(getShortenedText(name,19), templateImage.getWidth() / 3.3f , templateImage.getHeight() / 11f, paint);
+		float tempRatio = 0.06f;
+		paint.setTextSize(imageHeight * tempRatio);
+        combine.drawText(getShortenedText(name,17), templateImage.getWidth() / 3.3f , templateImage.getHeight() / 11f, paint);
         paint.setTextSize(imageHeight * template.costFontRatio);
         if(resourceCost > 9){
         	combine.drawText("" + resourceCost, templateImage.getWidth() / 8.5f, templateImage.getHeight() / 7.5f, paint);
@@ -145,7 +146,7 @@ public class Card extends AbstractCard {
         if (cardType[0].equals(CardType.TROOP)) {
             combine.drawText(baseAttackValue, templateImage.getWidth() / 9, templateImage.getHeight() - (templateImage.getHeight() / 11f), paint);
             combine.drawText(baseHealthValue, templateImage.getWidth() - (templateImage.getWidth() / 6.8f), templateImage.getHeight() - (templateImage.getHeight() / 11f), paint);
-        } else{
+        } else{        	
         	paint.setTextSize(imageHeight * template.typeFontRatio);
         	String cardTypes = "";
         	for(int i = 0; i < cardType.length ;i++){
@@ -155,13 +156,16 @@ public class Card extends AbstractCard {
         	}
         	if(!cardSubtype.equals(""))
         		cardTypes += " -- " + cardSubtype;
-    		combine.drawText(getShortenedText(cardTypes, 24), templateImage.getWidth() / 11, templateImage.getHeight() - (templateImage.getHeight() / 5.9f), paint);
+        	
+        	float tempDivider = 6.2f;
+    		combine.drawText(getShortenedText(cardTypes, 24), templateImage.getWidth() / 11, templateImage.getHeight() - (templateImage.getHeight() / tempDivider), paint);
         }
 	}
 	
 	private void drawFullImageText(Canvas combine,Bitmap templateImage,Paint paint, Resources resources, Context context,CardTemplate template) {
 		float imageHeight = templateImage.getHeight();
-		paint.setTextSize(imageHeight * template.nameFontRatio);	
+		float tempRatio = template.nameFontRatio;
+		paint.setTextSize(imageHeight * tempRatio);	
 		combine.drawText(name, templateImage.getWidth() / 6 , templateImage.getHeight() / 14, paint);        
         if(resourceCost > 9){
         	combine.drawText("" + resourceCost, templateImage.getWidth() / 14f, templateImage.getHeight() / 14, paint);
@@ -173,11 +177,11 @@ public class Card extends AbstractCard {
             combine.drawText(baseAttackValue, templateImage.getWidth() / 17, templateImage.getHeight() - (templateImage.getHeight() / 25), paint);
             combine.drawText(baseHealthValue, templateImage.getWidth() - (templateImage.getWidth() / 11.5f), templateImage.getHeight() - (templateImage.getHeight() / 25), paint);
         }
- 
-        paint.setTextSize(imageHeight * template.costFontRatio);        
+        tempRatio = template.costFontRatio;
+        paint.setTextSize(imageHeight * tempRatio);        
         drawGameText(gameText,64,combine,templateImage,paint,resources,context);        
-
-        paint.setTextSize(imageHeight * template.typeFontRatio);
+        tempRatio = template.typeFontRatio;
+        paint.setTextSize(imageHeight * tempRatio);
 		String cardTypes = "";
 		for (int i = 0; i < cardType.length; i++) {
 			cardTypes += cardType[i].getCardType();
