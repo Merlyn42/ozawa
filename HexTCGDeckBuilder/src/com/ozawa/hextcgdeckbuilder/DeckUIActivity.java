@@ -32,7 +32,7 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
     private TabPagerAdapter mAdapter;
     public static ActionBar actionBar;
     // Tab titles
-    private String[] tabs = {"Custom Deck", "Master Deck"};
+    private String[] tabs = {"Custom Deck", "Card Library"};
     
     // Current Custom Deck
     public ArrayList<AbstractCard> customDeckCardList;
@@ -55,7 +55,6 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 	    customDeck = new HashMap<AbstractCard, Integer>();
 	    customDeckCardList = new ArrayList<AbstractCard>(customDeck.keySet());
 	    
-	    Bundle bundle = getIntent().getExtras();
 	    dbHandler = new DatabaseHandler(this);
 	    
 	    viewPager.setAdapter(mAdapter);
@@ -128,24 +127,6 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
         }
 
     }
-        
-	/*@Override
-	public void onTabReselected(Tab arg0, FragmentTransaction arg1) {
-		// TODO Auto-generated method stub
-		super.onTabReselected(arg0, arg1);
-		
-	}
-
-	@Override
-	public void onTabSelected(Tab tab, FragmentTransaction fragTransaction) {
-		viewPager.setCurrentItem(tab.getPosition()); // Change to the tab when clicked
-	}
-
-	@Override
-	public void onTabUnselected(Tab arg0, FragmentTransaction arg1) {
-		// TODO Auto-generated method stub
-		
-	}*/
 
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
@@ -165,7 +146,7 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 				mAdapter.customDeckFragment.reloadCustomDeckView();
 				deckChanged = false;
 				updateCustomDeckData();
-				actionBar.getTabAt(0).setText("Custom Deck - " + deckName);
+				actionBar.getTabAt(0).setText(deckName);
 				return true;				
 			}
 		}
@@ -178,7 +159,7 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 			Deck loadedDeck = mAdapter.customDeckFragment.loadDeck(deckID);
 			if(loadedDeck.getID().contentEquals(deckID)){
 				updateCustomDeck(loadedDeck);
-				actionBar.getTabAt(0).setText("Custom Deck - " + loadedDeck.name);
+				actionBar.getTabAt(0).setText(loadedDeck.name);
 				mAdapter.customDeckFragment.reloadCustomDeckView();
 				updateCustomDeckData();
 				return true;
@@ -251,9 +232,7 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 
 	@Override
 	public void onTabReselected(Tab arg0,
-			android.support.v4.app.FragmentTransaction arg1) {
-		// TODO Auto-generated method stub
-		
+			android.support.v4.app.FragmentTransaction arg1) {		
 	}
 
 	@Override
@@ -265,9 +244,7 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 
 	@Override
 	public void onTabUnselected(Tab arg0,
-			android.support.v4.app.FragmentTransaction arg1) {
-		// TODO Auto-generated method stub
-		
+			android.support.v4.app.FragmentTransaction arg1) {		
 	}
 
 }

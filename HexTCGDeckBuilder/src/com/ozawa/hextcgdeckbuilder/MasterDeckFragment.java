@@ -170,7 +170,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
                     }else if(prediction.name.equalsIgnoreCase("swipe right")){
                     	CustomViewPager pager = (CustomViewPager) mainActivity.findViewById(R.id.pager);
                     	pager.setCurrentItem(pager.getCurrentItem()-1); // ******* TEMPORARY FIX FOR SLIDING BETWEEN PAGES
-                    }else if(prediction.name.equalsIgnoreCase("clear")){
+                    }else if(prediction.name.equalsIgnoreCase("anti clockwise") || prediction.name.equalsIgnoreCase("clockwise")){
                     	cardViewer.clearFilter();
                     }
                 }
@@ -244,7 +244,12 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-            	
+				// Sending image id to FullScreenActivity
+				Intent i = new Intent(mainActivity.getApplicationContext(), FullImageActivity.class);
+				// passing array index
+				i.putExtra("id", position);
+				i.putExtra("isMaster", true);
+				startActivity(i);
             }
         });
 		
