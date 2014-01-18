@@ -5,9 +5,9 @@ import com.ozawa.hextcgdeckbuilder.MasterDeckFragment;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
-public class TabPagerAdapter extends FragmentPagerAdapter{
+public class TabPagerAdapter extends FragmentStatePagerAdapter{
 	
 	private static final int tabCount = 2;
 	public CustomDeckFragment customDeckFragment;

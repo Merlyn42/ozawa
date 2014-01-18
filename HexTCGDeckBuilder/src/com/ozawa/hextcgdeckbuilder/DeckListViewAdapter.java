@@ -9,14 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ozawa.hextcgdeckbuilder.UI.ImageGetter;
 import com.ozawa.hextcgdeckbuilder.UI.StringGetter;
-import com.ozawa.hextcgdeckbuilder.enums.CardType;
 import com.ozawa.hextcgdeckbuilder.enums.ImageGetterType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
-import com.ozawa.hextcgdeckbuilder.hexentities.ResourceCard;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 /**
@@ -52,7 +51,8 @@ public class DeckListViewAdapter extends ImageAdapter{
         if(convertView==null){
             vi = inflater.inflate(R.layout.deck_list_row, null);
         }
-
+        
+        LinearLayout portaitBorder = (LinearLayout) vi.findViewById(R.id.portrait_border);
         TextView cardName = (TextView)vi.findViewById(R.id.card_name);
         TextView gameText = (TextView)vi.findViewById(R.id.gametext);
         TextView cardCost = (TextView)vi.findViewById(R.id.tvCardCost);
@@ -64,31 +64,43 @@ public class DeckListViewAdapter extends ImageAdapter{
         ImageView imCardDefense = (ImageView)vi.findViewById(R.id.imCardDefense);
         
         AbstractCard card = masterDeck.get(position);
-
+        
 		if (card.colorFlags.length > 0&&card.colorFlags[0]!=null) {
 			switch (card.colorFlags[0]) {
 				case COLORLESS: {
 					vi.setBackgroundResource(R.drawable.list_selector_colorless);
+					portaitBorder.setBackgroundResource(R.drawable.portrait_border_colorless);
+					portaitBorder.setPadding(5, 5, 5, 5);
 					break;
 				}
 				case BLOOD: {
 					vi.setBackgroundResource(R.drawable.list_selector_blood);
+					portaitBorder.setBackgroundResource(R.drawable.portrait_border_blood);
+					portaitBorder.setPadding(5, 5, 5, 5);
 					break;
 				}
 				case DIAMOND: {
 					vi.setBackgroundResource(R.drawable.list_selector_diamond);
+					portaitBorder.setBackgroundResource(R.drawable.portrait_border_diamond);
+					portaitBorder.setPadding(5, 5, 5, 5);
 					break;
 				}
 				case RUBY: {
 					vi.setBackgroundResource(R.drawable.list_selector_ruby);
+					portaitBorder.setBackgroundResource(R.drawable.portrait_border_ruby);
+					portaitBorder.setPadding(5, 5, 5, 5);
 					break;
 				}
 				case SAPPHIRE: {
 					vi.setBackgroundResource(R.drawable.list_selector_sapphire);
+					portaitBorder.setBackgroundResource(R.drawable.portrait_border_sapphire);
+					portaitBorder.setPadding(5, 5, 5, 5);
 					break;
 				}
 				case WILD: {
 					vi.setBackgroundResource(R.drawable.list_selector_wild);
+					portaitBorder.setBackgroundResource(R.drawable.portrait_border_wild);
+					portaitBorder.setPadding(5, 5, 5, 5);
 					break;
 				}
 				default: {
