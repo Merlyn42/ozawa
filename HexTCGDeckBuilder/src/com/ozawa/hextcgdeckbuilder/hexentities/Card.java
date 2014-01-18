@@ -274,6 +274,7 @@ public class Card extends AbstractCard {
 			} else {
 				if(stuff[i].equalsIgnoreCase("p")){
 					line += 0.06f;
+					width = templateImage.getWidth() / 14;
 				}
 				else if(stuff[i].equalsIgnoreCase("b")){
 					paint.setFakeBoldText(true);
