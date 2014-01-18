@@ -25,6 +25,7 @@ import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by dkerr on 12/16/13.
@@ -36,16 +37,17 @@ public class ImageAdapter extends BaseAdapter {
     private Bitmap back;
     private static int numberOfColumns = 3;
     private static int differenceInHeight = 26;
+    Map<AbstractCard, Integer> customDeck;
 
     public boolean isListView = false;
     private static LayoutInflater inflater=null;
     
     public ImageAdapter(){}
-    public ImageAdapter(Context c, List<AbstractCard> deck ) {
+    public ImageAdapter(Context c, List<AbstractCard> deck, Map<AbstractCard, Integer> customDeck ) {
         mContext = c;
         masterDeck = deck;
         back= BitmapFactory.decodeResource(c.getResources(), R.drawable.back);
-        
+        this.customDeck=customDeck;
         inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -89,7 +91,7 @@ public class ImageAdapter extends BaseAdapter {
             ((ImageGetter) imageView.getTag()).cancel(true);
         }
         imageView.setImageBitmap(back);
-        ImageGetter task = new ImageGetter(imageView,mContext, ImageGetterType.CARDTHUMBNAIL) ;
+        ImageGetter task = new ImageGetter(imageView,mContext, ImageGetterType.CARDTHUMBNAIL,customDeck) ;
         task.execute(card);
         imageView.setTag(task);
     }

@@ -125,7 +125,7 @@ public class DeckListViewAdapter extends ImageAdapter{
             ((ImageGetter) imageView.getTag()).cancel(true);
         }
         imageView.setImageBitmap(back);
-        ImageGetter task = new ImageGetter(imageView,mContext, ImageGetterType.CARDPORTRAIT) ;
+        ImageGetter task = new ImageGetter(imageView,mContext, ImageGetterType.CARDPORTRAIT,null) ;
         task.execute(card);
         imageView.setTag(task);
     }
@@ -135,7 +135,7 @@ public class DeckListViewAdapter extends ImageAdapter{
             ((ImageGetter) imageView.getTag()).cancel(true);
         }
     	
-        ImageGetter task = new ImageGetter(imageView,mContext, ImageGetterType.CARDTHRESHOLD) ;
+        ImageGetter task = new ImageGetter(imageView,mContext, ImageGetterType.CARDTHRESHOLD,null) ;
         task.execute(card);
         imageView.setTag(task);
     }

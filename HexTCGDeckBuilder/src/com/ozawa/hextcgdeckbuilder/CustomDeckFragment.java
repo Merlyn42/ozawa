@@ -51,36 +51,36 @@ import android.widget.AdapterView.OnItemLongClickListener;
 public class CustomDeckFragment extends Fragment implements NavigationDrawerFragment.NavigationDrawerCallbacks,
 		GestureOverlayView.OnGesturePerformedListener {
 
-	private DeckUIActivity mainActivity;
-	private DrawerLayout uiLayout;
+	private DeckUIActivity				mainActivity;
+	private DrawerLayout				uiLayout;
 
-	ListView listView;
-	ImageAdapter imAdapter;
-	DeckListViewAdapter lvAdapter;
-	private static List<AbstractCard> deck;
-	public boolean isGridView;
-	
-	ImageView cardBack;
-    private int cardBackDimension;
-    private int screenWidth;
+	ListView							listView;
+	ImageAdapter						imAdapter;
+	DeckListViewAdapter					lvAdapter;
+	private static List<AbstractCard>	deck;
+	public boolean						isGridView;
+
+	ImageView							cardBack;
+	private int							cardBackDimension;
+	private int							screenWidth;
 
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
 	 */
-	public NavigationDrawerFragment mNavigationDrawerFragment;
+	public NavigationDrawerFragment		mNavigationDrawerFragment;
 
-	public static CardViewer cardViewer;
-	public final static String GETDECK = "GETDECK";
-	private GestureLibrary gesLibrary;
-	private GridView gridView;
+	public static CardViewer			cardViewer;
+	public final static String			GETDECK	= "GETDECK";
+	private GestureLibrary				gesLibrary;
+	private GridView					gridView;
 
 	// Database
-	DatabaseHandler dbHandler;
+	DatabaseHandler						dbHandler;
 
-	Button saveDeck;
-	Button deleteDeck;
-	Button selectChampion;
+	Button								saveDeck;
+	Button								deleteDeck;
+	Button								selectChampion;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -94,7 +94,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 			mainActivity.finish();
 		}
 
-		cardViewer = new CardViewer(mainActivity, deck);
+		cardViewer = new CardViewer(mainActivity, deck, mainActivity.customDeck);
 		imAdapter = cardViewer.getAdapter();
 		uiLayout = (DrawerLayout) inflater.inflate(R.layout.fragment_custom_deck, container, false);
 
@@ -111,19 +111,19 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 		GestureOverlayView gestureOverlayView = (GestureOverlayView) uiLayout.findViewById(R.id.customDeckGestureOverlayView);
 		gestureOverlayView.addOnGesturePerformedListener(this);
 		gestureOverlayView.setGestureVisible(false);
-		
+
 		setUpGridView(); // Set up the card grid view
-		
+
 		/**
-         * Card Animation
-         */
-        RelativeLayout cardAnimationView = (RelativeLayout) uiLayout.findViewById(R.id.cardAnimationLayout);
-        cardBackDimension = HexUtil.getScreenWidth(mainActivity) / 3;
-        cardBack = (ImageView) cardAnimationView.findViewById(R.id.cardAnimation);
-		cardBack.setImageResource(R.drawable.back);  
+		 * Card Animation
+		 */
+		RelativeLayout cardAnimationView = (RelativeLayout) uiLayout.findViewById(R.id.cardAnimationLayout);
+		cardBackDimension = HexUtil.getScreenWidth(mainActivity) / 3;
+		cardBack = (ImageView) cardAnimationView.findViewById(R.id.cardAnimation);
+		cardBack.setImageResource(R.drawable.back);
 		cardBack.setLayoutParams(new RelativeLayout.LayoutParams(cardBackDimension, cardBackDimension));
 		cardBack.setVisibility(View.INVISIBLE);
-		
+
 		return uiLayout;
 	}
 
@@ -181,21 +181,22 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 							ListView listView = (ListView) uiLayout.findViewById(R.id.custom_deck_deck_list);
 							position = listView.pointToPosition(x, y);
 						}
-						
-						if(position >= 0){
+
+						if (position >= 0) {
 							removeCardFromCustomDeck(position);
-                        	throwCardAnimation(x-(cardBackDimension/2), screenWidth+cardBackDimension, y-(cardBackDimension/2), (int) y - (y /3));
-                        }
-					}else if(prediction.name.equalsIgnoreCase("clear")){
-                    	cardViewer.clearFilter();
-                    }
+							throwCardAnimation(x - (cardBackDimension / 2), screenWidth + cardBackDimension, y - (cardBackDimension / 2),
+									(int) y - (y / 3));
+						}
+					} else if (prediction.name.equalsIgnoreCase("clear")) {
+						cardViewer.clearFilter();
+					}
 				}
 			}
 		}
 	}
 
 	public void changeToListView() {
-		if(listView != null){			
+		if (listView != null) {
 			cardViewer.setAdapter(lvAdapter);
 			lvAdapter.updateDeck(imAdapter.masterDeck);
 			setIsGridView(false);
@@ -208,12 +209,12 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 
 	public void changeToGridView() {
 		if (gridView != null) {
-			cardViewer.setAdapter(imAdapter);			
+			cardViewer.setAdapter(imAdapter);
 			imAdapter.updateDeck(lvAdapter.masterDeck);
 			setIsGridView(true);
 		} else {
 			setUpGridView();
-		}		
+		}
 		listView.setVisibility(View.INVISIBLE);
 		gridView.setVisibility(View.VISIBLE);
 	}
@@ -279,8 +280,8 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 
 		setIsGridView(false);
 	}
-	
-	private boolean makeRemoveMultipleCardsDialog(int position){
+
+	private boolean makeRemoveMultipleCardsDialog(int position) {
 		if (position >= 0) {
 			AbstractCard card = isGridView == true ? imAdapter.masterDeck.get(position) : lvAdapter.masterDeck.get(position);
 
@@ -338,10 +339,10 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 				} else {
 					customDeck.remove(card);
 					mainActivity.customDeckCardList.remove(card);
-					reloadCustomDeckView();
 				}
+				reloadCustomDeckView();
 			}
-			
+
 			Toast.makeText(mainActivity.getApplicationContext(), card.name + " removed to custom deck.", Toast.LENGTH_SHORT).show();
 		}
 	}
@@ -495,7 +496,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 			} else {
 				Toast.makeText(mainActivity.getApplicationContext(), "Failed to save deck. Please try again.", Toast.LENGTH_SHORT).show();
 			}
-		}else{
+		} else {
 			Toast.makeText(mainActivity.getApplicationContext(), "No deck to save.", Toast.LENGTH_SHORT).show();
 		}
 
@@ -613,7 +614,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 	 *            - the CustomDeckFragment to invoke the given method on
 	 */
 	private void invokeNoParamReflectiveMethod(final String methodName, final CustomDeckFragment fragment) {
-		if(methodName != null){
+		if (methodName != null) {
 			try {
 				Method method = CustomDeckFragment.class.getDeclaredMethod(methodName);
 				if (!method.isAccessible()) {
@@ -625,25 +626,27 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 			}
 		}
 	}
-	
-	public void throwCardAnimation(int fromX, int toX, int fromY, int toY){
+
+	public void throwCardAnimation(int fromX, int toX, int fromY, int toY) {
 		TranslateAnimation moveCard = new TranslateAnimation(fromX, toX, fromY, toY);
 		moveCard.setDuration(400);
 		moveCard.setFillAfter(true);
-		moveCard.setAnimationListener(new AnimationListener() {    
+		moveCard.setAnimationListener(new AnimationListener() {
 			@Override
 			public void onAnimationEnd(Animation animation) {
 				cardBack.setVisibility(View.INVISIBLE);
 			}
+
 			@Override
 			public void onAnimationRepeat(Animation animation) {
-				
+
 			}
+
 			@Override
 			public void onAnimationStart(Animation animation) {
 				cardBack.setVisibility(View.VISIBLE);
 			}
-	    });
-	    cardBack.startAnimation(moveCard);
+		});
+		cardBack.startAnimation(moveCard);
 	}
 }

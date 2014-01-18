@@ -85,7 +85,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
         	mainActivity.finish();
         }        
         
-        cardViewer = new CardViewer(mainActivity, masterDeck);
+        cardViewer = new CardViewer(mainActivity, masterDeck,null);
         imAdapter = cardViewer.getAdapter();
         uiLayout = (DrawerLayout) inflater.inflate(R.layout.fragment_master_deck, container, false);
         

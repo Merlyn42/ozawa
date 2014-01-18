@@ -50,10 +50,10 @@ public class RemoveMultipleCardsDialogFragment extends DialogFragment {
 		picker = (NumberPicker) dialog.findViewById(R.id.addCardsNumberPicker);
 
 		dialog.setTitle("Add Multiple Cards");
-
-		picker.setMaxValue(40);
+		HashMap<AbstractCard, Integer> customDeck = mainActivity.customDeck;
+		picker.setMaxValue(customDeck.get(card));
 		picker.setMinValue(1);
-		picker.setValue(4);
+		picker.setValue(customDeck.get(card));
 
 		removeCards.setOnClickListener(new OnClickListener() {
 
@@ -91,8 +91,9 @@ public class RemoveMultipleCardsDialogFragment extends DialogFragment {
 			} else {
 				customDeck.remove(card);
 				mainActivity.customDeckCardList.remove(card);
-				fragment.reloadCustomDeckView();
+				
 			}
+			fragment.reloadCustomDeckView();
 		}
 		Toast.makeText(mainActivity.getApplicationContext(),picker.getValue() +" "+ card.name+(picker.getValue()>1?"s":"") + " removed from custom deck.", Toast.LENGTH_SHORT).show();
 	}

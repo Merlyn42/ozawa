@@ -173,6 +173,7 @@ public class NavigationDrawerFragment extends Fragment {
 				CardType.RESOURCE, cardViewer);
 		EditText text = (EditText) scrollView.findViewById(R.id.SearchTextField);
 		text.addTextChangedListener(cardViewer);
+		cardViewer.addAssociatedTextView(text);
 		text.setOnFocusChangeListener(new OnFocusChangeListener() {
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {

@@ -74,7 +74,7 @@ public class MasterDeckActivity extends ActionBarActivity
         }
         
 
-        cardViewer = new CardViewer(this, masterDeck);
+        cardViewer = new CardViewer(this, masterDeck,null);
         setContentView(R.layout.activity_master_deck);
 
 
