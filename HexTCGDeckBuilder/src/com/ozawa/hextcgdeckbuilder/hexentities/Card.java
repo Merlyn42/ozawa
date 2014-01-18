@@ -302,7 +302,8 @@ public class Card extends AbstractCard {
 						int basicSize = (int) paint.measureText("SYM");
 						symbolImage = getSymbolImage(stuff[i], context, basicSize, basicSize);
 					}else if(stuff[i].equalsIgnoreCase("ONE-SHOT")){
-						symbolImage = textAsBitmap("[ONE-SHOT]", paint, templateImage, baseline, height);
+						int basicSize = (int) paint.measureText("BASIC");
+						symbolImage = getSymbolImage(stuff[i], context, basicSize, height);
 					}else{
 						symbolImage = getSymbolImage(stuff[i], context,height,height);						
 					}
