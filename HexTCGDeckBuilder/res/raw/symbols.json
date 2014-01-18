@@ -223,5 +223,10 @@
 		"cardText": "ACT",
 		"imageName": "gametext_exhaustcard",
 		"sizeRatio": 1.1025
-	}	
+	},
+	{
+		"cardText": "ONE-SHOT",
+		"imageName": "gametext_oneshot",
+		"sizeRatio": 2.7442
+	}
 ]
