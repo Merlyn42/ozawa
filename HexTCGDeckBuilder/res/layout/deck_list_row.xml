@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:padding="3dip"
         android:layout_alignParentLeft="true"
-        android:background="@drawable/portrait_border_diamond"
+        android:background="@drawable/portrait_border_colorless"
         android:layout_marginRight="5dip">
 
         <ImageView
