@@ -91,7 +91,7 @@ public class FullImageActivity extends Activity implements GestureOverlayView.On
 							Toast.makeText(this, "No more cards, Jumping to the start", Toast.LENGTH_SHORT).show();
 							setImage();
 						}						
-					}else if(prediction.name.equalsIgnoreCase("clear")){
+					}else if(prediction.name.equalsIgnoreCase("anti clockwise") || prediction.name.equalsIgnoreCase("clockwise")){
                     	finish();
                     }
 				}

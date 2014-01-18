@@ -186,7 +186,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 							removeCardFromCustomDeck(position);
                         	throwCardAnimation(x-(cardBackDimension/2), screenWidth+cardBackDimension, y-(cardBackDimension/2), (int) y - (y /3));
                         }
-					}else if(prediction.name.equalsIgnoreCase("clear")){
+					}else if(prediction.name.equalsIgnoreCase("anti clockwise") || prediction.name.equalsIgnoreCase("clockwise")){
                     	cardViewer.clearFilter();
                     }
 				}
