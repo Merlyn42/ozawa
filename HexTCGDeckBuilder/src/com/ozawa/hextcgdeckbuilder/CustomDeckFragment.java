@@ -325,6 +325,17 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 		}
 
 		mainActivity.updateCustomDeckData();
+		// Set button availability
+		if (mainActivity.currentCustomDeck != null) {			
+			deleteDeck.setEnabled(true);
+		}else{			
+			deleteDeck.setEnabled(false);
+		}
+		if(!deck.isEmpty()){
+			saveDeck.setEnabled(true);
+		}else{
+			saveDeck.setEnabled(false);
+		}
 	}
 
 	/**
