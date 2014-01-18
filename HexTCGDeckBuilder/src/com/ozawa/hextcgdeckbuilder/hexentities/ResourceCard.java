@@ -1,5 +1,6 @@
 package com.ozawa.hextcgdeckbuilder.hexentities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -20,7 +21,8 @@ public class ResourceCard extends AbstractCard {
 	@SerializedName("m_MaxResourcesGranted")
 	public int maxResourcesGranted;
 
-    @Override
+    @SuppressLint("NewApi")
+	@Override
     public Bitmap getCardBitmap(Context context, CardTemplate template, int maxWidth) {
         Resources resources = context.getResources();
         final int resourceId = resources.getIdentifier(cardImagePath.split("\\.")[0], "drawable",
@@ -34,7 +36,7 @@ public class ResourceCard extends AbstractCard {
             scale *= 2;
         //Decode with inSampleSize
         BitmapFactory.Options o2 = new BitmapFactory.Options();
-
+        o2.inMutable=true;
         o2.inSampleSize = scale;
         image = BitmapFactory.decodeResource(resources, resourceId, o2);
         return image;
