@@ -142,10 +142,11 @@ public class HexUtil {
 	 * @param repeatCount - the number of times to repeat the animation i.e to play 4 times, the repeat count should be 3
 	 */
 	public static void moveImageAnimation(final ImageView image, int fromX, int toX, int fromY, int toY, int duration, int repeatCount){
-		TranslateAnimation moveCard = new TranslateAnimation(fromX, toX, fromY, toY);
-		moveCard.setDuration(400);
-		moveCard.setFillAfter(true);
-		moveCard.setAnimationListener(new AnimationListener() {    
+		TranslateAnimation imageAnimation = new TranslateAnimation(fromX, toX, fromY, toY);
+		imageAnimation.setDuration(400);
+		imageAnimation.setFillAfter(true);
+		imageAnimation.setRepeatCount(repeatCount);
+		imageAnimation.setAnimationListener(new AnimationListener() {    
 			@Override
 			public void onAnimationEnd(Animation animation) {
 				image.setVisibility(View.INVISIBLE);
@@ -159,7 +160,7 @@ public class HexUtil {
 				image.setVisibility(View.VISIBLE);
 			}
 	    });
-		image.startAnimation(moveCard);
+		image.startAnimation(imageAnimation);
 	}
 	
 	public static void moveImageAnimation(AnimationArg arg){

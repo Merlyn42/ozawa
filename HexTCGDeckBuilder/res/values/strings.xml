@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">HEX TCG</string>
+    <string name="app_name">HEX TCG - Deck Builder</string>
     <string name="title_section1">Filter 1</string>
     <string name="title_section2">Filter 2</string>
     <string name="title_section3">Filter 3</string>
