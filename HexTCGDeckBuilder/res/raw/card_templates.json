@@ -86,7 +86,7 @@
     "isTroop": false,
     "color": "Colorless",
     "fullCard": true,
-    "nameFontRatio": 0.025806451,
+    "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839
   },
@@ -99,7 +99,7 @@
     "isTroop": false,
     "color": "Blood",
     "fullCard": true,
-    "nameFontRatio": 0.025806451,
+    "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839
   },
@@ -112,7 +112,7 @@
     "isTroop": false,
     "color": "Diamond",
     "fullCard": true,
-    "nameFontRatio": 0.025806451,
+    "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839
   },
@@ -125,7 +125,7 @@
     "isTroop": false,
     "color": "Ruby",
     "fullCard": true,
-    "nameFontRatio": 0.025806451,
+    "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839
   },
@@ -138,7 +138,7 @@
     "isTroop": false,
     "color": "Sapphire",
     "fullCard": true,
-    "nameFontRatio": 0.025806451,
+    "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839
   },
@@ -151,7 +151,7 @@
     "isTroop": false,
     "color": "Wild",
     "fullCard": true,
-    "nameFontRatio": 0.025806451,
+    "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839
   },
@@ -242,7 +242,7 @@
     "isTroop": true,
     "color": "Colorless",
     "fullCard": true,
-    "nameFontRatio": 0.025806451,
+    "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839
   },
@@ -255,7 +255,7 @@
     "isTroop": true,
     "color": "Blood",
     "fullCard": true,
-    "nameFontRatio": 0.025806451,
+    "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839
   },
@@ -268,7 +268,7 @@
     "isTroop": true,
     "color": "Diamond",
     "fullCard": true,
-    "nameFontRatio": 0.025806451,
+    "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839
   },
@@ -281,7 +281,7 @@
     "isTroop": true,
     "color": "Ruby",
     "fullCard": true,
-    "nameFontRatio": 0.025806451,
+    "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839
   },
@@ -294,7 +294,7 @@
     "isTroop": true,
     "color": "Sapphire",
     "fullCard": true,
-    "nameFontRatio": 0.025806451,
+    "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839
   },
@@ -307,7 +307,7 @@
     "isTroop": true,
     "color": "Wild",
     "fullCard": true,
-    "nameFontRatio": 0.025806451,
+    "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839
   }
