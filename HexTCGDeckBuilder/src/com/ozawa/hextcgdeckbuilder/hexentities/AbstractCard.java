@@ -88,7 +88,7 @@ public abstract class AbstractCard {
 			} catch (OutOfMemoryError e) {
 				System.err.println("Ran out of memory, dumping some images from the cache");
 				ImageCache.emergencyDump(CacheType.GridView);
-				image = getCardBitmap(context, CardTemplate.findCardTemplate(this, false, CardTemplate.getAllTemplates(context)), maxWidth);
+				image = getThumbnailCardBitmap(context);
 			}
 			cachedImageWidthLimit = maxWidth;
 			ImageCache.getInstance(CacheType.GridView).queueForRemovalFromCache(context, this, ImageType.WithTemplate);
@@ -104,22 +104,37 @@ public abstract class AbstractCard {
 	 * @return
 	 */
 	public Bitmap getCardPortait(Context mContext) {
-		int maxWidth = HexUtil.getScreenWidth(mContext) / 8;
-
-		if (portrait == null || cachedImageWidthLimit != maxWidth) {
+		try{
+		if (portrait == null) {
 			BitmapFactory.Options portraitOptions = new BitmapFactory.Options();
-			portraitOptions.inSampleSize = 10;
+			portraitOptions.inSampleSize = 4;
 			portrait = BitmapFactory.decodeResource(mContext.getResources(), HexUtil.getResourceID(this.cardImagePath, R.drawable.class),
 					portraitOptions);
 			if (portrait != null) {
+				double pL = defaultLayout.portraitLeft*portrait.getWidth();
+				double pR = defaultLayout.portraitRight*portrait.getWidth();
+				double pT = defaultLayout.portraitTop*portrait.getHeight();
+				double pB = defaultLayout.portraitBottom*portrait.getHeight();
+				
+				double xD = pL+ 0.0567*(pR-pL);
+				double widthD = (pR)-(0.0113*(pR-pL))-xD;
+				double yD =pT+0.0130*(pB-pT);
+				double heightD = pB-(0.0078*(pB-pT))-yD;
+				
+				int x = (int) Math.round(xD);
+				int width = (int) Math.round(widthD);
+				int y = (int) Math.round(yD);
+				int height = (int) Math.round(heightD);
 				Matrix matrix = new Matrix();
 				matrix.postScale(0.5f, 0.5f);
-				int dimensions = (portrait.getWidth() / 18);
-				portrait = Bitmap.createBitmap(portrait, dimensions * 3, dimensions, dimensions * 12, dimensions * 12, matrix, true);
-				portrait = Bitmap.createScaledBitmap(portrait, maxWidth, maxWidth, true);
-				cachedImageWidthLimit = maxWidth;
+				portrait = Bitmap.createBitmap(portrait, x, y, width,height, matrix, true);
 				ImageCache.getInstance(CacheType.ListView).queueForRemovalFromCache(mContext, this, ImageType.WithoutTemplate);
 			}
+		}
+		}catch(OutOfMemoryError e){
+			System.err.println("Ran out of memory, dumping some images from the cache");
+			ImageCache.emergencyDump(CacheType.ListView);
+			return getCardPortait(mContext);
 		}
 
 		return portrait;
