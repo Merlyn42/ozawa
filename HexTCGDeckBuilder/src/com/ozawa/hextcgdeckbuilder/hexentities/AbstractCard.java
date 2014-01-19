@@ -103,43 +103,8 @@ public abstract class AbstractCard {
 	 * @param mContext
 	 * @return
 	 */
-	public Bitmap getCardPortait(Context mContext) {
-		try{
-		if (portrait == null) {
-			BitmapFactory.Options portraitOptions = new BitmapFactory.Options();
-			portraitOptions.inSampleSize = 4;
-			portrait = BitmapFactory.decodeResource(mContext.getResources(), HexUtil.getResourceID(this.cardImagePath, R.drawable.class),
-					portraitOptions);
-			if (portrait != null) {
-				double pL = defaultLayout.portraitLeft*portrait.getWidth();
-				double pR = defaultLayout.portraitRight*portrait.getWidth();
-				double pT = defaultLayout.portraitTop*portrait.getHeight();
-				double pB = defaultLayout.portraitBottom*portrait.getHeight();
-				
-				double xD = pL+ 0.0567*(pR-pL);
-				double widthD = (pR)-(0.0113*(pR-pL))-xD;
-				double yD =pT+0.0130*(pB-pT);
-				double heightD = pB-(0.0078*(pB-pT))-yD;
-				
-				int x = (int) Math.round(xD);
-				int width = (int) Math.round(widthD);
-				int y = (int) Math.round(yD);
-				int height = (int) Math.round(heightD);
-				Matrix matrix = new Matrix();
-				matrix.postScale(0.5f, 0.5f);
-				portrait = Bitmap.createBitmap(portrait, x, y, width,height, matrix, true);
-				ImageCache.getInstance(CacheType.ListView).queueForRemovalFromCache(mContext, this, ImageType.WithoutTemplate);
-			}
-		}
-		}catch(OutOfMemoryError e){
-			System.err.println("Ran out of memory, dumping some images from the cache");
-			ImageCache.emergencyDump(CacheType.ListView);
-			return getCardPortait(mContext);
-		}
-
-		return portrait;
-	}
-
+	public abstract Bitmap getCardPortait(Context mContext);
+		
 	/**
 	 * called when a card is removed from the cache queue. Should free the
 	 * bitmap that was cached for this position in the queue.
