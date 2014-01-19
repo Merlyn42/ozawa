@@ -177,8 +177,6 @@ public class Card extends AbstractCard {
 		float tempRatio = template.nameFontRatio;
 		paint.setTextSize(imageHeight * tempRatio);
 		combine.drawText(name, templateImage.getWidth() / 6, templateImage.getHeight() / 14, paint);
-		float tempHeight = 14;
-		float tempWdith = 14;
 		if (resourceCost > 9) {
 			combine.drawText("" + resourceCost, templateImage.getWidth() / 15, templateImage.getHeight() / 15, paint);
 		} else {
