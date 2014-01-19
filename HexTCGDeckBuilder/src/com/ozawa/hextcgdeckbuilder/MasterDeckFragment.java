@@ -281,7 +281,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 			AddMultipleCardsDialogFragment addMultipleCardsDialog = new AddMultipleCardsDialogFragment();
 			addMultipleCardsDialog.card = card;
 			addMultipleCardsDialog.position=position;
-			addMultipleCardsDialog.animationArg=createAnimationArg(values[0],values[1]);
+			addMultipleCardsDialog.animationArg=createAnimationArg(values[0]+cardBackDimension/2,values[1]-cardBackDimension/2);
 			addMultipleCardsDialog.mainActivity = ((DeckUIActivity) mainActivity);
 			addMultipleCardsDialog.fragment = this;
 			addMultipleCardsDialog.show(mainActivity.getSupportFragmentManager(), "Add Multiple Cards");

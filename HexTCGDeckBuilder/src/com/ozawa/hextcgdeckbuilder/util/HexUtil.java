@@ -143,7 +143,7 @@ public class HexUtil {
 	 */
 	public static void moveImageAnimation(final ImageView image, int fromX, int toX, int fromY, int toY, int duration, int repeatCount){
 		TranslateAnimation imageAnimation = new TranslateAnimation(fromX, toX, fromY, toY);
-		imageAnimation.setDuration(400);
+		imageAnimation.setDuration(400/(1+repeatCount)+20);
 		imageAnimation.setFillAfter(true);
 		imageAnimation.setRepeatCount(repeatCount);
 		imageAnimation.setAnimationListener(new AnimationListener() {    

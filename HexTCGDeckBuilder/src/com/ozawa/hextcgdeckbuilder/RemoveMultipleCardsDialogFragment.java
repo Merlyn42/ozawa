@@ -63,11 +63,11 @@ public class RemoveMultipleCardsDialogFragment extends DialogFragment {
 			@Override
 			public void onClick(View v) {
 				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-				fragment.removeCardFromCustomDeck(position,picker.getValue());
-				animationArg.repeatCount=picker.getValue()-1;
+				int count =picker.getValue();
+				animationArg.repeatCount=count-1;
 				HexUtil.moveImageAnimation(animationArg);
 				dialog.dismiss();
-
+				fragment.removeCardFromCustomDeck(position,count);
 			}
 		});
 

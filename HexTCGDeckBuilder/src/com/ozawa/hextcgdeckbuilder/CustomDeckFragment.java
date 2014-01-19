@@ -298,7 +298,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 			RemoveMultipleCardsDialogFragment removeMultipleCardsDialog = new RemoveMultipleCardsDialogFragment();
 			removeMultipleCardsDialog.card = card;
 			removeMultipleCardsDialog.position=position;
-			removeMultipleCardsDialog.animationArg = createAnimationArg(values[0],values[1]);
+			removeMultipleCardsDialog.animationArg = createAnimationArg(values[0]+cardBackDimension/2,values[1]-cardBackDimension/2);
 			removeMultipleCardsDialog.mainActivity = ((DeckUIActivity) mainActivity);
 			removeMultipleCardsDialog.fragment = this;
 			removeMultipleCardsDialog.show(mainActivity.getSupportFragmentManager(), "Remove Multiple Cards");
