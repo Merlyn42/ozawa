@@ -15,7 +15,12 @@ import android.text.Html;
 import android.text.Spanned;
 import android.util.DisplayMetrics;
 import android.view.Display;
+import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
+import android.view.animation.Animation.AnimationListener;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class HexUtil {
@@ -123,6 +128,38 @@ public class HexUtil {
 	
 	public static void populateTextViewWithHexHtml(TextView view,String text){
 		view.setText(parseStringAsHexHtml(text, view.getContext(), Float.valueOf(view.getTextSize()).intValue()));
+	}
+	
+	/**
+	 * Move an ImageView from one location to anoter via animation
+	 * 
+	 * @param image
+	 * @param fromX
+	 * @param toX
+	 * @param fromY
+	 * @param toY
+	 * @param duration - the length of the animation in milliseconds
+	 * @param repeatCount - the number of times to repeat the animation i.e to play 4 times, the repeat count should be 3
+	 */
+	public static void moveImageAnimation(final ImageView image, int fromX, int toX, int fromY, int toY, int duration, int repeatCount){
+		TranslateAnimation moveCard = new TranslateAnimation(fromX, toX, fromY, toY);
+		moveCard.setDuration(400);
+		moveCard.setFillAfter(true);
+		moveCard.setAnimationListener(new AnimationListener() {    
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				image.setVisibility(View.INVISIBLE);
+			}
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+				
+			}
+			@Override
+			public void onAnimationStart(Animation animation) {
+				image.setVisibility(View.VISIBLE);
+			}
+	    });
+		image.startAnimation(moveCard);
 	}
 
 }

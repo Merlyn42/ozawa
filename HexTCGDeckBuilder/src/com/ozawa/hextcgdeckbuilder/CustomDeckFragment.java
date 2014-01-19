@@ -33,9 +33,6 @@ import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
-import android.view.animation.Animation.AnimationListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -60,7 +57,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 	private static List<AbstractCard>	deck;
 	public boolean						isGridView;
 
-	ImageView							cardBack;
+	public ImageView					cardBack;
 	private int							cardBackDimension;
 	private int							screenWidth;
 
@@ -184,7 +181,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 
 						if (position >= 0) {
 							removeCardFromCustomDeck(position);
-                        	throwCardAnimation(x-(cardBackDimension/2), screenWidth+cardBackDimension, y-(cardBackDimension/2), (int) y - (y /3));                        	
+							HexUtil.moveImageAnimation(cardBack, x-(cardBackDimension/2), screenWidth+cardBackDimension, y-(cardBackDimension/2), (int) y - (y /3), 400, 0);                        	
                         }
 					}else if(prediction.name.equalsIgnoreCase("anti clockwise") || prediction.name.equalsIgnoreCase("clockwise")){
                     	cardViewer.clearFilter();
@@ -293,7 +290,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 			removeMultipleCardsDialog.card = card;
 			removeMultipleCardsDialog.mainActivity = ((DeckUIActivity) mainActivity);
 			removeMultipleCardsDialog.fragment = this;
-			removeMultipleCardsDialog.show(mainActivity.getSupportFragmentManager(), "Add Multiple Cards");
+			removeMultipleCardsDialog.show(mainActivity.getSupportFragmentManager(), "Remove Multiple Cards");
 			return true;
 		}
 		return false;
@@ -662,28 +659,5 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 			} catch (Exception ex) {
 			}
 		}
-	}
-
-	public void throwCardAnimation(int fromX, int toX, int fromY, int toY) {
-		TranslateAnimation moveCard = new TranslateAnimation(fromX, toX, fromY, toY);
-		moveCard.setDuration(400);
-		moveCard.setFillAfter(true);
-		moveCard.setAnimationListener(new AnimationListener() {
-			@Override
-			public void onAnimationEnd(Animation animation) {
-				cardBack.setVisibility(View.INVISIBLE);
-			}
-
-			@Override
-			public void onAnimationRepeat(Animation animation) {
-
-			}
-
-			@Override
-			public void onAnimationStart(Animation animation) {
-				cardBack.setVisibility(View.VISIBLE);
-			}
-		});
-		cardBack.startAnimation(moveCard);
 	}
 }

@@ -29,11 +29,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationSet;
-import android.view.animation.RotateAnimation;
-import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.GridView;
@@ -41,7 +36,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 public class MasterDeckFragment extends Fragment implements NavigationDrawerFragment.NavigationDrawerCallbacks, GestureOverlayView.OnGesturePerformedListener{
 	
@@ -55,7 +49,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
     private JsonReader jsonReader;
     public boolean isGridView;
     
-    ImageView cardBack;
+    public ImageView cardBack;
     private int cardBackDimension;
     
     /**
@@ -165,7 +159,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
                         
                         if(position >= 0){
                         	addCardToCustomDeck(position);
-                        	throwCardAnimation(x-(cardBackDimension/2), -cardBack.getLayoutParams().width, y-(cardBackDimension/2), (int) y - (y /3));
+                        	HexUtil.moveImageAnimation(cardBack, x-(cardBackDimension/2), -cardBack.getLayoutParams().width, y-(cardBackDimension/2), (int) y - (y /3), 400, 0);
                         }
                     }else if(prediction.name.equalsIgnoreCase("swipe right")){
                     	CustomViewPager pager = (CustomViewPager) mainActivity.findViewById(R.id.pager);
@@ -300,29 +294,6 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 		}else{
 			customDeck.put(card, customDeck.get(card) + 1);
 		}		
-		((DeckUIActivity) mainActivity).deckChanged = true;
-		//Toast.makeText(mainActivity.getApplicationContext(), card.name + " added to custom deck.", Toast.LENGTH_SHORT).show();
-		
-	}
-	
-	public void throwCardAnimation(int fromX, int toX, int fromY, int toY){
-		TranslateAnimation moveCard = new TranslateAnimation(fromX, toX, fromY, toY);
-		moveCard.setDuration(400);
-		moveCard.setFillAfter(true);
-		moveCard.setAnimationListener(new AnimationListener() {    
-			@Override
-			public void onAnimationEnd(Animation animation) {
-				cardBack.setVisibility(View.INVISIBLE);
-			}
-			@Override
-			public void onAnimationRepeat(Animation animation) {
-				
-			}
-			@Override
-			public void onAnimationStart(Animation animation) {
-				cardBack.setVisibility(View.VISIBLE);
-			}
-	    });
-	    cardBack.startAnimation(moveCard);
+		((DeckUIActivity) mainActivity).deckChanged = true;		
 	}
 }
