@@ -184,7 +184,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 
 						if (position >= 0) {
 							removeCardFromCustomDeck(position);
-                        	throwCardAnimation(x-(cardBackDimension/2), screenWidth+cardBackDimension, y-(cardBackDimension/2), (int) y - (y /3));
+                        	throwCardAnimation(x-(cardBackDimension/2), screenWidth+cardBackDimension, y-(cardBackDimension/2), (int) y - (y /3));                        	
                         }
 					}else if(prediction.name.equalsIgnoreCase("anti clockwise") || prediction.name.equalsIgnoreCase("clockwise")){
                     	cardViewer.clearFilter();
@@ -322,10 +322,30 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 			imAdapter.updateDeckAndCardViewDeck(deck, cardViewer);
 		} else {
 			lvAdapter.updateDeckAndCardViewDeck(deck, cardViewer);
-		}
+		}		
 
 		mainActivity.updateCustomDeckData();
 		// Set button availability
+		setDeckButtonAvailablity();
+	}
+	
+	public void reloadCustomDeckView(boolean reloadFullView, int position) {
+		deck = mainActivity.customDeckCardList;
+		if(reloadFullView){
+			reloadCustomDeckView();
+		}else{
+			if (isGridView) {
+				imAdapter.getView(position, gridView.getChildAt(position), null);
+			} else {
+				lvAdapter.getView(position, listView.getChildAt(position), null);
+			}	
+			mainActivity.updateCustomDeckData();
+			// Set button availability
+			setDeckButtonAvailablity();
+		}		
+	}
+	
+	private void setDeckButtonAvailablity(){
 		if (mainActivity.currentCustomDeck != null) {			
 			deleteDeck.setEnabled(true);
 		}else{			
@@ -351,11 +371,13 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 				int cardCount = customDeck.get(card);
 				if (cardCount > 1) {
 					customDeck.put(card, customDeck.get(card) - 1);
+					reloadCustomDeckView(false, position);
 				} else {
 					customDeck.remove(card);
 					mainActivity.customDeckCardList.remove(card);
+					reloadCustomDeckView();
 				}
-				reloadCustomDeckView();
+				
 			}
 
 			Toast.makeText(mainActivity.getApplicationContext(), card.name + " removed to custom deck.", Toast.LENGTH_SHORT).show();
