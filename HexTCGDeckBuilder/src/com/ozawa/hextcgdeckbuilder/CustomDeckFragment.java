@@ -181,7 +181,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 
 						if (position >= 0) {
 							removeCardFromCustomDeck(position);
-							HexUtil.moveImageAnimation(cardBack, x-(cardBackDimension/2), screenWidth+cardBackDimension, y-(cardBackDimension/2), (int) y - (y /3), 400, 0);                        	
+							HexUtil.moveImageAnimation(createAnimationArg(x,y));                        	
                         }
 					}else if(prediction.name.equalsIgnoreCase("anti clockwise") || prediction.name.equalsIgnoreCase("clockwise")){
                     	cardViewer.clearFilter();
@@ -189,6 +189,11 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 				}
 			}
 		}
+	}
+	
+	private HexUtil.AnimationArg createAnimationArg(int x,int y){
+		HexUtil.AnimationArg result = new HexUtil.AnimationArg(cardBack, x-(cardBackDimension/2), screenWidth+cardBackDimension, y-(cardBackDimension/2), (int) y - (y /3), 400, 0);		
+		return result;		
 	}
 
 	public void changeToListView() {
@@ -238,7 +243,9 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 				// Remove cards from custom deck
-				makeRemoveMultipleCardsDialog(position);
+				int[] values = new int[2]; 
+		           view.getLocationOnScreen(values);
+				makeRemoveMultipleCardsDialog(position,values);
 				return true;
 			}
 
@@ -273,7 +280,9 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 				// Remove cards from custom deck
-				makeRemoveMultipleCardsDialog(position);
+				int[] values = new int[2]; 
+		           view.getLocationOnScreen(values);
+				makeRemoveMultipleCardsDialog(position,values);
 				return true;
 			}
 
@@ -282,12 +291,14 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 		setIsGridView(false);
 	}
 
-	private boolean makeRemoveMultipleCardsDialog(int position) {
+	private boolean makeRemoveMultipleCardsDialog(int position, int[] values) {
 		if (position >= 0) {
 			AbstractCard card = isGridView == true ? imAdapter.masterDeck.get(position) : lvAdapter.masterDeck.get(position);
 
 			RemoveMultipleCardsDialogFragment removeMultipleCardsDialog = new RemoveMultipleCardsDialogFragment();
 			removeMultipleCardsDialog.card = card;
+			removeMultipleCardsDialog.position=position;
+			removeMultipleCardsDialog.animationArg = createAnimationArg(values[0],values[1]);
 			removeMultipleCardsDialog.mainActivity = ((DeckUIActivity) mainActivity);
 			removeMultipleCardsDialog.fragment = this;
 			removeMultipleCardsDialog.show(mainActivity.getSupportFragmentManager(), "Remove Multiple Cards");
@@ -360,14 +371,14 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 	 * 
 	 * @param card
 	 */
-	private void removeCardFromCustomDeck(int position) {
+	public void removeCardFromCustomDeck(int position, int value) {
 		if (position >= 0) {
 			AbstractCard card = isGridView == true ? imAdapter.masterDeck.get(position) : lvAdapter.masterDeck.get(position);
 			HashMap<AbstractCard, Integer> customDeck = mainActivity.customDeck;
 			if (customDeck.get(card) != null) {
 				int cardCount = customDeck.get(card);
-				if (cardCount > 1) {
-					customDeck.put(card, customDeck.get(card) - 1);
+				if (cardCount > value) {
+					customDeck.put(card, customDeck.get(card) - value);
 					reloadCustomDeckView(false, position);
 				} else {
 					customDeck.remove(card);
@@ -379,6 +390,10 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 
 			Toast.makeText(mainActivity.getApplicationContext(), card.name + " removed to custom deck.", Toast.LENGTH_SHORT).show();
 		}
+	}
+	
+	public void removeCardFromCustomDeck(int position) {
+		removeCardFromCustomDeck(position,1);
 	}
 
 	/**

@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import com.ozawa.hextcgdeckbuilder.NewDeckDialogFragment.NewDeckListener;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
+import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -28,8 +29,11 @@ public class AddMultipleCardsDialogFragment extends DialogFragment {
 	Button cancel;
 	DeckUIActivity mainActivity;
 	NumberPicker picker;
+	public HexUtil.AnimationArg animationArg;
+	public int position;
 	
 	AbstractCard card;
+	public MasterDeckFragment	fragment;
 	
 	public AddMultipleCardsDialogFragment(){
 	}
@@ -60,7 +64,9 @@ public class AddMultipleCardsDialogFragment extends DialogFragment {
 			@Override
 			public void onClick(View v) {
 				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-				addCardsToCustomDeck();
+				fragment.addCardToCustomDeck(position , picker.getValue());
+				animationArg.repeatCount=picker.getValue()-1;
+				HexUtil.moveImageAnimation(animationArg);
 				dialog.dismiss();
 				
 			}
@@ -75,24 +81,6 @@ public class AddMultipleCardsDialogFragment extends DialogFragment {
 		});
 
 		return dialog;
-	}
-	
-	/**
-	 * Add cards to the custom deck
-	 * 
-	 * @param card
-	 */
-	private void addCardsToCustomDeck() {
-		{
-			if(mainActivity.customDeck.get(card) == null){
-				mainActivity.customDeck.put(card, picker.getValue());
-				mainActivity.customDeckCardList.add(card);
-			}else{
-				mainActivity.customDeck.put(card, mainActivity.customDeck.get(card) + picker.getValue());
-			}		
-			mainActivity.deckChanged = true;
-			Toast.makeText(mainActivity.getApplicationContext(), card.name + " added to custom deck.", Toast.LENGTH_SHORT).show();
-		}
 	}
 	
 

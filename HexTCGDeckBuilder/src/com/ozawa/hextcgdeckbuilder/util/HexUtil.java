@@ -161,5 +161,30 @@ public class HexUtil {
 	    });
 		image.startAnimation(moveCard);
 	}
+	
+	public static void moveImageAnimation(AnimationArg arg){
+		moveImageAnimation(arg.image, arg.fromX, arg.toX, arg.fromY, arg.toY, arg.duration, arg.repeatCount);
+	}
+	
+	public static class AnimationArg{
+		
+		public AnimationArg(ImageView image, int fromX, int toX, int fromY, int toY, int duration, int repeatCount) {
+			super();
+			this.image = image;
+			this.fromX = fromX;
+			this.toX = toX;
+			this.fromY = fromY;
+			this.toY = toY;
+			this.duration = duration;
+			this.repeatCount = repeatCount;
+		}
+		public ImageView image;
+		public int fromX;
+		public int toX;
+		public int fromY;
+		public int toY;
+		public int duration;
+		public int repeatCount;	
+	}
 
 }

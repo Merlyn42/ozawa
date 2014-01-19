@@ -219,7 +219,9 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-				return makeAddMultipleCardsDialog(position);
+				int[] values = new int[2]; 
+		           view.getLocationOnScreen(values);
+				return makeAddMultipleCardsDialog(position,values);
 			}
 		});
 		setIsGridView(true);
@@ -252,7 +254,9 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
                     int position, long id) {
-				return makeAddMultipleCardsDialog(position);
+				int[] values = new int[2]; 
+		           view.getLocationOnScreen(values);
+				return makeAddMultipleCardsDialog(position,values);
 			}
 			
 		});
@@ -265,13 +269,21 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 		this.isGridView = isGridView;
 	}
 	
-	private boolean makeAddMultipleCardsDialog(int position){
+	private HexUtil.AnimationArg createAnimationArg(int x,int y){
+		HexUtil.AnimationArg result = new HexUtil.AnimationArg(cardBack, x-(cardBackDimension/2), -cardBack.getLayoutParams().width, y-(cardBackDimension/2), (int) y - (y /3), 400, 0);		
+		return result;		
+	}
+	
+	private boolean makeAddMultipleCardsDialog(int position, int[] values){
 		if (position >= 0) {
 			AbstractCard card = isGridView == true ? imAdapter.masterDeck.get(position) : lvAdapter.masterDeck.get(position);
 
 			AddMultipleCardsDialogFragment addMultipleCardsDialog = new AddMultipleCardsDialogFragment();
 			addMultipleCardsDialog.card = card;
+			addMultipleCardsDialog.position=position;
+			addMultipleCardsDialog.animationArg=createAnimationArg(values[0],values[1]);
 			addMultipleCardsDialog.mainActivity = ((DeckUIActivity) mainActivity);
+			addMultipleCardsDialog.fragment = this;
 			addMultipleCardsDialog.show(mainActivity.getSupportFragmentManager(), "Add Multiple Cards");
 			return true;
 		}
@@ -284,16 +296,20 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 	 * 
 	 * @param card
 	 */
-	private void addCardToCustomDeck(int position) {
+	public void addCardToCustomDeck(int position,int value) {
 		
 		AbstractCard card = isGridView == true ? imAdapter.masterDeck.get(position) : lvAdapter.masterDeck.get(position);
 		HashMap<AbstractCard, Integer> customDeck = ((DeckUIActivity) mainActivity).customDeck;
 		if(customDeck.get(card) == null){
-			customDeck.put(card, 1);
+			customDeck.put(card, value);
 			((DeckUIActivity) mainActivity).customDeckCardList.add(card);
 		}else{
-			customDeck.put(card, customDeck.get(card) + 1);
+			customDeck.put(card, customDeck.get(card) + value);
 		}		
 		((DeckUIActivity) mainActivity).deckChanged = true;		
+	}
+	
+	public void addCardToCustomDeck(int position) {
+		addCardToCustomDeck(position,1);
 	}
 }

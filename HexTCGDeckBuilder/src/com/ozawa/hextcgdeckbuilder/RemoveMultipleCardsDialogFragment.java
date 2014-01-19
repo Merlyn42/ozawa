@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import com.ozawa.hextcgdeckbuilder.NewDeckDialogFragment.NewDeckListener;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
+import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -26,8 +27,10 @@ import android.widget.Toast;
 public class RemoveMultipleCardsDialogFragment extends DialogFragment {
 	Button removeCards;
 	Button cancel;
-	DeckUIActivity mainActivity;
+	public DeckUIActivity mainActivity;
 	NumberPicker picker;
+	public HexUtil.AnimationArg animationArg;
+	public int position;
 
 	AbstractCard card;
 	public CustomDeckFragment fragment;
@@ -60,7 +63,9 @@ public class RemoveMultipleCardsDialogFragment extends DialogFragment {
 			@Override
 			public void onClick(View v) {
 				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-				removeCardsFromCustomDeck();
+				fragment.removeCardFromCustomDeck(position,picker.getValue());
+				animationArg.repeatCount=picker.getValue()-1;
+				HexUtil.moveImageAnimation(animationArg);
 				dialog.dismiss();
 
 			}
@@ -75,27 +80,6 @@ public class RemoveMultipleCardsDialogFragment extends DialogFragment {
 		});
 
 		return dialog;
-	}
-
-	/**
-	 * Add cards to the custom deck
-	 * 
-	 * @param card
-	 */
-	private void removeCardsFromCustomDeck() {
-		HashMap<AbstractCard, Integer> customDeck = mainActivity.customDeck;
-		if (customDeck.get(card) != null) {
-			int cardCount = customDeck.get(card);
-			if (cardCount > picker.getValue()) {
-				customDeck.put(card, customDeck.get(card) - picker.getValue());
-			} else {
-				customDeck.remove(card);
-				mainActivity.customDeckCardList.remove(card);
-				
-			}
-			fragment.reloadCustomDeckView();
-		}
-		Toast.makeText(mainActivity.getApplicationContext(),picker.getValue() +" "+ card.name+(picker.getValue()>1?"s":"") + " removed from custom deck.", Toast.LENGTH_SHORT).show();
 	}
 
 }
