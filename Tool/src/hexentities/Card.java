@@ -39,7 +39,5 @@ public class Card extends AbstractCard {
 	public int				variableAttack;
 	@SerializedName("m_VariableHealth")
 	public int				variableHealth;
-	@SerializedName("m_CardNumber")
-	public int					cardNumber;
 
 }
