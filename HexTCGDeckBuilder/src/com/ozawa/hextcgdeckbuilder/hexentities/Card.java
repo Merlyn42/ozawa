@@ -154,7 +154,7 @@ public class Card extends AbstractCard {
 		paint.setTextSize(imageHeight * template.costFontRatio);
 		if (resourceCost > 9 ) {
 			combine.drawText("" + resourceCost, templateImage.getWidth() / 9.5f, templateImage.getHeight() / 7.2f, paint);
-		} else if(variableCost){
+		} else if(variableCost == 1){
 			if(resourceCost == 0)
 				combine.drawText("X", templateImage.getWidth() / 9.5f, templateImage.getHeight() / 7.2f, paint);
 			else
@@ -163,11 +163,11 @@ public class Card extends AbstractCard {
 			combine.drawText("" + resourceCost, templateImage.getWidth() / 7.7f, templateImage.getHeight() / 7.2f, paint);
 		}
 		if (cardType[0].equals(CardType.TROOP)) {			
-			if(variableAttack)
+			if(variableAttack == 1)
 				combine.drawText("X", templateImage.getWidth() / 9, templateImage.getHeight() - (templateImage.getHeight() / 11f),paint);
 			else
 				combine.drawText(baseAttackValue, templateImage.getWidth() / 9, templateImage.getHeight() - (templateImage.getHeight() / 11f),paint);
-			if(variableHealth)
+			if(variableHealth == 1)
 				combine.drawText("X", templateImage.getWidth() - (templateImage.getWidth() / 6.8f), templateImage.getHeight()- (templateImage.getHeight() / 11f), paint);
 			else
 				combine.drawText(baseHealthValue, templateImage.getWidth() - (templateImage.getWidth() / 6.8f), templateImage.getHeight()- (templateImage.getHeight() / 11f), paint);
@@ -196,7 +196,7 @@ public class Card extends AbstractCard {
 		combine.drawText(name, templateImage.getWidth() / 6, templateImage.getHeight() / 14, paint);
 		if (resourceCost > 9) {
 			combine.drawText("" + resourceCost, templateImage.getWidth() / 15, templateImage.getHeight() / 15, paint);
-		}else if(variableCost){
+		}else if(variableCost == 1){
 			if(resourceCost == 0){
 				combine.drawText("X", templateImage.getWidth() / 13, templateImage.getHeight() / 15, paint);
 			}
@@ -206,12 +206,12 @@ public class Card extends AbstractCard {
 		}
 
 		if (cardType[0].equals(CardType.TROOP)) {
-			if(variableAttack){
+			if(variableAttack == 1){
 				combine.drawText("X", templateImage.getWidth() / 17, templateImage.getHeight() - (templateImage.getHeight() / 25),paint);
 			}else{
 				combine.drawText(baseAttackValue, templateImage.getWidth() / 17, templateImage.getHeight() - (templateImage.getHeight() / 25),paint);
 			}
-			if(variableHealth){
+			if(variableHealth == 1){
 				combine.drawText("X", templateImage.getWidth() - (templateImage.getWidth() / 11.5f), templateImage.getHeight()
 					- (templateImage.getHeight() / 25), paint);
 			} else {
