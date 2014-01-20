@@ -10,26 +10,22 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 public class TabPagerAdapter extends FragmentStatePagerAdapter{
 	
 	private static final int tabCount = 2;
-	public CustomDeckFragment customDeckFragment;
-	public MasterDeckFragment masterDeckFragment;
+	public final CustomDeckFragment customDeckFragment;
+	public final MasterDeckFragment masterDeckFragment;
 	
 	public TabPagerAdapter(FragmentManager fm) {
         super(fm);
+        customDeckFragment = new CustomDeckFragment();
+        masterDeckFragment = new MasterDeckFragment();
     }
 
 	@Override
 	public Fragment getItem(int index) {
 		switch(index){
 			case 0:{
-				if(customDeckFragment == null){
-					customDeckFragment = new CustomDeckFragment();
-				}
 				return customDeckFragment;
 			}
 			case 1:{
-				if(masterDeckFragment == null){
-					masterDeckFragment = new MasterDeckFragment();
-				}
 				return masterDeckFragment;
 			}
 		}
