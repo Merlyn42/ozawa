@@ -57,11 +57,13 @@ public class Card extends AbstractCard {
 	@SerializedName("m_EquipmentSlots")
 	public GlobalIdentifier[]	equipmentSlots;
 	@SerializedName("m_VariableCost")
-	public boolean	variableCost;
+	public int				variableCost;
 	@SerializedName("m_VariableAttack")
-	public boolean	variableAttack;
+	public int				variableAttack;
 	@SerializedName("m_VariableHealth")
-	public boolean	variableHealth;
+	public int				variableHealth;
+	@SerializedName("m_CardNumber")
+	public int					cardNumber;
 
 	private float				line;
 	private static final int	fullTemplateWidth		= 890;

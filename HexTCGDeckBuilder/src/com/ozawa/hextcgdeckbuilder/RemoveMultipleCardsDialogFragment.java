@@ -44,6 +44,7 @@ public class RemoveMultipleCardsDialogFragment extends DialogFragment {
 
 		dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		dialog.setContentView(R.layout.add_multiple_cards_popup);
+		dialog.setTitle("Remove Multiple Cards");
 
 		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0xaa000000));
 
