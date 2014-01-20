@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +15,7 @@ import com.ozawa.hextcgdeckbuilder.UI.ImageGetter;
 import com.ozawa.hextcgdeckbuilder.UI.StringGetter;
 import com.ozawa.hextcgdeckbuilder.enums.ImageGetterType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
+import com.ozawa.hextcgdeckbuilder.hexentities.ResourceCard;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 /**
@@ -63,7 +62,8 @@ public class DeckListViewAdapter extends ImageAdapter{
         
         AbstractCard card = masterDeck.get(position);
         
-		if (card.colorFlags.length > 0&&card.colorFlags[0]!=null) {
+		if (card.colorFlags.length > 0 && card.colorFlags[0] != null 
+				&& !(card instanceof ResourceCard)) {
 			switch (card.colorFlags[0]) {
 				case COLORLESS: {
 					vi.setBackgroundResource(R.drawable.list_selector_colorless);
@@ -105,8 +105,29 @@ public class DeckListViewAdapter extends ImageAdapter{
 					break;
 				}
 			}
-		} else {
+		}else if(card instanceof ResourceCard){
+			if(card.name.contains("Blood")){
+				vi.setBackgroundResource(R.drawable.list_selector_blood);
+				portaitBorder.setBackgroundResource(R.drawable.portrait_border_blood);
+			}else if(card.name.contains("Diamond")){
+				vi.setBackgroundResource(R.drawable.list_selector_diamond);
+				portaitBorder.setBackgroundResource(R.drawable.portrait_border_diamond);
+			}else if(card.name.contains("Ruby")){
+				vi.setBackgroundResource(R.drawable.list_selector_ruby);
+				portaitBorder.setBackgroundResource(R.drawable.portrait_border_ruby);
+			} else if(card.name.contains("Sapphire")){
+				vi.setBackgroundResource(R.drawable.list_selector_sapphire);
+				portaitBorder.setBackgroundResource(R.drawable.portrait_border_sapphire);
+			} else if(card.name.contains("Wild")){
+				vi.setBackgroundResource(R.drawable.list_selector_wild);
+				portaitBorder.setBackgroundResource(R.drawable.portrait_border_wild);
+			}else{
+				vi.setBackgroundResource(R.drawable.list_selector_colorless);
+				portaitBorder.setBackgroundResource(R.drawable.portrait_border_colorless);
+			}
+		}else{
 			vi.setBackgroundResource(R.drawable.list_selector_colorless);
+			portaitBorder.setBackgroundResource(R.drawable.portrait_border_colorless);
 		}
 		
         // Setting all values in listview
