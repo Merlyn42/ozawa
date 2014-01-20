@@ -53,7 +53,7 @@ public class SelectChampionDialogFragment extends DialogFragment {
 		dialog.setContentView(R.layout.select_champion_popup);
 		
 		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0xaa000000));
-		dialog.setTitle("Load Deck");
+		dialog.setTitle("Select Champion");
 		
 		SelectChampionArrayAdapter adapter = new SelectChampionArrayAdapter(getActivity(), R.layout.select_champion_popup, allChampions);
 		

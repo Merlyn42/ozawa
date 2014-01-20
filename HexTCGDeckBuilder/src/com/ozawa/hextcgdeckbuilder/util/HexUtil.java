@@ -131,7 +131,7 @@ public class HexUtil {
 	}
 	
 	/**
-	 * Move an ImageView from one location to anoter via animation
+	 * Move an ImageView from one location to another via animation
 	 * 
 	 * @param image
 	 * @param fromX
