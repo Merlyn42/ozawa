@@ -64,9 +64,10 @@ public class AddMultipleCardsDialogFragment extends DialogFragment {
 			@Override
 			public void onClick(View v) {
 				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-				fragment.addCardToCustomDeck(position , picker.getValue());
-				animationArg.repeatCount=picker.getValue()-1;
-				HexUtil.moveImageAnimation(animationArg);
+				if(fragment.addCardToCustomDeck(position , picker.getValue())){
+					animationArg.repeatCount=picker.getValue()-1;
+					HexUtil.moveImageAnimation(animationArg);
+				}
 				dialog.dismiss();
 				
 			}

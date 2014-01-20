@@ -10,28 +10,34 @@ import enums.Attribute;
  * @author Chad Kinsella
  */
 public class Card extends AbstractCard {
-	
+
 	@SerializedName("m_Faction")
-	public String faction;
+	public String				faction;
 	@SerializedName("m_SocketCount")
-	public int socketCount;
+	public int					socketCount;
 	@SerializedName("m_AttributeFlags")
-	public Attribute[] attributeFlags;
+	public Attribute[]			attributeFlags;
 	@SerializedName("m_ResourceCost")
-	public int resourceCost;
+	public int					resourceCost;
 	@SerializedName("m_Threshold")
-	public ResourceThreshold[] threshold;
+	public ResourceThreshold[]	threshold;
 	@SerializedName("m_BaseAttackValue")
-	public String baseAttackValue;
+	public String				baseAttackValue;
 	@SerializedName("m_BaseHealthValue")
-	public String baseHealthValue;
+	public String				baseHealthValue;
 	@SerializedName("m_FlavorText")
-	public String flavorText;
+	public String				flavorText;
 	@SerializedName("m_ResourceSymbolImagePath")
-	public String resourceSymbolImagePath;
+	public String				resourceSymbolImagePath;
 	@SerializedName("m_Unique")
-	public Boolean unique;
+	public Boolean				unique;
 	@SerializedName("m_EquipmentSlots")
-	public GlobalIdentifier[] equipmentSlots;
+	public GlobalIdentifier[]	equipmentSlots;
+	@SerializedName("m_VariableCost")
+	public int				variableCost;
+	@SerializedName("m_VariableAttack")
+	public int				variableAttack;
+	@SerializedName("m_VariableHealth")
+	public int				variableHealth;
 
 }
