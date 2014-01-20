@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/list_selector_colorless"
+    android:orientation="horizontal"
+    android:padding="5dip" >
+
+    <!--  ListRow Left side Thumbnail image -->
+    <LinearLayout android:id="@+id/portrait_border"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="3dip"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/portrait_border_colorless"
+        android:layout_marginRight="5dip">
+
+        <ImageView
+            android:id="@+id/list_image"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:src="@drawable/back"/>
+
+    </LinearLayout>
+
+    <!-- Card Name -->
+    <TextView
+        android:id="@+id/card_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/portrait_border"
+        android:layout_toRightOf="@+id/portrait_border"
+        android:textColor="@drawable/list_selector_text_color"
+        android:typeface="sans"
+        android:textSize="15dip"
+        android:textStyle="bold"/>
+
+    <!-- Game Text -->
+    <TextView
+        android:id="@+id/gametext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/card_name"
+        android:textColor="@drawable/list_selector_text_color"
+        android:textSize="10dip"
+        android:layout_marginTop="1dip"
+        android:layout_toRightOf="@+id/portrait_border"
+        android:layout_toLeftOf="@+id/tvCardAttack" />
+    	
+	
+   	<TextView
+        android:id="@+id/tvCardCost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/card_name"
+        android:textColor="@drawable/list_selector_text_color"
+        android:typeface="sans"
+        android:textSize="15dip"
+        android:layout_marginRight="5dip"
+        android:textStyle="bold" />
+    
+    <ImageView
+        android:id="@+id/cardthreshold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/tvCardCost"
+        android:gravity="right"
+        android:layout_marginRight="5dip"
+        android:contentDescription="Card Threshold"/>
+    
+    <ImageView
+        android:id="@+id/imCardDefense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:gravity="right"
+        android:layout_marginRight="5dip"
+        android:contentDescription="Card Defense"
+        android:adjustViewBounds="true"
+        android:maxWidth="17dp"
+        android:maxHeight="17dp"/>
+    
+    <TextView
+        android:id="@+id/tvCardDefense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@drawable/list_selector_text_color"
+        android:textSize="15dip"
+        android:layout_alignParentBottom="true"
+        android:gravity="right"
+        android:layout_toLeftOf="@+id/imCardDefense"
+        android:layout_marginRight="5dip"
+        android:textStyle="bold" />
+    
+    <ImageView
+        android:id="@+id/imCardAttack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="right"
+        android:layout_toLeftOf="@+id/tvCardDefense"
+        android:layout_marginRight="5dip"
+        android:contentDescription="Card Attack"
+        android:adjustViewBounds="true"
+        android:maxWidth="17dp"
+        android:maxHeight="17dp"/>
+    
+    <TextView
+        android:id="@+id/tvCardAttack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@drawable/list_selector_text_color"
+        android:textSize="15dip"
+        android:layout_alignParentBottom="true"
+        android:gravity="right"
+        android:layout_toLeftOf="@+id/imCardAttack"
+        android:layout_marginRight="5dip"
+        android:textStyle="bold" />
+    
+    <TextView
+        android:id="@+id/tvCardCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/portrait_border"
+        android:layout_marginTop="1dip"
+        android:layout_toLeftOf="@+id/gametext"
+        android:gravity="left"
+        android:textColor="@drawable/list_selector_text_color"
+        android:textSize="10dip" />
+
+    <!-- Rightend Duration -->
+    <!-- <TextView
+        android:id="@+id/duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@id/title"
+        android:gravity="right"
+        android:text="5:45"
+        android:layout_marginRight="5dip"
+        android:textSize="10dip"
+        android:textColor="@drawable/list_selector_text_color"
+        android:textStyle="bold"/>-->
+
+    <!-- Rightend Arrow
+    <ImageView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src=""
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"/> -->
+
+</RelativeLayout>

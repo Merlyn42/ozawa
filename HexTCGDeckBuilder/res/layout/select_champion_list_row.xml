@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:orientation="horizontal"
+    android:padding="5dip" >
+	
+    <TextView
+   	    android:id="@+id/tvChampionName_Row"
+   	    android:layout_width="wrap_content"
+   	    android:layout_height="wrap_content"
+   	    android:text="Champion Name"
+   	    android:textSize="20dp"
+        android:textStyle="bold"/>
+
+   	<TextView
+   	    android:id="@+id/tvChampionGameText_Row"
+   	    android:layout_width="wrap_content"
+   	    android:layout_height="wrap_content"
+   	    android:text="Game Text"
+   	    android:textSize="15dp"
+   	    android:layout_below="@id/tvChampionName_Row" />   
+
+</RelativeLayout>

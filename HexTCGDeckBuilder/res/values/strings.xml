@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">HEX TCG - Deck Builder</string>
+    <string name="title_section1">Filter 1</string>
+    <string name="title_section2">Filter 2</string>
+    <string name="title_section3">Filter 3</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Don\'t Press.</string>
+    <string name="action_settings">Don\'t Press!</string>
+    <string name="deck_view">Deck View</string>
+    <string name="list_view">List View</string>
+    <string name="new_deck">New Deck</string>
+    <string name="load_deck">Load Deck</string>
+    <string name="save_deck">Save Deck</string>
+    <string name="delete_deck">Delete Deck</string>
+    <string name="new_deck_name">New Deck Name</string>
+    <string name="select_champion">Select Champion</string>
+    <string name="full_image_description">Full card view</string>
+
+</resources>

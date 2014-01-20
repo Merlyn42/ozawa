@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <RelativeLayout 
+        android:id="@+id/relLayoutChampionSelected"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        
+    	<ImageView
+            	android:id="@+id/imageChampionPortrait"
+            	android:layout_width="100dip"
+            	android:layout_height="100dip"
+            	android:src="@drawable/championnoportait"
+            	android:layout_alignParentTop="true"
+            	android:contentDescription="Champion Portrait"/>
+
+    	<TextView
+    	    android:id="@+id/tvChampionName"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:text="Champion Name"
+    	    android:textSize="25dp"
+        	android:textStyle="bold"
+        	android:layout_alignParentTop="true"
+    	    android:layout_toRightOf="@+id/imageChampionPortrait" />
+
+    	<TextView
+    	    android:id="@+id/tvChampionGameText"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:text="Game Text"
+    	    android:textSize="20dp"
+    	    android:layout_toRightOf="@+id/imageChampionPortrait"
+    	    android:layout_below="@id/tvChampionName" />
+    </RelativeLayout>
+    
+    <LinearLayout
+        android:id="@+id/linLayoutSelectChampButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom"
+        android:weightSum="2"
+        android:layout_alignParentBottom="true" >
+       
+         <Button
+	        android:id="@+id/buttonCancelSelectChampion"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="Cancel"
+	        android:layout_weight="1" />
+         
+	     <Button
+	        android:id="@+id/buttonSaveSelectedChampion"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/select_champion"
+	        android:layout_weight="1" />
+   
+   	</LinearLayout>
+    	
+   	<LinearLayout
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical"
+	        android:layout_below="@id/relLayoutChampionSelected"
+	        android:layout_above="@id/linLayoutSelectChampButtons" >
+	        	
+	        	<ListView
+	         		android:id="@+id/championList"
+	         		android:layout_height="match_parent"
+	         		android:layout_width="match_parent">
+	    		</ListView>
+        		
+     </LinearLayout>
+</RelativeLayout>
