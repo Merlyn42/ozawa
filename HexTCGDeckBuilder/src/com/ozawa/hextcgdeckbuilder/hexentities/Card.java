@@ -150,16 +150,25 @@ public class Card extends AbstractCard {
 		paint.setTextSize(imageHeight * template.nameFontRatio);
 		combine.drawText(getShortenedText(name, 17), templateImage.getWidth() / 3.3f, templateImage.getHeight() / 11f, paint);
 		paint.setTextSize(imageHeight * template.costFontRatio);
-		if (resourceCost > 9) {
+		if (resourceCost > 9 ) {
 			combine.drawText("" + resourceCost, templateImage.getWidth() / 9.5f, templateImage.getHeight() / 7.2f, paint);
-		} else {
+		} else if(variableCost){
+			if(resourceCost == 0)
+				combine.drawText("X", templateImage.getWidth() / 9.5f, templateImage.getHeight() / 7.2f, paint);
+			else
+				combine.drawText(resourceCost + "X", templateImage.getWidth() / 9.5f, templateImage.getHeight() / 7.2f, paint);
+		}else {
 			combine.drawText("" + resourceCost, templateImage.getWidth() / 7.7f, templateImage.getHeight() / 7.2f, paint);
 		}
-		if (cardType[0].equals(CardType.TROOP)) {
-			combine.drawText(baseAttackValue, templateImage.getWidth() / 9, templateImage.getHeight() - (templateImage.getHeight() / 11f),
-					paint);
-			combine.drawText(baseHealthValue, templateImage.getWidth() - (templateImage.getWidth() / 6.8f), templateImage.getHeight()
-					- (templateImage.getHeight() / 11f), paint);
+		if (cardType[0].equals(CardType.TROOP)) {			
+			if(variableAttack)
+				combine.drawText("X", templateImage.getWidth() / 9, templateImage.getHeight() - (templateImage.getHeight() / 11f),paint);
+			else
+				combine.drawText(baseAttackValue, templateImage.getWidth() / 9, templateImage.getHeight() - (templateImage.getHeight() / 11f),paint);
+			if(variableHealth)
+				combine.drawText("X", templateImage.getWidth() - (templateImage.getWidth() / 6.8f), templateImage.getHeight()- (templateImage.getHeight() / 11f), paint);
+			else
+				combine.drawText(baseHealthValue, templateImage.getWidth() - (templateImage.getWidth() / 6.8f), templateImage.getHeight()- (templateImage.getHeight() / 11f), paint);
 		} else {
 			paint.setTextSize(imageHeight * template.typeFontRatio);
 			String cardTypes = "";
@@ -185,15 +194,28 @@ public class Card extends AbstractCard {
 		combine.drawText(name, templateImage.getWidth() / 6, templateImage.getHeight() / 14, paint);
 		if (resourceCost > 9) {
 			combine.drawText("" + resourceCost, templateImage.getWidth() / 15, templateImage.getHeight() / 15, paint);
-		} else {
+		}else if(variableCost){
+			if(resourceCost == 0){
+				combine.drawText("X", templateImage.getWidth() / 13, templateImage.getHeight() / 15, paint);
+			}
+			combine.drawText(resourceCost + "X", templateImage.getWidth() / 13, templateImage.getHeight() / 15, paint);
+		}else {
 			combine.drawText("" + resourceCost, templateImage.getWidth() / 13, templateImage.getHeight() / 15, paint);
 		}
 
 		if (cardType[0].equals(CardType.TROOP)) {
-			combine.drawText(baseAttackValue, templateImage.getWidth() / 17, templateImage.getHeight() - (templateImage.getHeight() / 25),
-					paint);
-			combine.drawText(baseHealthValue, templateImage.getWidth() - (templateImage.getWidth() / 11.5f), templateImage.getHeight()
+			if(variableAttack){
+				combine.drawText("X", templateImage.getWidth() / 17, templateImage.getHeight() - (templateImage.getHeight() / 25),paint);
+			}else{
+				combine.drawText(baseAttackValue, templateImage.getWidth() / 17, templateImage.getHeight() - (templateImage.getHeight() / 25),paint);
+			}
+			if(variableHealth){
+				combine.drawText("X", templateImage.getWidth() - (templateImage.getWidth() / 11.5f), templateImage.getHeight()
 					- (templateImage.getHeight() / 25), paint);
+			} else {
+				combine.drawText(baseHealthValue, templateImage.getWidth() - (templateImage.getWidth() / 11.5f), templateImage.getHeight()
+						- (templateImage.getHeight() / 25), paint);
+			}
 		}
 		tempRatio = template.costFontRatio;
 		paint.setTextSize(imageHeight * tempRatio);
