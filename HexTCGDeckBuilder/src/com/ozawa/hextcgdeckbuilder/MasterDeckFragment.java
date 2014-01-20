@@ -29,11 +29,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.RelativeLayout;
 
@@ -180,6 +183,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 		}else{
 			setUpListView();			
 		}
+		updateListViewHeight();		
 		gridView.setVisibility(View.INVISIBLE);
 		listView.setVisibility(View.VISIBLE);
 	}
@@ -311,5 +315,24 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 	
 	public void addCardToCustomDeck(int position) {
 		addCardToCustomDeck(position,1);
+	}
+	
+	/**
+	 * Update the listview height 
+	 */
+	private void updateListViewHeight() {
+		Runnable fitsOnScreen = new Runnable() {
+		    @Override
+		    public void run() {
+		    	if(listView.getChildCount() > 0){
+			        int last = listView.getLastVisiblePosition();
+			        if(last == listView.getCount() - 1 && listView.getChildAt(last).getBottom() >= listView.getHeight()) {
+			            listView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, listView.getHeight() + listView.getChildAt(last).getBottom()));
+			            Toast.makeText(mainActivity, "Updating Listview height", Toast.LENGTH_SHORT).show();
+			        }
+		    	}
+		    }
+		};
+		listView.post(fitsOnScreen);
 	}
 }

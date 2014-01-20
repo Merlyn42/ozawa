@@ -34,11 +34,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -204,6 +206,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 		} else {
 			setUpListView();
 		}
+		updateListViewHeight();
 		listView.setVisibility(View.VISIBLE);
 		gridView.setVisibility(View.INVISIBLE);
 	}
@@ -674,5 +677,24 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 			} catch (Exception ex) {
 			}
 		}
+	}
+	
+	/**
+	 * Update the listview height 
+	 */
+	private void updateListViewHeight() {
+		Runnable fitsOnScreen = new Runnable() {
+		    @Override
+		    public void run() {
+		    	if(listView.getChildCount() > 0){
+			        int last = listView.getLastVisiblePosition();
+			        if(last == listView.getCount() - 1 && listView.getChildAt(last).getBottom() >= listView.getHeight()) {
+			            listView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, listView.getHeight() + listView.getChildAt(last).getBottom()));
+			            Toast.makeText(mainActivity, "Updating Listview height", Toast.LENGTH_SHORT).show();
+			        }
+		    	}
+		    }
+		};
+		listView.post(fitsOnScreen);
 	}
 }
