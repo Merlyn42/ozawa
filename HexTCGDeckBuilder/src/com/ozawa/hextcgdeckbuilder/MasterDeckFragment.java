@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.ozawa.hextcgdeckbuilder.MasterDeckActivity.PlaceholderFragment;
 import com.ozawa.hextcgdeckbuilder.UI.CardViewer;
 import com.ozawa.hextcgdeckbuilder.UI.CustomViewPager;
+import com.ozawa.hextcgdeckbuilder.UI.PlaceholderFragment;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 import com.ozawa.hextcgdeckbuilder.json.JsonReader;
