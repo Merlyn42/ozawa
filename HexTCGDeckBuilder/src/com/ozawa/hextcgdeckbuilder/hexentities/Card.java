@@ -154,7 +154,7 @@ public class Card extends AbstractCard {
 			combine.drawText("" + resourceCost, templateImage.getWidth() / 9.5f, templateImage.getHeight() / 7.2f, paint);
 		} else if(variableCost == 1){
 			if(resourceCost == 0)
-				combine.drawText("X", templateImage.getWidth() / 9.5f, templateImage.getHeight() / 7.2f, paint);
+				combine.drawText("X", templateImage.getWidth() / 7.7f, templateImage.getHeight() / 7.2f, paint);
 			else
 				combine.drawText(resourceCost + "X", templateImage.getWidth() / 9.5f, templateImage.getHeight() / 7.2f, paint);
 		}else {
@@ -191,18 +191,17 @@ public class Card extends AbstractCard {
 		float imageHeight = templateImage.getHeight();
 		float tempRatio = template.nameFontRatio;
 		paint.setTextSize(imageHeight * tempRatio);
-		combine.drawText(name, templateImage.getWidth() / 6, templateImage.getHeight() / 14, paint);
+		combine.drawText(name, templateImage.getWidth() / 6, templateImage.getHeight() / 14, paint);		
 		if (resourceCost > 9) {
 			combine.drawText("" + resourceCost, templateImage.getWidth() / 15, templateImage.getHeight() / 15, paint);
 		}else if(variableCost == 1){
-			if(resourceCost == 0){
+			if(resourceCost == 0)
 				combine.drawText("X", templateImage.getWidth() / 13, templateImage.getHeight() / 15, paint);
-			}
-			combine.drawText(resourceCost + "X", templateImage.getWidth() / 13, templateImage.getHeight() / 15, paint);
+			else
+				combine.drawText(resourceCost + "X", templateImage.getWidth() / 13, templateImage.getHeight() / 15, paint);
 		}else {
 			combine.drawText("" + resourceCost, templateImage.getWidth() / 13, templateImage.getHeight() / 15, paint);
-		}
-
+		}		
 		if (cardType[0].equals(CardType.TROOP)) {
 			if(variableAttack == 1){
 				combine.drawText("X", templateImage.getWidth() / 17, templateImage.getHeight() - (templateImage.getHeight() / 25),paint);
