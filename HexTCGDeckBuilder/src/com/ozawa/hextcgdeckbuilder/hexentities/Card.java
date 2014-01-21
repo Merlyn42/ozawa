@@ -82,7 +82,7 @@ public class Card extends AbstractCard {
 	public Bitmap getCardBitmap(Context context, CardTemplate template, int maxWidth) {
 		Resources resources = context.getResources();
 		final int portraitId = resources.getIdentifier(cardImagePath.split("\\.")[0], "drawable", context.getPackageName());
-
+		
 		// no resourceID found
 		if (portraitId == 0)
 			return null;
@@ -136,7 +136,7 @@ public class Card extends AbstractCard {
 				combine.drawBitmap(threshold, (templateImage.getWidth() / 14), (templateImage.getHeight() / 9.5f), null);
 			}
 		} else {
-			drawThumbnailText(combine, templateImage, paint, template);
+			drawThumbnailText(combine, templateImage, paint, template,resources);
 			if (threshold != null) {
 				combine.drawBitmap(threshold, (templateImage.getWidth() / 14), (templateImage.getHeight() / 4.2f), null);
 			}
@@ -145,7 +145,7 @@ public class Card extends AbstractCard {
 		return result;
 	}
 
-	private void drawThumbnailText(Canvas combine, Bitmap templateImage, Paint paint, CardTemplate template) {
+	private void drawThumbnailText(Canvas combine, Bitmap templateImage, Paint paint, CardTemplate template, Resources resources) {
 		float imageHeight = templateImage.getHeight();
 		paint.setTextSize(imageHeight * template.nameFontRatio);
 		combine.drawText(getShortenedText(name, 17), templateImage.getWidth() / 3.3f, templateImage.getHeight() / 11f, paint);
@@ -179,10 +179,14 @@ public class Card extends AbstractCard {
 			}
 			if (!cardSubtype.equals(""))
 				cardTypes += " -- " + cardSubtype;
-
-			float tempDivider = 6.2f;
+		
 			combine.drawText(getShortenedText(cardTypes, 24), templateImage.getWidth() / 11,
-					templateImage.getHeight() - (templateImage.getHeight() / tempDivider), paint);
+					templateImage.getHeight() - (templateImage.getHeight() / 6.2f), paint);
+		}
+			
+		if (socketCount > 0) {
+			Bitmap socketImage = BitmapFactory.decodeResource(resources,R.drawable.gem_socket);
+			combine.drawBitmap(socketImage, templateImage.getWidth() - (templateImage.getWidth() / 3),templateImage.getHeight() / 1.9f, paint);
 		}
 	}
 
@@ -231,6 +235,11 @@ public class Card extends AbstractCard {
 			cardTypes += " -- " + cardSubtype;
 
 		combine.drawText(cardTypes, templateImage.getWidth() / 13, templateImage.getHeight() - (templateImage.getHeight() / 2.97f), paint);
+				
+		if(socketCount > 0){
+			Bitmap socketImage = BitmapFactory.decodeResource(resources, R.drawable.gem_socket);
+			combine.drawBitmap(socketImage, templateImage.getWidth() - (templateImage.getWidth() / 5), templateImage.getHeight() / 1.95f, paint);
+		}
 	}
 
 	private void drawGameText(String gameText, int length, Canvas combine, Bitmap templateImage, Paint paint, Resources resources,
