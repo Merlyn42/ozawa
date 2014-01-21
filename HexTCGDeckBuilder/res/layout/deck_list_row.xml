@@ -30,6 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/portrait_border"
         android:layout_toRightOf="@+id/portrait_border"
+        android:layout_toLeftOf="@+id/tvCardCost"
         android:textColor="@drawable/list_selector_text_color"
         android:typeface="sans"
         android:textSize="15dip"
