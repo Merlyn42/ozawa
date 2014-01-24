@@ -1,4 +1,3 @@
-import hexentities.AbstractCard;
 import hexentities.Card;
 import hexentities.Champion;
 
@@ -87,16 +86,16 @@ public class CardImagerMapperUtil {
 			e.printStackTrace();
 		}
 
-		for (AbstractCard card : allCards) {
+		for (Card card : allCards) {
 			try {
-				String cardImagePath = card.cardImagePath;
+				String cardImagePath = card.getM_CardImagePath();
 				File imageFile = new File(hexLocation, cardImagePath);
 				File newImageFile = new File(newImageLocation, imageName + String.format("%05d", fileNumber) + ".jpg");
 
 				BufferedImage image = openImage(imageFile);
 				writeJpeg(newImageFile, image, 0.6f);
 				// FileUtils.copyFile(imageFile, newImageFile);
-				card.cardImagePath = FilenameUtils.removeExtension(newImageFile.getName());
+				card.setM_CardImagePath(FilenameUtils.removeExtension(newImageFile.getName()));
 				String newCardJSON = JSONSerializer.serializeCardToJSON(card);
 
 				File newCardFile = new File(newCardLocation, newCardName + String.format("%05d", fileNumber) + ".json");
@@ -111,9 +110,9 @@ public class CardImagerMapperUtil {
 				newCardOutput.close();
 				fileNumber++;
 			} catch (FileNotFoundException e) {
-				System.out.println("Skipping file as image not found" + card.name);
+				System.out.println("Skipping file as image not found" + card.getM_Name());
 			} catch (IOException e) {
-				System.out.println("Skipping file as error loading image" + card.name);
+				System.out.println("Skipping file as error loading image" + card.getM_Name());
 				e.printStackTrace();
 			}
 		}
