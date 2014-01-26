@@ -72,6 +72,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 	ShowcaseViews 						mViews;
 	public static CardViewer			cardViewer;
 	public final static String			GETDECK	= "GETDECK";
+	private static final String PREFS_NAME = "FirstLaunchPref";
 	private GestureLibrary				gesLibrary;
 	private GridView					gridView;
 	
@@ -82,6 +83,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);	
+		mPreferences = getActivity().getSharedPreferences(PREFS_NAME, 0);
 		boolean firstTime = mPreferences.getBoolean("firstTime", true);
 		if (firstTime) { 
 		    SharedPreferences.Editor editor = mPreferences.edit();
