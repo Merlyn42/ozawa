@@ -123,6 +123,8 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
             	}
             	return true;
             case R.id.view_tutorial:{
+            	viewPager.setCurrentItem(1); // Change to Card Library
+            	masterDeckFragment.showTutorial();
             	return true;
             }
             default:

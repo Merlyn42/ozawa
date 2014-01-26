@@ -78,8 +78,6 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 	
 	private SharedPreferences mPreferences;
 	
-
-	@SuppressWarnings("deprecation")
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);	
@@ -90,17 +88,26 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 		    editor.putBoolean("firstTime", false);
 		    editor.commit();
 		
-			tutCount = 0;
-			co = new ShowcaseView.ConfigOptions();
-			co.shotType = ShowcaseView.TYPE_ONE_SHOT;
-			co.centerText = true;
-			co.hideOnClickOutside = true;
-	        showcaseView = ShowcaseView.insertShowcaseView(HexUtil.getScreenWidth(getActivity()) / 2, (int)(HexUtil.getScreenHeight(getActivity()) / 2.15), getActivity(), "Gestures", "Swipe left to add the card to your custom deck", co);        
-			showcaseView.setOnShowcaseEventListener(new TutorialEventListener(getActivity(),co));
-	        showcaseView.animateGesture(HexUtil.getScreenWidth(getActivity()) / 2, (int)(HexUtil.getScreenHeight(getActivity()) / 2.1), (int)(HexUtil.getScreenWidth(getActivity()) / 4), (int)(HexUtil.getScreenHeight(getActivity()) / 2.1), true);        
-	        showcaseView.show();
-	        tutCount++;
+			showTutorial();
 		}
+	}
+
+	/**
+	 * Show the app's tutorial
+	 */
+	@SuppressWarnings("deprecation")
+	public void showTutorial() {
+		tutCount = 0;
+		co = new ShowcaseView.ConfigOptions();
+		co.shotType = ShowcaseView.TYPE_ONE_SHOT;
+		co.centerText = true;
+		co.hideOnClickOutside = true;
+		showcaseView = ShowcaseView.insertShowcaseView(HexUtil.getScreenWidth(getActivity()) / 2, (int)(HexUtil.getScreenHeight(getActivity()) / 15), getActivity(), "Welcome to the Unofficial Hex TCG - Deck Builder", 
+				"Before you get started building awesome decks, let us give you a run down of the basics.", co);     
+		showcaseView.setShowcase(ShowcaseView.NONE);
+		showcaseView.setOnShowcaseEventListener(new TutorialEventListener(getActivity(),co));        
+		showcaseView.show();
+		tutCount++;
 	}
 	
 	@Override
