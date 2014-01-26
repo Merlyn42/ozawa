@@ -30,6 +30,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.Display;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -302,9 +305,13 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 
 	private boolean makeRemoveMultipleCardsDialog(int position, int[] values) {
 		if (position >= 0) {
+			AbstractMultipleCardsDialogFragment removeMultipleCardsDialog;
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+				removeMultipleCardsDialog = new RemoveMultipleCardsDialogFragment();
+			} else {
+				removeMultipleCardsDialog = new RemoveMultipleCardsDialogFragmentGinger();
+			}
 			AbstractCard card = isGridView == true ? imAdapter.masterDeck.get(position) : lvAdapter.masterDeck.get(position);
-
-			RemoveMultipleCardsDialogFragment removeMultipleCardsDialog = new RemoveMultipleCardsDialogFragment();
 			removeMultipleCardsDialog.card = card;
 			removeMultipleCardsDialog.position = position;
 			removeMultipleCardsDialog.animationArg = createAnimationArg(values[0] + cardBackDimension / 2, values[1] - cardBackDimension
@@ -398,7 +405,6 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 
 			}
 
-			
 		}
 	}
 
@@ -632,7 +638,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 		final EditText input = new EditText(mainActivity);
 
 		if (mainActivity.currentCustomDeck == null) {
-			builder.setMessage("This deck is not yet saved, would you like to save it before proceeding?");
+			builder.setMessage("This deck is not yet saved, would you like to save now?");
 			builder.setView(input);
 		} else {
 			builder.setMessage("This deck has unsaved changes, would you like to save it before proceeding?");
@@ -641,12 +647,13 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 		builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int position) {
-				if (mainActivity.currentCustomDeck != null) {
+				if(input.getText().toString().isEmpty()){
+					Toast.makeText(mainActivity.getApplicationContext(), "You must enter a name before saving.", Toast.LENGTH_SHORT).show();
+				}else if (mainActivity.currentCustomDeck != null) {
 					saveDeck();
 					invokeNoParamReflectiveMethod(methodName, fragment);
 				} else if (!saveUnsavedDeck(input.getText().toString())) {
-					Toast.makeText(mainActivity.getApplicationContext(), "Failed to save deck. Please try again.", Toast.LENGTH_SHORT)
-							.show();
+					Toast.makeText(mainActivity.getApplicationContext(), "Failed to save deck. Please try again.", Toast.LENGTH_SHORT).show();
 				} else {
 					invokeNoParamReflectiveMethod(methodName, fragment);
 				}
@@ -658,9 +665,32 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 				invokeNoParamReflectiveMethod(methodName, fragment);
 			}
 		});
+		final AlertDialog dialog = builder.create();
+		dialog.show(); // To show the AlertDialog
+		dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+		input.addTextChangedListener(new TextWatcher(){
 
-		builder.show(); // To show the AlertDialog
+			@Override
+			public void afterTextChanged(Editable edit) {
+				if(!input.getText().toString().trim().isEmpty()){
+					dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+				}else{
+					dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+				}
+			}
 
+			@Override
+			public void beforeTextChanged(CharSequence cs, int start,
+					int before, int count) {				
+			}
+
+			@Override
+			public void onTextChanged(CharSequence cs, int start, int before,
+					int count) {
+								
+			}
+			
+		});
 	}
 
 	/**
