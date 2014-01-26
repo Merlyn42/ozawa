@@ -88,22 +88,14 @@ public class TutorialEventListener implements OnShowcaseEventListener {
 	        break;
 		}
 		case 7:{ //Go to custom deck
-			showcaseView = ShowcaseView.insertShowcaseView(HexUtil.getScreenWidth(activity)/2, (int)(HexUtil.getScreenHeight(activity) / 2), activity, "Custom Deck Screen", "Swipe right to view the custom deck.", co);
+			showcaseView = ShowcaseView.insertShowcaseView(HexUtil.getScreenWidth(activity)/2, (int)(HexUtil.getScreenHeight(activity) / 2.15), activity, "Custom Deck Screen", "Swipe right to view the custom deck.", co);
 	        showcaseView.setOnShowcaseEventListener(this);
 			showcaseView.animateGesture(HexUtil.getScreenWidth(activity) / 2, HexUtil.getScreenHeight(activity) / 2, HexUtil.getScreenWidth(activity), HexUtil.getScreenHeight(activity) / 2, true);
 	        showcaseView.show();
 	        tutCount++;
 	        break;
 		}
-		case 8:{ // Custom Deck Options
-			showcaseView = ShowcaseView.insertShowcaseView(0, (int)(HexUtil.getScreenHeight(activity) / 2), activity, "Custom Deck Options", "Swipe right from the edge to bring out the filter menu and deck options.", co);
-	        showcaseView.setOnShowcaseEventListener(this);
-			showcaseView.animateGesture(0, HexUtil.getScreenHeight(activity) / 2, HexUtil.getScreenWidth(activity) / 2, HexUtil.getScreenHeight(activity) / 2, true);
-	        showcaseView.show();
-	        tutCount++;
-	        break;
-		}
-		case 9:{ // Remove card from custom deck
+		case 8:{ // Remove card from custom deck
 			showcaseView = ShowcaseView.insertShowcaseView(HexUtil.getScreenWidth(activity)/7, (int)(HexUtil.getScreenHeight(activity) / 4), activity, "Remove Card from Custom Deck", "Swipe right or hold down to remove a card from your custom deck.", co);        
 			showcaseView.setOnShowcaseEventListener(this);
 	        showcaseView.animateGesture(0, (int)(HexUtil.getScreenHeight(activity) / 4), (int)HexUtil.getScreenWidth(activity) /2, (int)(HexUtil.getScreenHeight(activity) / 4), true);        
@@ -111,9 +103,17 @@ public class TutorialEventListener implements OnShowcaseEventListener {
 	        tutCount++;
 	        break;
 		}
+		case 9:{ // Custom Deck Options
+			showcaseView = ShowcaseView.insertShowcaseView(0, (int)(HexUtil.getScreenHeight(activity) / 2), activity, "Custom Deck Options", "Swipe right from the edge to bring out the filter menu and deck options.", co);
+	        showcaseView.setOnShowcaseEventListener(this);
+			showcaseView.animateGesture(0, HexUtil.getScreenHeight(activity) / 2, HexUtil.getScreenWidth(activity) / 2, HexUtil.getScreenHeight(activity) / 2, true);
+	        showcaseView.show();
+	        tutCount++;
+	        break;
+		}		
 		case 10:{ // Finish
 			showcaseView = ShowcaseView.insertShowcaseView((int)HexUtil.getScreenWidth(activity) - 20, (int)(HexUtil.getScreenHeight(activity) / 15), activity,"Your done!", 
-					"That's it. The rest of the functionality should be pretty intuatuive. You can view this tutorial again, anytime, by click the settings button and choosing the \"View Tutorial\" option. Have fun and keep an eye out for more awesome updates coming to this app soon!", 
+					"That's it. Open the custom deck options to start making your decks. You can view this tutorial again, anytime, by click the settings button and choosing the \"View Tutorial\" option. Have fun and keep an eye out for more awesome updates coming to this app soon!", 
 					co);
 			showcaseView.setScaleMultiplier(.5f);
 	        showcaseView.setOnShowcaseEventListener(this);

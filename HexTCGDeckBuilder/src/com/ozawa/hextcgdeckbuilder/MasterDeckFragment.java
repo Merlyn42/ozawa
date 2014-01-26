@@ -15,7 +15,6 @@ import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 import com.ozawa.hextcgdeckbuilder.json.JsonReader;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
-import com.espian.showcaseview.OnShowcaseEventListener;
 import com.espian.showcaseview.ShowcaseViews;
 import com.espian.showcaseview.ShowcaseView;
 
@@ -79,25 +78,24 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 	
 	private SharedPreferences mPreferences;
 	
-
-	@SuppressWarnings("deprecation")
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
 		super.onActivityCreated(savedInstanceState);	
 		mPreferences = getActivity().getSharedPreferences(PREFS_NAME, 0);
 		boolean firstTime = mPreferences.getBoolean("firstTime", true);
-		//if (firstTime) { 
+		if (firstTime) { 
 		    SharedPreferences.Editor editor = mPreferences.edit();
 		    editor.putBoolean("firstTime", false);
 		    editor.commit();
 		
 			showTutorial();
-		//}
+		}
 	}
 
 	/**
-	 * 
+	 * Show the app's tutorial
 	 */
+	@SuppressWarnings("deprecation")
 	public void showTutorial() {
 		tutCount = 0;
 		co = new ShowcaseView.ConfigOptions();
