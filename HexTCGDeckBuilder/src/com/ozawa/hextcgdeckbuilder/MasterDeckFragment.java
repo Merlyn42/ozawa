@@ -15,7 +15,6 @@ import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 import com.ozawa.hextcgdeckbuilder.json.JsonReader;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
-import com.espian.showcaseview.OnShowcaseEventListener;
 import com.espian.showcaseview.ShowcaseViews;
 import com.espian.showcaseview.ShowcaseView;
 
