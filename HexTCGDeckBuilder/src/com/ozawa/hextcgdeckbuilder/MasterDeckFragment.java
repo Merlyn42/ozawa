@@ -20,6 +20,7 @@ import com.espian.showcaseview.ShowcaseViews;
 import com.espian.showcaseview.ShowcaseView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
@@ -73,23 +74,32 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 	public final static String			GETDECK	= "GETDECK";
 	private GestureLibrary				gesLibrary;
 	private GridView					gridView;
+	
+	private SharedPreferences mPreferences;
+	
 
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState){
-		super.onActivityCreated(savedInstanceState);
-		tutCount = 0;
-
-		co = new ShowcaseView.ConfigOptions();
-		co.shotType = ShowcaseView.TYPE_ONE_SHOT;
-		co.centerText = true;
-		co.hideOnClickOutside = true;
-        showcaseView = ShowcaseView.insertShowcaseView(HexUtil.getScreenWidth(getActivity()) / 2, (int)(HexUtil.getScreenHeigth(getActivity()) / 1.45), getActivity(), "Gestures", "Swipe left to add the card to your custom deck", co);        
-		showcaseView.setOnShowcaseEventListener(new TutorialEventListener(getActivity(),co));
-        showcaseView.animateGesture(HexUtil.getScreenWidth(getActivity()) / 2, (int)(HexUtil.getScreenHeigth(getActivity()) / 1.45), (int)(HexUtil.getScreenWidth(getActivity()) / 4), (int)(HexUtil.getScreenHeigth(getActivity()) / 1.45), true);        
-        showcaseView.show();
-        showcaseView.animate();
-        tutCount++;
+		super.onActivityCreated(savedInstanceState);	
+		boolean firstTime = mPreferences.getBoolean("firstTime", true);
+		if (firstTime) { 
+		    SharedPreferences.Editor editor = mPreferences.edit();
+		    editor.putBoolean("firstTime", false);
+		    editor.commit();
+		
+			tutCount = 0;
+			co = new ShowcaseView.ConfigOptions();
+			co.shotType = ShowcaseView.TYPE_ONE_SHOT;
+			co.centerText = true;
+			co.hideOnClickOutside = true;
+	        showcaseView = ShowcaseView.insertShowcaseView(HexUtil.getScreenWidth(getActivity()) / 2, (int)(HexUtil.getScreenHeight(getActivity()) / 1.45), getActivity(), "Gestures", "Swipe left to add the card to your custom deck", co);        
+			showcaseView.setOnShowcaseEventListener(new TutorialEventListener(getActivity(),co));
+	        showcaseView.animateGesture(HexUtil.getScreenWidth(getActivity()) / 2, (int)(HexUtil.getScreenHeight(getActivity()) / 1.45), (int)(HexUtil.getScreenWidth(getActivity()) / 4), (int)(HexUtil.getScreenHeight(getActivity()) / 1.45), true);        
+	        showcaseView.show();
+	        showcaseView.animate();
+	        tutCount++;
+		}
 	}
 	
 	@Override
