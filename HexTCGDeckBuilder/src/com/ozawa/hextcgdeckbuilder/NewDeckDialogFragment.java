@@ -50,24 +50,16 @@ public class NewDeckDialogFragment extends DialogFragment {
 			@Override
 			public void onClick(View v) {
 				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-				String deckName = newDeckName.getText().toString();
-				if (deckName == null || deckName.trim().contentEquals("")) {
-					Toast.makeText(mainActivity.getApplicationContext(),
-							"Deck Name must not be empty!", Toast.LENGTH_SHORT)
-							.show();
+				String deckName = newDeckName.getText().toString();				
+				NewDeckListener activity = (NewDeckListener) getActivity();
+				
+				if (activity.saveNewDeck(deckName, true)) {
+					Toast.makeText(getActivity().getApplicationContext(),
+							"Deck successfully saved.", Toast.LENGTH_SHORT).show();
+					dialog.dismiss();
 				} else {
-					NewDeckListener activity = (NewDeckListener) getActivity();
-					if (activity.saveNewDeck(deckName, true)) {
-						Toast.makeText(getActivity().getApplicationContext(),
-								"Deck successfully saved.", Toast.LENGTH_SHORT)
-								.show();
-						dialog.dismiss();
-					} else {
-						Toast.makeText(mainActivity.getApplicationContext(),
-								"Failed to save deck. Please try again.",
-								Toast.LENGTH_SHORT).show();
-					}
-				}
+					Toast.makeText(mainActivity.getApplicationContext(), "Failed to save deck. Please try again.", Toast.LENGTH_SHORT).show();
+				}				
 			}
 		});
 
@@ -90,7 +82,7 @@ public class NewDeckDialogFragment extends DialogFragment {
 	 * 
 	 * @return a new TextWatcher
 	 */
-	private TextWatcher getTextWatcher(){
+	protected TextWatcher getTextWatcher(){
 		return new TextWatcher() {
 			@Override
    		    public void onTextChanged(CharSequence cs, int start, int before, int count) {
