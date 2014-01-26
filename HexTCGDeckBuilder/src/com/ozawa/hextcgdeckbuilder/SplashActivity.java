@@ -1,11 +1,9 @@
 package com.ozawa.hextcgdeckbuilder;
 
-import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.commons.io.IOUtils;
-
 import com.ozawa.hextcgdeckbuilder.UI.GifDecoderView;
+import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -26,10 +24,7 @@ public class SplashActivity extends Activity {
 		InputStream stream = null;
 		stream = getResources().openRawResource(R.drawable.splash);
 		splash = new GifDecoderView(this);
-		try {
-			splash.setBytes(IOUtils.toByteArray(stream));
-		} catch (IOException e) {
-		}
+		splash.setBytes(HexUtil.toByteArray(stream));
 		splash.getRootView().setBackgroundColor(getResources().getColor(android.R.color.black));
 		
 		setContentView(splash);

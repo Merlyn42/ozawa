@@ -1,5 +1,8 @@
 package com.ozawa.hextcgdeckbuilder.util;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 
 import com.ozawa.hextcgdeckbuilder.HtmlImageGetter;
@@ -233,4 +236,20 @@ public class HexUtil {
 		public int repeatCount;	
 	}
 
+	public static byte[] toByteArray(InputStream is){
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+		int nRead;
+		byte[] data = new byte[700000];
+
+		try {
+			while ((nRead = is.read(data, 0, data.length)) != -1) {
+			  buffer.write(data, 0, nRead);
+			}
+			buffer.flush();
+		} catch (IOException e) {
+		}
+		
+		return buffer.toByteArray();
+	}
 }
