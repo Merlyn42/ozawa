@@ -1,8 +1,5 @@
 package com.ozawa.hextcgdeckbuilder.UI;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
@@ -11,8 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import com.ozawa.hextcgdeckbuilder.R;
-import com.ozawa.hextcgdeckbuilder.enums.CardType;
-import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
 import com.ozawa.hextcgdeckbuilder.json.JsonReader;
 
 public class SymbolTemplate {

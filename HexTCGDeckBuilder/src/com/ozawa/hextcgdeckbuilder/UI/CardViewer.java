@@ -6,10 +6,7 @@ import android.text.TextWatcher;
 import android.widget.TextView;
 
 import com.ozawa.hextcgdeckbuilder.ImageAdapter;
-import com.ozawa.hextcgdeckbuilder.enums.Attribute;
 import com.ozawa.hextcgdeckbuilder.enums.CardEnum;
-import com.ozawa.hextcgdeckbuilder.enums.CardType;
-import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
 import com.ozawa.hextcgdeckbuilder.filter.Filter;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.CardComparatorColor;

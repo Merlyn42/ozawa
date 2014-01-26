@@ -1,7 +1,6 @@
 package com.ozawa.hextcgdeckbuilder.UI;
 
 import android.app.Activity;
-import android.widget.Toast;
 
 import com.espian.showcaseview.OnShowcaseEventListener;
 import com.espian.showcaseview.ShowcaseView;

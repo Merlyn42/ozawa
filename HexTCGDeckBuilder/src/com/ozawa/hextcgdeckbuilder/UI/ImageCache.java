@@ -8,7 +8,6 @@ import android.app.ActivityManager.MemoryInfo;
 import android.content.Context;
 
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
-import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 
 /**
  * Queue to control caching behaviour of card images.

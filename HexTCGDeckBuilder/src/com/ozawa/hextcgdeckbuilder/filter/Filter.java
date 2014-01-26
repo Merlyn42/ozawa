@@ -1,6 +1,5 @@
 package com.ozawa.hextcgdeckbuilder.filter;
 
-import com.ozawa.hextcgdeckbuilder.UI.FilterButton;
 import com.ozawa.hextcgdeckbuilder.enums.CardEnum;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Card;
@@ -19,8 +18,6 @@ public class Filter {
 	private final EnumSet<Attribute>	attributes;
 	private final EnumSet<ColorFlag>	colors;
 	private final EnumSet<CardType>		cardTypes;
-	private int							minCost;
-	private int							maxCost;
 	
 	private final static int NUMBEROFCARDTYPES = EnumSet.allOf(CardType.class).size();
 	private final static int NUMBEROFCOLORS = EnumSet.allOf(ColorFlag.class).size();
@@ -30,8 +27,6 @@ public class Filter {
 		colors = EnumSet.allOf(ColorFlag.class);
 		cardTypes = EnumSet.allOf(CardType.class);
         cardTypes.remove(CardType.CHAMPION);
-		minCost = -1;
-		maxCost = -1;
 	}
 
 	public String getFilterString() {

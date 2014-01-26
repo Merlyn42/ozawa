@@ -8,12 +8,10 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.Typeface;
-import android.text.InputFilter.LengthFilter;
 
 import com.google.gson.annotations.SerializedName;
 import com.ozawa.hextcgdeckbuilder.R;
@@ -24,7 +22,6 @@ import com.ozawa.hextcgdeckbuilder.UI.ImageCache.CacheType;
 import com.ozawa.hextcgdeckbuilder.UI.ImageCache.ImageType;
 import com.ozawa.hextcgdeckbuilder.enums.Attribute;
 import com.ozawa.hextcgdeckbuilder.enums.CardType;
-import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 /**

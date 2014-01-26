@@ -1,13 +1,9 @@
 package com.ozawa.hextcgdeckbuilder;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.text.BoringLayout;
 import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,14 +11,11 @@ import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.ozawa.hextcgdeckbuilder.UI.CardViewer;
 import com.ozawa.hextcgdeckbuilder.UI.ImageGetter;
-import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
 import com.ozawa.hextcgdeckbuilder.enums.ImageGetterType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
-import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 
 import java.util.List;
 import java.util.Map;
@@ -33,14 +26,12 @@ import java.util.Map;
 public class ImageAdapter extends BaseAdapter {
     protected Context mContext;
     public List<AbstractCard> masterDeck;
-    private static int cardWidth = 200;
     protected Bitmap back;
     private static int numberOfColumns = 3;
     private static int differenceInHeight = 26;
     Map<AbstractCard, Integer> customDeck;
 
     public boolean isListView = false;
-    private static LayoutInflater inflater=null;
     
     public ImageAdapter(){}
     public ImageAdapter(Context c, List<AbstractCard> deck, Map<AbstractCard, Integer> customDeck ) {
@@ -48,7 +39,6 @@ public class ImageAdapter extends BaseAdapter {
         masterDeck = deck;
         back= BitmapFactory.decodeResource(c.getResources(), R.drawable.back);
         this.customDeck=customDeck;
-        inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     public int getCount() {

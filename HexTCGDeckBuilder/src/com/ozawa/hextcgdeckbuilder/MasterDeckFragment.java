@@ -62,7 +62,6 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 
 	public ImageView					cardBack;
 	private int							cardBackDimension;
-	private int							tutCount;
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
@@ -97,7 +96,6 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 	 */
 	@SuppressWarnings("deprecation")
 	public void showTutorial() {
-		tutCount = 0;
 		co = new ShowcaseView.ConfigOptions();
 		co.shotType = ShowcaseView.TYPE_ONE_SHOT;
 		co.centerText = true;
@@ -107,7 +105,6 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 		showcaseView.setShowcase(ShowcaseView.NONE);
 		showcaseView.setOnShowcaseEventListener(new TutorialEventListener(getActivity(),co));        
 		showcaseView.show();
-		tutCount++;
 	}
 	
 	@Override

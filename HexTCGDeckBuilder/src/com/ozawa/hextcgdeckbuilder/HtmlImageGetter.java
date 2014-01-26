@@ -1,14 +1,7 @@
 package com.ozawa.hextcgdeckbuilder;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.ozawa.hextcgdeckbuilder.UI.SymbolTemplate;
-import com.ozawa.hextcgdeckbuilder.util.HexUtil;
-
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.text.Html;
 

@@ -4,11 +4,8 @@ import java.util.Arrays;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 
 import com.google.gson.annotations.SerializedName;
-import com.ozawa.hextcgdeckbuilder.R;
 import com.ozawa.hextcgdeckbuilder.UI.CardTemplate;
 import com.ozawa.hextcgdeckbuilder.UI.ImageCache;
 import com.ozawa.hextcgdeckbuilder.UI.ImageCache.CacheType;
