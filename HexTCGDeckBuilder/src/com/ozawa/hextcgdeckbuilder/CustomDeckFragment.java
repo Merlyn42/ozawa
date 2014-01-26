@@ -32,6 +32,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Display;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -304,9 +305,13 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 
 	private boolean makeRemoveMultipleCardsDialog(int position, int[] values) {
 		if (position >= 0) {
+			AbstractMultipleCardsDialogFragment removeMultipleCardsDialog;
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+				removeMultipleCardsDialog = new RemoveMultipleCardsDialogFragment();
+			} else {
+				removeMultipleCardsDialog = new RemoveMultipleCardsDialogFragmentGinger();
+			}
 			AbstractCard card = isGridView == true ? imAdapter.masterDeck.get(position) : lvAdapter.masterDeck.get(position);
-
-			RemoveMultipleCardsDialogFragment removeMultipleCardsDialog = new RemoveMultipleCardsDialogFragment();
 			removeMultipleCardsDialog.card = card;
 			removeMultipleCardsDialog.position = position;
 			removeMultipleCardsDialog.animationArg = createAnimationArg(values[0] + cardBackDimension / 2, values[1] - cardBackDimension
@@ -400,7 +405,6 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 
 			}
 
-			
 		}
 	}
 

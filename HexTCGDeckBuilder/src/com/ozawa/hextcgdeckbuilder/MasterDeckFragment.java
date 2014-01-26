@@ -27,6 +27,7 @@ import android.gesture.GestureLibraries;
 import android.gesture.GestureLibrary;
 import android.gesture.GestureOverlayView;
 import android.gesture.Prediction;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -320,10 +321,15 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 	}
 
 	private boolean makeAddMultipleCardsDialog(int position, int[] values) {
+		AbstractMultipleCardsDialogFragment addMultipleCardsDialog;
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			addMultipleCardsDialog = new AddMultipleCardsDialogFragmentGinger();
+		} else {
+			addMultipleCardsDialog = new AddMultipleCardsDialogFragmentGinger();
+		}
 		if (position >= 0) {
 			AbstractCard card = isGridView == true ? imAdapter.masterDeck.get(position) : lvAdapter.masterDeck.get(position);
 
-			AddMultipleCardsDialogFragment addMultipleCardsDialog = new AddMultipleCardsDialogFragment();
 			addMultipleCardsDialog.card = card;
 			addMultipleCardsDialog.position = position;
 			addMultipleCardsDialog.animationArg = createAnimationArg(values[0] + cardBackDimension / 2, values[1] - cardBackDimension / 2);
