@@ -9,10 +9,15 @@ import java.util.List;
 import com.ozawa.hextcgdeckbuilder.UI.CardViewer;
 import com.ozawa.hextcgdeckbuilder.UI.CustomViewPager;
 import com.ozawa.hextcgdeckbuilder.UI.PlaceholderFragment;
+import com.ozawa.hextcgdeckbuilder.UI.TutorialEventListener;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 import com.ozawa.hextcgdeckbuilder.json.JsonReader;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
+
+import com.espian.showcaseview.OnShowcaseEventListener;
+import com.espian.showcaseview.ShowcaseViews;
+import com.espian.showcaseview.ShowcaseView;
 
 import android.content.Intent;
 import android.content.res.Resources;
@@ -46,7 +51,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 
 	private FragmentActivity			mainActivity;
 	private DrawerLayout				uiLayout;
-
+	private ShowcaseView				showcaseView; 
 	ListView							listView;
 	ImageAdapter						imAdapter;
 	DeckListViewAdapter					lvAdapter;
@@ -56,18 +61,37 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 
 	public ImageView					cardBack;
 	private int							cardBackDimension;
-
+	private int							tutCount;
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
 	 */
 	private NavigationDrawerFragment	mNavigationDrawerFragment;
-
+	private ShowcaseView.ConfigOptions 	co;
+	ShowcaseViews 						mViews;
 	public static CardViewer			cardViewer;
 	public final static String			GETDECK	= "GETDECK";
 	private GestureLibrary				gesLibrary;
 	private GridView					gridView;
 
+	@SuppressWarnings("deprecation")
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState){
+		super.onActivityCreated(savedInstanceState);
+		tutCount = 0;
+
+		co = new ShowcaseView.ConfigOptions();
+		co.shotType = ShowcaseView.TYPE_ONE_SHOT;
+		co.centerText = true;
+		co.hideOnClickOutside = true;
+        showcaseView = ShowcaseView.insertShowcaseView(HexUtil.getScreenWidth(getActivity()) / 2, (int)(HexUtil.getScreenHeigth(getActivity()) / 1.45), getActivity(), "Gestures", "Swipe left to add the card to your custom deck", co);        
+		showcaseView.setOnShowcaseEventListener(new TutorialEventListener(getActivity(),co));
+        showcaseView.animateGesture(HexUtil.getScreenWidth(getActivity()) / 2, (int)(HexUtil.getScreenHeigth(getActivity()) / 1.45), (int)(HexUtil.getScreenWidth(getActivity()) / 4), (int)(HexUtil.getScreenHeigth(getActivity()) / 1.45), true);        
+        showcaseView.show();
+        showcaseView.animate();
+        tutCount++;
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mainActivity = super.getActivity();
@@ -82,7 +106,9 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 		if (!gesLibrary.load()) {
 			mainActivity.finish();
 		}
-
+        ShowcaseView.ConfigOptions co = new ShowcaseView.ConfigOptions();
+        co.hideOnClickOutside = true;       
+		
 		cardViewer = new CardViewer(mainActivity, masterDeck, null);
 		imAdapter = cardViewer.getAdapter();
 		uiLayout = (DrawerLayout) inflater.inflate(R.layout.fragment_master_deck, container, false);
@@ -108,7 +134,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 		cardBack = (ImageView) cardAnimationView.findViewById(R.id.cardAnimation);
 		cardBack.setImageResource(R.drawable.back);
 		cardBack.setLayoutParams(new RelativeLayout.LayoutParams(cardBackDimension, cardBackDimension));
-		cardBack.setVisibility(View.INVISIBLE);
+		cardBack.setVisibility(View.INVISIBLE);	
 
 		return uiLayout;
 	}

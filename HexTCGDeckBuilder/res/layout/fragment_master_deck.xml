@@ -57,6 +57,7 @@
             android:layout_height="50dip"
             android:src="@drawable/back"
             android:contentDescription="Card Animation."/>
+
     </RelativeLayout>
     <fragment android:id="@+id/master_deck_navigation_drawer"
         android:layout_width="@dimen/navigation_drawer_width"
