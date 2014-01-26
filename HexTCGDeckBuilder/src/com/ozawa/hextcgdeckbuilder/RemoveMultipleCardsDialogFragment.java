@@ -9,7 +9,6 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.WindowManager;
@@ -18,16 +17,9 @@ import android.widget.Button;
 import android.widget.NumberPicker;
 
 @SuppressLint("NewApi")
-public class RemoveMultipleCardsDialogFragment extends DialogFragment {
-	Button removeCards;
-	Button cancel;
-	public DeckUIActivity mainActivity;
-	NumberPicker picker;
-	public HexUtil.AnimationArg animationArg;
-	public int position;
+public class RemoveMultipleCardsDialogFragment extends AbstractMultipleCardsDialogFragment {
 
-	AbstractCard card;
-	public CustomDeckFragment fragment;
+	NumberPicker	picker;
 
 	public RemoveMultipleCardsDialogFragment() {
 	}
@@ -42,9 +34,9 @@ public class RemoveMultipleCardsDialogFragment extends DialogFragment {
 
 		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0xaa000000));
 
-		removeCards = (Button) dialog.findViewById(R.id.buttonAddCards);
-		removeCards.setText("Remove Cards");
-		cancel = (Button) dialog.findViewById(R.id.buttonCancelAddCards);
+		affirmButton = (Button) dialog.findViewById(R.id.buttonAddCards);
+		affirmButton.setText("Remove Cards");
+		cancelButton = (Button) dialog.findViewById(R.id.buttonCancelAddCards);
 		picker = (NumberPicker) dialog.findViewById(R.id.addCardsNumberPicker);
 
 		HashMap<AbstractCard, Integer> customDeck = mainActivity.customDeck;
@@ -52,20 +44,20 @@ public class RemoveMultipleCardsDialogFragment extends DialogFragment {
 		picker.setMinValue(1);
 		picker.setValue(customDeck.get(card));
 
-		removeCards.setOnClickListener(new OnClickListener() {
+		affirmButton.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-				int count =picker.getValue();
-				animationArg.repeatCount=count-1;
+				int count = picker.getValue();
+				animationArg.repeatCount = count - 1;
 				HexUtil.moveImageAnimation(animationArg);
 				dialog.dismiss();
-				fragment.removeCardFromCustomDeck(position,count);
+				((CustomDeckFragment) fragment).removeCardFromCustomDeck(position, count);
 			}
 		});
 
-		cancel.setOnClickListener(new OnClickListener() {
+		cancelButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
