@@ -16,6 +16,12 @@ HexTCGDeckBuilder/gen/android/support/v7/appcompat/R.java
 HexTCGDeckBuilder/gen/com/ozawa/hextcgdeckbuilder/BuildConfig.java
 HexTCGDeckBuilder/project.properties
 hex0*.png
+!hex00001.png
+!hex00002.png
+!hex00003.png
+!hex00004.png
+!hex00005.png
+!hex00006.png
 hexcard0*.json
 jsondata/
 hex0*.jpg
@@ -23,3 +29,9 @@ championportait0*.png
 championportaitsmall0*.png
 champion0*.json
 HexTCGDeckBuilder/gen/com/github/espiandev/showcaseview/R.java
+Ozawa/App/src/main/res/drawable-hdpi/hex00001.png
+Ozawa/App/src/main/res/drawable-hdpi/hex00002.png
+Ozawa/App/src/main/res/drawable-hdpi/hex00003.png
+Ozawa/App/src/main/res/drawable-hdpi/hex00004.png
+Ozawa/App/src/main/res/drawable-hdpi/hex00005.png
+Ozawa/App/src/main/res/drawable-hdpi/hex00006.png
