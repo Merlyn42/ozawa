@@ -5,7 +5,12 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.os.Build;
+import android.view.Display;
 
 import com.google.gson.annotations.SerializedName;
 import com.ozawa.hextcgdeckbuilder.R;
@@ -27,7 +32,6 @@ public class ResourceCard extends AbstractCard {
 	@SerializedName("m_MaxResourcesGranted")
 	public int	maxResourcesGranted;
 
-	@SuppressLint("NewApi")
 	@Override
 	public Bitmap getCardBitmap(Context context, CardTemplate template, int maxWidth) {
 		Resources resources = context.getResources();
@@ -41,15 +45,19 @@ public class ResourceCard extends AbstractCard {
 			scale *= 2;
 		// Decode with inSampleSize
 		BitmapFactory.Options o2 = new BitmapFactory.Options();
-		o2.inMutable = true;
+        if (false){//Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        	o2.inMutable = true;
+        } 
 		o2.inSampleSize = scale;
 		Bitmap output = BitmapFactory.decodeResource(resources, resourceId, o2);
 		int left = Double.valueOf(o2.outWidth * defaultLayout.portraitLeft).intValue();
 		int width = Double.valueOf(o2.outWidth * defaultLayout.portraitRight).intValue() - left;
 		int top = Double.valueOf(o2.outHeight * defaultLayout.portraitTop).intValue();
 		int height = Double.valueOf(o2.outHeight * defaultLayout.portraitBottom).intValue() - top;
-
-		image = Bitmap.createBitmap(output, left, top, width, height);
+        if (true){//Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+        	output=output.copy(Bitmap.Config.ARGB_8888, true);
+        } 
+		image = output;//Bitmap.createBitmap(output, left, top, width, height);
 		return image;
 	}
 
@@ -83,4 +91,32 @@ public class ResourceCard extends AbstractCard {
 
 		return portrait;
 	}
+	
+	@Override
+	public Bitmap addCount(String count, Bitmap imageIn) {
+    	Bitmap image= Bitmap.createBitmap(imageIn);
+    	Canvas combine = new Canvas(image);
+    	Paint textPaint = new Paint();
+    	textPaint.setTextSize( ((float)image.getHeight()) * 0.09f);
+    	int buf = (int) (textPaint.getTextSize()*0.2f);
+    	
+    	textPaint.setTextAlign(Paint.Align.RIGHT);
+    	textPaint.setColor(-1);        
+    	textPaint.setAntiAlias(true);
+    	Paint boxPaint = new Paint();
+    	boxPaint.setColor(0x770060b0);
+    	
+    	int originX = (int) (((float)image.getWidth()*0.9)-buf);
+    	int originY = (int) (((float)image.getHeight())*0.1107f+textPaint.getTextSize());
+    	
+    	Rect box = new Rect();
+    	box.left=(originX-(int)textPaint.measureText(count))-buf;
+    	box.right=originX+buf;
+    	box.bottom=originY+buf;
+    	box.top=(originY-(int)textPaint.getTextSize());
+    	combine.drawRect(box, boxPaint);
+    	combine.drawText(count, originX, originY, textPaint);
+    	return image;
+	}
+	
 }
