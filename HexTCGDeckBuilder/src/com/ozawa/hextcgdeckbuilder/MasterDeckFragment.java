@@ -95,11 +95,10 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 			co.shotType = ShowcaseView.TYPE_ONE_SHOT;
 			co.centerText = true;
 			co.hideOnClickOutside = true;
-	        showcaseView = ShowcaseView.insertShowcaseView(HexUtil.getScreenWidth(getActivity()) / 2, (int)(HexUtil.getScreenHeight(getActivity()) / 1.45), getActivity(), "Gestures", "Swipe left to add the card to your custom deck", co);        
+	        showcaseView = ShowcaseView.insertShowcaseView(HexUtil.getScreenWidth(getActivity()) / 2, (int)(HexUtil.getScreenHeight(getActivity()) / 2.15), getActivity(), "Gestures", "Swipe left to add the card to your custom deck", co);        
 			showcaseView.setOnShowcaseEventListener(new TutorialEventListener(getActivity(),co));
-	        showcaseView.animateGesture(HexUtil.getScreenWidth(getActivity()) / 2, (int)(HexUtil.getScreenHeight(getActivity()) / 1.45), (int)(HexUtil.getScreenWidth(getActivity()) / 4), (int)(HexUtil.getScreenHeight(getActivity()) / 1.45), true);        
+	        showcaseView.animateGesture(HexUtil.getScreenWidth(getActivity()) / 2, (int)(HexUtil.getScreenHeight(getActivity()) / 2.1), (int)(HexUtil.getScreenWidth(getActivity()) / 4), (int)(HexUtil.getScreenHeight(getActivity()) / 2.1), true);        
 	        showcaseView.show();
-	        showcaseView.animate();
 	        tutCount++;
 		}
 	}

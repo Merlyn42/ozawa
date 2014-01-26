@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import com.espian.showcaseview.OnShowcaseEventListener;
 import com.espian.showcaseview.ShowcaseView;
+import com.ozawa.hextcgdeckbuilder.R;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 public class TutorialEventListener implements OnShowcaseEventListener {
@@ -34,7 +35,6 @@ public class TutorialEventListener implements OnShowcaseEventListener {
 	        showcaseView.setOnShowcaseEventListener(this);
 			showcaseView.animateGesture(HexUtil.getScreenWidth(activity), HexUtil.getScreenHeight(activity) / 2, HexUtil.getScreenWidth(activity) / 2, HexUtil.getScreenHeight(activity) / 2, true);
 	        showcaseView.show();
-	        showcaseView.animate();
 	        tutCount++;
 	        break;
 		case 1: //Go to custom deck
@@ -42,18 +42,18 @@ public class TutorialEventListener implements OnShowcaseEventListener {
 	        showcaseView.setOnShowcaseEventListener(this);
 			showcaseView.animateGesture(HexUtil.getScreenWidth(activity) / 2, HexUtil.getScreenHeight(activity) / 2, HexUtil.getScreenWidth(activity), HexUtil.getScreenHeight(activity) / 2, true);
 	        showcaseView.show();
-	        showcaseView.animate();
 	        tutCount++;
 	        break;
 		case 2: //change to list view tutorial
-			showcaseView = ShowcaseView.insertShowcaseView(HexUtil.getScreenWidth(activity)  - (HexUtil.getScreenWidth(activity) / 17), HexUtil.getScreenHeight(activity) / 15, activity, "ListView", "Click here to change view to a listview", co);
+			//showcaseView = ShowcaseView.insertShowcaseView(HexUtil.getScreenWidth(activity)  - (HexUtil.getScreenWidth(activity) / 17), HexUtil.getScreenHeight(activity) / 15, activity, "ListView", "Click here to change view to a listview", co);
+			showcaseView = ShowcaseView.insertShowcaseView(activity.findViewById(R.id.action_list_view),activity,"ListView", "Click here to change view to a listview", co);
 			showcaseView.setScaleMultiplier(.5f);
 	        showcaseView.setOnShowcaseEventListener(this);
 			showcaseView.show();			
 			tutCount++;
 			break;
 		case 3: //click for fullscreen
-			showcaseView = ShowcaseView.insertShowcaseView(HexUtil.getScreenWidth(activity) / 2, (int)(HexUtil.getScreenHeight(activity) / 1.45), activity, "Fullscreen", "Click on a card to go fullscreen", co);        
+			showcaseView = ShowcaseView.insertShowcaseView(HexUtil.getScreenWidth(activity) / 2, (int)(HexUtil.getScreenHeight(activity) / 2.15), activity, "Fullscreen", "Click on a card to go fullscreen", co);        
 			showcaseView.setOnShowcaseEventListener(this);        
 	        showcaseView.show();
 	        tutCount++;
