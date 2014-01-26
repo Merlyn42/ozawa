@@ -131,12 +131,12 @@ public class Card extends AbstractCard {
 
 		Bitmap threshold = getCardThresholdImage(context, template, templateImage);
 		if (template.fullCard) {
-			drawFullImageText(combine, templateImage, paint, resources, context, template);
+			drawFullImageText(combine, templateImage, paint, resources, context, template,scale);
 			if (threshold != null) {
 				combine.drawBitmap(threshold, (templateImage.getWidth() / 14), (templateImage.getHeight() / 9.5f), null);
 			}
 		} else {
-			drawThumbnailText(combine, templateImage, paint, template,resources);
+			drawThumbnailText(combine, templateImage, paint, template,resources,scale);
 			if (threshold != null) {
 				combine.drawBitmap(threshold, (templateImage.getWidth() / 14), (templateImage.getHeight() / 4.2f), null);
 			}
@@ -145,7 +145,7 @@ public class Card extends AbstractCard {
 		return result;
 	}
 
-	private void drawThumbnailText(Canvas combine, Bitmap templateImage, Paint paint, CardTemplate template, Resources resources) {
+	private void drawThumbnailText(Canvas combine, Bitmap templateImage, Paint paint, CardTemplate template, Resources resources, int scale) {
 		float imageHeight = templateImage.getHeight();
 		paint.setTextSize(imageHeight * template.nameFontRatio);
 		combine.drawText(getShortenedText(name, 17), templateImage.getWidth() / 3.3f, templateImage.getHeight() / 11f, paint);
@@ -185,13 +185,14 @@ public class Card extends AbstractCard {
 		}
 			
 		if (socketCount > 0) {
-			Bitmap socketImage = BitmapFactory.decodeResource(resources,R.drawable.gem_socket);
-			combine.drawBitmap(socketImage, templateImage.getWidth() - (templateImage.getWidth() / 3),templateImage.getHeight() / 1.9f, paint);
+			BitmapFactory.Options socketOptions = new BitmapFactory.Options();
+			socketOptions.inSampleSize = scale;
+			Bitmap socketImage = BitmapFactory.decodeResource(resources,R.drawable.gem_socket,socketOptions);
+			combine.drawBitmap(socketImage, templateImage.getWidth() - (templateImage.getWidth() / 5),templateImage.getHeight() / 1.57f, paint);
 		}
 	}
 
-	private void drawFullImageText(Canvas combine, Bitmap templateImage, Paint paint, Resources resources, Context context,
-			CardTemplate template) {
+	private void drawFullImageText(Canvas combine, Bitmap templateImage, Paint paint, Resources resources, Context context, CardTemplate template, int scale) {
 		float imageHeight = templateImage.getHeight();
 		float tempRatio = template.nameFontRatio;
 		paint.setTextSize(imageHeight * tempRatio);
@@ -237,8 +238,10 @@ public class Card extends AbstractCard {
 		combine.drawText(cardTypes, templateImage.getWidth() / 13, templateImage.getHeight() - (templateImage.getHeight() / 2.97f), paint);
 				
 		if(socketCount > 0){
-			Bitmap socketImage = BitmapFactory.decodeResource(resources, R.drawable.gem_socket);
-			combine.drawBitmap(socketImage, templateImage.getWidth() - (templateImage.getWidth() / 5), templateImage.getHeight() / 1.95f, paint);
+			BitmapFactory.Options socketOptions = new BitmapFactory.Options();
+			socketOptions.inSampleSize = scale;
+			Bitmap socketImage = BitmapFactory.decodeResource(resources,R.drawable.gem_socket,socketOptions);
+			combine.drawBitmap(socketImage, templateImage.getWidth() - (templateImage.getWidth() / 4.5f), templateImage.getHeight() / 2, paint);
 		}
 	}
 
