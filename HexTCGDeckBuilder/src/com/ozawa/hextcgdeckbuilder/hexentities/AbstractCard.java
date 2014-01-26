@@ -49,6 +49,8 @@ public abstract class AbstractCard {
 	public String				gameText;
 	@SerializedName("m_DesignNotes")
 	public String				designNotes;
+	@SerializedName("m_ImplNotes")
+	public String				implementationNotes;
 	@SerializedName("m_Unlimited")
 	public Boolean				unlimited;
 	@SerializedName("m_Tradeable")
@@ -104,7 +106,7 @@ public abstract class AbstractCard {
 	 * @return
 	 */
 	public abstract Bitmap getCardPortait(Context mContext);
-		
+
 	/**
 	 * called when a card is removed from the cache queue. Should free the
 	 * bitmap that was cached for this position in the queue.

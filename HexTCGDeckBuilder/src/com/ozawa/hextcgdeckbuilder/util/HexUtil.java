@@ -23,10 +23,19 @@ import android.view.animation.Animation.AnimationListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/**
+ * Utility class that holds reusable methods for the application
+ */
 public class HexUtil {
 	
 	private HexUtil(){}
 	
+	/**
+	 * Get the width of the device's screen
+	 * 
+	 * @param context
+	 * @return the pixel width of the screen
+	 */
 	@SuppressWarnings("deprecation")
 	@SuppressLint("NewApi")
     public static int getScreenWidth(Context context){
@@ -44,9 +53,15 @@ public class HexUtil {
         return measuredWidth;
     }
 	
+	/**
+	 * Get the height of the device's screen
+	 * 
+	 * @param context
+	 * @return the pixel height of the screen
+	 */
 	@SuppressWarnings("deprecation")
 	@SuppressLint("NewApi")
-    public static int getScreenHeigth(Context context){
+    public static int getScreenHeight(Context context){
     	int measuredHeigth = 0;
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Point size = new Point();
@@ -112,12 +127,27 @@ public class HexUtil {
 		return null;
 	}
 	
+	/**
+	 * Convert a desired density pixel value into a screen pixels value
+	 * 
+	 * @param mContext
+	 * @param dp
+	 * @return the converted screen pixel value
+	 */
 	public static int convertDensityPixelsToPixels(Context mContext, int dp) {
 	    DisplayMetrics displayMetrics = mContext.getResources().getDisplayMetrics();
 	    int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));       
 	    return px;
 	}
 	
+	/**
+	 * Parse HTML from given a String
+	 * 
+	 * @param text
+	 * @param context
+	 * @param height
+	 * @return displayable styled text from the provided HTML string
+	 */
 	public static Spanned parseStringAsHexHtml(String text,Context context,int height){
 		text=text.replaceAll("\\[([0-9])\\]", "{$1}");
 		text=text.replace("[", "<img src=\"");
@@ -126,6 +156,12 @@ public class HexUtil {
 		return Html.fromHtml(text,new HtmlImageGetter(context,height),null);
 	}
 	
+	/**
+	 * Replace text with HTML
+	 * 
+	 * @param view
+	 * @param text
+	 */
 	public static void populateTextViewWithHexHtml(TextView view,String text){
 		view.setText(parseStringAsHexHtml(text, view.getContext(), Float.valueOf(view.getTextSize()).intValue()));
 	}
@@ -163,10 +199,19 @@ public class HexUtil {
 		image.startAnimation(imageAnimation);
 	}
 	
+	/**
+	 * Move an image from the given arguments
+	 * 
+	 * @param arg
+	 */
 	public static void moveImageAnimation(AnimationArg arg){
 		moveImageAnimation(arg.image, arg.fromX, arg.toX, arg.fromY, arg.toY, arg.duration, arg.repeatCount);
 	}
 	
+	/**
+	 * Used to hold an ImageView and all the required variable to animate
+	 * the given ImageView
+	 */
 	public static class AnimationArg{
 		
 		public AnimationArg(ImageView image, int fromX, int toX, int fromY, int toY, int duration, int repeatCount) {

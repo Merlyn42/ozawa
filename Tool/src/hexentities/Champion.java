@@ -7,7 +7,7 @@ public class Champion {
 	@SerializedName("m_Name")
 	public String name;
 	@SerializedName("m_SetId")
-	public GlobalIdentifier setID;
+	public M_SetId setID;
 	@SerializedName("m_HudPortrait")
 	public String hudPortrait;
 	@SerializedName("m_HudSmall")

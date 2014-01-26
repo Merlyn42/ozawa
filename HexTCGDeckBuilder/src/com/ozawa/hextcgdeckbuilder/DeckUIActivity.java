@@ -205,7 +205,7 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 	}
 	
 	private void resetCustomDeck(){
-		customDeck = new HashMap<AbstractCard, Integer>();
+		customDeck.clear();
 	    customDeckCardList = new ArrayList<AbstractCard>(customDeck.keySet());
 	    currentCustomDeck = null;
 	    actionBar.getTabAt(0).setText("Custom Deck");
@@ -213,7 +213,7 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 	}
 	
 	private void updateCustomDeck(Deck deck){
-		customDeck = new HashMap<AbstractCard, Integer>();
+		customDeck.clear();
 		
 		if(deck.deckResources != null){
 			for(DeckResource card : deck.deckResources){
