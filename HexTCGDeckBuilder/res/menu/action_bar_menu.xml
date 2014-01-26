@@ -11,4 +11,9 @@
         android:icon="@drawable/action_button_list_view"
         android:title="@string/list_view"
         hextcgapp:showAsAction="ifRoom"/>
+    
+    <item android:id="@+id/view_tutorial"
+          android:title="@string/view_tutorial"
+          android:showAsAction="never" />
+    
 </menu>

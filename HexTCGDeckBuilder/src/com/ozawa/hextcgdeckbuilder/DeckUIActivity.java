@@ -122,6 +122,9 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
             		customDeckFragment.changeToListView();
             	}
             	return true;
+            case R.id.view_tutorial:{
+            	return true;
+            }
             default:
                 return super.onOptionsItemSelected(item);
         }

@@ -9,6 +9,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Don\'t Press.</string>
     <string name="action_settings">Don\'t Press!</string>
+    <string name="view_tutorial">View tutorial</string>
     <string name="deck_view">Deck View</string>
     <string name="list_view">List View</string>
     <string name="new_deck">New Deck</string>
