@@ -325,7 +325,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 	private boolean makeAddMultipleCardsDialog(int position, int[] values) {
 		AbstractMultipleCardsDialogFragment addMultipleCardsDialog;
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			addMultipleCardsDialog = new AddMultipleCardsDialogFragmentGinger();
+			addMultipleCardsDialog = new AddMultipleCardsDialogFragment();
 		} else {
 			addMultipleCardsDialog = new AddMultipleCardsDialogFragmentGinger();
 		}

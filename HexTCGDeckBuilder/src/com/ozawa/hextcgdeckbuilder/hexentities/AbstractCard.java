@@ -141,4 +141,6 @@ public abstract class AbstractCard {
 
 	public abstract Bitmap getCardBitmap(Context context, CardTemplate template, int maxWidth);
 
+	public abstract Bitmap addCount(String count, Bitmap imageIn);
+
 }

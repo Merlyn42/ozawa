@@ -537,4 +537,31 @@ public class Card extends AbstractCard {
 		return portrait;
 	}
 
+	@Override
+	public Bitmap addCount(String count, Bitmap imageIn) {
+    	Bitmap image= Bitmap.createBitmap(imageIn);
+    	Canvas combine = new Canvas(image);
+    	Paint textPaint = new Paint();
+    	textPaint.setTextSize( ((float)image.getHeight()) * 0.09f);
+    	int buf = (int) (textPaint.getTextSize()*0.2f);
+    	
+    	textPaint.setTextAlign(Paint.Align.RIGHT);
+    	textPaint.setColor(-1);        
+    	textPaint.setAntiAlias(true);
+    	Paint boxPaint = new Paint();
+    	boxPaint.setColor(0x770060b0);
+    	
+    	int originX = (int) (((float)image.getWidth())-buf);
+    	int originY = (int) (((float)image.getHeight())*0.1107f+textPaint.getTextSize());
+    	
+    	Rect box = new Rect();
+    	box.left=(originX-(int)textPaint.measureText(count))-buf;
+    	box.right=originX+buf;
+    	box.bottom=originY+buf;
+    	box.top=(originY-(int)textPaint.getTextSize());
+    	combine.drawRect(box, boxPaint);
+    	combine.drawText(count, originX, originY, textPaint);
+    	return image;
+	}
+
 }
