@@ -61,7 +61,7 @@ public class ResourceCard extends AbstractCard {
 			scale *= 2;
 		// Decode with inSampleSize
 		BitmapFactory.Options o2 = new BitmapFactory.Options();
-        if (false){//Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
         	o2.inMutable = true;
         } 
 		o2.inSampleSize = scale;
@@ -70,7 +70,7 @@ public class ResourceCard extends AbstractCard {
 		int width = Double.valueOf(o2.outWidth * defaultLayout.portraitRight).intValue() - left;
 		int top = Double.valueOf(o2.outHeight * defaultLayout.portraitTop).intValue();
 		int height = Double.valueOf(o2.outHeight * defaultLayout.portraitBottom).intValue() - top;
-        if (true){//Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
         	output=output.copy(Bitmap.Config.ARGB_8888, true);
         } 
 		image = output;//Bitmap.createBitmap(output, left, top, width, height);
