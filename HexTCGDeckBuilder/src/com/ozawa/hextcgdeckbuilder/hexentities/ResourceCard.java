@@ -1,3 +1,20 @@
+/*******************************************************************************
+ * Hex TCG Deck Builder
+ *     Copyright ( C ) 2014  Chad Kinsella, Dave Kerr and Laurence Reading
+ * 
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * 
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ * 
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package com.ozawa.hextcgdeckbuilder.hexentities;
 
 import android.annotation.SuppressLint;
@@ -44,7 +61,7 @@ public class ResourceCard extends AbstractCard {
 			scale *= 2;
 		// Decode with inSampleSize
 		BitmapFactory.Options o2 = new BitmapFactory.Options();
-        if (false){//Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
         	o2.inMutable = true;
         } 
 		o2.inSampleSize = scale;
@@ -53,7 +70,7 @@ public class ResourceCard extends AbstractCard {
 		int width = Double.valueOf(o2.outWidth * defaultLayout.portraitRight).intValue() - left;
 		int top = Double.valueOf(o2.outHeight * defaultLayout.portraitTop).intValue();
 		int height = Double.valueOf(o2.outHeight * defaultLayout.portraitBottom).intValue() - top;
-        if (true){//Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
         	output=output.copy(Bitmap.Config.ARGB_8888, true);
         } 
 		image = output;//Bitmap.createBitmap(output, left, top, width, height);

@@ -4,12 +4,12 @@ import hexentities.Champion;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.imageio.IIOImage;
@@ -31,8 +31,6 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
-import sun.java2d.loops.ProcessPath.EndSubPathHandler;
-
 import com.google.gson.Gson;
 
 import json.JSONSerializer;
@@ -50,6 +48,7 @@ public class CardImagerMapperUtil {
 	public static void generateImageAndCardJSONData(File hexLocation, File target) {
 		File newImageLocation = new File(target, "\\res\\drawable-nodpi\\");
 		File newCardLocation = new File(target, "\\res\\raw\\");
+		HashMap<String, File> portraitMap = new HashMap<String, File>();
 		// File[] cardFiles = new
 		// File("C:\\Program Files (x86)\\Hex\\Data\\Sets\\Set001\\CardDefinitions").listFiles();
 		try {
@@ -65,6 +64,7 @@ public class CardImagerMapperUtil {
 		ArrayList<Card> allCards = new ArrayList<Card>();
 		try {
 			FilenameFilter filter = new FilenameFilter() {
+				@Override
 				public boolean accept(File directory, String fileName) {
 					return !fileName.endsWith("~");
 				}
@@ -73,11 +73,11 @@ public class CardImagerMapperUtil {
 
 			for (File cardFile : cardFiles) {
 				String cardJSON = JSONSerializer.getJSONFromFiles(cardFile);
-				try{
-				allCards.add(JSONSerializer.deserializeJSONtoCard(cardJSON));
-				
-				}catch (Exception e){
-					System.err.println("Unable to parse file:"+cardFile.getName() );
+				try {
+					allCards.add(JSONSerializer.deserializeJSONtoCard(cardJSON));
+
+				} catch (Exception e) {
+					System.err.println("Unable to parse file:" + cardFile.getName());
 					throw e;
 				}
 			}
@@ -89,12 +89,14 @@ public class CardImagerMapperUtil {
 		for (Card card : allCards) {
 			try {
 				String cardImagePath = card.getM_CardImagePath();
-				File imageFile = new File(hexLocation, cardImagePath);
-				File newImageFile = new File(newImageLocation, imageName + String.format("%05d", fileNumber) + ".jpg");
+				File newImageFile = portraitMap.get(cardImagePath);
+				if (newImageFile == null) {
+					File imageFile = new File(hexLocation, cardImagePath);
+					newImageFile = new File(newImageLocation, imageName + String.format("%05d", fileNumber) + ".jpg");
+					BufferedImage image = openImage(imageFile);
+					writeJpeg(newImageFile, image, 0.6f);
+				}
 
-				BufferedImage image = openImage(imageFile);
-				writeJpeg(newImageFile, image, 0.6f);
-				// FileUtils.copyFile(imageFile, newImageFile);
 				card.setM_CardImagePath(FilenameUtils.removeExtension(newImageFile.getName()));
 				String newCardJSON = JSONSerializer.serializeCardToJSON(card);
 
@@ -143,7 +145,8 @@ public class CardImagerMapperUtil {
 						File imageFile = new File(hexLocation, championImagePath);
 						File newImageFile = new File(newImageLocation, championPortraitSmall + String.format("%05d", fileNumber) + ".png");
 						try {
-							FileUtils.copyFile(imageFile, newImageFile);
+							BufferedImage image = openImage(imageFile);
+							writeJpeg(newImageFile, image, 0.6f);
 						} catch (IOException e) {
 							System.out.println("Skipping champion file as image not found");
 						}
@@ -156,7 +159,8 @@ public class CardImagerMapperUtil {
 						File imageFile = new File(hexLocation, championImagePath);
 						File newImageFile = new File(newImageLocation, championPortrait + String.format("%05d", fileNumber) + ".png");
 						try {
-							FileUtils.copyFile(imageFile, newImageFile);
+							BufferedImage image = openImage(imageFile);
+							writeJpeg(newImageFile, image, 0.6f);
 						} catch (IOException e) {
 							System.out.println("Skipping champion file as image not found");
 						}
@@ -263,7 +267,7 @@ public class CardImagerMapperUtil {
 		target = cmd.getOptionValue("target");
 		File targetFile = new File(target);
 		File sourceFile = new File(source, "\\Data\\");
-		
+
 		cleanTarget(targetFile);
 
 		generateImageAndCardJSONData(sourceFile, targetFile);
@@ -271,35 +275,35 @@ public class CardImagerMapperUtil {
 	}
 
 	private static void cleanTarget(File targetFile) {
-		File res =new File(targetFile,"res") ;
-		if(res.exists()){
-			File images =new File(res,"drawable-nodpi") ;
-			if(images.exists()){
-				File[] files = images.listFiles(new FilenameFilter(){
+		File res = new File(targetFile, "res");
+		if (res.exists()) {
+			File images = new File(res, "drawable-nodpi");
+			if (images.exists()) {
+				File[] files = images.listFiles(new FilenameFilter() {
 					@Override
 					public boolean accept(File dir, String name) {
-						return (name.startsWith("hex0")&&name.endsWith(".jpg")||(name.startsWith("championportait")&&name.endsWith(".png")));
+						return (name.startsWith("hex0") && name.endsWith(".jpg") || (name.startsWith("championportait") && name
+								.endsWith(".png")));
 					}
 				});
-				for (File f :files){
+				for (File f : files) {
 					f.delete();
 				}
 			}
-			File raw =new File(res,"raw") ;
-			if(raw.exists()){
-				File[] files = raw.listFiles(new FilenameFilter(){
+			File raw = new File(res, "raw");
+			if (raw.exists()) {
+				File[] files = raw.listFiles(new FilenameFilter() {
 					@Override
 					public boolean accept(File dir, String name) {
-						return ((name.startsWith("hexcard0")||name.startsWith("champion"))&&name.endsWith(".json"));
+						return ((name.startsWith("hexcard0") || name.startsWith("champion")) && name.endsWith(".json"));
 					}
 				});
-				for (File f :files){
+				for (File f : files) {
 					f.delete();
 				}
 			}
 		}
-		
-		
+
 	}
 
 }
