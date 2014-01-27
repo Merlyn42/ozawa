@@ -219,7 +219,7 @@ public class Card extends AbstractCard {
 		}
 		tempRatio = template.costFontRatio;
 		paint.setTextSize(imageHeight * tempRatio);
-		drawGameText(gameText, 64, combine, templateImage, paint, resources, context);
+		drawGameText(gameText.trim(), 64, combine, templateImage, paint, resources, context);
 		tempRatio = template.typeFontRatio;
 		paint.setTextSize(imageHeight * tempRatio);
 		String cardTypes = "";
@@ -267,7 +267,7 @@ public class Card extends AbstractCard {
 					displayText = "" + word.substring(pLocation, word.length()) + " ";
 					lineCount++;
 				} else {
-					if ((displayText + word).length() > lengths.get(lineCount)) {
+					if (paint.measureText(displayText + word) > (templateImage.getWidth() * 0.829)) {
 						drawTextWithImages(displayText, templateImage, combine, paint, resources, context);
 						displayText = "";
 						line += .06f;
@@ -276,7 +276,16 @@ public class Card extends AbstractCard {
 					displayText += word + " ";
 				}
 			}
-			drawTextWithImages(displayText, templateImage, combine, paint, resources, context);
+			if (paint.measureText(displayText) > (templateImage.getWidth() * 0.829)) {
+				String stuff = displayText.substring(0,displayText.lastIndexOf(" "));
+				drawTextWithImages(stuff, templateImage, combine, paint, resources, context);				
+				line += .06f;
+				lineCount++;
+				stuff = displayText.substring(displayText.lastIndexOf(" "),displayText.length()-1);
+				drawTextWithImages(stuff, templateImage, combine, paint, resources, context);
+			} else{
+				drawTextWithImages(displayText, templateImage, combine, paint, resources, context);
+			}
 		}
 	}
 
@@ -286,7 +295,7 @@ public class Card extends AbstractCard {
 		for (String word : words) {
 			if ((displayText + word).length() >= length) {
 				if (displayText.contains("[")) {
-					int adjuster = length + ((displayText.split("\\[").length - 1) * 4);
+					int adjuster = length + ((displayText.split("\\[").length - 1) * 3);
 					lengths.add(adjuster);
 				} else {
 					lengths.add(length);
@@ -298,7 +307,7 @@ public class Card extends AbstractCard {
 			displayText += word + " ";
 		}
 		if (displayText.contains("[")) {
-			int adjuster = length + ((displayText.split("\\[").length - 1) * 4);
+			int adjuster = length + ((displayText.split("\\[").length - 1) * 3);
 			lengths.add(adjuster);
 		} else {
 			lengths.add(length);
@@ -325,7 +334,7 @@ public class Card extends AbstractCard {
 
 			} else {
 				if (stuff[i].equalsIgnoreCase("p")) {
-					line += 0.06f;
+					line += 0.04f;
 					width = templateImage.getWidth() / 14;
 				} else if (stuff[i].equalsIgnoreCase("b")) {
 					paint.setFakeBoldText(true);
