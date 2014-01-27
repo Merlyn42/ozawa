@@ -60,11 +60,13 @@ public class RemoveMultipleCardsDialogFragmentGinger extends AbstractMultipleCar
 			@Override
 			public void onClick(View v) {
 				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-				int count = Integer.parseInt(text.getText().toString());
-				animationArg.repeatCount = count - 1;
-				HexUtil.moveImageAnimation(animationArg);
+				if (text != null && text.getText() != null && text.getText().toString() != null && text.getText().toString().length() > 0) {
+					int count = Integer.parseInt(text.getText().toString());
+					animationArg.repeatCount = count - 1;
+					HexUtil.moveImageAnimation(animationArg);
+					((CustomDeckFragment) fragment).removeCardFromCustomDeck(position, count);
+				}
 				dialog.dismiss();
-				((CustomDeckFragment) fragment).removeCardFromCustomDeck(position, count);
 			}
 		});
 

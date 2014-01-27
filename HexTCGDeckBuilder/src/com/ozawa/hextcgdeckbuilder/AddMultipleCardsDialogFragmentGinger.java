@@ -52,16 +52,16 @@ public class AddMultipleCardsDialogFragmentGinger extends AbstractMultipleCardsD
 		dialog.setTitle("Add Multiple Cards");
 
 		affirmButton.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-				if (((MasterDeckFragment) fragment).addCardToCustomDeck(position, Integer.parseInt(text.getText().toString()))) {
-					animationArg.repeatCount = Integer.parseInt(text.getText().toString()) - 1;
-					HexUtil.moveImageAnimation(animationArg);
+				if (text != null && text.getText() != null && text.getText().toString() != null && text.getText().toString().length() > 0) {
+					if (((MasterDeckFragment) fragment).addCardToCustomDeck(position, Integer.parseInt(text.getText().toString()))) {
+						animationArg.repeatCount = Integer.parseInt(text.getText().toString()) - 1;
+						HexUtil.moveImageAnimation(animationArg);
+					}
 				}
 				dialog.dismiss();
-
 			}
 		});
 
