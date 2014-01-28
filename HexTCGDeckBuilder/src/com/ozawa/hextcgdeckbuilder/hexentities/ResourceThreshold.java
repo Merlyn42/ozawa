@@ -23,8 +23,6 @@ import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
 
 /**
  * Threshold data for a card.
- * 
- * @author Chad Kinsella
  */
 public class ResourceThreshold {
 	

@@ -20,8 +20,6 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * Each different card type.
- * 
- * @author Chad Kinsella
  */
 public enum CardType implements CardEnum {
 	

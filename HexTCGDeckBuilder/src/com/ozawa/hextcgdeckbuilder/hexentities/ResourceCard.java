@@ -17,7 +17,6 @@
  ******************************************************************************/
 package com.ozawa.hextcgdeckbuilder.hexentities;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -26,7 +25,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Build;
-import android.view.Display;
 
 import com.google.gson.annotations.SerializedName;
 import com.ozawa.hextcgdeckbuilder.R;
@@ -38,8 +36,6 @@ import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 /**
  * A Resource Card.
- * 
- * @author Chad Kinsella
  */
 public class ResourceCard extends AbstractCard {
 
@@ -66,10 +62,10 @@ public class ResourceCard extends AbstractCard {
         } 
 		o2.inSampleSize = scale;
 		Bitmap output = BitmapFactory.decodeResource(resources, resourceId, o2);
-		int left = Double.valueOf(o2.outWidth * defaultLayout.portraitLeft).intValue();
-		int width = Double.valueOf(o2.outWidth * defaultLayout.portraitRight).intValue() - left;
-		int top = Double.valueOf(o2.outHeight * defaultLayout.portraitTop).intValue();
-		int height = Double.valueOf(o2.outHeight * defaultLayout.portraitBottom).intValue() - top;
+		//int left = Double.valueOf(o2.outWidth * defaultLayout.portraitLeft).intValue();
+		//int width = Double.valueOf(o2.outWidth * defaultLayout.portraitRight).intValue() - left;
+		//int top = Double.valueOf(o2.outHeight * defaultLayout.portraitTop).intValue();
+		//int height = Double.valueOf(o2.outHeight * defaultLayout.portraitBottom).intValue() - top;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
         	output=output.copy(Bitmap.Config.ARGB_8888, true);
         } 

@@ -43,13 +43,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 /**
  * Database Handler classed used to read and write application information
  * to the SQLite Database
- * 
- * @author Chad Kinsella
  */
 public class DatabaseHandler extends SQLiteOpenHelper {
 
 	// Database Version
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 1;
     // Database Name
     private static final String DATABASE_NAME = "HexTCGDeckBuilderDB";
     

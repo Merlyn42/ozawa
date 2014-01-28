@@ -35,10 +35,6 @@ import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.ResourceCard;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
-/**
- * Created by ckinsella on 19/12/13.
- */
-
 public class DeckListViewAdapter extends ImageAdapter{
 
     private static LayoutInflater inflater=null;

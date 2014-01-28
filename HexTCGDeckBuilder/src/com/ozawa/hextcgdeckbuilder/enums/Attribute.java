@@ -21,8 +21,6 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * Each Attribute for a non-resource card.
- * 
- * @author Chad Kinsella
  */
 public enum Attribute implements CardEnum {
 	

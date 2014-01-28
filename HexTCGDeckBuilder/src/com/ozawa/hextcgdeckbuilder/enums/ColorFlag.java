@@ -21,8 +21,6 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * Each card colour.
- * 
- * @author Chad Kinsella
  */
 public enum ColorFlag implements CardEnum {
 	

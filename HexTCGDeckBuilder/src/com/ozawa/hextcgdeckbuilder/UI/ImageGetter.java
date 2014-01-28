@@ -19,9 +19,6 @@ package com.ozawa.hextcgdeckbuilder.UI;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.widget.ImageView;
 
@@ -31,9 +28,6 @@ import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 
 import java.util.Map;
 
-/**
- * Created by lreading on 18/12/13.
- */
 public class ImageGetter extends AsyncTask<AbstractCard, Void, Bitmap> {
 
     private ImageView iv;

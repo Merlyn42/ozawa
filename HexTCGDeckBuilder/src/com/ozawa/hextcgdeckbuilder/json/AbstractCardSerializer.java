@@ -29,9 +29,6 @@ import com.ozawa.hextcgdeckbuilder.hexentities.ResourceCard;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 
-/**
- * Created by lreading on 19/12/13.
- */
 public class AbstractCardSerializer implements JsonDeserializer<AbstractCard> {
     @Override
     public AbstractCard deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
