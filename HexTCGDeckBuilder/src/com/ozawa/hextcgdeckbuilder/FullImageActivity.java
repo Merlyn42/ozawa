@@ -22,8 +22,15 @@ package com.ozawa.hextcgdeckbuilder;
  */
 import java.util.ArrayList;
 
+import com.espian.showcaseview.ShowcaseView;
+import com.espian.showcaseview.ShowcaseView.ConfigOptions;
+import com.ozawa.hextcgdeckbuilder.UI.TutorialEventListener;
+import com.ozawa.hextcgdeckbuilder.enums.TutorialType;
+import com.ozawa.hextcgdeckbuilder.util.HexUtil;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
 import android.gesture.GestureLibrary;
@@ -43,6 +50,10 @@ public class FullImageActivity extends Activity implements GestureOverlayView.On
 	private ImageView imageView;
 	private int cardCount;
 	private boolean isMaster;
+	
+	// Tutorial
+	private static final String PREFS_NAME = "FirstLaunchPref";
+	private SharedPreferences mPreferences;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,7 +87,30 @@ public class FullImageActivity extends Activity implements GestureOverlayView.On
 		GestureOverlayView gestureOverlayView = (GestureOverlayView) findViewById(R.id.fullImageGestureOverlayView);
 		gestureOverlayView.addOnGesturePerformedListener(this);	
 		gestureOverlayView.setGestureVisible(false);
+		
+		// Tutorial
+		mPreferences = getSharedPreferences(PREFS_NAME, 0);
+		boolean firstTime = mPreferences.getBoolean("firstTime", true);
+		if (firstTime) { 
+			showTutorial();
+		}
     }
+    
+    /**
+	 * Show the app's tutorial
+	 */
+	@SuppressWarnings("deprecation")
+	public void showTutorial() {
+		ConfigOptions co = new ShowcaseView.ConfigOptions();
+		co.shotType = ShowcaseView.TYPE_ONE_SHOT;
+		co.centerText = true;
+		co.hideOnClickOutside = true;
+		ShowcaseView showcaseView = ShowcaseView.insertShowcaseView(HexUtil.getScreenWidth(this) / 2, (int)(HexUtil.getScreenHeight(this) / 15), this, "Fullscreen View", 
+				"Check out the hi-res on these bad boys. Here is a close up of the card and all it's interesting data.", co);     
+		showcaseView.setShowcase(ShowcaseView.NONE);
+		showcaseView.setOnShowcaseEventListener(new TutorialEventListener(this,co, TutorialType.FULLSCREEN));        
+		showcaseView.show();
+	}
     
     @Override
     protected void onPause(){

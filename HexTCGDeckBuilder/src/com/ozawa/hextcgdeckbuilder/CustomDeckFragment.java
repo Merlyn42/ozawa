@@ -24,10 +24,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.espian.showcaseview.ShowcaseView;
+import com.espian.showcaseview.ShowcaseView.ConfigOptions;
 import com.ozawa.hextcgdeckbuilder.UI.CardViewer;
 import com.ozawa.hextcgdeckbuilder.UI.CustomViewPager;
 import com.ozawa.hextcgdeckbuilder.UI.PlaceholderFragment;
+import com.ozawa.hextcgdeckbuilder.UI.TutorialEventListener;
 import com.ozawa.hextcgdeckbuilder.database.DatabaseHandler;
+import com.ozawa.hextcgdeckbuilder.enums.TutorialType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Deck;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
@@ -35,6 +39,7 @@ import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
@@ -100,6 +105,10 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 	Button								saveDeck;
 	Button								deleteDeck;
 	Button								selectChampion;
+	
+	// Tutorial
+	private static final String PREFS_NAME = "FirstLaunchPref";
+	private SharedPreferences mPreferences;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -354,7 +363,31 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 		// Update the view so the user can see the newly added cards
 		if (this.isVisible() && isVisibleToUser) {
 			reloadCustomDeckView();
+			mPreferences = getActivity().getSharedPreferences(PREFS_NAME, 0);
+			boolean firstTime = mPreferences.getBoolean("firstTime", true);
+			if(firstTime){
+				showTutorial();
+			}
 		}
+	}
+	
+	/**
+	 * Show the app's tutorial
+	 */
+	@SuppressWarnings("deprecation")
+	public void showTutorial() {
+		ConfigOptions co = new ShowcaseView.ConfigOptions();
+		co.shotType = ShowcaseView.TYPE_ONE_SHOT;
+		co.centerText = true;
+		co.hideOnClickOutside = true;
+		ShowcaseView showcaseView = ShowcaseView.insertShowcaseView(HexUtil.getScreenWidth(getActivity()) / 2, (int)(HexUtil.getScreenHeight(getActivity()) / 15), getActivity(), "Custom Deck", 
+				"This is where the magic happens, and you'll create your custom decks.", co);     
+		showcaseView.setShowcase(ShowcaseView.NONE);
+		showcaseView.setOnShowcaseEventListener(new TutorialEventListener(getActivity(),co, TutorialType.CUSTOMDECK));        
+		showcaseView.show();
+		SharedPreferences.Editor editor = mPreferences.edit();
+	    editor.putBoolean("firstTime", false);
+	    editor.commit();
 	}
 
 	public void reloadCustomDeckView() {
@@ -744,7 +777,6 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 					if (last == listView.getCount() - 1 && listView.getChildAt(last).getBottom() >= listView.getHeight()) {
 						listView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, listView.getHeight()
 								+ listView.getChildAt(last).getBottom()));
-						Toast.makeText(mainActivity, "Updating Listview height", Toast.LENGTH_SHORT).show();
 					}
 				}
 			}

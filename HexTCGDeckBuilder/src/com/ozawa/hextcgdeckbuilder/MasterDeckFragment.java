@@ -27,6 +27,7 @@ import com.ozawa.hextcgdeckbuilder.UI.CardViewer;
 import com.ozawa.hextcgdeckbuilder.UI.CustomViewPager;
 import com.ozawa.hextcgdeckbuilder.UI.PlaceholderFragment;
 import com.ozawa.hextcgdeckbuilder.UI.TutorialEventListener;
+import com.ozawa.hextcgdeckbuilder.enums.TutorialType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 import com.ozawa.hextcgdeckbuilder.json.JsonReader;
@@ -69,7 +70,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 
 	private FragmentActivity			mainActivity;
 	private DrawerLayout				uiLayout;
-	private ShowcaseView				showcaseView; 
+	public ShowcaseView					showcaseView; 
 	ListView							listView;
 	ImageAdapter						imAdapter;
 	DeckListViewAdapter					lvAdapter;
@@ -100,10 +101,6 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 		mPreferences = getActivity().getSharedPreferences(PREFS_NAME, 0);
 		boolean firstTime = mPreferences.getBoolean("firstTime", true);
 		if (firstTime) { 
-		    SharedPreferences.Editor editor = mPreferences.edit();
-		    editor.putBoolean("firstTime", false);
-		    editor.commit();
-		
 			showTutorial();
 		}
 	}
@@ -120,8 +117,11 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 		showcaseView = ShowcaseView.insertShowcaseView(HexUtil.getScreenWidth(getActivity()) / 2, (int)(HexUtil.getScreenHeight(getActivity()) / 15), getActivity(), "Welcome to the Unofficial Hex TCG - Deck Builder", 
 				"Before you get started building awesome decks, let us give you a run down of the basics.", co);     
 		showcaseView.setShowcase(ShowcaseView.NONE);
-		showcaseView.setOnShowcaseEventListener(new TutorialEventListener(getActivity(),co));        
+		showcaseView.setOnShowcaseEventListener(new TutorialEventListener(getActivity(),co, TutorialType.CARDLIBRARY));        
 		showcaseView.show();
+		SharedPreferences.Editor editor = mPreferences.edit();
+	    editor.putBoolean("firstTime", true);
+	    editor.commit();
 	}
 	
 	@Override
@@ -399,7 +399,6 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 					if (last == listView.getCount() - 1 && listView.getChildAt(last).getBottom() >= listView.getHeight()) {
 						listView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, listView.getHeight()
 								+ listView.getChildAt(last).getBottom()));
-						Toast.makeText(mainActivity, "Updating Listview height", Toast.LENGTH_SHORT).show();
 					}
 				}
 			}
