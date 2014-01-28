@@ -260,9 +260,7 @@ public class Card extends AbstractCard {
 	private void drawGameText(String gameText, int length, Canvas combine, Bitmap templateImage, Paint paint, Resources resources,
 			Context context) {
 		line = 0f;
-		ArrayList<Integer> lengths = new ArrayList<Integer>();
-		adjust(length, gameText, lengths);
-		if (gameText.length() < lengths.get(0)) {
+		if (paint.measureText(gameText) < (templateImage.getWidth() * 0.829)) {
 			if (gameText.contains("<p>")) {
 				int pLocation = gameText.lastIndexOf("<p>") + 3;
 				String paragraph = gameText.substring(0, pLocation);
@@ -274,7 +272,6 @@ public class Card extends AbstractCard {
 		} else {
 			String displayText = "";
 			String[] words = gameText.split(" ");
-			int lineCount = 0;
 			for (String word : words) {
 				if (word.contains("<p>")) {
 					int pLocation = word.lastIndexOf("<p>") + 3;
@@ -282,13 +279,11 @@ public class Card extends AbstractCard {
 					displayText += paragraph;
 					drawTextWithImages(displayText, templateImage, combine, paint, resources, context);
 					displayText = "" + word.substring(pLocation, word.length()) + " ";
-					lineCount++;
 				} else {
 					if (paint.measureText(displayText + word) > (templateImage.getWidth() * 0.829)) {
 						drawTextWithImages(displayText, templateImage, combine, paint, resources, context);
 						displayText = "";
 						line += .06f;
-						lineCount++;
 					}
 					displayText += word + " ";
 				}
@@ -297,40 +292,12 @@ public class Card extends AbstractCard {
 				String stuff = displayText.substring(0,displayText.lastIndexOf(" "));
 				drawTextWithImages(stuff, templateImage, combine, paint, resources, context);				
 				line += .06f;
-				lineCount++;
 				stuff = displayText.substring(displayText.lastIndexOf(" "),displayText.length()-1);
 				drawTextWithImages(stuff, templateImage, combine, paint, resources, context);
 			} else{
 				drawTextWithImages(displayText, templateImage, combine, paint, resources, context);
 			}
 		}
-	}
-
-	private void adjust(int length, String gameText, ArrayList<Integer> lengths) {
-		String displayText = "";
-		String[] words = gameText.split(" ");
-		for (String word : words) {
-			if ((displayText + word).length() >= length) {
-				if (displayText.contains("[")) {
-					int adjuster = length + ((displayText.split("\\[").length - 1) * 3);
-					lengths.add(adjuster);
-				} else {
-					lengths.add(length);
-				}
-				if (displayText.contains("<p>"))
-					lengths.add(length);
-				displayText = "";
-			}
-			displayText += word + " ";
-		}
-		if (displayText.contains("[")) {
-			int adjuster = length + ((displayText.split("\\[").length - 1) * 3);
-			lengths.add(adjuster);
-		} else {
-			lengths.add(length);
-		}
-		if (displayText.contains("<p>"))
-			lengths.add(length);
 	}
 
 	private void drawTextWithImages(String displayText, Bitmap templateImage, Canvas combine, Paint paint, Resources resources,
