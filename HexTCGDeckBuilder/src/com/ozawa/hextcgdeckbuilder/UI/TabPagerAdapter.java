@@ -27,8 +27,8 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 public class TabPagerAdapter extends FragmentStatePagerAdapter{
 	
 	private static final int tabCount = 2;
-	public final CustomDeckFragment customDeckFragment;
-	public final MasterDeckFragment masterDeckFragment;
+	public CustomDeckFragment customDeckFragment;
+	public MasterDeckFragment masterDeckFragment;
 	
 	public TabPagerAdapter(FragmentManager fm) {
         super(fm);
