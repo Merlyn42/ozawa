@@ -31,6 +31,7 @@ public class TutorialEventListener implements OnShowcaseEventListener {
 	private Activity activity;
 	private ShowcaseView.ConfigOptions co;
 	private TutorialType type;
+	public ShowcaseView currentShowcase;
 	
 	public TutorialEventListener(Activity activity,ShowcaseView.ConfigOptions co){
 		this.tutCount = 0;
@@ -59,6 +60,7 @@ public class TutorialEventListener implements OnShowcaseEventListener {
 				showcaseView.setShowcase(ShowcaseView.NONE);
 				showcaseView.setOnShowcaseEventListener(this);	                
 		        showcaseView.show();
+		        currentShowcase = showcaseView;
 		        tutCount++;
 		        break;
 			}
@@ -67,6 +69,7 @@ public class TutorialEventListener implements OnShowcaseEventListener {
 						"Fullscreen View", "Click on a card to go fullscreen. Click on that card again to exit fullscreen.", co);   			
 				showcaseView.setOnShowcaseEventListener(this);        
 		        showcaseView.show();
+		        currentShowcase = showcaseView;
 		        tutCount++;
 		        break;
 			}		
@@ -75,6 +78,7 @@ public class TutorialEventListener implements OnShowcaseEventListener {
 		        showcaseView.setOnShowcaseEventListener(this);
 				showcaseView.animateGesture(HexUtil.getScreenWidth(activity), HexUtil.getScreenHeight(activity) / 2, HexUtil.getScreenWidth(activity) / 2, HexUtil.getScreenHeight(activity) / 2, true);
 		        showcaseView.show();
+		        currentShowcase = showcaseView;
 		        tutCount++;
 		        break;
 			}		
@@ -83,7 +87,8 @@ public class TutorialEventListener implements OnShowcaseEventListener {
 				showcaseView = ShowcaseView.insertShowcaseView(activity.findViewById(R.id.action_list_view),activity,"List View", "Click here to change view to a listview", co);
 				showcaseView.setScaleMultiplier(.5f);
 		        showcaseView.setOnShowcaseEventListener(this);
-				showcaseView.show();			
+				showcaseView.show();
+				currentShowcase = showcaseView;
 				tutCount++;
 				break;
 			}
@@ -91,7 +96,8 @@ public class TutorialEventListener implements OnShowcaseEventListener {
 				showcaseView = ShowcaseView.insertShowcaseView(activity.findViewById(R.id.action_deck_view),activity,"Deck View", "Click here to change view to a deck view.", co);
 				showcaseView.setScaleMultiplier(.5f);
 		        showcaseView.setOnShowcaseEventListener(this);
-				showcaseView.show();			
+				showcaseView.show();
+				currentShowcase = showcaseView;
 				tutCount++;
 				break;
 			}
@@ -100,6 +106,7 @@ public class TutorialEventListener implements OnShowcaseEventListener {
 				showcaseView.setOnShowcaseEventListener(this);
 		        showcaseView.animateGesture(HexUtil.getScreenWidth(activity) / 2, (int)(HexUtil.getScreenHeight(activity) / 2.1), (int)(HexUtil.getScreenWidth(activity) / 4), (int)(HexUtil.getScreenHeight(activity) / 2.1), true);        
 		        showcaseView.show();
+		        currentShowcase = showcaseView;
 		        tutCount++;
 		        break;
 			}
@@ -108,6 +115,7 @@ public class TutorialEventListener implements OnShowcaseEventListener {
 				showcaseView.setOnShowcaseEventListener(this);
 		        showcaseView.animateGesture(HexUtil.getScreenWidth(activity) / 2, (int)(HexUtil.getScreenHeight(activity) / 1.5), (int)(HexUtil.getScreenWidth(activity) / 2), (int)(HexUtil.getScreenHeight(activity) / 2.1), true);        
 		        showcaseView.show();
+		        currentShowcase = showcaseView;
 		        tutCount++;
 		        break;
 			}
@@ -117,6 +125,7 @@ public class TutorialEventListener implements OnShowcaseEventListener {
 		        showcaseView.setOnShowcaseEventListener(this);
 				showcaseView.animateGesture(HexUtil.getScreenWidth(activity) / 2, HexUtil.getScreenHeight(activity) / 2, HexUtil.getScreenWidth(activity), HexUtil.getScreenHeight(activity) / 2, true);
 		        showcaseView.show();
+		        currentShowcase = showcaseView;
 		        tutCount++;
 		        break;
 			}
@@ -131,6 +140,7 @@ public class TutorialEventListener implements OnShowcaseEventListener {
 				showcaseView.setOnShowcaseEventListener(this);
 		        showcaseView.animateGesture(HexUtil.getScreenWidth(activity) / 2, (int)(HexUtil.getScreenHeight(activity) / 2.1), (int)(HexUtil.getScreenWidth(activity) / 4), (int)(HexUtil.getScreenHeight(activity) / 2.1), true);        
 		        showcaseView.show();
+		        currentShowcase = showcaseView;
 		        tutCount++;
 		        break;
 			}
@@ -138,6 +148,7 @@ public class TutorialEventListener implements OnShowcaseEventListener {
 				showcaseView = ShowcaseView.insertShowcaseView(HexUtil.getScreenWidth(activity) / 2, (int)(HexUtil.getScreenHeight(activity) / 2.15), activity, "Exit Fullscreen", "Tap the card to exit fullscreen view.", co);        
 				showcaseView.setOnShowcaseEventListener(this);        
 		        showcaseView.show();
+		        currentShowcase = showcaseView;
 		        tutCount++;
 		        break;
 			}
@@ -153,6 +164,7 @@ public class TutorialEventListener implements OnShowcaseEventListener {
 					showcaseView.setOnShowcaseEventListener(this);
 			        showcaseView.animateGesture(0, (int)(HexUtil.getScreenHeight(activity) / 4), (int)HexUtil.getScreenWidth(activity) /2, (int)(HexUtil.getScreenHeight(activity) / 4), true);        
 			        showcaseView.show();
+			        currentShowcase = showcaseView;
 			        tutCount++;
 			        break;
 				}
@@ -161,6 +173,7 @@ public class TutorialEventListener implements OnShowcaseEventListener {
 			        showcaseView.setOnShowcaseEventListener(this);
 					showcaseView.animateGesture(0, HexUtil.getScreenHeight(activity) / 2, HexUtil.getScreenWidth(activity) / 2, HexUtil.getScreenHeight(activity) / 2, true);
 			        showcaseView.show();
+			        currentShowcase = showcaseView;
 			        tutCount++;
 			        break;
 				}		
@@ -170,7 +183,8 @@ public class TutorialEventListener implements OnShowcaseEventListener {
 							co);
 					showcaseView.setScaleMultiplier(.5f);
 			        showcaseView.setOnShowcaseEventListener(this);
-					showcaseView.show();			
+					showcaseView.show();	
+					currentShowcase = showcaseView;
 					tutCount++;
 					break;
 				}
