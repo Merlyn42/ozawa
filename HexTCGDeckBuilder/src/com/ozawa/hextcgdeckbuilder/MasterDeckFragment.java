@@ -89,7 +89,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 	ShowcaseViews 						mViews;
 	public static CardViewer			cardViewer;
 	public final static String			GETDECK	= "GETDECK";
-	private static final String PREFS_NAME = "FirstLaunchPref";
+	private static final String PREFS_NAME = "FirstLaunchPrefCardLibrary";
 	private GestureLibrary				gesLibrary;
 	private GridView					gridView;
 	
@@ -120,7 +120,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 		showcaseView.setOnShowcaseEventListener(new TutorialEventListener(getActivity(),co, TutorialType.CARDLIBRARY));        
 		showcaseView.show();
 		SharedPreferences.Editor editor = mPreferences.edit();
-	    editor.putBoolean("firstTime", true);
+	    editor.putBoolean("firstTime", false);
 	    editor.commit();
 	}
 	
@@ -223,14 +223,12 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 							}
 						}
 					} else if (prediction.name.equalsIgnoreCase("swipe right")) {
+						if(showcaseView != null){
+							//Go to next step
+							showcaseView.hide();
+						}
 						CustomViewPager pager = (CustomViewPager) mainActivity.findViewById(R.id.pager);
-						pager.setCurrentItem(pager.getCurrentItem() - 1); // *******
-																			// TEMPORARY
-																			// FIX
-																			// FOR
-																			// SLIDING
-																			// BETWEEN
-																			// PAGES
+						pager.setCurrentItem(pager.getCurrentItem() - 1); // Slide between pages
 					} else if (prediction.name.equalsIgnoreCase("anti clockwise") || prediction.name.equalsIgnoreCase("clockwise")) {
 						cardViewer.clearFilter();
 					}
@@ -272,7 +270,10 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 		gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-
+				if(showcaseView != null){
+					//Go to next step
+					showcaseView.hide();
+				}
 				// Sending image id to FullScreenActivity
 				Intent i = new Intent(mainActivity.getApplicationContext(), FullImageActivity.class);
 				// passing array index
@@ -306,6 +307,10 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				if(showcaseView != null){
+					//Go to next step
+					showcaseView.hide();
+				}
 				// Sending image id to FullScreenActivity
 				Intent i = new Intent(mainActivity.getApplicationContext(), FullImageActivity.class);
 				// passing array index

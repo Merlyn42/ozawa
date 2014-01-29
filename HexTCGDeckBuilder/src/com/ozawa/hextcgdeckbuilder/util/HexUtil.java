@@ -21,6 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 
 import com.ozawa.hextcgdeckbuilder.HtmlImageGetter;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
@@ -252,7 +253,13 @@ public class HexUtil {
 		public int duration;
 		public int repeatCount;	
 	}
-
+	
+	/**
+	 * Convert an inputstream to a byte[]
+	 * 
+	 * @param is
+	 * @return the resulting byte[]
+	 */
 	public static byte[] toByteArray(InputStream is){
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 
@@ -268,5 +275,20 @@ public class HexUtil {
 		}
 		
 		return buffer.toByteArray();
+	}
+	
+	/**
+	 * Round a double to the specified number of decimal places
+	 * 
+	 * @param unrounded
+	 * @param precision
+	 * @param roundingMode
+	 * @return a rounded double
+	 */
+	public static double round(double unrounded, int precision, int roundingMode)
+	{
+	    BigDecimal bd = new BigDecimal(unrounded);
+	    BigDecimal rounded = bd.setScale(precision, roundingMode);
+	    return rounded.doubleValue();
 	}
 }

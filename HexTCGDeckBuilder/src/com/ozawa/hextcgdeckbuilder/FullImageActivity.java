@@ -61,7 +61,7 @@ public class FullImageActivity extends Activity implements GestureOverlayView.On
 	private boolean isMaster;
 	
 	// Tutorial
-	private static final String PREFS_NAME = "FirstLaunchPref";
+	private static final String PREFS_NAME = "FirstLaunchPrefFullscreen";
 	private SharedPreferences mPreferences;
 	
     @Override
@@ -127,6 +127,9 @@ public class FullImageActivity extends Activity implements GestureOverlayView.On
 		showcaseView.setShowcase(ShowcaseView.NONE);
 		showcaseView.setOnShowcaseEventListener(new TutorialEventListener(this,co, TutorialType.FULLSCREEN));        
 		showcaseView.show();
+		SharedPreferences.Editor editor = mPreferences.edit();
+	    editor.putBoolean("firstTime", false);
+	    editor.commit();
 	}
     
     @Override
@@ -191,13 +194,13 @@ public class FullImageActivity extends Activity implements GestureOverlayView.On
 		
 		float aspectRatio = (float) HexUtil.getScreenWidth(this) / HexUtil.getScreenHeight(this);//(HexUtil.getScreenHeight(this) - getStatusBarHeight());
 		int width = HexUtil.getScreenWidth(this);
-		int height = (int) (width * (1 / round(aspectRatio, 2, BigDecimal.ROUND_HALF_UP)));
+		int height = (int) (width * (1 / HexUtil.round(aspectRatio, 2, BigDecimal.ROUND_HALF_UP)));
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams((int)(width*template.socketRatio), (int)(width*template.socketRatio));
         Bitmap socketImage = BitmapFactory.decodeResource(getResources(),R.drawable.gem_socket);
 		socketImage = Bitmap.createScaledBitmap(socketImage, (int)(width*template.socketRatio), (int)(width*template.socketRatio), true);
 		socketGem.setImageBitmap(socketImage);
         lp.leftMargin = (int) (width - (width / 4.5f));
-        lp.topMargin = (int) (height / 2.2f);
+        lp.topMargin = (int) (height / 2.2f) - ((HexUtil.getScreenHeight(this) - height) / 2);
         socketGem.setLayoutParams(lp);		
 	}
 	
@@ -209,11 +212,4 @@ public class FullImageActivity extends Activity implements GestureOverlayView.On
  	   }
  	   return result;
  	}*/
-	
-	public static double round(double unrounded, int precision, int roundingMode)
-	{
-	    BigDecimal bd = new BigDecimal(unrounded);
-	    BigDecimal rounded = bd.setScale(precision, roundingMode);
-	    return rounded.doubleValue();
-	}
 }
