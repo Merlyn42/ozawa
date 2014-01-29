@@ -150,13 +150,17 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 	@Override
 	public void onResume() {
 		super.onResume();
-		setupNavigationDrawer();
+		if(mNavigationDrawerFragment == null){
+			setupNavigationDrawer();
+		}
 	}
 
 	@Override
 	public void onStart() {
 		super.onStart();
-		setupNavigationDrawer();
+		if(mNavigationDrawerFragment == null){
+			setupNavigationDrawer();
+		}
 	}
 
 	private void setupNavigationDrawer() {
