@@ -17,6 +17,7 @@
  ******************************************************************************/
 package com.ozawa.hextcgdeckbuilder.hexentities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -44,6 +45,7 @@ public class ResourceCard extends AbstractCard {
 	@SerializedName("m_MaxResourcesGranted")
 	public int	maxResourcesGranted;
 
+	@SuppressLint("NewApi")
 	@Override
 	public Bitmap getCardBitmap(Context context, CardTemplate template, int maxWidth) {
 		Resources resources = context.getResources();
