@@ -40,6 +40,7 @@ import android.os.Bundle;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -76,11 +77,13 @@ public class FullImageActivity extends Activity implements GestureOverlayView.On
         
         setImage();
         
-        imageView.setOnClickListener(new OnClickListener() {			
+        imageView.setOnLongClickListener(new OnLongClickListener() {			
+
 			@Override
-			public void onClick(View v) {
+			public boolean onLongClick(View v) {
 				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 				finish();
+				return true;
 			}
 		});
         

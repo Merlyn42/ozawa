@@ -135,7 +135,7 @@ public class TutorialEventListener implements OnShowcaseEventListener {
 		        break;
 			}
 			case 1:{ // Exit fullscreen
-				showcaseView = ShowcaseView.insertShowcaseView(HexUtil.getScreenWidth(activity) / 2, (int)(HexUtil.getScreenHeight(activity) / 2.15), activity, "Exit Fullscreen", "Tap the card to exit fullscreen view.", co);        
+				showcaseView = ShowcaseView.insertShowcaseView(HexUtil.getScreenWidth(activity) / 2, (int)(HexUtil.getScreenHeight(activity) / 2.15), activity, "Exit Fullscreen", "Long press the card to exit fullscreen view.", co);        
 				showcaseView.setOnShowcaseEventListener(this);        
 		        showcaseView.show();
 		        tutCount++;
