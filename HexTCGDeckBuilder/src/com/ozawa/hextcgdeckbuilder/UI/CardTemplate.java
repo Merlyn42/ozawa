@@ -33,10 +33,7 @@ import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.json.JsonReader;
 
 /**
- * Stores reference data about CardTemplates
- * 
- * @author Laurence
- * 
+ * Stores reference data about CardTemplates 
  */
 public class CardTemplate {
 	public double						top;

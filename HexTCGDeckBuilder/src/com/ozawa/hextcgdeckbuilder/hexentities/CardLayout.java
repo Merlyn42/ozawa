@@ -21,8 +21,6 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * A layout for a card which gives the relative positions of the card portrait.
- * 
- * @author Chad Kinsella
  */
 public class CardLayout {
 	

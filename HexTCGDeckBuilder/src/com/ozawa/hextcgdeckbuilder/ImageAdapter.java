@@ -21,7 +21,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -37,9 +36,6 @@ import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by dkerr on 12/16/13.
- */
 public class ImageAdapter extends BaseAdapter {
     protected Context mContext;
     public List<AbstractCard> masterDeck;

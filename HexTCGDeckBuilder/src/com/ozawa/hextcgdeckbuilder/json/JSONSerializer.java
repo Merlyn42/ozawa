@@ -35,8 +35,6 @@ import com.google.gson.GsonBuilder;
 
 /**
  * Class used to serialize and deserialize JSON to required Hex entities and vice versa.
- * 
- * @author Chad Kinsella
  */
 public class JSONSerializer {
 	static final File HEXLOCATION = new File("D:\\Program Files (x86)\\Hex");

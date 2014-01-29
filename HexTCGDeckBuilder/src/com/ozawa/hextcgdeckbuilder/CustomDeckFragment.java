@@ -95,7 +95,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 	public NavigationDrawerFragment		mNavigationDrawerFragment;
 
 	public static CardViewer			cardViewer;
-	public final static String			GETDECK	= "GETDECK";
+	public final static String			GETDECK		= "GETDECK";
 	private GestureLibrary				gesLibrary;
 	private GridView					gridView;
 
@@ -105,10 +105,10 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 	Button								saveDeck;
 	Button								deleteDeck;
 	Button								selectChampion;
-	
+
 	// Tutorial
-	private static final String PREFS_NAME = "FirstLaunchPref";
-	private SharedPreferences mPreferences;
+	private static final String			PREFS_NAME	= "FirstLaunchPrefCustomDeck";
+	private SharedPreferences			mPreferences;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -126,15 +126,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 		imAdapter = cardViewer.getAdapter();
 		uiLayout = (DrawerLayout) inflater.inflate(R.layout.fragment_custom_deck, container, false);
 
-		mNavigationDrawerFragment = (NavigationDrawerFragment) mainActivity.getSupportFragmentManager().findFragmentById(
-				R.id.custom_deck_navigation_drawer);
-		// Set up the drawer.
-		mNavigationDrawerFragment.setUp(uiLayout, cardViewer, mainActivity, R.id.custom_deck_navigation_drawer,
-				(DrawerLayout) uiLayout.findViewById(R.id.custom_deck_drawer_layout));
-		mNavigationDrawerFragment.setUpCustomDeckViews();
-		setCustomDeckButtonListeners();
-		FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-		transaction.add(R.id.custom_deck_navigation_drawer, mNavigationDrawerFragment).commit();
+		setupNavigationDrawer();
 
 		GestureOverlayView gestureOverlayView = (GestureOverlayView) uiLayout.findViewById(R.id.customDeckGestureOverlayView);
 		gestureOverlayView.addOnGesturePerformedListener(this);
@@ -153,6 +145,34 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 		cardBack.setVisibility(View.INVISIBLE);
 
 		return uiLayout;
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		if(mNavigationDrawerFragment == null){
+			setupNavigationDrawer();
+		}
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		if(mNavigationDrawerFragment == null){
+			setupNavigationDrawer();
+		}
+	}
+
+	private void setupNavigationDrawer() {
+		mNavigationDrawerFragment = (NavigationDrawerFragment) mainActivity.getSupportFragmentManager().findFragmentById(
+				R.id.custom_deck_navigation_drawer);
+		// Set up the drawer.
+		mNavigationDrawerFragment.setUp(uiLayout, cardViewer, mainActivity, R.id.custom_deck_navigation_drawer,
+				(DrawerLayout) uiLayout.findViewById(R.id.custom_deck_drawer_layout));
+		mNavigationDrawerFragment.setUpCustomDeckViews();
+		setCustomDeckButtonListeners();
+		FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+		transaction.add(R.id.custom_deck_navigation_drawer, mNavigationDrawerFragment).commit();
 	}
 
 	public ArrayList<InputStream> getJson() throws IllegalAccessException {
@@ -224,7 +244,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 
 	private HexUtil.AnimationArg createAnimationArg(int x, int y) {
 		HexUtil.AnimationArg result = new HexUtil.AnimationArg(cardBack, x - (cardBackDimension / 2), screenWidth + cardBackDimension, y
-				- (cardBackDimension / 2), (int) y - (y / 3), 400, 0);
+				- (cardBackDimension / 2), y - (y / 3), 400, 0);
 		return result;
 	}
 
@@ -341,7 +361,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 			removeMultipleCardsDialog.position = position;
 			removeMultipleCardsDialog.animationArg = createAnimationArg(values[0] + cardBackDimension / 2, values[1] - cardBackDimension
 					/ 2);
-			removeMultipleCardsDialog.mainActivity = ((DeckUIActivity) mainActivity);
+			removeMultipleCardsDialog.mainActivity = (mainActivity);
 			removeMultipleCardsDialog.fragment = this;
 			removeMultipleCardsDialog.show(mainActivity.getSupportFragmentManager(), "Remove Multiple Cards");
 			return true;
@@ -365,12 +385,12 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 			reloadCustomDeckView();
 			mPreferences = getActivity().getSharedPreferences(PREFS_NAME, 0);
 			boolean firstTime = mPreferences.getBoolean("firstTime", true);
-			if(firstTime){
+			if (firstTime) {
 				showTutorial();
 			}
 		}
 	}
-	
+
 	/**
 	 * Show the app's tutorial
 	 */
@@ -380,14 +400,15 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 		co.shotType = ShowcaseView.TYPE_ONE_SHOT;
 		co.centerText = true;
 		co.hideOnClickOutside = true;
-		ShowcaseView showcaseView = ShowcaseView.insertShowcaseView(HexUtil.getScreenWidth(getActivity()) / 2, (int)(HexUtil.getScreenHeight(getActivity()) / 15), getActivity(), "Custom Deck", 
-				"This is where the magic happens, and you'll create your custom decks.", co);     
+		ShowcaseView showcaseView = ShowcaseView.insertShowcaseView(HexUtil.getScreenWidth(getActivity()) / 2,
+				HexUtil.getScreenHeight(getActivity()) / 15, getActivity(), "Custom Deck",
+				"This is where the magic happens, and you'll create your custom decks.", co);
 		showcaseView.setShowcase(ShowcaseView.NONE);
-		showcaseView.setOnShowcaseEventListener(new TutorialEventListener(getActivity(),co, TutorialType.CUSTOMDECK));        
+		showcaseView.setOnShowcaseEventListener(new TutorialEventListener(getActivity(), co, TutorialType.CUSTOMDECK));
 		showcaseView.show();
 		SharedPreferences.Editor editor = mPreferences.edit();
-	    editor.putBoolean("firstTime", false);
-	    editor.commit();
+		editor.putBoolean("firstTime", false);
+		editor.commit();
 	}
 
 	public void reloadCustomDeckView() {
@@ -696,13 +717,14 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 		builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int position) {
-				if(input.getText().toString().isEmpty()){
+				if (input.getText().toString().isEmpty()) {
 					Toast.makeText(mainActivity.getApplicationContext(), "You must enter a name before saving.", Toast.LENGTH_SHORT).show();
-				}else if (mainActivity.currentCustomDeck != null) {
+				} else if (mainActivity.currentCustomDeck != null) {
 					saveDeck();
 					invokeNoParamReflectiveMethod(methodName, fragment);
 				} else if (!saveUnsavedDeck(input.getText().toString())) {
-					Toast.makeText(mainActivity.getApplicationContext(), "Failed to save deck. Please try again.", Toast.LENGTH_SHORT).show();
+					Toast.makeText(mainActivity.getApplicationContext(), "Failed to save deck. Please try again.", Toast.LENGTH_SHORT)
+							.show();
 				} else {
 					invokeNoParamReflectiveMethod(methodName, fragment);
 				}
@@ -716,29 +738,27 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 		});
 		final AlertDialog dialog = builder.create();
 		dialog.show(); // To show the AlertDialog
-		dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-		input.addTextChangedListener(new TextWatcher(){
+		dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
+		input.addTextChangedListener(new TextWatcher() {
 
 			@Override
 			public void afterTextChanged(Editable edit) {
-				if(!input.getText().toString().trim().isEmpty()){
-					dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-				}else{
-					dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+				if (!input.getText().toString().trim().isEmpty()) {
+					dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
+				} else {
+					dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
 				}
 			}
 
 			@Override
-			public void beforeTextChanged(CharSequence cs, int start,
-					int before, int count) {				
+			public void beforeTextChanged(CharSequence cs, int start, int before, int count) {
 			}
 
 			@Override
-			public void onTextChanged(CharSequence cs, int start, int before,
-					int count) {
-								
+			public void onTextChanged(CharSequence cs, int start, int before, int count) {
+
 			}
-			
+
 		});
 	}
 

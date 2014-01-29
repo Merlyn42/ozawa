@@ -21,8 +21,6 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * A Deck entity which holds an array of DeckResources that correspond to Cards.
- * 
- * @author Chad Kinsella
  */
 public class Deck {
 	

@@ -51,7 +51,6 @@ import com.ozawa.hextcgdeckbuilder.UI.FilterButton;
 import com.ozawa.hextcgdeckbuilder.enums.CardType;
 import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
 
-;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation

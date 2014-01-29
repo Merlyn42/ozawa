@@ -28,8 +28,6 @@ import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 
 /**
  * Queue to control caching behaviour of card images.
- * @author lreading
- *
  */
 public class ImageCache {
 	public enum ImageType {
@@ -72,7 +70,7 @@ public class ImageCache {
 	 */
 	private static int getMaxCacheSize(Context context){
 		MemoryInfo mi = new MemoryInfo();
-		ActivityManager activityManager = (ActivityManager) context.getSystemService(context.ACTIVITY_SERVICE);
+		ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 		activityManager.getMemoryInfo(mi);
 		long availableMegs = mi.availMem / 1048576L;
 		int result = Long.valueOf(availableMegs).intValue();

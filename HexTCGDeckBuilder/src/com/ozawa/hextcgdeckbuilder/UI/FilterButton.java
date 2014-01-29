@@ -28,9 +28,6 @@ import android.widget.Toast;
 
 import com.ozawa.hextcgdeckbuilder.enums.CardEnum;
 
-/**
- * Created by lreading on 20/12/13.
- */
 public class FilterButton extends ImageButton implements View.OnClickListener {
     private Bitmap imageOff;
     private Bitmap imageOn;

@@ -34,9 +34,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by Laurence on 19/12/13.
- */
 public class CardViewer implements TextWatcher {
     private Filter filter;
     private List<AbstractCard> cards;

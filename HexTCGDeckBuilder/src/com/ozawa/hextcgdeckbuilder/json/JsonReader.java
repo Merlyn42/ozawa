@@ -35,9 +35,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by lreading on 18/12/13.
- */
 public class JsonReader {
 
     Gson gson;

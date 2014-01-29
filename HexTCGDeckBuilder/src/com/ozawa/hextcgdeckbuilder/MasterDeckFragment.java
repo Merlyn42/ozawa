@@ -71,6 +71,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 	private FragmentActivity			mainActivity;
 	private DrawerLayout				uiLayout;
 	public ShowcaseView					showcaseView; 
+	private TutorialEventListener		tutorialEventListener;
 	ListView							listView;
 	ImageAdapter						imAdapter;
 	DeckListViewAdapter					lvAdapter;
@@ -89,7 +90,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 	ShowcaseViews 						mViews;
 	public static CardViewer			cardViewer;
 	public final static String			GETDECK	= "GETDECK";
-	private static final String PREFS_NAME = "FirstLaunchPref";
+	private static final String PREFS_NAME = "FirstLaunchPrefCardLibrary";
 	private GestureLibrary				gesLibrary;
 	private GridView					gridView;
 	
@@ -117,10 +118,11 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 		showcaseView = ShowcaseView.insertShowcaseView(HexUtil.getScreenWidth(getActivity()) / 2, (int)(HexUtil.getScreenHeight(getActivity()) / 15), getActivity(), "Welcome to the Unofficial Hex TCG - Deck Builder", 
 				"Before you get started building awesome decks, let us give you a run down of the basics.", co);     
 		showcaseView.setShowcase(ShowcaseView.NONE);
-		showcaseView.setOnShowcaseEventListener(new TutorialEventListener(getActivity(),co, TutorialType.CARDLIBRARY));        
+		tutorialEventListener = new TutorialEventListener(getActivity(),co, TutorialType.CARDLIBRARY);
+		showcaseView.setOnShowcaseEventListener(tutorialEventListener);        
 		showcaseView.show();
 		SharedPreferences.Editor editor = mPreferences.edit();
-	    editor.putBoolean("firstTime", true);
+	    editor.putBoolean("firstTime", false);
 	    editor.commit();
 	}
 	
@@ -223,14 +225,9 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 							}
 						}
 					} else if (prediction.name.equalsIgnoreCase("swipe right")) {
+						hideShowcase();
 						CustomViewPager pager = (CustomViewPager) mainActivity.findViewById(R.id.pager);
-						pager.setCurrentItem(pager.getCurrentItem() - 1); // *******
-																			// TEMPORARY
-																			// FIX
-																			// FOR
-																			// SLIDING
-																			// BETWEEN
-																			// PAGES
+						pager.setCurrentItem(pager.getCurrentItem() - 1); // Slide between pages
 					} else if (prediction.name.equalsIgnoreCase("anti clockwise") || prediction.name.equalsIgnoreCase("clockwise")) {
 						cardViewer.clearFilter();
 					}
@@ -272,7 +269,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 		gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-
+				hideShowcase();
 				// Sending image id to FullScreenActivity
 				Intent i = new Intent(mainActivity.getApplicationContext(), FullImageActivity.class);
 				// passing array index
@@ -306,6 +303,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				hideShowcase();
 				// Sending image id to FullScreenActivity
 				Intent i = new Intent(mainActivity.getApplicationContext(), FullImageActivity.class);
 				// passing array index
@@ -404,5 +402,11 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 			}
 		};
 		listView.post(fitsOnScreen);
+	}
+	
+	private void hideShowcase(){
+		if(tutorialEventListener != null && tutorialEventListener.currentShowcase != null){
+			tutorialEventListener.currentShowcase.hide();
+		}		
 	}
 }

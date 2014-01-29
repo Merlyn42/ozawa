@@ -205,7 +205,7 @@ public class Card extends AbstractCard {
 		}
 	}
 
-	private void drawFullImageText(Canvas combine, Bitmap templateImage, Paint paint, Resources resources, Context context, CardTemplate template, int scale) {
+	private void drawFullImageText(Canvas combine, Bitmap templateImage, Paint paint, Resources resources, final Context context, CardTemplate template, int scale) {
 		float imageHeight = templateImage.getHeight();
 		float tempRatio = template.nameFontRatio;
 		paint.setTextSize(imageHeight * tempRatio);
@@ -249,12 +249,6 @@ public class Card extends AbstractCard {
 			cardTypes += " -- " + cardSubtype;
 
 		combine.drawText(cardTypes, templateImage.getWidth() / 13, templateImage.getHeight() - (templateImage.getHeight() / 2.97f), paint);
-				
-		if(socketCount > 0){
-			Bitmap socketImage = BitmapFactory.decodeResource(resources,R.drawable.gem_socket);
-			socketImage = Bitmap.createScaledBitmap(socketImage, (int)(templateImage.getWidth() * template.socketRatio), (int)(templateImage.getWidth() * template.socketRatio), true);
-			combine.drawBitmap(socketImage, templateImage.getWidth() - (templateImage.getWidth() / 4.5f), templateImage.getHeight() / 2, paint);
-		}
 	}
 
 	private void drawGameText(String gameText, int length, Canvas combine, Bitmap templateImage, Paint paint, Resources resources,

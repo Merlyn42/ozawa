@@ -34,8 +34,6 @@ import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 /**
  * An Abstract Card used to define common fields for all Hex Cards
- * 
- * @author Chad Kinsella
  */
 public abstract class AbstractCard {
 

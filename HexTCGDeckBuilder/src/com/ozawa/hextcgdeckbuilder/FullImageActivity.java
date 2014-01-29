@@ -20,12 +20,16 @@ package com.ozawa.hextcgdeckbuilder;
 /**
  * Created by dkerr on 12/20/13.
  */
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import com.espian.showcaseview.ShowcaseView;
 import com.espian.showcaseview.ShowcaseView.ConfigOptions;
+import com.ozawa.hextcgdeckbuilder.UI.CardTemplate;
 import com.ozawa.hextcgdeckbuilder.UI.TutorialEventListener;
 import com.ozawa.hextcgdeckbuilder.enums.TutorialType;
+import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
+import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 import android.app.Activity;
@@ -36,12 +40,15 @@ import android.gesture.GestureLibraries;
 import android.gesture.GestureLibrary;
 import android.gesture.GestureOverlayView;
 import android.gesture.Prediction;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 public class FullImageActivity extends Activity implements GestureOverlayView.OnGesturePerformedListener {
@@ -49,11 +56,12 @@ public class FullImageActivity extends Activity implements GestureOverlayView.On
 	private GestureLibrary gesLibrary;
 	private int position;
 	private ImageView imageView;
+	private ImageButton socketGem;
 	private int cardCount;
 	private boolean isMaster;
 	
 	// Tutorial
-	private static final String PREFS_NAME = "FirstLaunchPref";
+	private static final String PREFS_NAME = "FirstLaunchPrefFullscreen";
 	private SharedPreferences mPreferences;
 	
     @Override
@@ -74,7 +82,7 @@ public class FullImageActivity extends Activity implements GestureOverlayView.On
         isMaster = i.getExtras().getBoolean("isMaster");
 
         imageView = (ImageView) findViewById(R.id.full_image_view);
-        
+        socketGem = (ImageButton) findViewById(R.id.buttonSocketGem);
         setImage();
         
         imageView.setOnLongClickListener(new OnLongClickListener() {			
@@ -87,6 +95,14 @@ public class FullImageActivity extends Activity implements GestureOverlayView.On
 			}
 		});
         
+        socketGem.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(getApplicationContext(), "Socketing cards coming soon!", Toast.LENGTH_SHORT).show();
+			}
+		});
+        
 		GestureOverlayView gestureOverlayView = (GestureOverlayView) findViewById(R.id.fullImageGestureOverlayView);
 		gestureOverlayView.addOnGesturePerformedListener(this);	
 		gestureOverlayView.setGestureVisible(false);
@@ -96,7 +112,7 @@ public class FullImageActivity extends Activity implements GestureOverlayView.On
 		boolean firstTime = mPreferences.getBoolean("firstTime", true);
 		if (firstTime) { 
 			showTutorial();
-		}
+		}		
     }
     
     /**
@@ -113,6 +129,9 @@ public class FullImageActivity extends Activity implements GestureOverlayView.On
 		showcaseView.setShowcase(ShowcaseView.NONE);
 		showcaseView.setOnShowcaseEventListener(new TutorialEventListener(this,co, TutorialType.FULLSCREEN));        
 		showcaseView.show();
+		SharedPreferences.Editor editor = mPreferences.edit();
+	    editor.putBoolean("firstTime", false);
+	    editor.commit();
 	}
     
     @Override
@@ -154,12 +173,41 @@ public class FullImageActivity extends Activity implements GestureOverlayView.On
 	}
 	
 	private void setImage(){
+		AbstractCard card;
 		if(isMaster){
-        	imageView.setImageBitmap(MasterDeckFragment.cardViewer.getFilteredCardList().get(position).getFullscreenCardBitmap(this));
+			card = MasterDeckFragment.cardViewer.getFilteredCardList().get(position);
+        	imageView.setImageBitmap(card.getFullscreenCardBitmap(this));
         	cardCount = MasterDeckFragment.cardViewer.getFilteredCardList().size();
         } else{
-        	imageView.setImageBitmap(CustomDeckFragment.cardViewer.getFilteredCardList().get(position).getFullscreenCardBitmap(this));
+        	card = CustomDeckFragment.cardViewer.getFilteredCardList().get(position);
+        	imageView.setImageBitmap(card.getFullscreenCardBitmap(this));
         	cardCount = CustomDeckFragment.cardViewer.getFilteredCardList().size();
         }
+		if(card instanceof Card && ((Card) card).socketCount > 0){
+    		setSocketButton(card);
+    		socketGem.setVisibility(View.VISIBLE);
+    	}else{
+    		socketGem.setVisibility(View.INVISIBLE);
+    	}
+	}
+	
+	/**
+	 * Add the socketgem button to the fullscreen image
+	 * 
+	 * @param card
+	 */
+	private void setSocketButton(AbstractCard card){
+		CardTemplate template = CardTemplate.findCardTemplate(card, true, CardTemplate.getAllTemplates(this));
+		
+		float aspectRatio = (float) HexUtil.getScreenWidth(this) / HexUtil.getScreenHeight(this);
+		int width = HexUtil.getScreenWidth(this);
+		int height = (int) (width * (1 / HexUtil.round(aspectRatio, 2, BigDecimal.ROUND_HALF_UP)));
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams((int)(width*template.socketRatio), (int)(width*template.socketRatio));
+        Bitmap socketImage = BitmapFactory.decodeResource(getResources(),R.drawable.gem_socket);
+		socketImage = Bitmap.createScaledBitmap(socketImage, (int)(width*template.socketRatio), (int)(width*template.socketRatio), true);
+		socketGem.setImageBitmap(socketImage);
+        lp.leftMargin = (int) (width - (width / 4.5f));
+        lp.topMargin = (int) (height / 2.2f) - ((HexUtil.getScreenHeight(this) - height) / 2);
+        socketGem.setLayoutParams(lp);		
 	}
 }

@@ -29,8 +29,6 @@ import com.google.gson.JsonSerializer;
 
 /**
  * JSON serializer and deserializer for Boolean values.
- * 
- * @author Chad Kinsella
  */
 public class BooleanSerializer implements JsonSerializer<Boolean>, JsonDeserializer<Boolean> {
 	

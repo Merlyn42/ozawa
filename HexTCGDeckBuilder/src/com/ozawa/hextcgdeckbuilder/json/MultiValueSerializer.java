@@ -28,8 +28,6 @@ import com.google.gson.JsonParseException;
 
 /**
  * Generic serializer and deserializer for JSON values that consist of multiple values separated by "|".
- * 
- * @author Chad Kinsella
  *
  * @param <T>
  */
