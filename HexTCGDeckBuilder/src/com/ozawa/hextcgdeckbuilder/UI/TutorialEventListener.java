@@ -136,7 +136,7 @@ public class TutorialEventListener implements OnShowcaseEventListener {
 		}else if(type == TutorialType.FULLSCREEN){
 			switch(tutCount){
 			case 0:{ // Swipe between fullscreen images
-				showcaseView = ShowcaseView.insertShowcaseView(HexUtil.getScreenWidth(activity) / 2, (int)(HexUtil.getScreenHeight(activity) / 2.15), activity, "Swipe Between Fullscreen Images", "Swipe right to go to the next card, and left to go to the previous card.", co);        
+				showcaseView = ShowcaseView.insertShowcaseView(HexUtil.getScreenWidth(activity) / 2, (int)(HexUtil.getScreenHeight(activity) / 2.15), activity, "Swipe Between Fullscreen Images", "Swipe left to go to the next card, and right to go to the previous card.", co);        
 				showcaseView.setOnShowcaseEventListener(this);
 		        showcaseView.animateGesture(HexUtil.getScreenWidth(activity) / 2, (int)(HexUtil.getScreenHeight(activity) / 2.1), (int)(HexUtil.getScreenWidth(activity) / 4), (int)(HexUtil.getScreenHeight(activity) / 2.1), true);        
 		        showcaseView.show();

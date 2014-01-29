@@ -154,6 +154,22 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 	public void onNavigationDrawerItemSelected(int position) {
 		// TODO Auto-generated method stub
 	}
+	
+	@Override
+	public void onStart(){
+		super.onStart();
+		if(mAdapter == null || mAdapter.masterDeckFragment == null || mAdapter.customDeckFragment == null){
+			mAdapter = new TabPagerAdapter(getSupportFragmentManager());
+		}
+	}
+	
+	@Override
+	public void onResume(){
+		super.onResume();
+		if(mAdapter == null || mAdapter.masterDeckFragment == null || mAdapter.customDeckFragment == null){
+			mAdapter = new TabPagerAdapter(getSupportFragmentManager());
+		}
+	}
 
 	@Override
 	public boolean saveNewDeck(String deckName, boolean resetCustomDeck) {
