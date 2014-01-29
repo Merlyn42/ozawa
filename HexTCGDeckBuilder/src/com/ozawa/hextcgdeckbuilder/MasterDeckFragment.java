@@ -31,6 +31,7 @@ import com.ozawa.hextcgdeckbuilder.enums.TutorialType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 import com.ozawa.hextcgdeckbuilder.json.JsonReader;
+import com.ozawa.hextcgdeckbuilder.json.MasterDeck;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 import com.espian.showcaseview.ShowcaseViews;
@@ -75,7 +76,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 	ListView							listView;
 	ImageAdapter						imAdapter;
 	DeckListViewAdapter					lvAdapter;
-	public List<AbstractCard>			masterDeck;
+	
 	private JsonReader					jsonReader;
 	public boolean						isGridView;
 
@@ -137,12 +138,6 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mainActivity = super.getActivity();
-		jsonReader = new JsonReader(container.getContext());
-		try {
-			masterDeck = jsonReader.deserializeJSONInputStreamsToCard(getJson());
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
 
 		gesLibrary = GestureLibraries.fromRawResource(mainActivity, R.raw.gestures);
 		if (!gesLibrary.load()) {
@@ -151,7 +146,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
         ShowcaseView.ConfigOptions co = new ShowcaseView.ConfigOptions();
         co.hideOnClickOutside = true;       
 		
-		cardViewer = new CardViewer(mainActivity, masterDeck, null);
+		cardViewer = new CardViewer(mainActivity, MasterDeck.getMasterDeck(container.getContext()), null);
 		imAdapter = cardViewer.getAdapter();
 		uiLayout = (DrawerLayout) inflater.inflate(R.layout.fragment_master_deck, container, false);
 
@@ -181,26 +176,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 		return uiLayout;
 	}
 
-	public ArrayList<InputStream> getJson() throws IllegalAccessException {
-		Field[] rawFields = R.raw.class.getFields();
-		ArrayList<InputStream> jsonFiles = new ArrayList<InputStream>();
 
-		for (int count = 0; count < rawFields.length; count++) {
-			int rid = rawFields[count].getInt(rawFields[count]);
-			try {
-				Resources res = getResources();
-				String name = res.getResourceName(rid);
-				if (name.contains("hexcard")) {
-					InputStream inputStream = res.openRawResource(rid);
-					if (inputStream != null) {
-						jsonFiles.add(inputStream);
-					}
-				}
-			} catch (Exception e) {
-			}
-		}
-		return jsonFiles;
-	}
 
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {

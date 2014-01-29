@@ -29,6 +29,7 @@ import com.ozawa.hextcgdeckbuilder.database.DatabaseHandler;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Deck;
 import com.ozawa.hextcgdeckbuilder.hexentities.DeckResource;
+import com.ozawa.hextcgdeckbuilder.json.MasterDeck;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 import android.os.Bundle;
@@ -255,7 +256,7 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 		
 		if(deck.deckResources != null){
 			for(DeckResource card : deck.deckResources){
-				for(AbstractCard masterCard : mAdapter.masterDeckFragment.masterDeck){
+				for(AbstractCard masterCard : MasterDeck.getMasterDeck(this)){
 					if(masterCard.getID().contentEquals(card.cardID.gUID)){
 						customDeck.put(masterCard, card.cardCount);
 						break;
