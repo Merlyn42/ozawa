@@ -189,10 +189,15 @@ public class FullImageActivity extends Activity implements GestureOverlayView.On
     	}
 	}
 	
+	/**
+	 * Add the socketgem button to the fullscreen image
+	 * 
+	 * @param card
+	 */
 	private void setSocketButton(AbstractCard card){
 		CardTemplate template = CardTemplate.findCardTemplate(card, true, CardTemplate.getAllTemplates(this));
 		
-		float aspectRatio = (float) HexUtil.getScreenWidth(this) / HexUtil.getScreenHeight(this);//(HexUtil.getScreenHeight(this) - getStatusBarHeight());
+		float aspectRatio = (float) HexUtil.getScreenWidth(this) / HexUtil.getScreenHeight(this);
 		int width = HexUtil.getScreenWidth(this);
 		int height = (int) (width * (1 / HexUtil.round(aspectRatio, 2, BigDecimal.ROUND_HALF_UP)));
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams((int)(width*template.socketRatio), (int)(width*template.socketRatio));
@@ -203,13 +208,4 @@ public class FullImageActivity extends Activity implements GestureOverlayView.On
         lp.topMargin = (int) (height / 2.2f) - ((HexUtil.getScreenHeight(this) - height) / 2);
         socketGem.setLayoutParams(lp);		
 	}
-	
-	/*private int getStatusBarHeight() {
- 	   int result = 0;
- 	   int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
- 	   if (resourceId > 0) {
- 	      result = getResources().getDimensionPixelSize(resourceId);
- 	   }
- 	   return result;
- 	}*/
 }
