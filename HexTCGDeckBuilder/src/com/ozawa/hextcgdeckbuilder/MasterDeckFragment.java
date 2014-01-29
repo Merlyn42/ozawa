@@ -124,6 +124,14 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 		SharedPreferences.Editor editor = mPreferences.edit();
 	    editor.putBoolean("firstTime", false);
 	    editor.commit();
+	    SharedPreferences fullImagePref = getActivity().getSharedPreferences(FullImageActivity.PREFS_NAME, 0);
+	    editor = fullImagePref.edit();
+	    editor.putBoolean("firstTime", true);
+	    editor.commit();
+	    SharedPreferences customDeckPref = getActivity().getSharedPreferences(CustomDeckFragment.PREFS_NAME, 0);
+	    editor = customDeckPref.edit();
+	    editor.putBoolean("firstTime", true);
+	    editor.commit();
 	}
 	
 	@Override

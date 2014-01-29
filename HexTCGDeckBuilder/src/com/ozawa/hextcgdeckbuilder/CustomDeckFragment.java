@@ -107,7 +107,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 	Button								selectChampion;
 
 	// Tutorial
-	private static final String			PREFS_NAME	= "FirstLaunchPrefCustomDeck";
+	public static final String			PREFS_NAME	= "FirstLaunchPrefCustomDeck";
 	private SharedPreferences			mPreferences;
 
 	@Override

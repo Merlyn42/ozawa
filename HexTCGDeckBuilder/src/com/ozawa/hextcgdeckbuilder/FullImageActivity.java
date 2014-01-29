@@ -62,7 +62,7 @@ public class FullImageActivity extends Activity implements GestureOverlayView.On
 	private boolean isMaster;
 	
 	// Tutorial
-	private static final String PREFS_NAME = "FirstLaunchPrefFullscreen";
+	public static final String PREFS_NAME = "FirstLaunchPrefFullscreen";
 	private SharedPreferences mPreferences;
 	
     @Override
