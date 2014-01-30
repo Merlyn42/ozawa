@@ -15,11 +15,13 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package com.ozawa.hextcgdeckbuilder;
+package com.ozawa.hextcgdeckbuilder.UI.splashscreen;
 
 import java.io.InputStream;
 
-import com.ozawa.hextcgdeckbuilder.UI.GifDecoderView;
+import com.ozawa.hextcgdeckbuilder.DeckUIActivity;
+import com.ozawa.hextcgdeckbuilder.R;
+import com.ozawa.hextcgdeckbuilder.R.drawable;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 import android.app.Activity;

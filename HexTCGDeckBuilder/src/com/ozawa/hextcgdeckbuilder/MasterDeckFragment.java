@@ -17,20 +17,21 @@
  ******************************************************************************/
 package com.ozawa.hextcgdeckbuilder;
 
-import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-
-import com.ozawa.hextcgdeckbuilder.UI.CardViewer;
+import com.ozawa.hextcgdeckbuilder.UI.CardListViewer;
 import com.ozawa.hextcgdeckbuilder.UI.CustomViewPager;
 import com.ozawa.hextcgdeckbuilder.UI.PlaceholderFragment;
 import com.ozawa.hextcgdeckbuilder.UI.TutorialEventListener;
+import com.ozawa.hextcgdeckbuilder.UI.customdeck.CustomDeckFragment;
+import com.ozawa.hextcgdeckbuilder.UI.filter.FilterDrawerFragment;
+import com.ozawa.hextcgdeckbuilder.UI.listview.DeckListViewAdapter;
+import com.ozawa.hextcgdeckbuilder.UI.multiplecarddialogs.AbstractMultipleCardsDialogFragment;
+import com.ozawa.hextcgdeckbuilder.UI.multiplecarddialogs.AddMultipleCardsDialogFragment;
+import com.ozawa.hextcgdeckbuilder.UI.multiplecarddialogs.AddMultipleCardsDialogFragmentGinger;
 import com.ozawa.hextcgdeckbuilder.enums.TutorialType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Card;
-import com.ozawa.hextcgdeckbuilder.json.JsonReader;
 import com.ozawa.hextcgdeckbuilder.json.MasterDeck;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
@@ -39,7 +40,6 @@ import com.espian.showcaseview.ShowcaseView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.gesture.Gesture;
 import android.gesture.GestureLibraries;
 import android.gesture.GestureLibrary;
@@ -66,18 +66,17 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.RelativeLayout;
 
-public class MasterDeckFragment extends Fragment implements NavigationDrawerFragment.NavigationDrawerCallbacks,
+public class MasterDeckFragment extends Fragment implements FilterDrawerFragment.NavigationDrawerCallbacks,
 		GestureOverlayView.OnGesturePerformedListener {
 
 	private FragmentActivity			mainActivity;
 	private DrawerLayout				uiLayout;
-	public ShowcaseView					showcaseView; 
+	public ShowcaseView					showcaseView;
 	private TutorialEventListener		tutorialEventListener;
 	ListView							listView;
 	ImageAdapter						imAdapter;
 	DeckListViewAdapter					lvAdapter;
-	
-	private JsonReader					jsonReader;
+
 	public boolean						isGridView;
 
 	public ImageView					cardBack;
@@ -86,23 +85,23 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
 	 */
-	private NavigationDrawerFragment	mNavigationDrawerFragment;
-	private ShowcaseView.ConfigOptions 	co;
-	ShowcaseViews 						mViews;
-	public static CardViewer			cardViewer;
-	public final static String			GETDECK	= "GETDECK";
-	private static final String PREFS_NAME = "FirstLaunchPrefCardLibrary";
+	private FilterDrawerFragment	mNavigationDrawerFragment;
+	private ShowcaseView.ConfigOptions	co;
+	ShowcaseViews						mViews;
+	public static CardListViewer			cardViewer;
+	public final static String			GETDECK		= "GETDECK";
+	private static final String			PREFS_NAME	= "FirstLaunchPrefCardLibrary";
 	private GestureLibrary				gesLibrary;
 	private GridView					gridView;
-	
-	private SharedPreferences mPreferences;
-	
+
+	private SharedPreferences			mPreferences;
+
 	@Override
-	public void onActivityCreated(Bundle savedInstanceState){
-		super.onActivityCreated(savedInstanceState);	
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
 		mPreferences = getActivity().getSharedPreferences(PREFS_NAME, 0);
 		boolean firstTime = mPreferences.getBoolean("firstTime", true);
-		if (firstTime) { 
+		if (firstTime) {
 			showTutorial();
 		}
 	}
@@ -116,25 +115,26 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 		co.shotType = ShowcaseView.TYPE_ONE_SHOT;
 		co.centerText = true;
 		co.hideOnClickOutside = true;
-		showcaseView = ShowcaseView.insertShowcaseView(HexUtil.getScreenWidth(getActivity()) / 2, (int)(HexUtil.getScreenHeight(getActivity()) / 15), getActivity(), "Welcome to the Unofficial Hex TCG - Deck Builder", 
-				"Before you get started building awesome decks, let us give you a run down of the basics.", co);     
+		showcaseView = ShowcaseView.insertShowcaseView(HexUtil.getScreenWidth(getActivity()) / 2,
+				HexUtil.getScreenHeight(getActivity()) / 15, getActivity(), "Welcome to the Unofficial Hex TCG - Deck Builder",
+				"Before you get started building awesome decks, let us give you a run down of the basics.", co);
 		showcaseView.setShowcase(ShowcaseView.NONE);
-		tutorialEventListener = new TutorialEventListener(getActivity(),co, TutorialType.CARDLIBRARY);
-		showcaseView.setOnShowcaseEventListener(tutorialEventListener);        
+		tutorialEventListener = new TutorialEventListener(getActivity(), co, TutorialType.CARDLIBRARY);
+		showcaseView.setOnShowcaseEventListener(tutorialEventListener);
 		showcaseView.show();
 		SharedPreferences.Editor editor = mPreferences.edit();
-	    editor.putBoolean("firstTime", false);
-	    editor.commit();
-	    SharedPreferences fullImagePref = getActivity().getSharedPreferences(FullImageActivity.PREFS_NAME, 0);
-	    editor = fullImagePref.edit();
-	    editor.putBoolean("firstTime", true);
-	    editor.commit();
-	    SharedPreferences customDeckPref = getActivity().getSharedPreferences(CustomDeckFragment.PREFS_NAME, 0);
-	    editor = customDeckPref.edit();
-	    editor.putBoolean("firstTime", true);
-	    editor.commit();
+		editor.putBoolean("firstTime", false);
+		editor.commit();
+		SharedPreferences fullImagePref = getActivity().getSharedPreferences(FullImageActivity.PREFS_NAME, 0);
+		editor = fullImagePref.edit();
+		editor.putBoolean("firstTime", true);
+		editor.commit();
+		SharedPreferences customDeckPref = getActivity().getSharedPreferences(CustomDeckFragment.PREFS_NAME, 0);
+		editor = customDeckPref.edit();
+		editor.putBoolean("firstTime", true);
+		editor.commit();
 	}
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mainActivity = super.getActivity();
@@ -143,14 +143,14 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 		if (!gesLibrary.load()) {
 			mainActivity.finish();
 		}
-        ShowcaseView.ConfigOptions co = new ShowcaseView.ConfigOptions();
-        co.hideOnClickOutside = true;       
-		
-		cardViewer = new CardViewer(mainActivity, MasterDeck.getMasterDeck(container.getContext()), null);
+		ShowcaseView.ConfigOptions co = new ShowcaseView.ConfigOptions();
+		co.hideOnClickOutside = true;
+
+		cardViewer = new CardListViewer(mainActivity, MasterDeck.getMasterDeck(container.getContext()), null);
 		imAdapter = cardViewer.getAdapter();
 		uiLayout = (DrawerLayout) inflater.inflate(R.layout.fragment_master_deck, container, false);
 
-		mNavigationDrawerFragment = (NavigationDrawerFragment) mainActivity.getSupportFragmentManager().findFragmentById(
+		mNavigationDrawerFragment = (FilterDrawerFragment) mainActivity.getSupportFragmentManager().findFragmentById(
 				R.id.master_deck_navigation_drawer);
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(uiLayout, cardViewer, mainActivity, R.id.master_deck_navigation_drawer,
@@ -171,12 +171,10 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 		cardBack = (ImageView) cardAnimationView.findViewById(R.id.cardAnimation);
 		cardBack.setImageResource(R.drawable.back);
 		cardBack.setLayoutParams(new RelativeLayout.LayoutParams(cardBackDimension, cardBackDimension));
-		cardBack.setVisibility(View.INVISIBLE);	
+		cardBack.setVisibility(View.INVISIBLE);
 
 		return uiLayout;
 	}
-
-
 
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
@@ -211,7 +209,9 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 					} else if (prediction.name.equalsIgnoreCase("swipe right")) {
 						hideShowcase();
 						CustomViewPager pager = (CustomViewPager) mainActivity.findViewById(R.id.pager);
-						pager.setCurrentItem(pager.getCurrentItem() - 1); // Slide between pages
+						pager.setCurrentItem(pager.getCurrentItem() - 1); // Slide
+																			// between
+																			// pages
 					} else if (prediction.name.equalsIgnoreCase("anti clockwise") || prediction.name.equalsIgnoreCase("clockwise")) {
 						cardViewer.clearFilter();
 					}
@@ -317,7 +317,7 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 
 	private HexUtil.AnimationArg createAnimationArg(int x, int y) {
 		HexUtil.AnimationArg result = new HexUtil.AnimationArg(cardBack, x - (cardBackDimension / 2), -cardBack.getLayoutParams().width, y
-				- (cardBackDimension / 2), (int) y - (y / 3), 400, 0);
+				- (cardBackDimension / 2), y - (y / 3), 400, 0);
 		return result;
 	}
 
@@ -334,7 +334,6 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 			addMultipleCardsDialog.card = card;
 			addMultipleCardsDialog.position = position;
 			addMultipleCardsDialog.animationArg = createAnimationArg(values[0] + cardBackDimension / 2, values[1] - cardBackDimension / 2);
-			addMultipleCardsDialog.mainActivity = ((DeckUIActivity) mainActivity);
 			addMultipleCardsDialog.fragment = this;
 			addMultipleCardsDialog.show(mainActivity.getSupportFragmentManager(), "Add Multiple Cards");
 			return true;
@@ -387,10 +386,10 @@ public class MasterDeckFragment extends Fragment implements NavigationDrawerFrag
 		};
 		listView.post(fitsOnScreen);
 	}
-	
-	private void hideShowcase(){
-		if(tutorialEventListener != null && tutorialEventListener.currentShowcase != null){
+
+	private void hideShowcase() {
+		if (tutorialEventListener != null && tutorialEventListener.currentShowcase != null) {
 			tutorialEventListener.currentShowcase.hide();
-		}		
+		}
 	}
 }

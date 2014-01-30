@@ -23,6 +23,7 @@ import android.text.TextWatcher;
 import android.widget.TextView;
 
 import com.ozawa.hextcgdeckbuilder.ImageAdapter;
+import com.ozawa.hextcgdeckbuilder.UI.filter.FilterButton;
 import com.ozawa.hextcgdeckbuilder.enums.CardEnum;
 import com.ozawa.hextcgdeckbuilder.filter.Filter;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
@@ -34,7 +35,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-public class CardViewer implements TextWatcher {
+public class CardListViewer implements TextWatcher {
     private Filter filter;
     private List<AbstractCard> cards;
     private ImageAdapter adapter;
@@ -42,7 +43,7 @@ public class CardViewer implements TextWatcher {
     private ArrayList<FilterButton> associatedButtons = new ArrayList<FilterButton>();
     private TextView associatedTextView;
 
-    public CardViewer(Context context,List<AbstractCard> abstractCards,Map<AbstractCard, Integer> customDeck){
+    public CardListViewer(Context context,List<AbstractCard> abstractCards,Map<AbstractCard, Integer> customDeck){
         filter = new Filter();
         cards= new ArrayList<AbstractCard>(abstractCards);
         Collections.sort(cards,comparator);

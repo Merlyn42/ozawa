@@ -15,14 +15,12 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package com.ozawa.hextcgdeckbuilder;
+package com.ozawa.hextcgdeckbuilder.UI.multiplecarddialogs;
 
-import java.util.HashMap;
-
-import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
+import com.ozawa.hextcgdeckbuilder.MasterDeckFragment;
+import com.ozawa.hextcgdeckbuilder.R;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -31,14 +29,13 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.NumberPicker;
+import android.widget.EditText;
 
-@SuppressLint("NewApi")
-public class RemoveMultipleCardsDialogFragment extends AbstractMultipleCardsDialogFragment {
+public class AddMultipleCardsDialogFragmentGinger extends AbstractMultipleCardsDialogFragment {
 
-	NumberPicker	picker;
+	EditText	text;
 
-	public RemoveMultipleCardsDialogFragment() {
+	public AddMultipleCardsDialogFragmentGinger() {
 	}
 
 	@Override
@@ -46,31 +43,27 @@ public class RemoveMultipleCardsDialogFragment extends AbstractMultipleCardsDial
 		final Dialog dialog = new Dialog(getActivity());
 
 		dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-		dialog.setContentView(R.layout.add_multiple_cards_popup);
-		dialog.setTitle("Remove Multiple Cards");
+		dialog.setContentView(R.layout.add_multiple_cards_popup_ginger);
 
 		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0xaa000000));
 
 		affirmButton = (Button) dialog.findViewById(R.id.buttonAddCards);
-		affirmButton.setText("Remove Cards");
 		cancelButton = (Button) dialog.findViewById(R.id.buttonCancelAddCards);
-		picker = (NumberPicker) dialog.findViewById(R.id.addCardsNumberPicker);
+		text = (EditText) dialog.findViewById(R.id.editText1);
 
-		HashMap<AbstractCard, Integer> customDeck = mainActivity.customDeck;
-		picker.setMaxValue(customDeck.get(card));
-		picker.setMinValue(1);
-		picker.setValue(customDeck.get(card));
+		dialog.setTitle("Add Multiple Cards");
 
 		affirmButton.setOnClickListener(new OnClickListener() {
-
 			@Override
 			public void onClick(View v) {
 				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-				int count = picker.getValue();
-				animationArg.repeatCount = count - 1;
-				HexUtil.moveImageAnimation(animationArg);
+				if (text != null && text.getText() != null && text.getText().toString() != null && text.getText().toString().length() > 0) {
+					if (((MasterDeckFragment) fragment).addCardToCustomDeck(position, Integer.parseInt(text.getText().toString()))) {
+						animationArg.repeatCount = Integer.parseInt(text.getText().toString()) - 1;
+						HexUtil.moveImageAnimation(animationArg);
+					}
+				}
 				dialog.dismiss();
-				((CustomDeckFragment) fragment).removeCardFromCustomDeck(position, count);
 			}
 		});
 

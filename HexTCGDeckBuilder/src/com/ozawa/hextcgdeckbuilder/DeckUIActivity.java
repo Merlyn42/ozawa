@@ -20,11 +20,13 @@ package com.ozawa.hextcgdeckbuilder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.ozawa.hextcgdeckbuilder.LoadDeckDialogFragment.LoadDeckListener;
-import com.ozawa.hextcgdeckbuilder.NewDeckDialogFragment.NewDeckListener;
-import com.ozawa.hextcgdeckbuilder.UI.CardViewer;
+import com.ozawa.hextcgdeckbuilder.UI.CardListViewer;
 import com.ozawa.hextcgdeckbuilder.UI.CustomViewPager;
 import com.ozawa.hextcgdeckbuilder.UI.TabPagerAdapter;
+import com.ozawa.hextcgdeckbuilder.UI.customdeck.CustomDeckFragment;
+import com.ozawa.hextcgdeckbuilder.UI.customdeck.LoadDeckDialogFragment.LoadDeckListener;
+import com.ozawa.hextcgdeckbuilder.UI.customdeck.NewDeckDialogFragment.NewDeckListener;
+import com.ozawa.hextcgdeckbuilder.UI.filter.FilterDrawerFragment;
 import com.ozawa.hextcgdeckbuilder.database.DatabaseHandler;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Deck;
@@ -42,9 +44,9 @@ import android.widget.TextView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
 
-public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabListener, NavigationDrawerFragment.NavigationDrawerCallbacks, NewDeckListener, LoadDeckListener{
+public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabListener, FilterDrawerFragment.NavigationDrawerCallbacks, NewDeckListener, LoadDeckListener{
 	
-    public static CardViewer cardViewer;
+    public static CardListViewer cardViewer;
     
 	private CustomViewPager viewPager;
     private TabPagerAdapter mAdapter;
@@ -216,7 +218,7 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 	}
 	
 	public void updateCustomDeckData(){
-		if(mAdapter.customDeckFragment != null){
+		if(mAdapter.customDeckFragment != null&&mAdapter.customDeckFragment.mNavigationDrawerFragment!=null){
 			ImageView championPortrait = (ImageView) mAdapter.customDeckFragment.mNavigationDrawerFragment.getView().findViewById(R.id.imageChampionPortrait);
 			TextView championName = (TextView) mAdapter.customDeckFragment.mNavigationDrawerFragment.getView().findViewById(R.id.tvChampionName);
 			if(currentCustomDeck != null && currentCustomDeck.champion != null){		

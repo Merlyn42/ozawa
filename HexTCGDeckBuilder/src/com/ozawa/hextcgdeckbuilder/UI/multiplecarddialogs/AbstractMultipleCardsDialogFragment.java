@@ -15,38 +15,26 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package com.ozawa.hextcgdeckbuilder;
+package com.ozawa.hextcgdeckbuilder.UI.multiplecarddialogs;
 
-import com.ozawa.hextcgdeckbuilder.UI.SymbolTemplate;
-import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.text.Html;
+import android.app.Dialog;
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.widget.Button;
+import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
+import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
-public class HtmlImageGetter implements Html.ImageGetter{
-
-	private Context context;
-	private int textSize;
+public abstract class AbstractMultipleCardsDialogFragment extends DialogFragment {
+	protected Button			affirmButton;
+	protected Button			cancelButton;
 	
-	public HtmlImageGetter(Context context, int textSize) {
-		super();
-		this.context = context;
-		this.textSize = textSize;
-	}
+	public HexUtil.AnimationArg	animationArg;
+	public int					position;
+	public AbstractCard				card;
+	public Fragment				fragment;
 
 	@Override
-	public Drawable getDrawable(String arg0) {
-		SymbolTemplate template;
-
-		template = SymbolTemplate.findSymbolTemplate(arg0, SymbolTemplate.getAllTemplates(context));
-		if(template==null){
-			System.err.println("Unable to find drawable for:"+arg0);
-			return null;
-		}
-		Drawable d=context.getResources().getDrawable(template.templateId);
-		
-		
-		d.setBounds(0,0,(int) Math.round(textSize*template.sizeRatio),textSize);
-		return d;
-	}
+	public abstract Dialog onCreateDialog(Bundle savedInstanceState);
 
 }

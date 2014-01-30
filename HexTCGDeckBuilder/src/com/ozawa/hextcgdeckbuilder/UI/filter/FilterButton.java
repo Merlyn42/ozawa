@@ -15,7 +15,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package com.ozawa.hextcgdeckbuilder.UI;
+package com.ozawa.hextcgdeckbuilder.UI.filter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -26,13 +26,14 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.ozawa.hextcgdeckbuilder.UI.CardListViewer;
 import com.ozawa.hextcgdeckbuilder.enums.CardEnum;
 
 public class FilterButton extends ImageButton implements View.OnClickListener {
     private Bitmap imageOff;
     private Bitmap imageOn;
     private CardEnum e;
-    private CardViewer cardViewer;
+    private CardListViewer cardViewer;
 
     public FilterButton(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -62,7 +63,7 @@ public class FilterButton extends ImageButton implements View.OnClickListener {
     	
     	setMeasuredDimension(dim, dim);
     }
-    public void setUp(Bitmap iImageOn, Bitmap iImageOff, CardEnum iE, CardViewer iCardViewer) {
+    public void setUp(Bitmap iImageOn, Bitmap iImageOff, CardEnum iE, CardListViewer iCardViewer) {
         imageOff = iImageOff;
         imageOn = iImageOn;
         e = iE;

@@ -15,7 +15,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package com.ozawa.hextcgdeckbuilder;
+package com.ozawa.hextcgdeckbuilder.UI.filter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -46,8 +46,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ozawa.hextcgdeckbuilder.UI.CardViewer;
-import com.ozawa.hextcgdeckbuilder.UI.FilterButton;
+import com.ozawa.hextcgdeckbuilder.R;
+import com.ozawa.hextcgdeckbuilder.R.drawable;
+import com.ozawa.hextcgdeckbuilder.R.id;
+import com.ozawa.hextcgdeckbuilder.R.layout;
+import com.ozawa.hextcgdeckbuilder.R.string;
+import com.ozawa.hextcgdeckbuilder.UI.CardListViewer;
 import com.ozawa.hextcgdeckbuilder.enums.CardType;
 import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
 
@@ -59,7 +63,7 @@ import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
  * > design guidelines</a> for a complete explanation of the behaviors
  * implemented here.
  */
-public class NavigationDrawerFragment extends Fragment {
+public class FilterDrawerFragment extends Fragment {
 
 	/**
 	 * Remember the position of the selected item.
@@ -86,14 +90,14 @@ public class NavigationDrawerFragment extends Fragment {
 	// private ListView mDrawerListView;
 	private ScrollView					scrollView;
 	private View						mFragmentContainerView;
-	CardViewer							cardViewer;
+	CardListViewer							cardViewer;
 	private Context						context;
 
 	private int							mCurrentSelectedPosition	= 0;
 	private boolean						mFromSavedInstanceState;
 	private boolean						mUserLearnedDrawer;
 
-	public NavigationDrawerFragment() {
+	public FilterDrawerFragment() {
 
 	}
 
@@ -241,7 +245,7 @@ public class NavigationDrawerFragment extends Fragment {
 	 * @param drawerLayout
 	 *            The DrawerLayout containing this fragment's UI.
 	 */
-	public void setUp(CardViewer iCardViewer, Context iContext, int fragmentId, DrawerLayout drawerLayout) {
+	public void setUp(CardListViewer iCardViewer, Context iContext, int fragmentId, DrawerLayout drawerLayout) {
 		context = iContext;
 		cardViewer = iCardViewer;
 		mFragmentContainerView = getActivity().findViewById(fragmentId);
@@ -307,7 +311,7 @@ public class NavigationDrawerFragment extends Fragment {
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 	}
 
-	public void setUp(View frag, CardViewer iCardViewer, Context iContext, int fragmentId, DrawerLayout drawerLayout) {
+	public void setUp(View frag, CardListViewer iCardViewer, Context iContext, int fragmentId, DrawerLayout drawerLayout) {
 		context = iContext;
 		cardViewer = iCardViewer;
 		mFragmentContainerView = frag.findViewById(fragmentId);

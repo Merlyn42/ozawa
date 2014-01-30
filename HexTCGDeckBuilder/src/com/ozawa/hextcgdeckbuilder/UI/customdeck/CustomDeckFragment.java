@@ -15,7 +15,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package com.ozawa.hextcgdeckbuilder;
+package com.ozawa.hextcgdeckbuilder.UI.customdeck;
 
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -26,10 +26,20 @@ import java.util.List;
 
 import com.espian.showcaseview.ShowcaseView;
 import com.espian.showcaseview.ShowcaseView.ConfigOptions;
-import com.ozawa.hextcgdeckbuilder.UI.CardViewer;
+import com.ozawa.hextcgdeckbuilder.DeckUIActivity;
+import com.ozawa.hextcgdeckbuilder.FullImageActivity;
+import com.ozawa.hextcgdeckbuilder.ImageAdapter;
+import com.ozawa.hextcgdeckbuilder.R;
+import com.ozawa.hextcgdeckbuilder.UI.CardListViewer;
 import com.ozawa.hextcgdeckbuilder.UI.CustomViewPager;
 import com.ozawa.hextcgdeckbuilder.UI.PlaceholderFragment;
 import com.ozawa.hextcgdeckbuilder.UI.TutorialEventListener;
+import com.ozawa.hextcgdeckbuilder.UI.customdeck.champions.SelectChampionDialogFragment;
+import com.ozawa.hextcgdeckbuilder.UI.filter.FilterDrawerFragment;
+import com.ozawa.hextcgdeckbuilder.UI.listview.DeckListViewAdapter;
+import com.ozawa.hextcgdeckbuilder.UI.multiplecarddialogs.AbstractMultipleCardsDialogFragment;
+import com.ozawa.hextcgdeckbuilder.UI.multiplecarddialogs.RemoveMultipleCardsDialogFragment;
+import com.ozawa.hextcgdeckbuilder.UI.multiplecarddialogs.RemoveMultipleCardsDialogFragmentGinger;
 import com.ozawa.hextcgdeckbuilder.database.DatabaseHandler;
 import com.ozawa.hextcgdeckbuilder.enums.TutorialType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
@@ -72,7 +82,7 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 
-public class CustomDeckFragment extends Fragment implements NavigationDrawerFragment.NavigationDrawerCallbacks,
+public class CustomDeckFragment extends Fragment implements FilterDrawerFragment.NavigationDrawerCallbacks,
 		GestureOverlayView.OnGesturePerformedListener {
 
 	private DeckUIActivity				mainActivity;
@@ -92,9 +102,9 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
 	 */
-	public NavigationDrawerFragment		mNavigationDrawerFragment;
+	public FilterDrawerFragment		mNavigationDrawerFragment;
 
-	public static CardViewer			cardViewer;
+	public static CardListViewer			cardViewer;
 	public final static String			GETDECK		= "GETDECK";
 	private GestureLibrary				gesLibrary;
 	private GridView					gridView;
@@ -122,7 +132,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 			mainActivity.finish();
 		}
 
-		cardViewer = new CardViewer(mainActivity, deck, mainActivity.customDeck);
+		cardViewer = new CardListViewer(mainActivity, deck, mainActivity.customDeck);
 		imAdapter = cardViewer.getAdapter();
 		uiLayout = (DrawerLayout) inflater.inflate(R.layout.fragment_custom_deck, container, false);
 
@@ -164,7 +174,7 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 	}
 
 	private void setupNavigationDrawer() {
-		mNavigationDrawerFragment = (NavigationDrawerFragment) mainActivity.getSupportFragmentManager().findFragmentById(
+		mNavigationDrawerFragment = (FilterDrawerFragment) mainActivity.getSupportFragmentManager().findFragmentById(
 				R.id.custom_deck_navigation_drawer);
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(uiLayout, cardViewer, mainActivity, R.id.custom_deck_navigation_drawer,
@@ -361,7 +371,6 @@ public class CustomDeckFragment extends Fragment implements NavigationDrawerFrag
 			removeMultipleCardsDialog.position = position;
 			removeMultipleCardsDialog.animationArg = createAnimationArg(values[0] + cardBackDimension / 2, values[1] - cardBackDimension
 					/ 2);
-			removeMultipleCardsDialog.mainActivity = (mainActivity);
 			removeMultipleCardsDialog.fragment = this;
 			removeMultipleCardsDialog.show(mainActivity.getSupportFragmentManager(), "Remove Multiple Cards");
 			return true;

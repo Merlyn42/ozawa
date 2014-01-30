@@ -33,12 +33,12 @@ import android.graphics.Typeface;
 import com.google.gson.annotations.SerializedName;
 import com.ozawa.hextcgdeckbuilder.R;
 import com.ozawa.hextcgdeckbuilder.UI.CardTemplate;
-import com.ozawa.hextcgdeckbuilder.UI.ImageCache;
 import com.ozawa.hextcgdeckbuilder.UI.SymbolTemplate;
-import com.ozawa.hextcgdeckbuilder.UI.ImageCache.CacheType;
-import com.ozawa.hextcgdeckbuilder.UI.ImageCache.ImageType;
 import com.ozawa.hextcgdeckbuilder.enums.Attribute;
 import com.ozawa.hextcgdeckbuilder.enums.CardType;
+import com.ozawa.hextcgdeckbuilder.programstate.ImageCache;
+import com.ozawa.hextcgdeckbuilder.programstate.ImageCache.CacheType;
+import com.ozawa.hextcgdeckbuilder.programstate.ImageCache.ImageType;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 /**

@@ -15,11 +15,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package com.ozawa.hextcgdeckbuilder.enums;
+package com.ozawa.hextcgdeckbuilder.programstate;
 
-public enum TutorialType {
-	
-	CARDLIBRARY,
-	CUSTOMDECK,
-	FULLSCREEN;
+import android.app.Application;
+
+public class HexApplication extends Application {
+
 }

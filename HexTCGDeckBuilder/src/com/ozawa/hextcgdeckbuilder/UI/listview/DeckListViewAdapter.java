@@ -15,7 +15,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package com.ozawa.hextcgdeckbuilder;
+package com.ozawa.hextcgdeckbuilder.UI.listview;
 
 import java.util.List;
 import java.util.Map;
@@ -28,6 +28,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.ozawa.hextcgdeckbuilder.ImageAdapter;
+import com.ozawa.hextcgdeckbuilder.R;
+import com.ozawa.hextcgdeckbuilder.R.drawable;
+import com.ozawa.hextcgdeckbuilder.R.id;
+import com.ozawa.hextcgdeckbuilder.R.layout;
 import com.ozawa.hextcgdeckbuilder.UI.ImageGetter;
 import com.ozawa.hextcgdeckbuilder.UI.StringGetter;
 import com.ozawa.hextcgdeckbuilder.enums.ImageGetterType;

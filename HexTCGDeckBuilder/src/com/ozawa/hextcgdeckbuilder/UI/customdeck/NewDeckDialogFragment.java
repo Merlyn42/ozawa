@@ -15,8 +15,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package com.ozawa.hextcgdeckbuilder;
+package com.ozawa.hextcgdeckbuilder.UI.customdeck;
 
+import com.ozawa.hextcgdeckbuilder.DeckUIActivity;
+import com.ozawa.hextcgdeckbuilder.R;
 import android.app.Dialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;

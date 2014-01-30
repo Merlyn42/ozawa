@@ -17,8 +17,8 @@
  ******************************************************************************/
 package com.ozawa.hextcgdeckbuilder.UI;
 
-import com.ozawa.hextcgdeckbuilder.CustomDeckFragment;
 import com.ozawa.hextcgdeckbuilder.MasterDeckFragment;
+import com.ozawa.hextcgdeckbuilder.UI.customdeck.CustomDeckFragment;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
