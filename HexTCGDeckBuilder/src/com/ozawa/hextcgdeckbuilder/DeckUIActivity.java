@@ -20,7 +20,7 @@ package com.ozawa.hextcgdeckbuilder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.ozawa.hextcgdeckbuilder.UI.CardListViewer;
+import com.ozawa.hextcgdeckbuilder.UI.CardsViewer;
 import com.ozawa.hextcgdeckbuilder.UI.CustomViewPager;
 import com.ozawa.hextcgdeckbuilder.UI.TabPagerAdapter;
 import com.ozawa.hextcgdeckbuilder.UI.customdeck.CustomDeckFragment;
@@ -46,7 +46,7 @@ import android.support.v7.app.ActionBar.Tab;
 
 public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabListener, FilterDrawerFragment.NavigationDrawerCallbacks, NewDeckListener, LoadDeckListener{
 	
-    public static CardListViewer cardViewer;
+    public static CardsViewer cardViewer;
     
 	private CustomViewPager viewPager;
     private TabPagerAdapter mAdapter;

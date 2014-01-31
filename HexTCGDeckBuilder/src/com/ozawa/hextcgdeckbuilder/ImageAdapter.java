@@ -28,7 +28,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
-import com.ozawa.hextcgdeckbuilder.UI.CardListViewer;
+import com.ozawa.hextcgdeckbuilder.UI.CardsViewer;
 import com.ozawa.hextcgdeckbuilder.UI.ImageGetter;
 import com.ozawa.hextcgdeckbuilder.enums.ImageGetterType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
@@ -110,7 +110,7 @@ public class ImageAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
     
-    public void updateDeckAndCardViewDeck(List<AbstractCard> cards, CardListViewer cardViewer) {        
+    public void updateDeckAndCardViewDeck(List<AbstractCard> cards, CardsViewer cardViewer) {        
         cardViewer.setCardList(cards); // Update CardViewer Deck
         masterDeck=cardViewer.getFilteredCardList();
         notifyDataSetChanged();

@@ -19,7 +19,7 @@ package com.ozawa.hextcgdeckbuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import com.ozawa.hextcgdeckbuilder.UI.CardListViewer;
+import com.ozawa.hextcgdeckbuilder.UI.CardsViewer;
 import com.ozawa.hextcgdeckbuilder.UI.CustomViewPager;
 import com.ozawa.hextcgdeckbuilder.UI.PlaceholderFragment;
 import com.ozawa.hextcgdeckbuilder.UI.TutorialEventListener;
@@ -88,7 +88,7 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 	private FilterDrawerFragment	mNavigationDrawerFragment;
 	private ShowcaseView.ConfigOptions	co;
 	ShowcaseViews						mViews;
-	public static CardListViewer			cardViewer;
+	public static CardsViewer			cardViewer;
 	public final static String			GETDECK		= "GETDECK";
 	private static final String			PREFS_NAME	= "FirstLaunchPrefCardLibrary";
 	private GestureLibrary				gesLibrary;
@@ -146,7 +146,7 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 		ShowcaseView.ConfigOptions co = new ShowcaseView.ConfigOptions();
 		co.hideOnClickOutside = true;
 
-		cardViewer = new CardListViewer(mainActivity, MasterDeck.getMasterDeck(container.getContext()), null);
+		cardViewer = new CardsViewer(mainActivity, MasterDeck.getMasterDeck(container.getContext()), null);
 		imAdapter = cardViewer.getAdapter();
 		uiLayout = (DrawerLayout) inflater.inflate(R.layout.fragment_master_deck, container, false);
 

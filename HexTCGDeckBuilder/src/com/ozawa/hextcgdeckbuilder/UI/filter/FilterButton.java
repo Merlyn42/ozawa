@@ -26,14 +26,14 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.ozawa.hextcgdeckbuilder.UI.CardListViewer;
+import com.ozawa.hextcgdeckbuilder.UI.CardsViewer;
 import com.ozawa.hextcgdeckbuilder.enums.CardEnum;
 
 public class FilterButton extends ImageButton implements View.OnClickListener {
     private Bitmap imageOff;
     private Bitmap imageOn;
     private CardEnum e;
-    private CardListViewer cardViewer;
+    private CardsViewer cardViewer;
 
     public FilterButton(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -63,7 +63,7 @@ public class FilterButton extends ImageButton implements View.OnClickListener {
     	
     	setMeasuredDimension(dim, dim);
     }
-    public void setUp(Bitmap iImageOn, Bitmap iImageOff, CardEnum iE, CardListViewer iCardViewer) {
+    public void setUp(Bitmap iImageOn, Bitmap iImageOff, CardEnum iE, CardsViewer iCardViewer) {
         imageOff = iImageOff;
         imageOn = iImageOn;
         e = iE;

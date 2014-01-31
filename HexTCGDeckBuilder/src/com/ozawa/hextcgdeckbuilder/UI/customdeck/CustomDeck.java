@@ -35,10 +35,8 @@ public class CustomDeck {
     private HashMap<AbstractCard, Integer> 	customDeckData; // Custom deck data of cards, and number of cards
     private Deck 							currentCustomDeck; // The current custom deck
     private DatabaseHandler 				dbHandler; // Database handler to save, load, and delete decks
-	private Context 						mContext; // The application context
 	
 	public CustomDeck(Context mContext){
-		this.mContext = mContext;
 		setCustomDeckCardList(new ArrayList<AbstractCard>());
 		dbHandler = new DatabaseHandler(mContext);
 	}
@@ -105,11 +103,12 @@ public class CustomDeck {
 	 * Load a Deck from the database using the given ID
 	 * 
 	 * @param deckID
+	 * @param masterDeck 
 	 * @return true if the deck loaded successfully
 	 */
-	public boolean loadDeck(String deckID) {
+	public boolean loadDeck(String deckID, List<AbstractCard> masterDeck) {
 		currentCustomDeck = dbHandler.getDeck(deckID);
-		updateCustomDeck(currentCustomDeck);
+		updateCustomDeck(currentCustomDeck, masterDeck);
 		return currentCustomDeck.getID().equalsIgnoreCase(deckID);
 	}
 
@@ -175,13 +174,14 @@ public class CustomDeck {
 	 * Update the custom deck
 	 * 
 	 * @param deck - the deck that should be the current custom deck
+	 * @param mContext 
 	 */
-	private void updateCustomDeck(Deck deck){
+	private void updateCustomDeck(Deck deck, List<AbstractCard> masterDeck ){
 		clearCustomDeckData();
 		
 		if(deck.deckResources != null){
 			for(DeckResource card : deck.deckResources){
-				for(AbstractCard masterCard : MasterDeck.getMasterDeck(mContext)){
+				for(AbstractCard masterCard : masterDeck){
 					if(masterCard.getID().contentEquals(card.cardID.gUID)){
 						customDeckData.put(masterCard, card.cardCount);
 						break;
