@@ -23,7 +23,9 @@ import java.util.List;
 import com.ozawa.hextcgdeckbuilder.R;
 import com.ozawa.hextcgdeckbuilder.UI.LoadDeckArrayAdapter;
 import com.ozawa.hextcgdeckbuilder.database.DatabaseHandler;
-import com.ozawa.hextcgdeckbuilder.hexentities.Deck;
+import com.ozawa.hextcgdeckbuilder.hexentities.HexDeck;
+import com.ozawa.hextcgdeckbuilder.json.MasterDeck;
+import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
 
 import android.app.Dialog;
 import android.graphics.drawable.ColorDrawable;
@@ -59,7 +61,7 @@ public class LoadDeckDialogFragment extends DialogFragment {
 	public Dialog onCreateDialog(Bundle savedInstanceState){
 		final Dialog dialog = new Dialog(getActivity());
 		DatabaseHandler dbHandler = new DatabaseHandler(getActivity());
-		List<Deck> allDecks = dbHandler.getAllDecks();
+		List<HexDeck> allDecks = dbHandler.getAllDecks();
 		dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		dialog.setContentView(R.layout.load_deck_popup);
 		
@@ -75,14 +77,14 @@ public class LoadDeckDialogFragment extends DialogFragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
-				Deck  deck = (Deck) listView.getItemAtPosition(position);
+				HexDeck  deck = (HexDeck) listView.getItemAtPosition(position);
 				if(deck != null){
-					LoadDeckListener activity = (LoadDeckListener) getActivity();
-					if(activity.loadDeck(deck.getID())){
-						Toast.makeText(getActivity().getApplicationContext(), "Loaded Deck successfully." , Toast.LENGTH_LONG).show();
+					Deck customDeck = ((HexApplication)getActivity().getApplication()).getCustomDeck();
+					if(customDeck.loadDeck(deck.getID(), MasterDeck.getMasterDeck(getActivity()))){
+						Toast.makeText(getActivity(), "Loaded Deck successfully." , Toast.LENGTH_LONG).show();
 						dialog.dismiss();
 					}else{
-						Toast.makeText(getActivity().getApplicationContext(), "Failed to load deck. Please try again." , Toast.LENGTH_LONG).show();
+						Toast.makeText(getActivity(), "Failed to load deck. Please try again." , Toast.LENGTH_LONG).show();
 					}
 				}
 			}

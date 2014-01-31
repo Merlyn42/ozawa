@@ -19,7 +19,7 @@ package com.ozawa.hextcgdeckbuilder.json;
 
 import com.ozawa.hextcgdeckbuilder.enums.Attribute;
 import com.ozawa.hextcgdeckbuilder.hexentities.Card;
-import com.ozawa.hextcgdeckbuilder.hexentities.Deck;
+import com.ozawa.hextcgdeckbuilder.hexentities.HexDeck;
 import com.ozawa.hextcgdeckbuilder.enums.CardType;
 import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
 
@@ -64,17 +64,17 @@ public class JSONSerializer {
 	 * @param json
 	 * @return A Deck deserialized from the given JSON
 	 */
-	public static Deck deserializeJSONtoDeck(String json){
+	public static HexDeck deserializeJSONtoDeck(String json){
 		Gson gson = new Gson();
 		
-		Deck newDeck = gson.fromJson(json, Deck.class);
+		HexDeck newDeck = gson.fromJson(json, HexDeck.class);
 		
 		return newDeck;
 	}
 	
 	public static void main(String args[]){
 		ArrayList<Card> allCards = new ArrayList<Card>();
-		ArrayList<Deck> allDecks = new ArrayList<Deck>();
+		ArrayList<HexDeck> allDecks = new ArrayList<HexDeck>();
 		try {
 			File[] cardFiles = new File(HEXLOCATION,"\\Data\\Sets\\Set001\\CardDefinitions").listFiles();
 			

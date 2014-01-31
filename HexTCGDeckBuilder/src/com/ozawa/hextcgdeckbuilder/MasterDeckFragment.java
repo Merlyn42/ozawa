@@ -349,7 +349,7 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 	 */
 	public boolean addCardToCustomDeck(int position, int value) {		
 		AbstractCard card = isGridView == true ? imAdapter.masterDeck.get(position) : lvAdapter.masterDeck.get(position);
-		((HexApplication)getActivity().getApplication()).getCustomDeck().addCardToCustomDeck(card, value);
+		((HexApplication)getActivity().getApplication()).getCustomDeck().addCardToDeck(card, value);
 /*		if (card instanceof Card && ((Card) card).cardNumber == 0) {
 			Toast.makeText(mainActivity.getApplicationContext(), card.name + " cannot be added directly to decks.", Toast.LENGTH_SHORT)
 					.show();

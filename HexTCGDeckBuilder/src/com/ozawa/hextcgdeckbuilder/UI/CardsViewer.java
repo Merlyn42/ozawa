@@ -23,6 +23,7 @@ import android.text.TextWatcher;
 import android.widget.TextView;
 
 import com.ozawa.hextcgdeckbuilder.ImageAdapter;
+import com.ozawa.hextcgdeckbuilder.UI.customdeck.Deck;
 import com.ozawa.hextcgdeckbuilder.UI.filter.FilterButton;
 import com.ozawa.hextcgdeckbuilder.enums.CardEnum;
 import com.ozawa.hextcgdeckbuilder.filter.Filter;
@@ -37,17 +38,17 @@ import java.util.Map;
 
 public class CardsViewer implements TextWatcher {
     private Filter filter;
-    private List<AbstractCard> cards;
+    private Deck deck;
     private ImageAdapter adapter;
     private Comparator<AbstractCard> comparator = new CardComparatorColor();
     private ArrayList<FilterButton> associatedButtons = new ArrayList<FilterButton>();
     private TextView associatedTextView;
 
-    public CardsViewer(Context context,List<AbstractCard> abstractCards,Map<AbstractCard, Integer> customDeck){
+    public CardsViewer(Context context,Deck deck){
         filter = new Filter();
-        cards= new ArrayList<AbstractCard>(abstractCards);
-        Collections.sort(cards,comparator);
-        adapter = new ImageAdapter(context,filter.filter(cards),customDeck);       
+        this.deck = deck;
+        Collections.sort(deck.getDeckCardList(),comparator);
+        adapter = new ImageAdapter(context,filter.filter(deck.getDeckCardList()), deck.getDeckData());       
     }
     
     public void addAssociatedButton(FilterButton button){
@@ -60,7 +61,7 @@ public class CardsViewer implements TextWatcher {
     
     public void clearFilter(){
     	filter = new Filter();
-    	adapter.updateDeck(filter.filter(cards));
+    	adapter.updateDeck(filter.filter(deck.getDeckCardList()));
     	for (FilterButton f:associatedButtons){
     		f.updateImage();
     	}
@@ -70,15 +71,11 @@ public class CardsViewer implements TextWatcher {
     }
     
     public List<AbstractCard> getFilteredCardList(){
-    	return filter.filter(cards);
+    	return filter.filter(deck.getDeckCardList());
     }
     
     public List<AbstractCard> getUnFilteredCardList(){
-    	return new ArrayList<AbstractCard>(cards);
-    }
-    
-    public void setCardList(List<AbstractCard> abstractCards){
-    	cards= new ArrayList<AbstractCard>(abstractCards);
+    	return new ArrayList<AbstractCard>(deck.getDeckCardList());
     }
 
     public boolean toggleFilter(CardEnum e){
@@ -90,7 +87,7 @@ public class CardsViewer implements TextWatcher {
             filter.addFilter(e);
             result =true;
         }
-        adapter.updateDeck(filter.filter(cards));
+        adapter.updateDeck(filter.filter(deck.getDeckCardList()));
         return result;
     }
 
@@ -109,7 +106,7 @@ public class CardsViewer implements TextWatcher {
 	@Override
 	public void afterTextChanged(Editable arg0) {
 		filter.setFilterString(arg0.toString());
-		adapter.updateDeck(filter.filter(cards));
+		adapter.updateDeck(filter.filter(deck.getDeckCardList()));
 		
 	}
 

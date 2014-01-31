@@ -20,7 +20,7 @@ package com.ozawa.hextcgdeckbuilder.UI;
 import java.util.List;
 
 import com.ozawa.hextcgdeckbuilder.R;
-import com.ozawa.hextcgdeckbuilder.hexentities.Deck;
+import com.ozawa.hextcgdeckbuilder.hexentities.HexDeck;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -29,11 +29,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class LoadDeckArrayAdapter extends ArrayAdapter<Deck> {
+public class LoadDeckArrayAdapter extends ArrayAdapter<HexDeck> {
 	
-	private List<Deck> decks;
+	private List<HexDeck> decks;
 	
-	public LoadDeckArrayAdapter(Context context, int resource, List<Deck> decks) {
+	public LoadDeckArrayAdapter(Context context, int resource, List<HexDeck> decks) {
 		super(context, resource, decks);
 
 		this.decks = decks;
@@ -47,7 +47,7 @@ public class LoadDeckArrayAdapter extends ArrayAdapter<Deck> {
 			view = inflater.inflate(R.layout.load_deck_list_row, null);
 		}
 		
-		Deck deck = decks.get(position);
+		HexDeck deck = decks.get(position);
 		
 		if(deck != null){
 			TextView deckName = (TextView) view.findViewById(R.id.deck_name);

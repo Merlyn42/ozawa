@@ -22,7 +22,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * A Deck entity which holds an array of DeckResources that correspond to Cards.
  */
-public class Deck {
+public class HexDeck {
 	
 	@SerializedName("m_MaximumDuplicates")
 	public int maximumDuplicates;

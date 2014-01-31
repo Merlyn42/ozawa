@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.ozawa.hextcgdeckbuilder.UI.CardsViewer;
-import com.ozawa.hextcgdeckbuilder.UI.customdeck.CustomDeck;
+import com.ozawa.hextcgdeckbuilder.UI.customdeck.Deck;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.json.MasterDeck;
 
@@ -31,26 +31,36 @@ public class HexApplication extends Application {
 	
 	CardsViewer customDeckViewer;
 	CardsViewer cardLibraryViewer;
-	CustomDeck customDeck;
+	Deck cardLibrary;
+	Deck customDeck;
 	
-	public CustomDeck getCustomDeck(){
+	public Deck getCustomDeck(){
 		if(customDeck == null){
-			customDeck = new CustomDeck(this);
+			customDeck = new Deck(this);
 		}
 		
 		return customDeck;
 	}
+	
+	public Deck getCardLibrary(){
+		if(cardLibrary == null){
+			cardLibrary = new Deck(this);
+			cardLibrary.setDeckCardList(MasterDeck.getMasterDeck(this));
+		}
+		
+		return cardLibrary;
+	} 
 
 	public CardsViewer getCustomDeckViewer() {
 		if(customDeckViewer==null){
-			customDeckViewer = new CardsViewer(getApplicationContext(), new ArrayList<AbstractCard>(), new HashMap<AbstractCard, Integer>());
+			customDeckViewer = new CardsViewer(getApplicationContext(), getCustomDeck());
 		}
 		return customDeckViewer;
 	}
 	
 	public CardsViewer getCardLibraryViewer() {
 		if(cardLibraryViewer==null){
-			cardLibraryViewer = new CardsViewer(getApplicationContext(), MasterDeck.getMasterDeck(getApplicationContext()), null);
+			cardLibraryViewer = new CardsViewer(getApplicationContext(), getCardLibrary());
 		}
 		return cardLibraryViewer;
 	}

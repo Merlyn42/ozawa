@@ -29,7 +29,7 @@ import com.ozawa.hextcgdeckbuilder.UI.customdeck.NewDeckDialogFragment.NewDeckLi
 import com.ozawa.hextcgdeckbuilder.UI.filter.FilterDrawerFragment;
 import com.ozawa.hextcgdeckbuilder.database.DatabaseHandler;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
-import com.ozawa.hextcgdeckbuilder.hexentities.Deck;
+import com.ozawa.hextcgdeckbuilder.hexentities.HexDeck;
 import com.ozawa.hextcgdeckbuilder.hexentities.DeckResource;
 import com.ozawa.hextcgdeckbuilder.json.MasterDeck;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;

@@ -28,7 +28,7 @@ import com.google.gson.Gson;
 import com.ozawa.hextcgdeckbuilder.R;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Champion;
-import com.ozawa.hextcgdeckbuilder.hexentities.Deck;
+import com.ozawa.hextcgdeckbuilder.hexentities.HexDeck;
 import com.ozawa.hextcgdeckbuilder.hexentities.DeckResource;
 import com.ozawa.hextcgdeckbuilder.hexentities.GlobalIdentifier;
 
@@ -275,7 +275,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 * @param deck - the deck to be added
 	 * @return the primary key ID for the new deck
 	 */
-	public long addDeck(Deck deck){
+	public long addDeck(HexDeck deck){
 		SQLiteDatabase db = this.getWritableDatabase();
 		long rowID = -1;
 		ContentValues values = new ContentValues();
@@ -303,7 +303,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 * 
 	 * @param deck
 	 */
-	public boolean updateDeck(Deck deck){
+	public boolean updateDeck(HexDeck deck){
 		SQLiteDatabase db = this.getWritableDatabase();
 		boolean updated = true;
 		ContentValues values = new ContentValues();
@@ -332,7 +332,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 * @param deck - the Deck to be deleted
 	 * @return true if the Deck was successfully deleted, otherwise false
 	 */
-	public boolean deleteDeck(Deck deck) {
+	public boolean deleteDeck(HexDeck deck) {
 	    SQLiteDatabase db = this.getWritableDatabase();
 	    boolean deleted = true;
 	    try{
@@ -355,9 +355,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 * @param id - the ID of the Deck
 	 * @return the Deck with the given ID if found, otherwise null
 	 */
-	public Deck getDeck(String id){
+	public HexDeck getDeck(String id){
 		SQLiteDatabase db = this.getReadableDatabase();
-		Deck deck = null;
+		HexDeck deck = null;
 		try{
 			Cursor results = db.query(TABLE_DECKS, new String[]{ID, NAME, CHAMPION_NAME}, ID + "= ?", new String[]{id}, null, null, null, null);
 			
@@ -382,8 +382,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 * 
 	 * @return all of the stored Decks
 	 */
-	public List<Deck> getAllDecks(){
-		ArrayList<Deck> decks = new ArrayList<Deck>();
+	public List<HexDeck> getAllDecks(){
+		ArrayList<HexDeck> decks = new ArrayList<HexDeck>();
 	    String selectQuery = "SELECT * FROM " + TABLE_DECKS;
 		SQLiteDatabase db = this.getReadableDatabase();
 		
@@ -414,7 +414,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 * @param deck - the Deck to update
 	 * @param cardData - the cards to add
 	 */
-	public void addDeckResources(Deck deck, HashMap<AbstractCard, Integer> cardData){
+	public void addDeckResources(HexDeck deck, HashMap<AbstractCard, Integer> cardData){
 		SQLiteDatabase db = this.getWritableDatabase();
 		
 		try{
@@ -438,7 +438,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 * @param card - the cards to add
 	 * @param cardCount - the amount of that card the Deck has
 	 */
-	public void addDeckResource(Deck deck, AbstractCard card, int cardCount){
+	public void addDeckResource(HexDeck deck, AbstractCard card, int cardCount){
 		SQLiteDatabase db = this.getWritableDatabase();
 		
 		ContentValues values = new ContentValues();
@@ -465,7 +465,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 * @param cardData - the cards to add
 	 * @param db - the database
 	 */
-	private void addDeckResources(Deck deck, HashMap<AbstractCard, Integer> cardData, SQLiteDatabase db){
+	private void addDeckResources(HexDeck deck, HashMap<AbstractCard, Integer> cardData, SQLiteDatabase db){
 		List<AbstractCard> cards = new ArrayList<AbstractCard>(cardData.keySet());
 		
 		for(AbstractCard card : cards){
@@ -484,7 +484,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 * @param cardData - the cards to add
 	 * @return true if updated successfully, otherwise false
 	 */
-	public boolean updateDeckResources(Deck deck, HashMap<AbstractCard, Integer> cardData){
+	public boolean updateDeckResources(HexDeck deck, HashMap<AbstractCard, Integer> cardData){
 		SQLiteDatabase db = this.getWritableDatabase();
 		boolean updated = true;
 		
@@ -513,7 +513,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 * @param card - the card to add
 	 * @param cardCount - the number of the card in the Deck
 	 */
-	public void updateDeckResource(Deck deck, AbstractCard card, int cardCount){
+	public void updateDeckResource(HexDeck deck, AbstractCard card, int cardCount){
 		SQLiteDatabase db = this.getWritableDatabase();
 		
 		ContentValues values = new ContentValues();
@@ -539,7 +539,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 * @param deck - the Deck to update
 	 * @param cardData - the cards to delete
 	 */
-	public void deleteDeckResources(Deck deck, HashMap<AbstractCard, Integer> cardData){
+	public void deleteDeckResources(HexDeck deck, HashMap<AbstractCard, Integer> cardData){
 		SQLiteDatabase db = this.getWritableDatabase();
 		
 		try{
@@ -560,7 +560,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 * @param deck - the Deck to update
 	 * @param db - the database
 	 */
-	private void deleteDeckResources(Deck deck, SQLiteDatabase db){
+	private void deleteDeckResources(HexDeck deck, SQLiteDatabase db){
 		db.delete(TABLE_DECK_RESOURCES, DECK_ID + "= ?", new String[]{deck.getID()});
 	}
 	
@@ -571,7 +571,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 * @param card - the card to delete
 	 * @param cardCount - the number of that card to delete
 	 */
-	public void deleteDeckResource(Deck deck, AbstractCard card, int cardCount){
+	public void deleteDeckResource(HexDeck deck, AbstractCard card, int cardCount){
 		SQLiteDatabase db = this.getWritableDatabase();
 		
 		try{
@@ -693,8 +693,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 * @param results - database data for a Deck
 	 * @return a Deck from the given data
 	 */
-	private Deck createNewDeck(Cursor results){
-		Deck deck = new Deck();
+	private HexDeck createNewDeck(Cursor results){
+		HexDeck deck = new HexDeck();
 		deck.id = new GlobalIdentifier(String.valueOf(results.getInt(results.getColumnIndex(ID))));
 		deck.name = results.getString(results.getColumnIndex(NAME));
 		deck.champion = getChampionFromAllChampions(results.getString(results.getColumnIndex(CHAMPION_NAME)));

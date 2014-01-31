@@ -20,7 +20,7 @@ package com.ozawa.hextcgdeckbuilder.UI.multiplecarddialogs;
 import java.util.HashMap;
 
 import com.ozawa.hextcgdeckbuilder.R;
-import com.ozawa.hextcgdeckbuilder.UI.customdeck.CustomDeck;
+import com.ozawa.hextcgdeckbuilder.UI.customdeck.Deck;
 import com.ozawa.hextcgdeckbuilder.UI.customdeck.CustomDeckFragment;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
@@ -60,8 +60,8 @@ public class RemoveMultipleCardsDialogFragment extends AbstractMultipleCardsDial
 		affirmButton.setText("Remove Cards");
 		cancelButton = (Button) dialog.findViewById(R.id.buttonCancelAddCards);
 		picker = (NumberPicker) dialog.findViewById(R.id.addCardsNumberPicker);
-		CustomDeck customDeck = ((HexApplication)getActivity().getApplication()).getCustomDeck();
-        HashMap<AbstractCard, Integer> customDeckData = customDeck.getCustomDeckData();
+		Deck customDeck = ((HexApplication)getActivity().getApplication()).getCustomDeck();
+        HashMap<AbstractCard, Integer> customDeckData = customDeck.getDeckData();
 		picker.setMaxValue(customDeckData.get(card));
 		picker.setMinValue(1);
 		picker.setValue(customDeckData.get(card));

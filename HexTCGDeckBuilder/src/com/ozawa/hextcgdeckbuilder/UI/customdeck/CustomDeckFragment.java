@@ -40,7 +40,7 @@ import com.ozawa.hextcgdeckbuilder.UI.multiplecarddialogs.RemoveMultipleCardsDia
 import com.ozawa.hextcgdeckbuilder.UI.multiplecarddialogs.RemoveMultipleCardsDialogFragmentGinger;
 import com.ozawa.hextcgdeckbuilder.enums.TutorialType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
-import com.ozawa.hextcgdeckbuilder.hexentities.Deck;
+import com.ozawa.hextcgdeckbuilder.hexentities.HexDeck;
 import com.ozawa.hextcgdeckbuilder.json.MasterDeck;
 import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
@@ -122,7 +122,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	public static final String			PREFS_NAME	= "FirstLaunchPrefCustomDeck";
 	private SharedPreferences			mPreferences;
 	
-	CustomDeck customDeck;
+	Deck customDeck;
 	HexApplication hexApplication;
 	
 	Context mContext;
@@ -326,7 +326,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 		listView = (ListView) uiLayout.findViewById(R.id.custom_deck_deck_list);
 
 		// Getting adapter by passing xml data ArrayList
-		lvAdapter = new DeckListViewAdapter(mContext, cardViewer.getAdapter().masterDeck, customDeck.getCustomDeckData());
+		lvAdapter = new DeckListViewAdapter(mContext, cardViewer.getAdapter().masterDeck, customDeck.getDeckData());
 		cardViewer.setAdapter(lvAdapter);
 		listView.setAdapter(cardViewer.getAdapter());
 		// Click event for single list row
@@ -424,7 +424,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	}
 
 	public void reloadCustomDeckView() {
-		List<AbstractCard> deck = customDeck.getCustomDeckCardList();
+		List<AbstractCard> deck = customDeck.getDeckCardList();
 		if (isGridView) {
 			imAdapter.updateDeckAndCardViewDeck(deck, cardViewer);
 		} else {
@@ -439,7 +439,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	public void updateCustomDeckData(){
 			ImageView championPortrait = (ImageView) mNavigationDrawerFragment.getView().findViewById(R.id.imageChampionPortrait);
 			TextView championName = (TextView) mNavigationDrawerFragment.getView().findViewById(R.id.tvChampionName);
-			Deck currentCustomDeck = customDeck.getCurrentCustomDeck();
+			HexDeck currentCustomDeck = customDeck.getCurrentDeck();
 			if(currentCustomDeck != null && currentCustomDeck.champion != null){		
 				int portaitID = HexUtil.getResourceID(currentCustomDeck.champion.hudPortraitSmall, R.drawable.class);
 				if(portaitID != -1){
@@ -452,10 +452,10 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 				championPortrait.setImageResource(R.drawable.championnoportaitsmall);				
 				championName.setText("No Champion Selected");
 			}
-			if(customDeck.getCustomDeckData() != null){
+			if(customDeck.getDeckData() != null){
 				TextView deckCardCount = (TextView) mNavigationDrawerFragment.getView().findViewById(R.id.tvDeckCardCount);
 				int cardCount = 0;
-				for(int value : customDeck.getCustomDeckData().values()){
+				for(int value : customDeck.getDeckData().values()){
 					cardCount += value;
 				}
 				deckCardCount.setText("Card Count: " + cardCount);
@@ -478,12 +478,12 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	}
 
 	private void setDeckButtonAvailablity() {
-		if (customDeck.getCurrentCustomDeck() != null) {
+		if (customDeck.getCurrentDeck() != null) {
 			deleteDeck.setEnabled(true);
 		} else {
 			deleteDeck.setEnabled(false);
 		}
-		if (!customDeck.getCustomDeckCardList().isEmpty()) {
+		if (!customDeck.getDeckCardList().isEmpty()) {
 			saveDeck.setEnabled(true);
 		} else {
 			saveDeck.setEnabled(false);
@@ -498,7 +498,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	public void removeCardFromCustomDeck(int position, int value) {
 		if (position >= 0) {
 			AbstractCard card = isGridView == true ? imAdapter.masterDeck.get(position) : lvAdapter.masterDeck.get(position);
-			if(customDeck.removeCardFromCustomDeck(card, value)){
+			if(customDeck.removeCardFromDeck(card, value)){
 				reloadCustomDeckView();
 			}else{
 				reloadCustomDeckView(false, position);
@@ -568,7 +568,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 			@Override
 			public void onClick(View v) {
 				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-				if (customDeck.getCurrentCustomDeck() != null) {
+				if (customDeck.getCurrentDeck() != null) {
 					buildDeleteDeckConfirmationDialog();
 				} else {
 					Toast.makeText(mContext, "Deck isn't saved, no need to delete.", Toast.LENGTH_SHORT).show();
@@ -620,7 +620,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	 * @param deckName
 	 * @return The newly saved Deck
 	 */
-	public Deck saveNewDeck(String deckName) {
+	public HexDeck saveNewDeck(String deckName) {
 		return customDeck.saveNewDeck(deckName);
 	}
 
@@ -632,7 +632,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	 */
 	public void loadDeck(String deckID) {
 		if(customDeck.loadDeck(deckID, MasterDeck.getMasterDeck(mContext))){
-			reloadCustomDeck(customDeck.getCurrentCustomDeck().name);
+			reloadCustomDeck(customDeck.getCurrentDeck().name);
 		}
 	}
 
@@ -642,7 +642,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	 * @return true if the Deck saved successfully, otherwise false
 	 */
 	private boolean saveDeck() {
-		if (customDeck.getCurrentCustomDeck() != null) {
+		if (customDeck.getCurrentDeck() != null) {
 			if (customDeck.saveDeck()) {
 				Toast.makeText(mContext, "Deck successfully saved.", Toast.LENGTH_SHORT).show();
 				return true;
@@ -660,7 +660,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	 * Delete the current Deck from the database
 	 */
 	private void deleteDeck() {
-		if (customDeck.getCurrentCustomDeck() != null) {
+		if (customDeck.getCurrentDeck() != null) {
 			if (customDeck.deleteDeck()) {
 				reloadCustomDeck("Custom Deck");
 				Toast.makeText(mContext, "Deck successfully deleted.", Toast.LENGTH_SHORT).show();
@@ -694,7 +694,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	private void buildDeleteDeckConfirmationDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 		builder.setTitle("Delete Deck");
-		builder.setMessage("Are you sure you want to delete deck: " + customDeck.getCurrentCustomDeck().name + "?");
+		builder.setMessage("Are you sure you want to delete deck: " + customDeck.getCurrentDeck().name + "?");
 		builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface arg0, int arg1) {
@@ -727,7 +727,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 		builder.setTitle("Save Deck?");
 		final EditText input = new EditText(getActivity());
 
-		if (customDeck.getCurrentCustomDeck() == null) {
+		if (customDeck.getCurrentDeck() == null) {
 			builder.setMessage("This deck is not yet saved, would you like to save now?");
 			builder.setView(input);
 		} else {
@@ -739,7 +739,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 			public void onClick(DialogInterface dialog, int position) {
 				if (input.getText().toString().isEmpty()) {
 					Toast.makeText(getActivity(), "You must enter a name before saving.", Toast.LENGTH_SHORT).show();
-				} else if (customDeck.getCurrentCustomDeck() != null) {
+				} else if (customDeck.getCurrentDeck() != null) {
 					saveDeck();
 					invokeNoParamReflectiveMethod(methodName, fragment);
 				} else if (!saveUnsavedDeck(input.getText().toString())) {

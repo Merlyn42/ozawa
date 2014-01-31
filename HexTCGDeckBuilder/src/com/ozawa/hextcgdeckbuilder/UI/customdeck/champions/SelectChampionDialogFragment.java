@@ -26,7 +26,7 @@ import com.ozawa.hextcgdeckbuilder.R.drawable;
 import com.ozawa.hextcgdeckbuilder.UI.SelectChampionArrayAdapter;
 import com.ozawa.hextcgdeckbuilder.database.DatabaseHandler;
 import com.ozawa.hextcgdeckbuilder.hexentities.Champion;
-import com.ozawa.hextcgdeckbuilder.hexentities.Deck;
+import com.ozawa.hextcgdeckbuilder.hexentities.HexDeck;
 import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
@@ -53,7 +53,7 @@ public class SelectChampionDialogFragment extends DialogFragment {
 	private ListView listView;
 	private RelativeLayout relativeLayout;
 	private LinearLayout linearLayout;
-	private Deck currentCustomDeck;
+	private HexDeck currentCustomDeck;
 	private Champion selectedChampion;
 	
 	@Override
@@ -61,7 +61,7 @@ public class SelectChampionDialogFragment extends DialogFragment {
 		final Dialog dialog = new Dialog(getActivity());
 		DatabaseHandler dbHandler = new DatabaseHandler(getActivity());
 		final List<Champion> allChampions = dbHandler.allChampions;
-		currentCustomDeck = ((HexApplication)getActivity().getApplication()).getCustomDeck().getCurrentCustomDeck();
+		currentCustomDeck = ((HexApplication)getActivity().getApplication()).getCustomDeck().getCurrentDeck();
 		
 		if(currentCustomDeck != null && currentCustomDeck.champion != null){
 			selectedChampion = currentCustomDeck.champion;

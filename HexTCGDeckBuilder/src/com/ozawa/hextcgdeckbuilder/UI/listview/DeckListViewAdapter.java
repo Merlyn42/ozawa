@@ -38,7 +38,7 @@ import com.ozawa.hextcgdeckbuilder.R.id;
 import com.ozawa.hextcgdeckbuilder.R.layout;
 import com.ozawa.hextcgdeckbuilder.UI.ImageGetter;
 import com.ozawa.hextcgdeckbuilder.UI.StringGetter;
-import com.ozawa.hextcgdeckbuilder.UI.customdeck.CustomDeck;
+import com.ozawa.hextcgdeckbuilder.UI.customdeck.Deck;
 import com.ozawa.hextcgdeckbuilder.enums.ImageGetterType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.ResourceCard;
@@ -171,14 +171,14 @@ public class DeckListViewAdapter extends ImageAdapter{
         buildCardTextView(card, cardDefense, "baseHealthValue", null, null);
         buildCardThreshold(card, cardThreshold);
         buildCardImage(card, thumb_image);
-        CustomDeck customDeck;
+        Deck customDeck;
         if(mContext instanceof DeckUIActivity){
         	DeckUIActivity activity = ((DeckUIActivity)mContext);
             customDeck = ((HexApplication)(activity.getApplication())).getCustomDeck();
         }else{
         	customDeck = ((HexApplication)(mContext)).getCustomDeck();
         }
-        HashMap<AbstractCard, Integer> customDeckData = customDeck.getCustomDeckData();
+        HashMap<AbstractCard, Integer> customDeckData = customDeck.getDeckData();
         if(customDeckData !=null && customDeckData.get(card) != null){
         	cardCount.setText("Count: " + customDeckData.get(card));
         }
