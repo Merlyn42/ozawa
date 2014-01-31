@@ -41,6 +41,7 @@ import com.ozawa.hextcgdeckbuilder.UI.multiplecarddialogs.RemoveMultipleCardsDia
 import com.ozawa.hextcgdeckbuilder.enums.TutorialType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Deck;
+import com.ozawa.hextcgdeckbuilder.json.MasterDeck;
 import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
@@ -630,7 +631,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	 * @return The Deck retrieved from the database with the given ID
 	 */
 	public void loadDeck(String deckID) {
-		if(customDeck.loadDeck(deckID)){
+		if(customDeck.loadDeck(deckID, MasterDeck.getMasterDeck(mContext))){
 			reloadCustomDeck(customDeck.getCurrentCustomDeck().name);
 		}
 	}

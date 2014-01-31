@@ -55,7 +55,6 @@ import com.ozawa.hextcgdeckbuilder.UI.CardsViewer;
 import com.ozawa.hextcgdeckbuilder.enums.CardType;
 import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
 
-
 /**
  * Fragment used for managing interactions for and presentation of a navigation
  * drawer. See the <a href=
@@ -92,7 +91,7 @@ public class FilterDrawerFragment extends Fragment {
 	private View						mFragmentContainerView;
 	CardsViewer							cardViewer;
 	private Context						context;
-
+	private List<FilterButton>			buttons;
 	private int							mCurrentSelectedPosition	= 0;
 	private boolean						mFromSavedInstanceState;
 	private boolean						mUserLearnedDrawer;
@@ -138,6 +137,15 @@ public class FilterDrawerFragment extends Fragment {
 
 	public boolean isDrawerOpen() {
 		return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
+	}
+
+	public void updateFilterUI() {
+		for (FilterButton f : associatedButtons) {
+			f.updateImage();
+		}
+		if (associatedTextView != null) {
+			associatedTextView.setText("");
+		}
 	}
 
 	private void setUpButtons() {
