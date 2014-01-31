@@ -24,13 +24,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.mockito.internal.util.collections.Sets;
+
 import com.espian.showcaseview.ShowcaseView;
 import com.espian.showcaseview.ShowcaseView.ConfigOptions;
 import com.ozawa.hextcgdeckbuilder.DeckUIActivity;
 import com.ozawa.hextcgdeckbuilder.FullImageActivity;
 import com.ozawa.hextcgdeckbuilder.ImageAdapter;
 import com.ozawa.hextcgdeckbuilder.R;
-import com.ozawa.hextcgdeckbuilder.UI.CardListViewer;
+import com.ozawa.hextcgdeckbuilder.UI.CardsViewer;
 import com.ozawa.hextcgdeckbuilder.UI.CustomViewPager;
 import com.ozawa.hextcgdeckbuilder.UI.PlaceholderFragment;
 import com.ozawa.hextcgdeckbuilder.UI.TutorialEventListener;
@@ -44,6 +46,7 @@ import com.ozawa.hextcgdeckbuilder.database.DatabaseHandler;
 import com.ozawa.hextcgdeckbuilder.enums.TutorialType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Deck;
+import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 import android.app.AlertDialog;
@@ -67,6 +70,7 @@ import android.text.TextWatcher;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.LayoutInflater.Filter;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -85,45 +89,42 @@ import android.widget.AdapterView.OnItemLongClickListener;
 public class CustomDeckFragment extends Fragment implements FilterDrawerFragment.NavigationDrawerCallbacks,
 		GestureOverlayView.OnGesturePerformedListener {
 
-	private DeckUIActivity				mainActivity;
-	private DrawerLayout				uiLayout;
+	private DeckUIActivity		mainActivity;
+	private DrawerLayout		uiLayout;
 
-	ListView							listView;
-	ImageAdapter						imAdapter;
-	DeckListViewAdapter					lvAdapter;
-	private static List<AbstractCard>	deck;
-	public boolean						isGridView;
+	private ListView			listView;
+	private GridView			gridView;
+	private View				currentView;
+	public boolean				isGridView;
 
-	public ImageView					cardBack;
-	private int							cardBackDimension;
-	private int							screenWidth;
+	public ImageView			cardBack;
+	private int					cardBackDimension;
+	private int					screenWidth;
 
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
 	 */
-	public FilterDrawerFragment		mNavigationDrawerFragment;
+	public FilterDrawerFragment	mNavigationDrawerFragment;
 
-	public static CardListViewer			cardViewer;
-	public final static String			GETDECK		= "GETDECK";
-	private GestureLibrary				gesLibrary;
-	private GridView					gridView;
+	public static CardsViewer	cardViewer;
+	public final static String	GETDECK		= "GETDECK";
+	private GestureLibrary		gesLibrary;
 
 	// Database
-	DatabaseHandler						dbHandler;
+	private DatabaseHandler		dbHandler;
 
-	Button								saveDeck;
-	Button								deleteDeck;
-	Button								selectChampion;
+	private Button				saveDeck;
+	private Button				deleteDeck;
+	private Button				selectChampion;
 
 	// Tutorial
-	public static final String			PREFS_NAME	= "FirstLaunchPrefCustomDeck";
-	private SharedPreferences			mPreferences;
+	public static final String	PREFS_NAME	= "FirstLaunchPrefCustomDeck";
+	private SharedPreferences	mPreferences;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mainActivity = (DeckUIActivity) super.getActivity();
-		deck = mainActivity.customDeckCardList;
 		dbHandler = mainActivity.dbHandler;
 		screenWidth = HexUtil.getScreenWidth(mainActivity);
 
@@ -132,8 +133,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 			mainActivity.finish();
 		}
 
-		cardViewer = new CardListViewer(mainActivity, deck, mainActivity.customDeck);
-		imAdapter = cardViewer.getAdapter();
+		cardViewer = ((HexApplication) mainActivity.getApplicationContext()).getCustomDeckViewer();
 		uiLayout = (DrawerLayout) inflater.inflate(R.layout.fragment_custom_deck, container, false);
 
 		setupNavigationDrawer();
@@ -160,7 +160,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	@Override
 	public void onResume() {
 		super.onResume();
-		if(mNavigationDrawerFragment == null){
+		if (mNavigationDrawerFragment == null) {
 			setupNavigationDrawer();
 		}
 	}
@@ -168,7 +168,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	@Override
 	public void onStart() {
 		super.onStart();
-		if(mNavigationDrawerFragment == null){
+		if (mNavigationDrawerFragment == null) {
 			setupNavigationDrawer();
 		}
 	}
@@ -246,6 +246,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 						}
 					} else if (prediction.name.equalsIgnoreCase("anti clockwise") || prediction.name.equalsIgnoreCase("clockwise")) {
 						cardViewer.clearFilter();
+						mNavigationDrawerFragment.updateFilterUI();
 					}
 				}
 			}
@@ -260,12 +261,13 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 
 	public void changeToListView() {
 		if (listView != null) {
-			cardViewer.setAdapter(lvAdapter);
+			cardViewer.setAdapter(new DeckListViewAdapter(mainActivity, cardViewer.getFilteredCardList(), mainActivity.customDeck););
 			lvAdapter.updateDeck(imAdapter.masterDeck);
 			setIsGridView(false);
 		} else {
 			setUpListView();
 		}
+		currentView=listView;
 		updateListViewHeight();
 		listView.setVisibility(View.VISIBLE);
 		gridView.setVisibility(View.INVISIBLE);
@@ -279,6 +281,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 		} else {
 			setUpGridView();
 		}
+		currentView=gridView;
 		listView.setVisibility(View.INVISIBLE);
 		gridView.setVisibility(View.VISIBLE);
 	}
@@ -323,7 +326,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 		listView = (ListView) uiLayout.findViewById(R.id.custom_deck_deck_list);
 
 		// Getting adapter by passing xml data ArrayList
-		lvAdapter = new DeckListViewAdapter(mainActivity, cardViewer.getAdapter().masterDeck, mainActivity.customDeck);
+		lvAdapter = new DeckListViewAdapter(mainActivity, cardViewer.getAdapter().deck, mainActivity.customDeck);
 		cardViewer.setAdapter(lvAdapter);
 		listView.setAdapter(cardViewer.getAdapter());
 		// Click event for single list row
@@ -366,7 +369,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 			} else {
 				removeMultipleCardsDialog = new RemoveMultipleCardsDialogFragmentGinger();
 			}
-			AbstractCard card = isGridView == true ? imAdapter.masterDeck.get(position) : lvAdapter.masterDeck.get(position);
+			AbstractCard card = cardViewer.getCardAtPosition(position);
 			removeMultipleCardsDialog.card = card;
 			removeMultipleCardsDialog.position = position;
 			removeMultipleCardsDialog.animationArg = createAnimationArg(values[0] + cardBackDimension / 2, values[1] - cardBackDimension
@@ -421,27 +424,20 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	}
 
 	public void reloadCustomDeckView() {
-		deck = mainActivity.customDeckCardList;
-		if (isGridView) {
-			imAdapter.updateDeckAndCardViewDeck(deck, cardViewer);
-		} else {
-			lvAdapter.updateDeckAndCardViewDeck(deck, cardViewer);
-		}
-
+		cardViewer.updateDeck();
 		mainActivity.updateCustomDeckData();
 		// Set button availability
 		setDeckButtonAvailablity();
 	}
 
 	public void reloadCustomDeckView(boolean reloadFullView, int position) {
-		deck = mainActivity.customDeckCardList;
 		if (reloadFullView) {
 			reloadCustomDeckView();
 		} else {
 			if (isGridView) {
-				imAdapter.getView(position, gridView.getChildAt(position), null);
+				cardViewer.reloadItem(position, gridView.getChildAt(position));
 			} else {
-				lvAdapter.getView(position, listView.getChildAt(position), null);
+				cardViewer.reloadItem(position, listView.getChildAt(position));
 			}
 			mainActivity.updateCustomDeckData();
 			// Set button availability
@@ -812,4 +808,5 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 		};
 		listView.post(fitsOnScreen);
 	}
+
 }

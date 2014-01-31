@@ -223,7 +223,7 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 	public void changeToListView() {
 		if (listView != null) {
 			cardViewer.setAdapter(lvAdapter);
-			lvAdapter.updateDeck(imAdapter.masterDeck);
+			lvAdapter.updateDeck(imAdapter.deck);
 			setIsGridView(false);
 		} else {
 			setUpListView();
@@ -236,7 +236,7 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 	public void changeToGridView() {
 		if (gridView != null) {
 			cardViewer.setAdapter(imAdapter);
-			imAdapter.updateDeck(lvAdapter.masterDeck);
+			imAdapter.updateDeck(lvAdapter.deck);
 			setIsGridView(true);
 		} else {
 			setUpGridView();
@@ -279,7 +279,7 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 		listView = (ListView) uiLayout.findViewById(R.id.master_deck_deck_list);
 		listView.setHapticFeedbackEnabled(true);
 		// Getting adapter by passing xml data ArrayList
-		lvAdapter = new DeckListViewAdapter(mainActivity, cardViewer.getAdapter().masterDeck, null);
+		lvAdapter = new DeckListViewAdapter(mainActivity, cardViewer.getAdapter().deck, null);
 		cardViewer.setAdapter(lvAdapter);
 		listView.setAdapter(cardViewer.getAdapter());
 		// Click event for single list row
@@ -329,7 +329,7 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 			addMultipleCardsDialog = new AddMultipleCardsDialogFragmentGinger();
 		}
 		if (position >= 0) {
-			AbstractCard card = isGridView == true ? imAdapter.masterDeck.get(position) : lvAdapter.masterDeck.get(position);
+			AbstractCard card = isGridView == true ? imAdapter.deck.get(position) : lvAdapter.deck.get(position);
 
 			addMultipleCardsDialog.card = card;
 			addMultipleCardsDialog.position = position;
@@ -347,7 +347,7 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 	 * @param card
 	 */
 	public boolean addCardToCustomDeck(int position, int value) {
-		AbstractCard card = isGridView == true ? imAdapter.masterDeck.get(position) : lvAdapter.masterDeck.get(position);
+		AbstractCard card = isGridView == true ? imAdapter.deck.get(position) : lvAdapter.deck.get(position);
 		if (card instanceof Card && ((Card) card).cardNumber == 0) {
 			Toast.makeText(mainActivity.getApplicationContext(), card.name + " cannot be added directly to decks.", Toast.LENGTH_SHORT)
 					.show();

@@ -17,6 +17,9 @@
  ******************************************************************************/
 package com.ozawa.hextcgdeckbuilder.UI.filter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -31,6 +34,8 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -51,7 +56,7 @@ import com.ozawa.hextcgdeckbuilder.R.drawable;
 import com.ozawa.hextcgdeckbuilder.R.id;
 import com.ozawa.hextcgdeckbuilder.R.layout;
 import com.ozawa.hextcgdeckbuilder.R.string;
-import com.ozawa.hextcgdeckbuilder.UI.CardListViewer;
+import com.ozawa.hextcgdeckbuilder.UI.CardsViewer;
 import com.ozawa.hextcgdeckbuilder.enums.CardType;
 import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
 
@@ -62,7 +67,7 @@ import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
  * > design guidelines</a> for a complete explanation of the behaviors
  * implemented here.
  */
-public class FilterDrawerFragment extends Fragment {
+public class FilterDrawerFragment extends Fragment implements TextWatcher {
 
 	/**
 	 * Remember the position of the selected item.
@@ -89,9 +94,10 @@ public class FilterDrawerFragment extends Fragment {
 	// private ListView mDrawerListView;
 	private ScrollView					scrollView;
 	private View						mFragmentContainerView;
-	CardListViewer						cardViewer;
+	CardsViewer						cardViewer;
 	private Context						context;
-	private List<FilterButton>			buttons;
+	private List<FilterButton>			buttons = new ArrayList<FilterButton>();
+	private EditText 					searchText;
 	private int							mCurrentSelectedPosition	= 0;
 	private boolean						mFromSavedInstanceState;
 	private boolean						mUserLearnedDrawer;
@@ -140,11 +146,11 @@ public class FilterDrawerFragment extends Fragment {
 	}
 
 	public void updateFilterUI() {
-		for (FilterButton f : associatedButtons) {
+		for (FilterButton f : buttons) {
 			f.updateImage();
 		}
-		if (associatedTextView != null) {
-			associatedTextView.setText("");
+		if (searchText != null) {
+			searchText.setText(cardViewer.getFilterString());
 		}
 	}
 
@@ -153,52 +159,52 @@ public class FilterDrawerFragment extends Fragment {
 		FilterButton button;
 
 		button = (FilterButton) scrollView.findViewById(R.id.blood);
-		cardViewer.addAssociatedButton(button);
+		buttons.add(button);
 		button.setUp(BitmapFactory.decodeResource(res, R.drawable.blood_on), BitmapFactory.decodeResource(res, R.drawable.blood_off),
 				ColorFlag.BLOOD, cardViewer);
 		button = (FilterButton) scrollView.findViewById(R.id.wild);
-		cardViewer.addAssociatedButton(button);
+		buttons.add(button);
 		button.setUp(BitmapFactory.decodeResource(res, R.drawable.wild_on), BitmapFactory.decodeResource(res, R.drawable.wild_off),
 				ColorFlag.WILD, cardViewer);
 		button = (FilterButton) scrollView.findViewById(R.id.ruby);
-		cardViewer.addAssociatedButton(button);
+		buttons.add(button);
 		button.setUp(BitmapFactory.decodeResource(res, R.drawable.ruby_on), BitmapFactory.decodeResource(res, R.drawable.ruby_off),
 				ColorFlag.RUBY, cardViewer);
 		button = (FilterButton) scrollView.findViewById(R.id.sapphire);
-		cardViewer.addAssociatedButton(button);
+		buttons.add(button);
 		button.setUp(BitmapFactory.decodeResource(res, R.drawable.sapphire_on), BitmapFactory.decodeResource(res, R.drawable.sapphire_off),
 				ColorFlag.SAPPHIRE, cardViewer);
 		button = (FilterButton) scrollView.findViewById(R.id.diamond);
-		cardViewer.addAssociatedButton(button);
+		buttons.add(button);
 		button.setUp(BitmapFactory.decodeResource(res, R.drawable.diamond_on), BitmapFactory.decodeResource(res, R.drawable.diamond_off),
 				ColorFlag.DIAMOND, cardViewer);
 		button = (FilterButton) scrollView.findViewById(R.id.colorless);
-		cardViewer.addAssociatedButton(button);
+		buttons.add(button);
 		button.setUp(BitmapFactory.decodeResource(res, R.drawable.colorless_on),
 				BitmapFactory.decodeResource(res, R.drawable.colorless_off), ColorFlag.COLORLESS, cardViewer);
 		button = (FilterButton) scrollView.findViewById(R.id.troop);
-		cardViewer.addAssociatedButton(button);
+		buttons.add(button);
 		button.setUp(BitmapFactory.decodeResource(res, R.drawable.troop_on), BitmapFactory.decodeResource(res, R.drawable.troop_off),
 				CardType.TROOP, cardViewer);
 		button = (FilterButton) scrollView.findViewById(R.id.basicaction);
-		cardViewer.addAssociatedButton(button);
+		buttons.add(button);
 		button.setUp(BitmapFactory.decodeResource(res, R.drawable.basic_on), BitmapFactory.decodeResource(res, R.drawable.basic_off),
 				CardType.BASICACTION, cardViewer);
 		button = (FilterButton) scrollView.findViewById(R.id.quickaction);
-		cardViewer.addAssociatedButton(button);
+		buttons.add(button);
 		button.setUp(BitmapFactory.decodeResource(res, R.drawable.quick_on), BitmapFactory.decodeResource(res, R.drawable.quick_off),
 				CardType.QUICKACTION, cardViewer);
 		button = (FilterButton) scrollView.findViewById(R.id.constant);
-		cardViewer.addAssociatedButton(button);
+		buttons.add(button);
 		button.setUp(BitmapFactory.decodeResource(res, R.drawable.constant_on), BitmapFactory.decodeResource(res, R.drawable.constant_off),
 				CardType.CONSTANT, cardViewer);
 		button = (FilterButton) scrollView.findViewById(R.id.resource);
-		cardViewer.addAssociatedButton(button);
+		buttons.add(button);
 		button.setUp(BitmapFactory.decodeResource(res, R.drawable.resource_on), BitmapFactory.decodeResource(res, R.drawable.resource_off),
 				CardType.RESOURCE, cardViewer);
 		EditText text = (EditText) scrollView.findViewById(R.id.SearchTextField);
-		text.addTextChangedListener(cardViewer);
-		cardViewer.addAssociatedTextView(text);
+		text.addTextChangedListener(this);
+		searchText = text;
 		text.setOnFocusChangeListener(new OnFocusChangeListener() {
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
@@ -253,7 +259,7 @@ public class FilterDrawerFragment extends Fragment {
 	 * @param drawerLayout
 	 *            The DrawerLayout containing this fragment's UI.
 	 */
-	public void setUp(CardListViewer iCardViewer, Context iContext, int fragmentId, DrawerLayout drawerLayout) {
+	public void setUp(CardsViewer iCardViewer, Context iContext, int fragmentId, DrawerLayout drawerLayout) {
 		context = iContext;
 		cardViewer = iCardViewer;
 		mFragmentContainerView = getActivity().findViewById(fragmentId);
@@ -319,7 +325,7 @@ public class FilterDrawerFragment extends Fragment {
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 	}
 
-	public void setUp(View frag, CardListViewer iCardViewer, Context iContext, int fragmentId, DrawerLayout drawerLayout) {
+	public void setUp(View frag, CardsViewer iCardViewer, Context iContext, int fragmentId, DrawerLayout drawerLayout) {
 		context = iContext;
 		cardViewer = iCardViewer;
 		mFragmentContainerView = frag.findViewById(fragmentId);
@@ -437,4 +443,21 @@ public class FilterDrawerFragment extends Fragment {
 	 * pager.setPagingEnabled(enabled); }
 	 */
 
+	@Override
+	public void afterTextChanged(Editable arg0) {
+		cardViewer.setFilterString(arg0.toString());
+	}
+
+	@Override
+	public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
+			int arg3) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+		// TODO Auto-generated method stub
+		
+	}
 }

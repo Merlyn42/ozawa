@@ -38,32 +38,19 @@ import java.util.Map;
 
 public class ImageAdapter extends BaseAdapter {
     protected Context mContext;
-    public List<AbstractCard> masterDeck;
+    protected CardsViewer cardsViewer;
+    
     protected Bitmap back;
     private static int numberOfColumns = 3;
     private static int differenceInHeight = 26;
-    Map<AbstractCard, Integer> customDeck;
+   // private Map<AbstractCard, Integer> customDeck;
 
     public boolean isListView = false;
     
     public ImageAdapter(){}
     public ImageAdapter(Context c, List<AbstractCard> deck, Map<AbstractCard, Integer> customDeck ) {
         mContext = c;
-        masterDeck = deck;
         back= BitmapFactory.decodeResource(c.getResources(), R.drawable.back);
-        this.customDeck=customDeck;
-    }
-
-    public int getCount() {
-        return masterDeck.size();
-    }
-
-    public Object getItem(int position) {
-        return null;
-    }
-
-    public long getItemId(int position) {
-        return 0;
     }
 
     // create a new ImageView for each item referenced by the Adapter
@@ -85,7 +72,7 @@ public class ImageAdapter extends BaseAdapter {
             imageView = (ImageView) convertView;
         }
 
-        buildCardImage(masterDeck.get(position), imageView);
+        buildCardImage(deck.get(position), imageView);
         return imageView;
     }
 
@@ -106,13 +93,8 @@ public class ImageAdapter extends BaseAdapter {
     }
 
     public void updateDeck(List<AbstractCard> cards) {
-        masterDeck=cards;
+        deck=cards;
         notifyDataSetChanged();
     }
     
-    public void updateDeckAndCardViewDeck(List<AbstractCard> cards, CardsViewer cardViewer) {        
-        cardViewer.setCardList(cards); // Update CardViewer Deck
-        masterDeck=cardViewer.getFilteredCardList();
-        notifyDataSetChanged();
-    }
 }

@@ -78,7 +78,7 @@ public class DeckListViewAdapter extends ImageAdapter{
         ImageView imCardAttack = (ImageView)vi.findViewById(R.id.imCardAttack);
         ImageView imCardDefense = (ImageView)vi.findViewById(R.id.imCardDefense);
         
-        AbstractCard card = masterDeck.get(position);
+        AbstractCard card = deck.get(position);
         
 		if (card.colorFlags.length > 0 && card.colorFlags[0] != null 
 				&& !(card instanceof ResourceCard)) {
