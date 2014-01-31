@@ -17,8 +17,30 @@
  ******************************************************************************/
 package com.ozawa.hextcgdeckbuilder.programstate;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import com.ozawa.hextcgdeckbuilder.UI.CardsViewer;
+import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
+import com.ozawa.hextcgdeckbuilder.json.MasterDeck;
+
 import android.app.Application;
 
 public class HexApplication extends Application {
+	
+	CardsViewer customDeckViewer;
+	CardsViewer cardLibraryViewer;
+	public CardsViewer getCustomDeckViewer() {
+		if(customDeckViewer==null){
+			customDeckViewer = new CardsViewer(getApplicationContext(), new ArrayList<AbstractCard>(), new HashMap<AbstractCard, Integer>());
+		}
+		return cardLibraryViewer;
+	}
+	public CardsViewer getCardLibraryViewer() {
+		if(cardLibraryViewer==null){
+			cardLibraryViewer = new CardsViewer(getApplicationContext(), MasterDeck.getMasterDeck(getApplicationContext()), null);
+		}
+		return cardLibraryViewer;
+	}
 
 }
