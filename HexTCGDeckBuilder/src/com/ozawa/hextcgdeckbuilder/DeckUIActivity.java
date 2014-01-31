@@ -20,7 +20,7 @@ package com.ozawa.hextcgdeckbuilder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.ozawa.hextcgdeckbuilder.UI.CardListViewer;
+import com.ozawa.hextcgdeckbuilder.UI.CardsViewer;
 import com.ozawa.hextcgdeckbuilder.UI.CustomViewPager;
 import com.ozawa.hextcgdeckbuilder.UI.TabPagerAdapter;
 import com.ozawa.hextcgdeckbuilder.UI.customdeck.CustomDeckFragment;
@@ -44,24 +44,15 @@ import android.widget.TextView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
 
-public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabListener, FilterDrawerFragment.NavigationDrawerCallbacks, NewDeckListener, LoadDeckListener{
+public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabListener, FilterDrawerFragment.NavigationDrawerCallbacks{
 	
-    public static CardListViewer cardViewer;
+    public static CardsViewer cardViewer;
     
 	private CustomViewPager viewPager;
     private TabPagerAdapter mAdapter;
     public static ActionBar actionBar;
     // Tab titles
     private String[] tabs = {"Custom Deck", "Card Library"};
-    
-    // Current Custom Deck
-    public ArrayList<AbstractCard> customDeckCardList;
-    public HashMap<AbstractCard, Integer> customDeck;
-    public Deck currentCustomDeck;
-    public boolean deckChanged = false;
-    
-    // Database
-    public DatabaseHandler dbHandler;
  
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,10 +63,6 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 	    viewPager = (CustomViewPager) findViewById(R.id.pager);
 	    actionBar = getSupportActionBar();
 	    mAdapter = new TabPagerAdapter(getSupportFragmentManager());
-	    customDeck = new HashMap<AbstractCard, Integer>();
-	    customDeckCardList = new ArrayList<AbstractCard>(customDeck.keySet());
-	    
-	    dbHandler = new DatabaseHandler(this);
 	    
 	    viewPager.setAdapter(mAdapter);
 	    //actionBar.setHomeButtonEnabled(false);
@@ -155,7 +142,6 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
-		// TODO Auto-generated method stub
 	}
 	
 	@Override
@@ -172,103 +158,6 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 		if(mAdapter == null || mAdapter.masterDeckFragment == null || mAdapter.customDeckFragment == null){
 			mAdapter = new TabPagerAdapter(getSupportFragmentManager());
 		}
-	}
-
-	@Override
-	public boolean saveNewDeck(String deckName, boolean resetCustomDeck) {
-		if(mAdapter.customDeckFragment != null){
-			Deck savedDeck = mAdapter.customDeckFragment.saveNewDeck(deckName);			
-			if(savedDeck != null && savedDeck.name.contentEquals(String.valueOf(deckName))){				
-				if(resetCustomDeck){
-					resetCustomDeck();
-				}
-					
-				currentCustomDeck = savedDeck;
-				mAdapter.customDeckFragment.reloadCustomDeckView();
-				deckChanged = false;
-				updateCustomDeckData();
-				actionBar.getTabAt(0).setText(deckName);
-				return true;				
-			}
-		}
-		return false;
-	}
-	
-	@Override
-	public boolean loadDeck(String deckID) {
-		if(mAdapter.customDeckFragment != null){
-			Deck loadedDeck = mAdapter.customDeckFragment.loadDeck(deckID);
-			if(loadedDeck.getID().contentEquals(deckID)){
-				updateCustomDeck(loadedDeck);
-				actionBar.getTabAt(0).setText(loadedDeck.name);
-				mAdapter.customDeckFragment.reloadCustomDeckView();
-				updateCustomDeckData();
-				return true;
-			}			
-		}
-		return false;
-	}
-	
-	public void deleteDeck(){
-		resetCustomDeck();
-	}
-	
-	public boolean isUnsavedDeck(){
-		return (currentCustomDeck == null && !customDeck.isEmpty());
-	}
-	
-	public void updateCustomDeckData(){
-		if(mAdapter.customDeckFragment != null&&mAdapter.customDeckFragment.mNavigationDrawerFragment!=null){
-			ImageView championPortrait = (ImageView) mAdapter.customDeckFragment.mNavigationDrawerFragment.getView().findViewById(R.id.imageChampionPortrait);
-			TextView championName = (TextView) mAdapter.customDeckFragment.mNavigationDrawerFragment.getView().findViewById(R.id.tvChampionName);
-			if(currentCustomDeck != null && currentCustomDeck.champion != null){		
-				int portaitID = HexUtil.getResourceID(currentCustomDeck.champion.hudPortraitSmall, R.drawable.class);
-				if(portaitID != -1){
-					championPortrait.setImageResource(portaitID);
-				}else{
-					championPortrait.setImageResource(R.drawable.championnoportaitsmall);
-				}
-				championName.setText(currentCustomDeck.champion.name);
-			}else{
-				championPortrait.setImageResource(R.drawable.championnoportaitsmall);				
-				championName.setText("No Champion Selected");
-			}
-			if(customDeck != null){
-				TextView deckCardCount = (TextView) mAdapter.customDeckFragment.mNavigationDrawerFragment.getView().findViewById(R.id.tvDeckCardCount);
-				int cardCount = 0;
-				for(int value : customDeck.values()){
-					cardCount += value;
-				}
-				deckCardCount.setText("Card Count: " + cardCount);
-			}
-		}
-		deckChanged = false;
-	}
-	
-	private void resetCustomDeck(){
-		customDeck.clear();
-	    customDeckCardList = new ArrayList<AbstractCard>(customDeck.keySet());
-	    currentCustomDeck = null;
-	    actionBar.getTabAt(0).setText("Custom Deck");
-	    updateCustomDeckData();
-	}
-	
-	private void updateCustomDeck(Deck deck){
-		customDeck.clear();
-		
-		if(deck.deckResources != null){
-			for(DeckResource card : deck.deckResources){
-				for(AbstractCard masterCard : MasterDeck.getMasterDeck(this)){
-					if(masterCard.getID().contentEquals(card.cardID.gUID)){
-						customDeck.put(masterCard, card.cardCount);
-						break;
-					}
-				}
-			}
-		}
-		
-	    customDeckCardList = new ArrayList<AbstractCard>(customDeck.keySet());
-	    updateCustomDeckData();
 	}
 
 	@Override

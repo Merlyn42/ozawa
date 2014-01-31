@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.ozawa.hextcgdeckbuilder.UI.CardsViewer;
+import com.ozawa.hextcgdeckbuilder.UI.customdeck.CustomDeck;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.json.MasterDeck;
 
@@ -30,12 +31,23 @@ public class HexApplication extends Application {
 	
 	CardsViewer customDeckViewer;
 	CardsViewer cardLibraryViewer;
+	CustomDeck customDeck;
+	
+	public CustomDeck getCustomDeck(){
+		if(customDeck == null){
+			customDeck = new CustomDeck(this);
+		}
+		
+		return customDeck;
+	}
+
 	public CardsViewer getCustomDeckViewer() {
 		if(customDeckViewer==null){
 			customDeckViewer = new CardsViewer(getApplicationContext(), new ArrayList<AbstractCard>(), new HashMap<AbstractCard, Integer>());
 		}
-		return cardLibraryViewer;
+		return customDeckViewer;
 	}
+	
 	public CardsViewer getCardLibraryViewer() {
 		if(cardLibraryViewer==null){
 			cardLibraryViewer = new CardsViewer(getApplicationContext(), MasterDeck.getMasterDeck(getApplicationContext()), null);

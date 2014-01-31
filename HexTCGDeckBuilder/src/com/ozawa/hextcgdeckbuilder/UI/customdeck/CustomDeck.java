@@ -34,13 +34,16 @@ public class CustomDeck {
 	private List<AbstractCard> 				customDeckCardList;	// List of all the cards in the custom deck
     private HashMap<AbstractCard, Integer> 	customDeckData; // Custom deck data of cards, and number of cards
     private Deck 							currentCustomDeck; // The current custom deck
+    private boolean 						deckChanged;
     private DatabaseHandler 				dbHandler; // Database handler to save, load, and delete decks
 	private Context 						mContext; // The application context
 	
 	public CustomDeck(Context mContext){
 		this.mContext = mContext;
+		customDeckData = new HashMap<AbstractCard, Integer>();
 		setCustomDeckCardList(new ArrayList<AbstractCard>());
 		dbHandler = new DatabaseHandler(mContext);
+		deckChanged = false;
 	}
 	
 	/**
@@ -56,6 +59,29 @@ public class CustomDeck {
 			customDeckData.put(card, value);
 			customDeckCardList.add(card);
 		}
+		deckChanged = true;
+	}
+	
+	/**
+	 * Remove a card from the custom deck
+	 * 
+	 * @param card
+	 * @return true if the card has been complete removed from custom deck, 
+	 * other false if that card type is still in the deck
+	 */
+	public boolean removeCardFromCustomDeck(AbstractCard card, int value) {
+		if (customDeckData.get(card) != null) {
+			int cardCount = customDeckData.get(card);
+			if (cardCount > value) {
+				customDeckData.put(card, customDeckData.get(card) - value);
+			} else {
+				customDeckData.remove(card);
+				customDeckCardList.remove(card);
+				return true;
+			}
+		}
+		deckChanged = true;
+		return false;
 	}
 	
 	/**
@@ -74,6 +100,33 @@ public class CustomDeck {
 	 */
 	public void setCustomDeckCardList(List<AbstractCard> deck){
 		this.customDeckCardList = deck;
+	}
+	
+	/**
+	 * Get the custom deck data
+	 * 
+	 * @return the data of all cards in the current custom deck and their counts
+	 */
+	public HashMap<AbstractCard, Integer> getCustomDeckData(){
+		return this.customDeckData;
+	}
+	
+	/**
+	 * Get the custom deck data
+	 * 
+	 * @return the data of all cards in the current custom deck and their counts
+	 */
+	public Deck getCurrentCustomDeck(){
+		return this.currentCustomDeck;
+	}
+	
+	/**
+	 * Check if the deck has been changed
+	 * 
+	 * @return true if the deck has been changed since its last save, otherwise false
+	 */
+	public boolean isDeckChanged(){
+		return this.deckChanged;
 	}
 	
 	/**
@@ -98,6 +151,7 @@ public class CustomDeck {
 			return null;
 		}
 		currentCustomDeck = dbHandler.getDeck(String.valueOf(newDeckID));
+		deckChanged = false;
 		return currentCustomDeck;
 	}
 
@@ -110,7 +164,8 @@ public class CustomDeck {
 	public boolean loadDeck(String deckID) {
 		currentCustomDeck = dbHandler.getDeck(deckID);
 		updateCustomDeck(currentCustomDeck);
-		return currentCustomDeck.getID().equalsIgnoreCase(deckID);
+		deckChanged = currentCustomDeck.getID().equalsIgnoreCase(deckID);
+		return deckChanged;
 	}
 
 	/**
@@ -118,9 +173,10 @@ public class CustomDeck {
 	 * 
 	 * @return true if the Deck saved successfully, otherwise false
 	 */
-	private boolean saveDeck() {
+	public boolean saveDeck() {
 		if (currentCustomDeck != null && dbHandler.updateDeck(currentCustomDeck) && dbHandler.updateDeckResources(currentCustomDeck, customDeckData)) {
-				return true;
+			deckChanged = false;
+			return true;
 		}
 
 		return false;
@@ -169,6 +225,7 @@ public class CustomDeck {
 		clearCustomDeckData();
 	    setCustomDeckCardList(new ArrayList<AbstractCard>(customDeckData.keySet()));
 	    currentCustomDeck = null;
+	    deckChanged = false;
 	}
 	
 	/**
@@ -176,7 +233,7 @@ public class CustomDeck {
 	 * 
 	 * @param deck - the deck that should be the current custom deck
 	 */
-	private void updateCustomDeck(Deck deck){
+	public void updateCustomDeck(Deck deck){
 		clearCustomDeckData();
 		
 		if(deck.deckResources != null){

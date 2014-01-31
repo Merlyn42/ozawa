@@ -31,6 +31,7 @@ import com.ozawa.hextcgdeckbuilder.UI.customdeck.CustomDeckFragment;
 import com.ozawa.hextcgdeckbuilder.enums.TutorialType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Card;
+import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 import android.app.Activity;
@@ -177,13 +178,13 @@ public class FullImageActivity extends Activity implements GestureOverlayView.On
 	private void setImage(){
 		AbstractCard card;
 		if(isMaster){
-			card = MasterDeckFragment.cardViewer.getFilteredCardList().get(position);
+			card = ((HexApplication)getApplication()).getCardLibraryViewer().getFilteredCardList().get(position);
         	imageView.setImageBitmap(card.getFullscreenCardBitmap(this));
-        	cardCount = MasterDeckFragment.cardViewer.getFilteredCardList().size();
+        	cardCount = ((HexApplication)getApplication()).getCardLibraryViewer().getFilteredCardList().size();
         } else{
-        	card = CustomDeckFragment.cardViewer.getFilteredCardList().get(position);
+        	card = ((HexApplication)getApplication()).getCustomDeckViewer().getFilteredCardList().get(position);
         	imageView.setImageBitmap(card.getFullscreenCardBitmap(this));
-        	cardCount = CustomDeckFragment.cardViewer.getFilteredCardList().size();
+        	cardCount = ((HexApplication)getApplication()).getCustomDeckViewer().getFilteredCardList().size();
         }
 		if(card instanceof Card && ((Card) card).socketCount > 0){
     		setSocketButton(card);

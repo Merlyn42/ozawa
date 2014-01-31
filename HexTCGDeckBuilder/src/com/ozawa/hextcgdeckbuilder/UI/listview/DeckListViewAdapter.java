@@ -17,9 +17,11 @@
  ******************************************************************************/
 package com.ozawa.hextcgdeckbuilder.UI.listview;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.ozawa.hextcgdeckbuilder.DeckUIActivity;
 import com.ozawa.hextcgdeckbuilder.ImageAdapter;
 import com.ozawa.hextcgdeckbuilder.R;
 import com.ozawa.hextcgdeckbuilder.R.drawable;
@@ -35,17 +38,20 @@ import com.ozawa.hextcgdeckbuilder.R.id;
 import com.ozawa.hextcgdeckbuilder.R.layout;
 import com.ozawa.hextcgdeckbuilder.UI.ImageGetter;
 import com.ozawa.hextcgdeckbuilder.UI.StringGetter;
+import com.ozawa.hextcgdeckbuilder.UI.customdeck.CustomDeck;
 import com.ozawa.hextcgdeckbuilder.enums.ImageGetterType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.ResourceCard;
+import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 public class DeckListViewAdapter extends ImageAdapter{
 
     private static LayoutInflater inflater=null;
-
-    public DeckListViewAdapter(Context c, List<AbstractCard> deck, Map<AbstractCard, Integer> customDeck) {
-        super(c,deck,customDeck);
+    private Context mContext;
+    public DeckListViewAdapter(Context mContext, List<AbstractCard> deck, Map<AbstractCard, Integer> customDeck) {
+        super(mContext,deck,customDeck);
+        this.mContext = mContext;
         inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -165,8 +171,16 @@ public class DeckListViewAdapter extends ImageAdapter{
         buildCardTextView(card, cardDefense, "baseHealthValue", null, null);
         buildCardThreshold(card, cardThreshold);
         buildCardImage(card, thumb_image);
-        if(customDeck!=null&&customDeck.get(card)!=null){
-        	cardCount.setText("Count:"+customDeck.get(card));
+        CustomDeck customDeck;
+        if(mContext instanceof DeckUIActivity){
+        	DeckUIActivity activity = ((DeckUIActivity)mContext);
+            customDeck = ((HexApplication)(activity.getApplication())).getCustomDeck();
+        }else{
+        	customDeck = ((HexApplication)(mContext)).getCustomDeck();
+        }
+        HashMap<AbstractCard, Integer> customDeckData = customDeck.getCustomDeckData();
+        if(customDeckData !=null && customDeckData.get(card) != null){
+        	cardCount.setText("Count: " + customDeckData.get(card));
         }
         return vi;
     }

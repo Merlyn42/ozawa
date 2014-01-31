@@ -28,7 +28,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 
-import com.ozawa.hextcgdeckbuilder.UI.CardListViewer;
+import com.ozawa.hextcgdeckbuilder.UI.CardsViewer;
 import com.ozawa.hextcgdeckbuilder.UI.ImageGetter;
 import com.ozawa.hextcgdeckbuilder.enums.ImageGetterType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ImageAdapter extends BaseAdapter {
-    protected Context mContext;
+    private Context mContext;
     public List<AbstractCard> masterDeck;
     protected Bitmap back;
     private static int numberOfColumns = 3;
@@ -110,7 +110,7 @@ public class ImageAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
     
-    public void updateDeckAndCardViewDeck(List<AbstractCard> cards, CardListViewer cardViewer) {        
+    public void updateDeckAndCardViewDeck(List<AbstractCard> cards, CardsViewer cardViewer) {        
         cardViewer.setCardList(cards); // Update CardViewer Deck
         masterDeck=cardViewer.getFilteredCardList();
         notifyDataSetChanged();

@@ -51,7 +51,7 @@ import com.ozawa.hextcgdeckbuilder.R.drawable;
 import com.ozawa.hextcgdeckbuilder.R.id;
 import com.ozawa.hextcgdeckbuilder.R.layout;
 import com.ozawa.hextcgdeckbuilder.R.string;
-import com.ozawa.hextcgdeckbuilder.UI.CardListViewer;
+import com.ozawa.hextcgdeckbuilder.UI.CardsViewer;
 import com.ozawa.hextcgdeckbuilder.enums.CardType;
 import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
 
@@ -90,7 +90,7 @@ public class FilterDrawerFragment extends Fragment {
 	// private ListView mDrawerListView;
 	private ScrollView					scrollView;
 	private View						mFragmentContainerView;
-	CardListViewer							cardViewer;
+	CardsViewer							cardViewer;
 	private Context						context;
 
 	private int							mCurrentSelectedPosition	= 0;
@@ -245,7 +245,7 @@ public class FilterDrawerFragment extends Fragment {
 	 * @param drawerLayout
 	 *            The DrawerLayout containing this fragment's UI.
 	 */
-	public void setUp(CardListViewer iCardViewer, Context iContext, int fragmentId, DrawerLayout drawerLayout) {
+	public void setUp(CardsViewer iCardViewer, Context iContext, int fragmentId, DrawerLayout drawerLayout) {
 		context = iContext;
 		cardViewer = iCardViewer;
 		mFragmentContainerView = getActivity().findViewById(fragmentId);
@@ -311,7 +311,7 @@ public class FilterDrawerFragment extends Fragment {
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 	}
 
-	public void setUp(View frag, CardListViewer iCardViewer, Context iContext, int fragmentId, DrawerLayout drawerLayout) {
+	public void setUp(View frag, CardsViewer iCardViewer, Context iContext, int fragmentId, DrawerLayout drawerLayout) {
 		context = iContext;
 		cardViewer = iCardViewer;
 		mFragmentContainerView = frag.findViewById(fragmentId);

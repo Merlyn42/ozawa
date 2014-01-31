@@ -19,7 +19,7 @@ package com.ozawa.hextcgdeckbuilder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import com.ozawa.hextcgdeckbuilder.UI.CardListViewer;
+import com.ozawa.hextcgdeckbuilder.UI.CardsViewer;
 import com.ozawa.hextcgdeckbuilder.UI.CustomViewPager;
 import com.ozawa.hextcgdeckbuilder.UI.PlaceholderFragment;
 import com.ozawa.hextcgdeckbuilder.UI.TutorialEventListener;
@@ -33,6 +33,7 @@ import com.ozawa.hextcgdeckbuilder.enums.TutorialType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 import com.ozawa.hextcgdeckbuilder.json.MasterDeck;
+import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 import com.espian.showcaseview.ShowcaseViews;
@@ -88,7 +89,7 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 	private FilterDrawerFragment	mNavigationDrawerFragment;
 	private ShowcaseView.ConfigOptions	co;
 	ShowcaseViews						mViews;
-	public static CardListViewer			cardViewer;
+	public static CardsViewer			cardViewer;
 	public final static String			GETDECK		= "GETDECK";
 	private static final String			PREFS_NAME	= "FirstLaunchPrefCardLibrary";
 	private GestureLibrary				gesLibrary;
@@ -146,10 +147,10 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 		ShowcaseView.ConfigOptions co = new ShowcaseView.ConfigOptions();
 		co.hideOnClickOutside = true;
 
-		cardViewer = new CardListViewer(mainActivity, MasterDeck.getMasterDeck(container.getContext()), null);
+		cardViewer = new CardsViewer(mainActivity, MasterDeck.getMasterDeck(container.getContext()), null);
 		imAdapter = cardViewer.getAdapter();
 		uiLayout = (DrawerLayout) inflater.inflate(R.layout.fragment_master_deck, container, false);
-
+		
 		mNavigationDrawerFragment = (FilterDrawerFragment) mainActivity.getSupportFragmentManager().findFragmentById(
 				R.id.master_deck_navigation_drawer);
 		// Set up the drawer.
@@ -346,9 +347,10 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 	 * 
 	 * @param card
 	 */
-	public boolean addCardToCustomDeck(int position, int value) {
+	public boolean addCardToCustomDeck(int position, int value) {		
 		AbstractCard card = isGridView == true ? imAdapter.masterDeck.get(position) : lvAdapter.masterDeck.get(position);
-		if (card instanceof Card && ((Card) card).cardNumber == 0) {
+		((HexApplication)getActivity().getApplication()).getCustomDeck().addCardToCustomDeck(card, value);
+/*		if (card instanceof Card && ((Card) card).cardNumber == 0) {
 			Toast.makeText(mainActivity.getApplicationContext(), card.name + " cannot be added directly to decks.", Toast.LENGTH_SHORT)
 					.show();
 			return false;
@@ -360,7 +362,7 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 		} else {
 			customDeck.put(card, customDeck.get(card) + value);
 		}
-		((DeckUIActivity) mainActivity).deckChanged = true;
+		((DeckUIActivity) mainActivity).deckChanged = true;*/
 		return true;
 	}
 

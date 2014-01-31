@@ -20,11 +20,14 @@ package com.ozawa.hextcgdeckbuilder.UI.multiplecarddialogs;
 import java.util.HashMap;
 
 import com.ozawa.hextcgdeckbuilder.R;
+import com.ozawa.hextcgdeckbuilder.UI.customdeck.CustomDeck;
 import com.ozawa.hextcgdeckbuilder.UI.customdeck.CustomDeckFragment;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
+import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -57,11 +60,11 @@ public class RemoveMultipleCardsDialogFragment extends AbstractMultipleCardsDial
 		affirmButton.setText("Remove Cards");
 		cancelButton = (Button) dialog.findViewById(R.id.buttonCancelAddCards);
 		picker = (NumberPicker) dialog.findViewById(R.id.addCardsNumberPicker);
-
-		HashMap<AbstractCard, Integer> customDeck = mainActivity.customDeck;
-		picker.setMaxValue(customDeck.get(card));
+		CustomDeck customDeck = ((HexApplication)getActivity().getApplication()).getCustomDeck();
+        HashMap<AbstractCard, Integer> customDeckData = customDeck.getCustomDeckData();
+		picker.setMaxValue(customDeckData.get(card));
 		picker.setMinValue(1);
-		picker.setValue(customDeck.get(card));
+		picker.setValue(customDeckData.get(card));
 
 		affirmButton.setOnClickListener(new OnClickListener() {
 

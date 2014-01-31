@@ -35,7 +35,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-public class CardListViewer implements TextWatcher {
+public class CardsViewer implements TextWatcher {
     private Filter filter;
     private List<AbstractCard> cards;
     private ImageAdapter adapter;
@@ -43,7 +43,7 @@ public class CardListViewer implements TextWatcher {
     private ArrayList<FilterButton> associatedButtons = new ArrayList<FilterButton>();
     private TextView associatedTextView;
 
-    public CardListViewer(Context context,List<AbstractCard> abstractCards,Map<AbstractCard, Integer> customDeck){
+    public CardsViewer(Context context,List<AbstractCard> abstractCards,Map<AbstractCard, Integer> customDeck){
         filter = new Filter();
         cards= new ArrayList<AbstractCard>(abstractCards);
         Collections.sort(cards,comparator);

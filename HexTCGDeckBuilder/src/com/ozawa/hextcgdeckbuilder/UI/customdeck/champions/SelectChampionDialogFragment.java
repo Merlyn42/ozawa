@@ -27,6 +27,7 @@ import com.ozawa.hextcgdeckbuilder.UI.SelectChampionArrayAdapter;
 import com.ozawa.hextcgdeckbuilder.database.DatabaseHandler;
 import com.ozawa.hextcgdeckbuilder.hexentities.Champion;
 import com.ozawa.hextcgdeckbuilder.hexentities.Deck;
+import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 import android.app.Dialog;
@@ -60,7 +61,7 @@ public class SelectChampionDialogFragment extends DialogFragment {
 		final Dialog dialog = new Dialog(getActivity());
 		DatabaseHandler dbHandler = new DatabaseHandler(getActivity());
 		final List<Champion> allChampions = dbHandler.allChampions;
-		currentCustomDeck = ((DeckUIActivity) getActivity()).currentCustomDeck;
+		currentCustomDeck = ((HexApplication)getActivity().getApplication()).getCustomDeck().getCurrentCustomDeck();
 		
 		if(currentCustomDeck != null && currentCustomDeck.champion != null){
 			selectedChampion = currentCustomDeck.champion;
@@ -136,16 +137,16 @@ public class SelectChampionDialogFragment extends DialogFragment {
 		});
 		
 		Button selectChampion = (Button) linearLayout.findViewById(R.id.buttonSaveSelectedChampion);
-		if(((DeckUIActivity) getActivity()).currentCustomDeck != null){
+		if(currentCustomDeck != null){
 		selectChampion.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-				((DeckUIActivity) getActivity()).currentCustomDeck.champion = selectedChampion;
-				 if(((DeckUIActivity) getActivity()).currentCustomDeck.champion == selectedChampion){
+				currentCustomDeck.champion = selectedChampion;
+				 if(currentCustomDeck.champion == selectedChampion){
 					 Toast.makeText(getActivity().getApplicationContext(), "Champion selected." , Toast.LENGTH_SHORT).show();
-					 ((DeckUIActivity) getActivity()).updateCustomDeckData();
+					 //((DeckUIActivity) getActivity()).updateCustomDeckData();
 					 dialog.dismiss();
 				 }else{
 					 Toast.makeText(getActivity().getApplicationContext(), "Failed to select champion. Please try again." , Toast.LENGTH_SHORT).show();
