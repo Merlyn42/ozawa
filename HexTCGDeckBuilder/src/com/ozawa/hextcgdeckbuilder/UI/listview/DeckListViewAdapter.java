@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,9 +32,6 @@ import android.widget.TextView;
 import com.ozawa.hextcgdeckbuilder.DeckUIActivity;
 import com.ozawa.hextcgdeckbuilder.ImageAdapter;
 import com.ozawa.hextcgdeckbuilder.R;
-import com.ozawa.hextcgdeckbuilder.R.drawable;
-import com.ozawa.hextcgdeckbuilder.R.id;
-import com.ozawa.hextcgdeckbuilder.R.layout;
 import com.ozawa.hextcgdeckbuilder.UI.ImageGetter;
 import com.ozawa.hextcgdeckbuilder.UI.StringGetter;
 import com.ozawa.hextcgdeckbuilder.UI.customdeck.Deck;

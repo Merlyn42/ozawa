@@ -110,8 +110,11 @@ public class ImageAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
     
+    public void setDeck(List<AbstractCard> deck){
+    	masterDeck = deck;
+    }
     public void updateDeckAndCardViewDeck(List<AbstractCard> cards, CardsViewer cardViewer) {        
-        cardViewer.setCardList(cards); // Update CardViewer Deck
+        //cardViewer.setCardList(cards); // Update CardViewer Deck
         masterDeck=cardViewer.getFilteredCardList();
         notifyDataSetChanged();
     }

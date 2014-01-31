@@ -24,8 +24,6 @@ import com.ozawa.hextcgdeckbuilder.R;
 import com.ozawa.hextcgdeckbuilder.UI.LoadDeckArrayAdapter;
 import com.ozawa.hextcgdeckbuilder.database.DatabaseHandler;
 import com.ozawa.hextcgdeckbuilder.hexentities.HexDeck;
-import com.ozawa.hextcgdeckbuilder.json.MasterDeck;
-import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
 
 import android.app.Dialog;
 import android.graphics.drawable.ColorDrawable;
@@ -42,13 +40,9 @@ public class LoadDeckDialogFragment extends DialogFragment {
 	
 	private static final String DECK_NAMES = "DECKNAMES";
 	private ListView listView;
-	public interface LoadDeckListener{
-		boolean loadDeck(String deckID);
-	}
 	
 	public static LoadDeckDialogFragment newInstance(ArrayList<String> deckNames){
 		LoadDeckDialogFragment dialog = new LoadDeckDialogFragment();
-		
 		Bundle args = new Bundle();
 		args.putStringArrayList(DECK_NAMES, deckNames);
 		
@@ -79,8 +73,7 @@ public class LoadDeckDialogFragment extends DialogFragment {
 					long id) {
 				HexDeck  deck = (HexDeck) listView.getItemAtPosition(position);
 				if(deck != null){
-					Deck customDeck = ((HexApplication)getActivity().getApplication()).getCustomDeck();
-					if(customDeck.loadDeck(deck.getID(), MasterDeck.getMasterDeck(getActivity()))){
+					if(((CustomDeckFragment)getTargetFragment()).loadDeck(deck.getID())){
 						Toast.makeText(getActivity(), "Loaded Deck successfully." , Toast.LENGTH_LONG).show();
 						dialog.dismiss();
 					}else{

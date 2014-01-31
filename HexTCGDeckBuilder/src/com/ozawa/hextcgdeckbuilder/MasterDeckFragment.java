@@ -138,7 +138,8 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		mainActivity = super.getActivity();
+		mainActivity = getActivity();
+		HexApplication hexApplication = (HexApplication) mainActivity.getApplication();
 
 		gesLibrary = GestureLibraries.fromRawResource(mainActivity, R.raw.gestures);
 		if (!gesLibrary.load()) {
@@ -146,8 +147,10 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 		}
 		ShowcaseView.ConfigOptions co = new ShowcaseView.ConfigOptions();
 		co.hideOnClickOutside = true;
-
-		cardViewer = new CardsViewer(mainActivity, MasterDeck.getMasterDeck(container.getContext()), null);
+		
+		if(cardViewer == null){
+			cardViewer = hexApplication.getCardLibraryViewer();
+		}
 		imAdapter = cardViewer.getAdapter();
 		uiLayout = (DrawerLayout) inflater.inflate(R.layout.fragment_master_deck, container, false);
 		
@@ -256,7 +259,7 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 				hideShowcase();
 				// Sending image id to FullScreenActivity
-				Intent i = new Intent(mainActivity.getApplicationContext(), FullImageActivity.class);
+				Intent i = new Intent(mainActivity, FullImageActivity.class);
 				// passing array index
 				i.putExtra("id", position);
 				i.putExtra("isMaster", true);
@@ -290,7 +293,7 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				hideShowcase();
 				// Sending image id to FullScreenActivity
-				Intent i = new Intent(mainActivity.getApplicationContext(), FullImageActivity.class);
+				Intent i = new Intent(mainActivity, FullImageActivity.class);
 				// passing array index
 				i.putExtra("id", position);
 				i.putExtra("isMaster", true);

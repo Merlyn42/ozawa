@@ -21,7 +21,6 @@ import java.io.InputStream;
 
 import com.ozawa.hextcgdeckbuilder.DeckUIActivity;
 import com.ozawa.hextcgdeckbuilder.R;
-import com.ozawa.hextcgdeckbuilder.R.drawable;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 import android.app.Activity;

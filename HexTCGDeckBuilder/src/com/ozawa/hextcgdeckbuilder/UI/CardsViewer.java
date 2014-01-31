@@ -122,4 +122,9 @@ public class CardsViewer implements TextWatcher {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public void updateDeckAndView(){
+		adapter.setDeck(getFilteredCardList());
+		adapter.notifyDataSetChanged();
+	}
 }

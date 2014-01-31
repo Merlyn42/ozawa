@@ -24,8 +24,6 @@ import com.ozawa.hextcgdeckbuilder.UI.CardsViewer;
 import com.ozawa.hextcgdeckbuilder.UI.CustomViewPager;
 import com.ozawa.hextcgdeckbuilder.UI.TabPagerAdapter;
 import com.ozawa.hextcgdeckbuilder.UI.customdeck.CustomDeckFragment;
-import com.ozawa.hextcgdeckbuilder.UI.customdeck.LoadDeckDialogFragment.LoadDeckListener;
-import com.ozawa.hextcgdeckbuilder.UI.customdeck.NewDeckDialogFragment.NewDeckListener;
 import com.ozawa.hextcgdeckbuilder.UI.filter.FilterDrawerFragment;
 import com.ozawa.hextcgdeckbuilder.database.DatabaseHandler;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;

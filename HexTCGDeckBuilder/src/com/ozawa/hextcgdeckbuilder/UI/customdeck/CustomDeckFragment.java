@@ -104,7 +104,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
 	 */
-	public FilterDrawerFragment		mNavigationDrawerFragment;
+	public FilterDrawerFragment		mFilterDrawerFragment;
 
 	private CardsViewer			cardViewer;
 	public final static String			GETDECK		= "GETDECK";
@@ -142,7 +142,6 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 			cardViewer = hexApplication.getCustomDeckViewer();
 		}
 		
-		imAdapter = cardViewer.getAdapter();
 		uiLayout = (DrawerLayout) inflater.inflate(R.layout.fragment_custom_deck, container, false);
 
 		setupNavigationDrawer();
@@ -169,7 +168,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	@Override
 	public void onResume() {
 		super.onResume();
-		if(mNavigationDrawerFragment == null){
+		if(mFilterDrawerFragment == null){
 			setupNavigationDrawer();
 		}
 	}
@@ -177,21 +176,21 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	@Override
 	public void onStart() {
 		super.onStart();
-		if(mNavigationDrawerFragment == null){
+		if(mFilterDrawerFragment == null){
 			setupNavigationDrawer();
 		}
 	}
 
 	private void setupNavigationDrawer() {
-		mNavigationDrawerFragment = (FilterDrawerFragment) getActivity().getSupportFragmentManager().findFragmentById(
+		mFilterDrawerFragment = (FilterDrawerFragment) getActivity().getSupportFragmentManager().findFragmentById(
 				R.id.custom_deck_navigation_drawer);
 		// Set up the drawer.
-		mNavigationDrawerFragment.setUp(uiLayout, cardViewer, mContext, R.id.custom_deck_navigation_drawer,
+		mFilterDrawerFragment.setUp(uiLayout, cardViewer, mContext, R.id.custom_deck_navigation_drawer,
 				(DrawerLayout) uiLayout.findViewById(R.id.custom_deck_drawer_layout));
-		mNavigationDrawerFragment.setUpCustomDeckViews();
+		mFilterDrawerFragment.setUpCustomDeckViews();
 		setCustomDeckButtonListeners();
 		FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-		transaction.add(R.id.custom_deck_navigation_drawer, mNavigationDrawerFragment).commit();
+		transaction.add(R.id.custom_deck_navigation_drawer, mFilterDrawerFragment).commit();
 	}
 
 	public ArrayList<InputStream> getJson() throws IllegalAccessException {
@@ -264,7 +263,9 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	public void changeToListView() {
 		if (listView != null) {
 			cardViewer.setAdapter(lvAdapter);
-			lvAdapter.updateDeck(imAdapter.masterDeck);
+			if(imAdapter != null){
+				lvAdapter.updateDeck(imAdapter.masterDeck);
+			}
 			setIsGridView(false);
 		} else {
 			setUpListView();
@@ -277,7 +278,9 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	public void changeToGridView() {
 		if (gridView != null) {
 			cardViewer.setAdapter(imAdapter);
-			imAdapter.updateDeck(lvAdapter.masterDeck);
+			if(lvAdapter != null){
+				imAdapter.updateDeck(lvAdapter.masterDeck);
+			}
 			setIsGridView(true);
 		} else {
 			setUpGridView();
@@ -287,9 +290,10 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	}
 
 	private void setUpGridView() {
-		gridView = (GridView) uiLayout.findViewById(R.id.custom_deck_grid_view);
-
-		gridView.setAdapter(cardViewer.getAdapter());
+		imAdapter = cardViewer.getAdapter();
+		
+		gridView = (GridView) uiLayout.findViewById(R.id.custom_deck_grid_view);		
+		gridView.setAdapter(imAdapter);
 
 		gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
@@ -328,7 +332,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 		// Getting adapter by passing xml data ArrayList
 		lvAdapter = new DeckListViewAdapter(mContext, cardViewer.getAdapter().masterDeck, customDeck.getDeckData());
 		cardViewer.setAdapter(lvAdapter);
-		listView.setAdapter(cardViewer.getAdapter());
+		listView.setAdapter(lvAdapter);
 		// Click event for single list row
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -424,21 +428,15 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	}
 
 	public void reloadCustomDeckView() {
-		List<AbstractCard> deck = customDeck.getDeckCardList();
-		if (isGridView) {
-			imAdapter.updateDeckAndCardViewDeck(deck, cardViewer);
-		} else {
-			lvAdapter.updateDeckAndCardViewDeck(deck, cardViewer);
-		}
-		
+		cardViewer.updateDeckAndView();
 		updateCustomDeckData();
 		// Set button availability
 		setDeckButtonAvailablity();
 	}
 	
 	public void updateCustomDeckData(){
-			ImageView championPortrait = (ImageView) mNavigationDrawerFragment.getView().findViewById(R.id.imageChampionPortrait);
-			TextView championName = (TextView) mNavigationDrawerFragment.getView().findViewById(R.id.tvChampionName);
+			ImageView championPortrait = (ImageView) mFilterDrawerFragment.getView().findViewById(R.id.imageChampionPortrait);
+			TextView championName = (TextView) mFilterDrawerFragment.getView().findViewById(R.id.tvChampionName);
 			HexDeck currentCustomDeck = customDeck.getCurrentDeck();
 			if(currentCustomDeck != null && currentCustomDeck.champion != null){		
 				int portaitID = HexUtil.getResourceID(currentCustomDeck.champion.hudPortraitSmall, R.drawable.class);
@@ -453,7 +451,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 				championName.setText("No Champion Selected");
 			}
 			if(customDeck.getDeckData() != null){
-				TextView deckCardCount = (TextView) mNavigationDrawerFragment.getView().findViewById(R.id.tvDeckCardCount);
+				TextView deckCardCount = (TextView) mFilterDrawerFragment.getView().findViewById(R.id.tvDeckCardCount);
 				int cardCount = 0;
 				for(int value : customDeck.getDeckData().values()){
 					cardCount += value;
@@ -516,7 +514,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	 */
 	private void setCustomDeckButtonListeners() {
 		final CustomDeckFragment fragment = this;
-		Button newDeck = (Button) mNavigationDrawerFragment.getView().findViewById(R.id.buttonNewDeck);
+		Button newDeck = (Button) mFilterDrawerFragment.getView().findViewById(R.id.buttonNewDeck);
 		newDeck.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -531,7 +529,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 
 		});
 
-		Button loadDeck = (Button) mNavigationDrawerFragment.getView().findViewById(R.id.buttonLoadDeck);
+		Button loadDeck = (Button) mFilterDrawerFragment.getView().findViewById(R.id.buttonLoadDeck);
 		loadDeck.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -547,7 +545,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 
 		});
 
-		saveDeck = (Button) mNavigationDrawerFragment.getView().findViewById(R.id.buttonSaveDeck);
+		saveDeck = (Button) mFilterDrawerFragment.getView().findViewById(R.id.buttonSaveDeck);
 		saveDeck.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -562,7 +560,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 
 		});
 
-		deleteDeck = (Button) mNavigationDrawerFragment.getView().findViewById(R.id.buttonDeleteDeck);
+		deleteDeck = (Button) mFilterDrawerFragment.getView().findViewById(R.id.buttonDeleteDeck);
 		deleteDeck.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -578,7 +576,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 
 		});
 
-		selectChampion = (Button) mNavigationDrawerFragment.getView().findViewById(R.id.buttonSelectChampion);
+		selectChampion = (Button) mFilterDrawerFragment.getView().findViewById(R.id.buttonSelectChampion);
 		selectChampion.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -595,6 +593,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	 */
 	private void showNewDeckPopup() {
 		NewDeckDialogFragment newDeckDialog = new NewDeckDialogFragment();
+		newDeckDialog.setTargetFragment(this, 1);
 		newDeckDialog.show(getActivity().getSupportFragmentManager(), "New Deck Popup");
 	}
 
@@ -603,6 +602,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	 */
 	private void showLoadDeckPopup() {
 		LoadDeckDialogFragment loadDeckDialog = new LoadDeckDialogFragment();
+		loadDeckDialog.setTargetFragment(this, 1);
 		loadDeckDialog.show(getActivity().getSupportFragmentManager(), "Load Deck Popup");
 	}
 
@@ -611,6 +611,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	 */
 	private void showSelectChampionPopup() {
 		SelectChampionDialogFragment selectChampionDialog = new SelectChampionDialogFragment();
+		selectChampionDialog.setTargetFragment(this, 1);
 		selectChampionDialog.show(getActivity().getSupportFragmentManager(), "Select Champion Popup");
 	}
 
@@ -620,8 +621,12 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	 * @param deckName
 	 * @return The newly saved Deck
 	 */
-	public HexDeck saveNewDeck(String deckName) {
-		return customDeck.saveNewDeck(deckName);
+	public boolean saveNewDeck(String deckName) {
+		if(customDeck.saveNewDeck(deckName) != null){
+			reloadCustomDeck(deckName);
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -630,10 +635,13 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	 * @param deckID
 	 * @return The Deck retrieved from the database with the given ID
 	 */
-	public void loadDeck(String deckID) {
+	public boolean loadDeck(String deckID) {
 		if(customDeck.loadDeck(deckID, MasterDeck.getMasterDeck(mContext))){
 			reloadCustomDeck(customDeck.getCurrentDeck().name);
+			return true;
 		}
+		
+		return false;
 	}
 
 	/**
@@ -644,6 +652,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	private boolean saveDeck() {
 		if (customDeck.getCurrentDeck() != null) {
 			if (customDeck.saveDeck()) {
+				reloadCustomDeck(customDeck.getCurrentDeck().name);
 				Toast.makeText(mContext, "Deck successfully saved.", Toast.LENGTH_SHORT).show();
 				return true;
 			} else {
@@ -673,7 +682,6 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	
 	private void reloadCustomDeck(String deckName){
 		((ActionBarActivity)getActivity()).getSupportActionBar().getTabAt(0).setText(deckName);
-		updateCustomDeckData();
 		reloadCustomDeckView();
 	}
 
@@ -684,7 +692,12 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	 * @return true if the Deck saved successfully, otherwise false
 	 */
 	private boolean saveUnsavedDeck(String deckName) {
-		return customDeck.saveUnsavedDeck(deckName);
+		if(customDeck.saveUnsavedDeck(deckName)){
+			reloadCustomDeck(deckName);
+			return true;
+		}
+		
+		return false;
 	}
 
 	/**

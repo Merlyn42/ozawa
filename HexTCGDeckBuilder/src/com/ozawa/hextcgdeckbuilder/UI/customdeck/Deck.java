@@ -156,6 +156,7 @@ public class Deck {
 		if (newDeckID == -1) {
 			return null;
 		}
+		resetDeck();
 		currentDeck = dbHandler.getDeck(String.valueOf(newDeckID));
 		deckChanged = false;
 		return currentDeck;

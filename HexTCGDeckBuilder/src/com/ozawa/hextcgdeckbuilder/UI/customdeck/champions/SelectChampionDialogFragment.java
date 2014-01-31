@@ -20,10 +20,10 @@ package com.ozawa.hextcgdeckbuilder.UI.customdeck.champions;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import com.ozawa.hextcgdeckbuilder.DeckUIActivity;
 import com.ozawa.hextcgdeckbuilder.R;
 import com.ozawa.hextcgdeckbuilder.R.drawable;
 import com.ozawa.hextcgdeckbuilder.UI.SelectChampionArrayAdapter;
+import com.ozawa.hextcgdeckbuilder.UI.customdeck.CustomDeckFragment;
 import com.ozawa.hextcgdeckbuilder.database.DatabaseHandler;
 import com.ozawa.hextcgdeckbuilder.hexentities.Champion;
 import com.ozawa.hextcgdeckbuilder.hexentities.HexDeck;
@@ -146,7 +146,7 @@ public class SelectChampionDialogFragment extends DialogFragment {
 				currentCustomDeck.champion = selectedChampion;
 				 if(currentCustomDeck.champion == selectedChampion){
 					 Toast.makeText(getActivity().getApplicationContext(), "Champion selected." , Toast.LENGTH_SHORT).show();
-					 //((DeckUIActivity) getActivity()).updateCustomDeckData();
+					 ((CustomDeckFragment) getTargetFragment()).updateCustomDeckData();
 					 dialog.dismiss();
 				 }else{
 					 Toast.makeText(getActivity().getApplicationContext(), "Failed to select champion. Please try again." , Toast.LENGTH_SHORT).show();

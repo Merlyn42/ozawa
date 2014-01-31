@@ -91,7 +91,7 @@ public class FilterDrawerFragment extends Fragment {
 	private View						mFragmentContainerView;
 	CardsViewer							cardViewer;
 	private Context						context;
-	private List<FilterButton>			buttons;
+	//private List<FilterButton>			buttons;
 	private int							mCurrentSelectedPosition	= 0;
 	private boolean						mFromSavedInstanceState;
 	private boolean						mUserLearnedDrawer;
@@ -139,14 +139,14 @@ public class FilterDrawerFragment extends Fragment {
 		return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
 	}
 
-	public void updateFilterUI() {
+	/*public void updateFilterUI() {
 		for (FilterButton f : associatedButtons) {
 			f.updateImage();
 		}
 		if (associatedTextView != null) {
 			associatedTextView.setText("");
 		}
-	}
+	}*/
 
 	private void setUpButtons() {
 		Resources res = context.getResources();

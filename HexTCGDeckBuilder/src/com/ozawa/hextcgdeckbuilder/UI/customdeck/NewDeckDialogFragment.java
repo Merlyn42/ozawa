@@ -23,6 +23,7 @@ import android.app.Dialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.HapticFeedbackConstants;
@@ -41,11 +42,10 @@ public class NewDeckDialogFragment extends DialogFragment {
 	String text = "";
 	DeckUIActivity mainActivity;
 
-	public interface NewDeckListener {
-		boolean saveNewDeck(String deckName, boolean resetCustomDeck);
-	}
-
-	public NewDeckDialogFragment() {
+	public static NewDeckDialogFragment newInstance(Fragment customDeckFragment){
+		NewDeckDialogFragment dialog = new NewDeckDialogFragment();
+		
+		return dialog;
 	}
 
 	@Override
@@ -69,10 +69,9 @@ public class NewDeckDialogFragment extends DialogFragment {
 			@Override
 			public void onClick(View v) {
 				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-				String deckName = newDeckName.getText().toString();				
-				NewDeckListener activity = (NewDeckListener) getActivity();
+				String deckName = newDeckName.getText().toString();			
 				
-				if (activity.saveNewDeck(deckName, true)) {
+				if (((CustomDeckFragment)getTargetFragment()).saveNewDeck(deckName)) {
 					Toast.makeText(getActivity().getApplicationContext(),
 							"Deck successfully saved.", Toast.LENGTH_SHORT).show();
 					dialog.dismiss();
