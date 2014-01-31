@@ -25,6 +25,7 @@ import java.util.List;
 
 import com.espian.showcaseview.ShowcaseView;
 import com.espian.showcaseview.ShowcaseView.ConfigOptions;
+import com.ozawa.hextcgdeckbuilder.DeckUIActivity;
 import com.ozawa.hextcgdeckbuilder.FullImageActivity;
 import com.ozawa.hextcgdeckbuilder.ImageAdapter;
 import com.ozawa.hextcgdeckbuilder.R;
@@ -248,6 +249,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 						}
 					} else if (prediction.name.equalsIgnoreCase("anti clockwise") || prediction.name.equalsIgnoreCase("clockwise")) {
 						cardViewer.clearFilter();
+						mFilterDrawerFragment.updateFilterUI();
 					}
 				}
 			}

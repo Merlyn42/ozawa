@@ -20,6 +20,7 @@ package com.ozawa.hextcgdeckbuilder.UI;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.TextView;
 
 import com.ozawa.hextcgdeckbuilder.ImageAdapter;
@@ -36,13 +37,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-public class CardsViewer implements TextWatcher {
+public class CardsViewer{
     private Filter filter;
     private Deck deck;
     private ImageAdapter adapter;
     private Comparator<AbstractCard> comparator = new CardComparatorColor();
-    private ArrayList<FilterButton> associatedButtons = new ArrayList<FilterButton>();
-    private TextView associatedTextView;
 
     public CardsViewer(Context context,Deck deck){
         filter = new Filter();
@@ -51,23 +50,9 @@ public class CardsViewer implements TextWatcher {
         adapter = new ImageAdapter(context,filter.filter(deck.getDeckCardList()), deck.getDeckData());       
     }
     
-    public void addAssociatedButton(FilterButton button){
-    	associatedButtons.add(button);
-    }
-    
-    public void addAssociatedTextView(TextView textView){
-    	associatedTextView =textView;
-    }
-    
     public void clearFilter(){
     	filter = new Filter();
     	adapter.updateDeck(filter.filter(deck.getDeckCardList()));
-    	for (FilterButton f:associatedButtons){
-    		f.updateImage();
-    	}
-    	if(associatedTextView!=null){
-    		associatedTextView.setText("");
-    	}
     }
     
     public List<AbstractCard> getFilteredCardList(){
@@ -77,6 +62,15 @@ public class CardsViewer implements TextWatcher {
     public List<AbstractCard> getUnFilteredCardList(){
     	return new ArrayList<AbstractCard>(deck.getDeckCardList());
     }
+
+	public String getFilterString() {
+		return filter.getFilterString();
+	}
+
+	public void setFilterString(String filterString) {
+		filter.setFilterString(filterString);
+		adapter.updateDeck(getFilteredCardList());
+	}
 
     public boolean toggleFilter(CardEnum e){
         boolean result;
@@ -103,25 +97,6 @@ public class CardsViewer implements TextWatcher {
     	this.adapter = adapter;
     }
 
-	@Override
-	public void afterTextChanged(Editable arg0) {
-		filter.setFilterString(arg0.toString());
-		adapter.updateDeck(filter.filter(deck.getDeckCardList()));
-		
-	}
-
-	@Override
-	public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
-			int arg3) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	public void updateDeckAndView(){
 		adapter.setDeck(getFilteredCardList());

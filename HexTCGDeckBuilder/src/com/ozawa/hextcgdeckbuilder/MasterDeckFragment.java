@@ -218,6 +218,7 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 																			// pages
 					} else if (prediction.name.equalsIgnoreCase("anti clockwise") || prediction.name.equalsIgnoreCase("clockwise")) {
 						cardViewer.clearFilter();
+						mNavigationDrawerFragment.updateFilterUI();
 					}
 				}
 			}
