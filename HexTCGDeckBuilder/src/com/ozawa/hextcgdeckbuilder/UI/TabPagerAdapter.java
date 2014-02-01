@@ -17,40 +17,61 @@
  ******************************************************************************/
 package com.ozawa.hextcgdeckbuilder.UI;
 
+import java.util.HashMap;
+
 import com.ozawa.hextcgdeckbuilder.MasterDeckFragment;
 import com.ozawa.hextcgdeckbuilder.UI.customdeck.CustomDeckFragment;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.view.ViewGroup;
 
 public class TabPagerAdapter extends FragmentStatePagerAdapter{
 	
 	private static final int tabCount = 2;
-	public CustomDeckFragment customDeckFragment;
-	public MasterDeckFragment masterDeckFragment;
+	private HashMap<Integer, Fragment> fragmentRefMap = new HashMap<Integer, Fragment>();
 	
 	public TabPagerAdapter(FragmentManager fm) {
-        super(fm);
-        customDeckFragment = new CustomDeckFragment();
-        masterDeckFragment = new MasterDeckFragment();
+        super(fm);        
     }
 
 	@Override
 	public Fragment getItem(int index) {
+		Fragment fragment = null;
 		switch(index){
 			case 0:{
-				return customDeckFragment;
+				CustomDeckFragment customDeckFragment = new CustomDeckFragment();				
+				fragment = customDeckFragment;
+				fragmentRefMap.put(index, fragment);
+				break;
 			}
 			case 1:{
-				return masterDeckFragment;
+				MasterDeckFragment masterDeckFragment = new MasterDeckFragment();
+				fragment = masterDeckFragment;
+				fragmentRefMap.put(index, fragment);
+				break;
 			}
 		}
-		return null;
+		return fragment;
+	}
+	
+	@Override
+	public void destroyItem(ViewGroup container, int position, Object object) {
+		super.destroyItem(container, position, object);
+		fragmentRefMap.remove(position);
 	}
 
 	@Override
 	public int getCount() {
 		return tabCount;
+	}
+	
+	public CustomDeckFragment getCustomDeckFragment(){
+		return (CustomDeckFragment) fragmentRefMap.get(0);
+	}
+	
+	public MasterDeckFragment getMasterDeckFragment(){
+		return (MasterDeckFragment) fragmentRefMap.get(1);
 	}
 }

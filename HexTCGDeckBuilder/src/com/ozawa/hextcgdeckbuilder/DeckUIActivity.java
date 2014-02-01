@@ -33,6 +33,7 @@ import com.ozawa.hextcgdeckbuilder.json.MasterDeck;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -60,6 +61,7 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 	    // Initilization
 	    viewPager = (CustomViewPager) findViewById(R.id.pager);
 	    actionBar = getSupportActionBar();
+	    
 	    mAdapter = new TabPagerAdapter(getSupportFragmentManager());
 	    
 	    viewPager.setAdapter(mAdapter);
@@ -108,8 +110,8 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Open the list view for the deck
-    	MasterDeckFragment masterDeckFragment = mAdapter.masterDeckFragment;
-    	CustomDeckFragment customDeckFragment = mAdapter.customDeckFragment;
+    	MasterDeckFragment masterDeckFragment = mAdapter.getMasterDeckFragment();
+    	CustomDeckFragment customDeckFragment = mAdapter.getCustomDeckFragment();
         switch (item.getItemId()) {
             case R.id.action_deck_view:            	
             	if(masterDeckFragment != null && !masterDeckFragment.isGridView){
@@ -145,7 +147,7 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 	@Override
 	public void onStart(){
 		super.onStart();
-		if(mAdapter == null || mAdapter.masterDeckFragment == null || mAdapter.customDeckFragment == null){
+		if(mAdapter == null || mAdapter.getMasterDeckFragment() == null || mAdapter.getCustomDeckFragment() == null){
 			mAdapter = new TabPagerAdapter(getSupportFragmentManager());
 		}
 	}
@@ -153,7 +155,7 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 	@Override
 	public void onResume(){
 		super.onResume();
-		if(mAdapter == null || mAdapter.masterDeckFragment == null || mAdapter.customDeckFragment == null){
+		if(mAdapter == null || mAdapter.getMasterDeckFragment() == null || mAdapter.getCustomDeckFragment() == null){
 			mAdapter = new TabPagerAdapter(getSupportFragmentManager());
 		}
 	}
