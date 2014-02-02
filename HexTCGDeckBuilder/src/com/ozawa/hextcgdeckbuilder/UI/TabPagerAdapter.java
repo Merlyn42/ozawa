@@ -35,31 +35,50 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter{
 	public TabPagerAdapter(FragmentManager fm) {
         super(fm);        
     }
+	
+	public TabPagerAdapter(FragmentManager fm, CustomDeckFragment customDeckFragment, MasterDeckFragment masterDeckFragment){
+		super(fm);
+		if(customDeckFragment != null){
+			fragmentRefMap.put(Integer.valueOf(0), customDeckFragment);
+		}
+		if(masterDeckFragment != null){
+			fragmentRefMap.put(Integer.valueOf(1), masterDeckFragment);
+		}
+	}
 
 	@Override
 	public Fragment getItem(int index) {
-		Fragment fragment = null;
+		if(index == 0){
+			CustomDeckFragment customDeckFragment = new CustomDeckFragment();		
+			fragmentRefMap.put(Integer.valueOf(index), customDeckFragment);
+			return customDeckFragment;
+		}else{
+			MasterDeckFragment masterDeckFragment = new MasterDeckFragment();
+			fragmentRefMap.put(Integer.valueOf(index), masterDeckFragment);
+			return masterDeckFragment;
+		}
+		/*Fragment fragment = null;
 		switch(index){
 			case 0:{
-				CustomDeckFragment customDeckFragment = new CustomDeckFragment();				
+				CustomDeckFragment customDeckFragment = CustomDeckFragment.newInstance();				
 				fragment = customDeckFragment;
-				fragmentRefMap.put(index, fragment);
+				fragmentRefMap.put(Integer.valueOf(index), fragment);
 				break;
 			}
 			case 1:{
-				MasterDeckFragment masterDeckFragment = new MasterDeckFragment();
+				MasterDeckFragment masterDeckFragment = MasterDeckFragment.newInstance();
 				fragment = masterDeckFragment;
-				fragmentRefMap.put(index, fragment);
+				fragmentRefMap.put(Integer.valueOf(index), fragment);
 				break;
 			}
 		}
-		return fragment;
+		return fragment;*/
 	}
 	
 	@Override
 	public void destroyItem(ViewGroup container, int position, Object object) {
 		super.destroyItem(container, position, object);
-		fragmentRefMap.remove(position);
+		fragmentRefMap.remove(Integer.valueOf(position));
 	}
 
 	@Override
@@ -67,11 +86,24 @@ public class TabPagerAdapter extends FragmentStatePagerAdapter{
 		return tabCount;
 	}
 	
-	public CustomDeckFragment getCustomDeckFragment(){
-		return (CustomDeckFragment) fragmentRefMap.get(0);
+	public CustomDeckFragment getCustomDeckFragment(FragmentManager fm, int viewId){
+		CustomDeckFragment fragment = (CustomDeckFragment) fragmentRefMap.get(0);
+		if(fragment == null){
+			fragment = (CustomDeckFragment) fm.findFragmentByTag(makeFragmentName(viewId, 0));
+		}
+		return fragment;
 	}
 	
-	public MasterDeckFragment getMasterDeckFragment(){
-		return (MasterDeckFragment) fragmentRefMap.get(1);
+	public MasterDeckFragment getMasterDeckFragment(FragmentManager fm, int viewId){
+		MasterDeckFragment fragment = (MasterDeckFragment) fragmentRefMap.get(1);
+		if(fragment == null){
+			fragment = (MasterDeckFragment) fm.findFragmentByTag(makeFragmentName(viewId, 1));
+		}
+		return fragment;
+	}
+	
+	private static String makeFragmentName(int viewId, int position)
+	{
+	     return "android:switcher:" + viewId + ":" + position;
 	}
 }

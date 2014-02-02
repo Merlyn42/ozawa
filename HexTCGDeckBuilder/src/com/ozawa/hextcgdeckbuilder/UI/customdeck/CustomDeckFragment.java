@@ -21,11 +21,9 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.List;
 
 import com.espian.showcaseview.ShowcaseView;
 import com.espian.showcaseview.ShowcaseView.ConfigOptions;
-import com.ozawa.hextcgdeckbuilder.DeckUIActivity;
 import com.ozawa.hextcgdeckbuilder.FullImageActivity;
 import com.ozawa.hextcgdeckbuilder.ImageAdapter;
 import com.ozawa.hextcgdeckbuilder.R;

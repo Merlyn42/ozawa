@@ -17,29 +17,17 @@
  ******************************************************************************/
 package com.ozawa.hextcgdeckbuilder;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.ozawa.hextcgdeckbuilder.UI.CardsViewer;
 import com.ozawa.hextcgdeckbuilder.UI.CustomViewPager;
 import com.ozawa.hextcgdeckbuilder.UI.TabPagerAdapter;
 import com.ozawa.hextcgdeckbuilder.UI.customdeck.CustomDeckFragment;
 import com.ozawa.hextcgdeckbuilder.UI.filter.FilterDrawerFragment;
-import com.ozawa.hextcgdeckbuilder.database.DatabaseHandler;
-import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
-import com.ozawa.hextcgdeckbuilder.hexentities.HexDeck;
-import com.ozawa.hextcgdeckbuilder.hexentities.DeckResource;
-import com.ozawa.hextcgdeckbuilder.json.MasterDeck;
-import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
 
@@ -57,15 +45,27 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
     protected void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.deck_ui_activity);
-        
+	    CustomDeckFragment customDeckFragment = null;
+	    MasterDeckFragment masterDeckFragment = null;
+	    if(savedInstanceState != null){
+	    	customDeckFragment = (CustomDeckFragment) getSupportFragmentManager().getFragment(savedInstanceState, CustomDeckFragment.class.getName());
+	    	masterDeckFragment = (MasterDeckFragment) getSupportFragmentManager().getFragment(savedInstanceState, MasterDeckFragment.class.getName());
+	    }
 	    // Initilization
-	    viewPager = (CustomViewPager) findViewById(R.id.pager);
+	    if(viewPager == null || viewPager.getAdapter() == null){
+			viewPager = (CustomViewPager) findViewById(R.id.pager);
+			if(customDeckFragment != null || masterDeckFragment != null){
+				mAdapter = new TabPagerAdapter(getSupportFragmentManager(), customDeckFragment, masterDeckFragment);
+			}else{
+				mAdapter = new TabPagerAdapter(getSupportFragmentManager());
+			}
+			viewPager.setAdapter(mAdapter);
+		}
+	    /*viewPager = (CustomViewPager) findViewById(R.id.pager);
+	    mAdapter = new TabPagerAdapter(getSupportFragmentManager());	    
+	    viewPager.setAdapter(mAdapter);*/
+	    
 	    actionBar = getSupportActionBar();
-	    
-	    mAdapter = new TabPagerAdapter(getSupportFragmentManager());
-	    
-	    viewPager.setAdapter(mAdapter);
-	    //actionBar.setHomeButtonEnabled(false);
 	    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);       
 	 
 	        // Adding Tabs
@@ -110,34 +110,64 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Open the list view for the deck
-    	MasterDeckFragment masterDeckFragment = mAdapter.getMasterDeckFragment();
-    	CustomDeckFragment customDeckFragment = mAdapter.getCustomDeckFragment();
-        switch (item.getItemId()) {
-            case R.id.action_deck_view:            	
-            	if(masterDeckFragment != null && !masterDeckFragment.isGridView){
-	            	masterDeckFragment.changeToGridView();	                
-            	}
-            	if(customDeckFragment != null && !customDeckFragment.isGridView){
-            		customDeckFragment.changeToGridView();	                
-            	}
-            	return true;
-            case R.id.action_list_view:
-            	if(masterDeckFragment != null && masterDeckFragment.isGridView){
-	            	masterDeckFragment.changeToListView();
-            	}
-            	if(customDeckFragment != null && customDeckFragment.isGridView){
-            		customDeckFragment.changeToListView();
-            	}
-            	return true;
-            case R.id.view_tutorial:{
-            	viewPager.setCurrentItem(1); // Change to Card Library
-            	masterDeckFragment.showTutorial();
-            	return true;
-            }
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+    	MasterDeckFragment masterDeckFragment = ((TabPagerAdapter)viewPager.getAdapter()).getMasterDeckFragment(getSupportFragmentManager(), viewPager.getId());
+    	CustomDeckFragment customDeckFragment = ((TabPagerAdapter)viewPager.getAdapter()).getCustomDeckFragment(getSupportFragmentManager(), viewPager.getId());
+    	if(item.getItemId() == R.id.action_deck_view){
+    		if(masterDeckFragment != null && !masterDeckFragment.isGridView){
+            	masterDeckFragment.changeToGridView();	                
+        	}
+        	if(customDeckFragment != null && !customDeckFragment.isGridView){
+        		customDeckFragment.changeToGridView();	                
+        	}
+        	return true;
+    	}else if(item.getItemId() == R.id.action_list_view){
+    		if(masterDeckFragment != null && masterDeckFragment.isGridView){
+            	masterDeckFragment.changeToListView();
+        	}
+        	if(customDeckFragment != null && customDeckFragment.isGridView){
+        		customDeckFragment.changeToListView();
+        	}
+        	return true;
+    	}else if(item.getItemId() == R.id.view_tutorial){
+    		viewPager.setCurrentItem(1); // Change to Card Library
+        	masterDeckFragment.showTutorial();
+        	return true;
+    	}else{
+    		return super.onOptionsItemSelected(item);
+    	}
+//        switch (item.getItemId()) {
+//            case R.id.action_deck_view:            	
+//            	if(masterDeckFragment != null && !masterDeckFragment.isGridView){
+//	            	masterDeckFragment.changeToGridView();	                
+//            	}
+//            	if(customDeckFragment != null && !customDeckFragment.isGridView){
+//            		customDeckFragment.changeToGridView();	                
+//            	}
+//            	return true;
+//            case R.id.action_list_view:
+//            	if(masterDeckFragment != null && masterDeckFragment.isGridView){
+//	            	masterDeckFragment.changeToListView();
+//            	}
+//            	if(customDeckFragment != null && customDeckFragment.isGridView){
+//            		customDeckFragment.changeToListView();
+//            	}
+//            	return true;
+//            case R.id.view_tutorial:{
+//            	viewPager.setCurrentItem(1); // Change to Card Library
+//            	masterDeckFragment.showTutorial();
+//            	return true;
+//            }
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
 
+    }
+    
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        getSupportFragmentManager().putFragment(outState, CustomDeckFragment.class.getName(), ((TabPagerAdapter)viewPager.getAdapter()).getCustomDeckFragment(getSupportFragmentManager(), viewPager.getId()));
+        getSupportFragmentManager().putFragment(outState, MasterDeckFragment.class.getName(), ((TabPagerAdapter)viewPager.getAdapter()).getMasterDeckFragment(getSupportFragmentManager(), viewPager.getId()));
     }
 
 	@Override
@@ -147,16 +177,20 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
 	@Override
 	public void onStart(){
 		super.onStart();
-		if(mAdapter == null || mAdapter.getMasterDeckFragment() == null || mAdapter.getCustomDeckFragment() == null){
+		if(viewPager.getAdapter() == null){
+			viewPager = (CustomViewPager) findViewById(R.id.pager);
 			mAdapter = new TabPagerAdapter(getSupportFragmentManager());
+			viewPager.setAdapter(mAdapter);
 		}
 	}
 	
 	@Override
 	public void onResume(){
 		super.onResume();
-		if(mAdapter == null || mAdapter.getMasterDeckFragment() == null || mAdapter.getCustomDeckFragment() == null){
+		if(viewPager == null || viewPager.getAdapter() == null){
+			viewPager = (CustomViewPager) findViewById(R.id.pager);
 			mAdapter = new TabPagerAdapter(getSupportFragmentManager());
+			viewPager.setAdapter(mAdapter);
 		}
 	}
 

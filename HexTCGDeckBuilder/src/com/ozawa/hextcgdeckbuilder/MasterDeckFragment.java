@@ -18,7 +18,6 @@
 package com.ozawa.hextcgdeckbuilder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import com.ozawa.hextcgdeckbuilder.UI.CardsViewer;
 import com.ozawa.hextcgdeckbuilder.UI.CustomViewPager;
 import com.ozawa.hextcgdeckbuilder.UI.PlaceholderFragment;
@@ -31,8 +30,6 @@ import com.ozawa.hextcgdeckbuilder.UI.multiplecarddialogs.AddMultipleCardsDialog
 import com.ozawa.hextcgdeckbuilder.UI.multiplecarddialogs.AddMultipleCardsDialogFragmentGinger;
 import com.ozawa.hextcgdeckbuilder.enums.TutorialType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
-import com.ozawa.hextcgdeckbuilder.hexentities.Card;
-import com.ozawa.hextcgdeckbuilder.json.MasterDeck;
 import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
@@ -63,7 +60,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.RelativeLayout;
 
@@ -96,7 +92,8 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 	private GridView					gridView;
 
 	private SharedPreferences			mPreferences;
-
+	
+	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
