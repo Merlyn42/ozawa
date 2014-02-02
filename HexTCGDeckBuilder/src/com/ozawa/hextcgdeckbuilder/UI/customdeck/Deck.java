@@ -148,7 +148,7 @@ public class Deck {
 	 * @param deckName
 	 * @return The newly saved Deck
 	 */
-	public HexDeck saveNewDeck(String deckName) {
+	public HexDeck saveNewDeck(String deckName, boolean resetDeckData) {
 		HexDeck newDeck = new HexDeck();
 		newDeck.name = deckName;
 
@@ -156,7 +156,9 @@ public class Deck {
 		if (newDeckID == -1) {
 			return null;
 		}
-		resetDeck();
+		if(resetDeckData){
+			resetDeck();
+		}
 		currentDeck = dbHandler.getDeck(String.valueOf(newDeckID));
 		deckChanged = false;
 		return currentDeck;
@@ -172,8 +174,8 @@ public class Deck {
 	public boolean loadDeck(String deckID, List<AbstractCard> masterDeck) {
 		currentDeck = dbHandler.getDeck(deckID);
 		updateDeck(currentDeck, masterDeck);
-		deckChanged = currentDeck.getID().equalsIgnoreCase(deckID);
-		return deckChanged;
+		deckChanged = !currentDeck.getID().equalsIgnoreCase(deckID);
+		return !deckChanged;
 	}
 
 	/**
@@ -209,7 +211,7 @@ public class Deck {
 	 * @return true if the Deck saved successfully, otherwise false
 	 */
 	public boolean saveUnsavedDeck(String deckName) {
-		if (saveNewDeck(deckName) != null) {
+		if (saveNewDeck(deckName, false) != null) {
 			return saveDeck();
 		}
 		return false;
