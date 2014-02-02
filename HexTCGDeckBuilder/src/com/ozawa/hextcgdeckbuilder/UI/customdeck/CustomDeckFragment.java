@@ -151,7 +151,12 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 		gestureOverlayView.addOnGesturePerformedListener(this);
 		gestureOverlayView.setGestureVisible(false);
 
-		setUpGridView(); // Set up the card grid view
+		if(cardViewer.getAdapter()!=null &&cardViewer.getAdapter() instanceof DeckListViewAdapter){
+			setUpListView();
+		}else{
+			setUpGridView(); // Set up the card grid view	
+		}
+		
 
 		/**
 		 * Card Animation

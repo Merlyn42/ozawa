@@ -165,7 +165,11 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 		GestureOverlayView gestureOverlayView = (GestureOverlayView) uiLayout.findViewById(R.id.masterDeckGestureOverlayView);
 		gestureOverlayView.addOnGesturePerformedListener(this);
 		gestureOverlayView.setGestureVisible(false);
-		setUpGridView(); // Set up the card grid view
+		if(cardViewer.getAdapter()!=null &&cardViewer.getAdapter() instanceof DeckListViewAdapter){
+			setUpListView();
+		}else{
+			setUpGridView(); // Set up the card grid view	
+		}
 
 		/**
 		 * Card Animation
