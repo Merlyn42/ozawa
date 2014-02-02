@@ -146,7 +146,7 @@ public class SelectChampionDialogFragment extends DialogFragment {
 				currentCustomDeck.champion = selectedChampion;
 				 if(currentCustomDeck.champion == selectedChampion){
 					 Toast.makeText(getActivity().getApplicationContext(), "Champion selected." , Toast.LENGTH_SHORT).show();
-					 ((CustomDeckFragment) getTargetFragment()).updateCustomDeckData();
+					 ((CustomDeckFragment) getTargetFragment()).updateCustomDeckMenuData();
 					 dialog.dismiss();
 				 }else{
 					 Toast.makeText(getActivity().getApplicationContext(), "Failed to select champion. Please try again." , Toast.LENGTH_SHORT).show();
