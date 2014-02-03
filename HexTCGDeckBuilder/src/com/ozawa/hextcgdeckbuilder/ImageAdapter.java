@@ -33,89 +33,76 @@ import com.ozawa.hextcgdeckbuilder.UI.ImageGetter;
 import com.ozawa.hextcgdeckbuilder.enums.ImageGetterType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 
-import java.util.List;
-import java.util.Map;
-
 public class ImageAdapter extends BaseAdapter {
-    private Context mContext;
-    public List<AbstractCard> masterDeck;
-    protected Bitmap back;
-    private static int numberOfColumns = 3;
-    private static int differenceInHeight = 26;
-    Map<AbstractCard, Integer> customDeck;
+	private Context		mContext;
+	public CardsViewer	cardViewer;
+	protected Bitmap	back;
+	private static int	numberOfColumns		= 3;
+	private static int	differenceInHeight	= 26;
 
-    public boolean isListView = false;
-    
-    public ImageAdapter(){}
-    public ImageAdapter(Context c, List<AbstractCard> deck, Map<AbstractCard, Integer> customDeck ) {
-        mContext = c;
-        masterDeck = deck;
-        back= BitmapFactory.decodeResource(c.getResources(), R.drawable.back);
-        this.customDeck=customDeck;
-    }
+	public boolean		isListView			= false;
 
-    public int getCount() {
-        return masterDeck.size();
-    }
+	public ImageAdapter(Context c, CardsViewer viewer) {
+		mContext = c;
+		this.cardViewer = viewer;
+		back = BitmapFactory.decodeResource(c.getResources(), R.drawable.back);
+	}
 
-    public Object getItem(int position) {
-        return null;
-    }
+	@Override
+	public int getCount() {
+		return cardViewer.getFilteredCardList().size();
+	}
 
-    public long getItemId(int position) {
-        return 0;
-    }
+	@Override
+	public Object getItem(int position) {
+		return null;
+	}
 
-    // create a new ImageView for each item referenced by the Adapter
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ImageView imageView;
-        if (convertView == null) {  // if it's not recycled, initialize some attributes
-            // Find the width and height of the screen and set the card dimensions
-            WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-            DisplayMetrics metrics = new DisplayMetrics();
-            wm.getDefaultDisplay().getMetrics(metrics);
-            int cardWidth = (metrics.widthPixels / numberOfColumns) - (metrics.widthPixels / 20);
-            int cardHeight = cardWidth + differenceInHeight;
+	@Override
+	public long getItemId(int position) {
+		return 0;
+	}
 
-            imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(cardWidth, cardHeight));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(8, 8, 8, 8);
-        } else {
-            imageView = (ImageView) convertView;
-        }
+	// create a new ImageView for each item referenced by the Adapter
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		ImageView imageView;
+		if (convertView == null) { // if it's not recycled, initialize some
+									// attributes
+			// Find the width and height of the screen and set the card
+			// dimensions
+			WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+			DisplayMetrics metrics = new DisplayMetrics();
+			wm.getDefaultDisplay().getMetrics(metrics);
+			int cardWidth = (metrics.widthPixels / numberOfColumns) - (metrics.widthPixels / 20);
+			int cardHeight = cardWidth + differenceInHeight;
 
-        buildCardImage(masterDeck.get(position), imageView);
-        return imageView;
-    }
+			imageView = new ImageView(mContext);
+			imageView.setLayoutParams(new GridView.LayoutParams(cardWidth, cardHeight));
+			imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+			imageView.setPadding(8, 8, 8, 8);
+		} else {
+			imageView = (ImageView) convertView;
+		}
 
-    protected void buildCardImage(AbstractCard card,ImageView imageView){
-        if(imageView.getTag() != null) {
-            ((ImageGetter) imageView.getTag()).cancel(true);
-        }
-        imageView.setImageBitmap(back);
-        ImageGetter task = new ImageGetter(imageView,mContext, ImageGetterType.CARDTHUMBNAIL,customDeck) ;
-        task.execute(card);
-        imageView.setTag(task);
-    }
+		buildCardImage(cardViewer.getFilteredCardList().get(position), imageView);
+		return imageView;
+	}
 
-    public int getDPIFromPixels(Context context, float pixels){
-        float density = context.getResources().getDisplayMetrics().density;
+	protected void buildCardImage(AbstractCard card, ImageView imageView) {
+		if (imageView.getTag() != null) {
+			((ImageGetter) imageView.getTag()).cancel(true);
+		}
+		imageView.setImageBitmap(back);
+		ImageGetter task = new ImageGetter(imageView, mContext, ImageGetterType.CARDTHUMBNAIL, cardViewer.getDeckData());
+		task.execute(card);
+		imageView.setTag(task);
+	}
 
-        return (int)(pixels / density);
-    }
+	public int getDPIFromPixels(Context context, float pixels) {
+		float density = context.getResources().getDisplayMetrics().density;
 
-    public void updateDeck(List<AbstractCard> cards) {
-        masterDeck=cards;
-        notifyDataSetChanged();
-    }
-    
-    public void setDeck(List<AbstractCard> deck){
-    	masterDeck = deck;
-    }
-    public void updateDeckAndCardViewDeck(List<AbstractCard> cards, CardsViewer cardViewer) {        
-        //cardViewer.setCardList(cards); // Update CardViewer Deck
-        masterDeck=cardViewer.getFilteredCardList();
-        notifyDataSetChanged();
-    }
+		return (int) (pixels / density);
+	}
+
 }

@@ -18,14 +18,8 @@
 package com.ozawa.hextcgdeckbuilder.UI;
 
 import android.content.Context;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.widget.TextView;
-
 import com.ozawa.hextcgdeckbuilder.ImageAdapter;
 import com.ozawa.hextcgdeckbuilder.UI.customdeck.Deck;
-import com.ozawa.hextcgdeckbuilder.UI.filter.FilterButton;
 import com.ozawa.hextcgdeckbuilder.enums.CardEnum;
 import com.ozawa.hextcgdeckbuilder.filter.Filter;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
@@ -37,31 +31,31 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-public class CardsViewer{
-    private Filter filter;
-    private Deck deck;
-    private ImageAdapter adapter;
-    private Comparator<AbstractCard> comparator = new CardComparatorColor();
+public class CardsViewer {
+	private Filter						filter;
+	private Deck						deck;
+	private ImageAdapter				adapter;
+	private Comparator<AbstractCard>	comparator	= new CardComparatorColor();
 
-    public CardsViewer(Context context,Deck deck){
-        filter = new Filter();
-        this.deck = deck;
-        Collections.sort(deck.getDeckCardList(),comparator);
-        adapter = new ImageAdapter(context,filter.filter(deck.getDeckCardList()), deck.getDeckData());       
-    }
-    
-    public void clearFilter(){
-    	filter = new Filter();
-    	adapter.updateDeck(filter.filter(deck.getDeckCardList()));
-    }
-    
-    public List<AbstractCard> getFilteredCardList(){
-    	return filter.filter(deck.getDeckCardList());
-    }
-    
-    public List<AbstractCard> getUnFilteredCardList(){
-    	return new ArrayList<AbstractCard>(deck.getDeckCardList());
-    }
+	public CardsViewer(Context context, Deck deck) {
+		filter = new Filter();
+		this.deck = deck;
+		Collections.sort(deck.getDeckCardList(), comparator);
+		adapter = new ImageAdapter(context, this);
+	}
+
+	public void clearFilter() {
+		filter = new Filter();
+		adapter.notifyDataSetChanged();
+	}
+
+	public List<AbstractCard> getFilteredCardList() {
+		return filter.filter(deck.getDeckCardList());
+	}
+
+	public List<AbstractCard> getUnFilteredCardList() {
+		return new ArrayList<AbstractCard>(deck.getDeckCardList());
+	}
 
 	public String getFilterString() {
 		return filter.getFilterString();
@@ -69,37 +63,41 @@ public class CardsViewer{
 
 	public void setFilterString(String filterString) {
 		filter.setFilterString(filterString);
-		adapter.updateDeck(getFilteredCardList());
+		adapter.notifyDataSetChanged();
 	}
 
-    public boolean toggleFilter(CardEnum e){
-        boolean result;
-    	if(filter.isActive(e)){
-            filter.removeFilter(e);
-            result =false;
-        }else{
-            filter.addFilter(e);
-            result =true;
-        }
-        adapter.updateDeck(filter.filter(deck.getDeckCardList()));
-        return result;
-    }
-
-    public boolean isActive(CardEnum e) {
-        return filter.isActive(e);
-    }
-
-    public ImageAdapter getAdapter() {
-        return adapter;
-    }
-    
-    public void setAdapter(ImageAdapter adapter){
-    	this.adapter = adapter;
-    }
-
-	
-	public void updateDeckAndView(){
-		adapter.setDeck(getFilteredCardList());
+	public boolean toggleFilter(CardEnum e) {
+		boolean result;
+		if (filter.isActive(e)) {
+			filter.removeFilter(e);
+			result = false;
+		} else {
+			filter.addFilter(e);
+			result = true;
+		}
 		adapter.notifyDataSetChanged();
+		return result;
+	}
+
+	public boolean isActive(CardEnum e) {
+		return filter.isActive(e);
+	}
+
+	public ImageAdapter getAdapter() {
+		return adapter;
+	}
+
+	public void setAdapter(ImageAdapter adapter) {
+		this.adapter = adapter;
+		adapter.cardViewer = this;
+		adapter.notifyDataSetChanged();
+	}
+
+	public void updateDeckAndView() {
+		adapter.notifyDataSetChanged();
+	}
+
+	public Map<AbstractCard, Integer> getDeckData() {
+		return deck.getDeckData();
 	}
 }

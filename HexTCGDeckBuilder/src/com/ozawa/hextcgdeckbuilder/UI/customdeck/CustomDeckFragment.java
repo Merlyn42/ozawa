@@ -156,7 +156,6 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 		gestureOverlayView.addOnGesturePerformedListener(this);
 		gestureOverlayView.setGestureVisible(false);
 	}
-
 	/**
 	 * Set up the card animation
 	 */
@@ -290,9 +289,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	public void changeToListView() {
 		if (listView != null) {
 			cardViewer.setAdapter(lvAdapter);
-			if (imAdapter != null) {
-				lvAdapter.updateDeck(imAdapter.masterDeck);
-			}
+			listView.setAdapter(lvAdapter);
 			setIsGridView(false);
 		} else {
 			setUpListView();
@@ -308,9 +305,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	public void changeToGridView() {
 		if (gridView != null) {
 			cardViewer.setAdapter(imAdapter);
-			if (lvAdapter != null) {
-				imAdapter.updateDeck(lvAdapter.masterDeck);
-			}
+			gridView.setAdapter(imAdapter);
 			setIsGridView(true);
 		} else {
 			setUpGridView();
@@ -323,7 +318,9 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	 * Set up the gridview
 	 */
 	private void setUpGridView() {
-		imAdapter = cardViewer.getAdapter();
+		if (imAdapter == null)
+			imAdapter = new ImageAdapter(mContext, cardViewer);
+		cardViewer.setAdapter(imAdapter);
 
 		gridView = (GridView) uiLayout.findViewById(R.id.custom_deck_grid_view);
 		gridView.setAdapter(imAdapter);
@@ -366,7 +363,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 		listView = (ListView) uiLayout.findViewById(R.id.custom_deck_deck_list);
 
 		// Getting adapter by passing xml data ArrayList
-		lvAdapter = new DeckListViewAdapter(mContext, cardViewer.getAdapter().masterDeck, customDeck.getDeckData());
+		lvAdapter = new DeckListViewAdapter(mContext, cardViewer);
 		cardViewer.setAdapter(lvAdapter);
 		listView.setAdapter(lvAdapter);
 		// Click event for single list row
@@ -416,7 +413,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 			} else {
 				removeMultipleCardsDialog = new RemoveMultipleCardsDialogFragmentGinger();
 			}
-			AbstractCard card = isGridView == true ? imAdapter.masterDeck.get(position) : lvAdapter.masterDeck.get(position);
+			AbstractCard card = cardViewer.getFilteredCardList().get(position);
 			removeMultipleCardsDialog.card = card;
 			removeMultipleCardsDialog.position = position;
 			removeMultipleCardsDialog.animationArg = createAnimationArg(values[0] + cardBackDimension / 2, values[1] - cardBackDimension
@@ -559,7 +556,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	 */
 	public void removeCardFromCustomDeck(int position, int value) {
 		if (position >= 0) {
-			AbstractCard card = isGridView == true ? imAdapter.masterDeck.get(position) : lvAdapter.masterDeck.get(position);
+			AbstractCard card = cardViewer.getFilteredCardList().get(position);
 			if (customDeck.removeCardFromDeck(card, value)) {
 				reloadCustomDeckView();
 			} else {

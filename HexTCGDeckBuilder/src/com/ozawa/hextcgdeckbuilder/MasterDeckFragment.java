@@ -82,7 +82,7 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
 	 */
-	private FilterDrawerFragment	mNavigationDrawerFragment;
+	private FilterDrawerFragment		mNavigationDrawerFragment;
 	private ShowcaseView.ConfigOptions	co;
 	ShowcaseViews						mViews;
 	public static CardsViewer			cardViewer;
@@ -92,8 +92,7 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 	private GridView					gridView;
 
 	private SharedPreferences			mPreferences;
-	
-	
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -144,13 +143,13 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 		}
 		ShowcaseView.ConfigOptions co = new ShowcaseView.ConfigOptions();
 		co.hideOnClickOutside = true;
-		
-		if(cardViewer == null){
+
+		if (cardViewer == null) {
 			cardViewer = hexApplication.getCardLibraryViewer();
 		}
-		imAdapter = cardViewer.getAdapter();
+
 		uiLayout = (DrawerLayout) inflater.inflate(R.layout.fragment_master_deck, container, false);
-		
+
 		mNavigationDrawerFragment = (FilterDrawerFragment) mainActivity.getSupportFragmentManager().findFragmentById(
 				R.id.master_deck_navigation_drawer);
 		// Set up the drawer.
@@ -162,10 +161,10 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 		GestureOverlayView gestureOverlayView = (GestureOverlayView) uiLayout.findViewById(R.id.masterDeckGestureOverlayView);
 		gestureOverlayView.addOnGesturePerformedListener(this);
 		gestureOverlayView.setGestureVisible(false);
-		if(cardViewer.getAdapter()!=null &&cardViewer.getAdapter() instanceof DeckListViewAdapter){
+		if (cardViewer.getAdapter() != null && cardViewer.getAdapter() instanceof DeckListViewAdapter) {
 			setUpListView();
-		}else{
-			setUpGridView(); // Set up the card grid view	
+		} else {
+			setUpGridView(); // Set up the card grid view
 		}
 
 		/**
@@ -229,7 +228,7 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 	public void changeToListView() {
 		if (listView != null) {
 			cardViewer.setAdapter(lvAdapter);
-			lvAdapter.updateDeck(imAdapter.masterDeck);
+			listView.setAdapter(lvAdapter);
 			setIsGridView(false);
 		} else {
 			setUpListView();
@@ -242,7 +241,7 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 	public void changeToGridView() {
 		if (gridView != null) {
 			cardViewer.setAdapter(imAdapter);
-			imAdapter.updateDeck(lvAdapter.masterDeck);
+			gridView.setAdapter(imAdapter);
 			setIsGridView(true);
 		} else {
 			setUpGridView();
@@ -252,9 +251,13 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 	}
 
 	private void setUpGridView() {
+		if (imAdapter == null) {
+			imAdapter = new ImageAdapter(mainActivity, cardViewer);
+		}
+		cardViewer.setAdapter(imAdapter);
 		gridView = (GridView) uiLayout.findViewById(R.id.master_deck_grid_view);
+		gridView.setAdapter(imAdapter);
 		gridView.setHapticFeedbackEnabled(true);
-		gridView.setAdapter(cardViewer.getAdapter());
 
 		gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
@@ -285,7 +288,8 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 		listView = (ListView) uiLayout.findViewById(R.id.master_deck_deck_list);
 		listView.setHapticFeedbackEnabled(true);
 		// Getting adapter by passing xml data ArrayList
-		lvAdapter = new DeckListViewAdapter(mainActivity, cardViewer.getAdapter().masterDeck, null);
+		if (lvAdapter == null)
+			lvAdapter = new DeckListViewAdapter(mainActivity, cardViewer);
 		cardViewer.setAdapter(lvAdapter);
 		listView.setAdapter(cardViewer.getAdapter());
 		// Click event for single list row
@@ -335,7 +339,7 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 			addMultipleCardsDialog = new AddMultipleCardsDialogFragmentGinger();
 		}
 		if (position >= 0) {
-			AbstractCard card = isGridView == true ? imAdapter.masterDeck.get(position) : lvAdapter.masterDeck.get(position);
+			AbstractCard card = cardViewer.getFilteredCardList().get(position);
 
 			addMultipleCardsDialog.card = card;
 			addMultipleCardsDialog.position = position;
@@ -352,22 +356,20 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 	 * 
 	 * @param card
 	 */
-	public boolean addCardToCustomDeck(int position, int value) {		
-		AbstractCard card = isGridView == true ? imAdapter.masterDeck.get(position) : lvAdapter.masterDeck.get(position);
-		((HexApplication)getActivity().getApplication()).getCustomDeck().addCardToDeck(card, value);
-/*		if (card instanceof Card && ((Card) card).cardNumber == 0) {
-			Toast.makeText(mainActivity.getApplicationContext(), card.name + " cannot be added directly to decks.", Toast.LENGTH_SHORT)
-					.show();
-			return false;
-		}
-		HashMap<AbstractCard, Integer> customDeck = ((DeckUIActivity) mainActivity).customDeck;
-		if (customDeck.get(card) == null) {
-			customDeck.put(card, value);
-			((DeckUIActivity) mainActivity).customDeckCardList.add(card);
-		} else {
-			customDeck.put(card, customDeck.get(card) + value);
-		}
-		((DeckUIActivity) mainActivity).deckChanged = true;*/
+	public boolean addCardToCustomDeck(int position, int value) {
+		AbstractCard card = cardViewer.getFilteredCardList().get(position);
+		((HexApplication) getActivity().getApplication()).getCustomDeck().addCardToDeck(card, value);
+		/*
+		 * if (card instanceof Card && ((Card) card).cardNumber == 0) {
+		 * Toast.makeText(mainActivity.getApplicationContext(), card.name +
+		 * " cannot be added directly to decks.", Toast.LENGTH_SHORT) .show();
+		 * return false; } HashMap<AbstractCard, Integer> customDeck =
+		 * ((DeckUIActivity) mainActivity).customDeck; if (customDeck.get(card)
+		 * == null) { customDeck.put(card, value); ((DeckUIActivity)
+		 * mainActivity).customDeckCardList.add(card); } else {
+		 * customDeck.put(card, customDeck.get(card) + value); }
+		 * ((DeckUIActivity) mainActivity).deckChanged = true;
+		 */
 		return true;
 	}
 
