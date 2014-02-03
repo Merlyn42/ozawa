@@ -44,6 +44,7 @@ public class CardImagerMapperUtil {
 	private static String		newCardName				= "hexcard";
 	private static String		newChampionName			= "champion";
 	public final static String	VERSION					= "v1.0";
+	public static float			quality					= 0.6f;
 
 	public static void generateImageAndCardJSONData(File hexLocation, File target) {
 		File newImageLocation = new File(target, "\\res\\drawable-nodpi\\");
@@ -94,7 +95,7 @@ public class CardImagerMapperUtil {
 					File imageFile = new File(hexLocation, cardImagePath);
 					newImageFile = new File(newImageLocation, imageName + String.format("%05d", fileNumber) + ".jpg");
 					BufferedImage image = openImage(imageFile);
-					writeJpeg(newImageFile, image, 0.6f);
+					writeJpeg(newImageFile, image, quality);
 				}
 
 				card.setM_CardImagePath(FilenameUtils.removeExtension(newImageFile.getName()));
@@ -145,8 +146,7 @@ public class CardImagerMapperUtil {
 						File imageFile = new File(hexLocation, championImagePath);
 						File newImageFile = new File(newImageLocation, championPortraitSmall + String.format("%05d", fileNumber) + ".png");
 						try {
-							BufferedImage image = openImage(imageFile);
-							writeJpeg(newImageFile, image, 0.6f);
+							FileUtils.copyFile(imageFile, newImageFile);
 						} catch (IOException e) {
 							System.out.println("Skipping champion file as image not found");
 						}
@@ -157,10 +157,10 @@ public class CardImagerMapperUtil {
 					if (champ.hudPortrait != null) {
 						String championImagePath = champ.hudPortrait;
 						File imageFile = new File(hexLocation, championImagePath);
-						File newImageFile = new File(newImageLocation, championPortrait + String.format("%05d", fileNumber) + ".png");
+						File newImageFile = new File(newImageLocation, championPortrait + String.format("%05d", fileNumber) + ".jpg");
 						try {
 							BufferedImage image = openImage(imageFile);
-							writeJpeg(newImageFile, image, 0.6f);
+							writeJpeg(newImageFile, image, quality);
 						} catch (IOException e) {
 							System.out.println("Skipping champion file as image not found");
 						}
@@ -243,6 +243,7 @@ public class CardImagerMapperUtil {
 		Options options = new Options();
 		options.addOption("source", true, "Root directory of the Hex installation");
 		options.addOption("target", true, "Target directory to write to");
+		options.addOption("quality", true, "The quality to save the images as [1-100]");
 		options.addOption("version", false, "Print the version information and exit");
 		options.addOption("help", false, "Print this message");
 		CommandLineParser parser = new PosixParser();
@@ -252,6 +253,25 @@ public class CardImagerMapperUtil {
 			System.out.println("Ozawa Tool " + VERSION);
 			System.out.println("Written by havocx42");
 			return;
+		}
+		
+		if (cmd.hasOption("quality")) {
+			Boolean fail = false;
+			Integer value =null;
+			try{
+				value = Integer.valueOf(cmd.getOptionValue("quality"));
+			}catch(Exception e){
+				fail = true;
+			}
+			if (!fail&&value != null && value > 0 && value <= 100) {
+				quality = value / 100.0f;
+				System.out.println("Setting quality to: " + quality);
+			} else {
+				System.out.println("quality must be between 1 and 100");
+				HelpFormatter formatter = new HelpFormatter();
+				formatter.printHelp("Ozawa Tool", options);
+				return;
+			}
 		}
 
 		if (((!cmd.hasOption("source") || !cmd.hasOption("target"))) || cmd.hasOption("help")) {
@@ -265,6 +285,7 @@ public class CardImagerMapperUtil {
 
 		source = cmd.getOptionValue("source");
 		target = cmd.getOptionValue("target");
+
 		File targetFile = new File(target);
 		File sourceFile = new File(source, "\\Data\\");
 
