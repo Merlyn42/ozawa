@@ -83,50 +83,47 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 
-public class CustomDeckFragment extends Fragment implements
-		FilterDrawerFragment.NavigationDrawerCallbacks,
+public class CustomDeckFragment extends Fragment implements FilterDrawerFragment.NavigationDrawerCallbacks,
 		GestureOverlayView.OnGesturePerformedListener {
 
-	private DrawerLayout uiLayout;
+	private DrawerLayout		uiLayout;
 
-	private ListView listView;
-	private ImageAdapter imAdapter;
-	private DeckListViewAdapter lvAdapter;
-	public boolean isGridView;
+	private ListView			listView;
+	private ImageAdapter		imAdapter;
+	private DeckListViewAdapter	lvAdapter;
+	public boolean				isGridView;
 
-	public ImageView cardBack;
-	private int cardBackDimension;
+	public ImageView			cardBack;
+	private int					cardBackDimension;
 
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
 	 */
-	public FilterDrawerFragment mFilterDrawerFragment;
+	public FilterDrawerFragment	mFilterDrawerFragment;
 
-	private CardsViewer cardViewer;
-	public final static String GETDECK = "GETDECK";
-	private GestureLibrary gesLibrary;
-	private GridView gridView;
-	private Button saveDeck;
-	private Button deleteDeck;
-	private Button selectChampion;
+	private CardsViewer			cardViewer;
+	public final static String	GETDECK		= "GETDECK";
+	private GestureLibrary		gesLibrary;
+	private GridView			gridView;
+	private Button				saveDeck;
+	private Button				deleteDeck;
+	private Button				selectChampion;
 
 	// Tutorial
-	public static final String PREFS_NAME = "FirstLaunchPrefCustomDeck";
-	private SharedPreferences mPreferences;
+	public static final String	PREFS_NAME	= "FirstLaunchPrefCustomDeck";
+	private SharedPreferences	mPreferences;
 
-	private Deck customDeck;
-	private HexApplication hexApplication;
+	private Deck				customDeck;
+	private HexApplication		hexApplication;
 
-	private Context mContext;
+	private Context				mContext;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		hexApplication = (HexApplication) getActivity().getApplication();
 		mContext = getActivity();
-		uiLayout = (DrawerLayout) inflater.inflate(
-				R.layout.fragment_custom_deck, container, false);
+		uiLayout = (DrawerLayout) inflater.inflate(R.layout.fragment_custom_deck, container, false);
 
 		if (customDeck == null) {
 			customDeck = hexApplication.getCustomDeck();
@@ -136,8 +133,7 @@ public class CustomDeckFragment extends Fragment implements
 			cardViewer = hexApplication.getCustomDeckViewer();
 		}
 
-		if (cardViewer.getAdapter() != null
-				&& cardViewer.getAdapter() instanceof DeckListViewAdapter) {
+		if (cardViewer.getAdapter() != null && cardViewer.getAdapter() instanceof DeckListViewAdapter) {
 			setUpListView();
 		} else {
 			setUpGridView(); // Set up the card grid view
@@ -156,8 +152,7 @@ public class CustomDeckFragment extends Fragment implements
 	private void setupGestures() {
 		gesLibrary = GestureLibraries.fromRawResource(mContext, R.raw.gestures);
 		gesLibrary.load();
-		GestureOverlayView gestureOverlayView = (GestureOverlayView) uiLayout
-				.findViewById(R.id.customDeckGestureOverlayView);
+		GestureOverlayView gestureOverlayView = (GestureOverlayView) uiLayout.findViewById(R.id.customDeckGestureOverlayView);
 		gestureOverlayView.addOnGesturePerformedListener(this);
 		gestureOverlayView.setGestureVisible(false);
 	}
@@ -166,14 +161,11 @@ public class CustomDeckFragment extends Fragment implements
 	 * Set up the card animation
 	 */
 	private void setupCardAnimation() {
-		RelativeLayout cardAnimationView = (RelativeLayout) uiLayout
-				.findViewById(R.id.cardAnimationLayout);
+		RelativeLayout cardAnimationView = (RelativeLayout) uiLayout.findViewById(R.id.cardAnimationLayout);
 		cardBackDimension = HexUtil.getScreenWidth(mContext) / 3;
-		cardBack = (ImageView) cardAnimationView
-				.findViewById(R.id.cardAnimation);
+		cardBack = (ImageView) cardAnimationView.findViewById(R.id.cardAnimation);
 		cardBack.setImageResource(R.drawable.back);
-		cardBack.setLayoutParams(new RelativeLayout.LayoutParams(
-				cardBackDimension, cardBackDimension));
+		cardBack.setLayoutParams(new RelativeLayout.LayoutParams(cardBackDimension, cardBackDimension));
 		cardBack.setVisibility(View.INVISIBLE);
 	}
 
@@ -197,19 +189,15 @@ public class CustomDeckFragment extends Fragment implements
 	 * Set up the filter drawer
 	 */
 	private void setupFilterDrawerFragment() {
-		mFilterDrawerFragment = (FilterDrawerFragment) getActivity()
-				.getSupportFragmentManager().findFragmentById(
-						R.id.custom_deck_navigation_drawer);
+		mFilterDrawerFragment = (FilterDrawerFragment) getActivity().getSupportFragmentManager().findFragmentById(
+				R.id.custom_deck_navigation_drawer);
 		// Set up the drawer.
-		mFilterDrawerFragment.setUp(uiLayout, cardViewer, mContext,
-				R.id.custom_deck_navigation_drawer, (DrawerLayout) uiLayout
-						.findViewById(R.id.custom_deck_drawer_layout));
+		mFilterDrawerFragment.setUp(uiLayout, cardViewer, mContext, R.id.custom_deck_navigation_drawer,
+				(DrawerLayout) uiLayout.findViewById(R.id.custom_deck_drawer_layout));
 		mFilterDrawerFragment.setUpCustomDeckViews();
 		setCustomDeckButtonListeners();
-		FragmentTransaction transaction = getChildFragmentManager()
-				.beginTransaction();
-		transaction.add(R.id.custom_deck_navigation_drawer,
-				mFilterDrawerFragment).commit();
+		FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+		transaction.add(R.id.custom_deck_navigation_drawer, mFilterDrawerFragment).commit();
 	}
 
 	/**
@@ -243,22 +231,17 @@ public class CustomDeckFragment extends Fragment implements
 	public void onNavigationDrawerItemSelected(int position) {
 		// update the main content by replacing fragments
 		FragmentManager fragmentManager = getChildFragmentManager();
-		fragmentManager
-				.beginTransaction()
-				.replace(R.id.container,
-						PlaceholderFragment.newInstance(position + 1)).commit();
+		fragmentManager.beginTransaction().replace(R.id.container, PlaceholderFragment.newInstance(position + 1)).commit();
 	}
 
 	@Override
-	public void onGesturePerformed(GestureOverlayView gestureOverlayView,
-			Gesture gesture) {
+	public void onGesturePerformed(GestureOverlayView gestureOverlayView, Gesture gesture) {
 		ArrayList<Prediction> predictions = gesLibrary.recognize(gesture);
 		if (predictions.size() > 0) {
 			for (Prediction prediction : predictions) {
 				if (prediction.score > 1.0) {
 					if (prediction.name.equalsIgnoreCase("swipe left")) {
-						CustomViewPager pager = (CustomViewPager) getActivity()
-								.findViewById(R.id.pager);
+						CustomViewPager pager = (CustomViewPager) getActivity().findViewById(R.id.pager);
 						pager.setCurrentItem(pager.getCurrentItem() + 1); // Swipe
 																			// between
 																			// pages
@@ -267,12 +250,10 @@ public class CustomDeckFragment extends Fragment implements
 						int y = (int) gesture.getStrokes().get(0).points[1];
 						int position = -1;
 						if (isGridView) {
-							GridView gridView = (GridView) uiLayout
-									.findViewById(R.id.custom_deck_grid_view);
+							GridView gridView = (GridView) uiLayout.findViewById(R.id.custom_deck_grid_view);
 							position = gridView.pointToPosition(x, y);
 						} else {
-							ListView listView = (ListView) uiLayout
-									.findViewById(R.id.custom_deck_deck_list);
+							ListView listView = (ListView) uiLayout.findViewById(R.id.custom_deck_deck_list);
 							position = listView.pointToPosition(x, y);
 						}
 
@@ -280,9 +261,7 @@ public class CustomDeckFragment extends Fragment implements
 							removeCardFromCustomDeck(position);
 							HexUtil.moveImageAnimation(createAnimationArg(x, y));
 						}
-					} else if (prediction.name
-							.equalsIgnoreCase("anti clockwise")
-							|| prediction.name.equalsIgnoreCase("clockwise")) {
+					} else if (prediction.name.equalsIgnoreCase("anti clockwise") || prediction.name.equalsIgnoreCase("clockwise")) {
 						cardViewer.clearFilter();
 						mFilterDrawerFragment.updateFilterUI();
 					}
@@ -300,10 +279,8 @@ public class CustomDeckFragment extends Fragment implements
 	 *         animation
 	 */
 	private HexUtil.AnimationArg createAnimationArg(int x, int y) {
-		HexUtil.AnimationArg result = new HexUtil.AnimationArg(cardBack, x
-				- (cardBackDimension / 2), HexUtil.getScreenWidth(mContext)
-				+ cardBackDimension, y - (cardBackDimension / 2), y - (y / 3),
-				400, 0);
+		HexUtil.AnimationArg result = new HexUtil.AnimationArg(cardBack, x - (cardBackDimension / 2), HexUtil.getScreenWidth(mContext)
+				+ cardBackDimension, y - (cardBackDimension / 2), y - (y / 3), 400, 0);
 		return result;
 	}
 
@@ -353,8 +330,7 @@ public class CustomDeckFragment extends Fragment implements
 
 		gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> parent, View v,
-					int position, long id) {
+			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
 				// Sending image id to FullScreenActivity
 				Intent i = new Intent(mContext, FullImageActivity.class);
@@ -368,8 +344,7 @@ public class CustomDeckFragment extends Fragment implements
 		gridView.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
-			public boolean onItemLongClick(AdapterView<?> parent, View view,
-					int position, long id) {
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 				// Remove cards from custom deck
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 					int[] values = new int[2];
@@ -391,16 +366,14 @@ public class CustomDeckFragment extends Fragment implements
 		listView = (ListView) uiLayout.findViewById(R.id.custom_deck_deck_list);
 
 		// Getting adapter by passing xml data ArrayList
-		lvAdapter = new DeckListViewAdapter(mContext,
-				cardViewer.getAdapter().masterDeck, customDeck.getDeckData());
+		lvAdapter = new DeckListViewAdapter(mContext, cardViewer.getAdapter().masterDeck, customDeck.getDeckData());
 		cardViewer.setAdapter(lvAdapter);
 		listView.setAdapter(lvAdapter);
 		// Click event for single list row
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				// Sending image id to FullScreenActivity
 				Intent i = new Intent(mContext, FullImageActivity.class);
 				// passing array index
@@ -413,8 +386,7 @@ public class CustomDeckFragment extends Fragment implements
 		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
-			public boolean onItemLongClick(AdapterView<?> parent, View view,
-					int position, long id) {
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 				// Remove cards from custom deck
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 					int[] values = new int[2];
@@ -444,16 +416,13 @@ public class CustomDeckFragment extends Fragment implements
 			} else {
 				removeMultipleCardsDialog = new RemoveMultipleCardsDialogFragmentGinger();
 			}
-			AbstractCard card = isGridView == true ? imAdapter.masterDeck
-					.get(position) : lvAdapter.masterDeck.get(position);
+			AbstractCard card = isGridView == true ? imAdapter.masterDeck.get(position) : lvAdapter.masterDeck.get(position);
 			removeMultipleCardsDialog.card = card;
 			removeMultipleCardsDialog.position = position;
-			removeMultipleCardsDialog.animationArg = createAnimationArg(
-					values[0] + cardBackDimension / 2, values[1]
-							- cardBackDimension / 2);
+			removeMultipleCardsDialog.animationArg = createAnimationArg(values[0] + cardBackDimension / 2, values[1] - cardBackDimension
+					/ 2);
 			removeMultipleCardsDialog.fragment = this;
-			removeMultipleCardsDialog.show(getActivity()
-					.getSupportFragmentManager(), "Remove Multiple Cards");
+			removeMultipleCardsDialog.show(getActivity().getSupportFragmentManager(), "Remove Multiple Cards");
 			return true;
 		}
 		return false;
@@ -495,17 +464,11 @@ public class CustomDeckFragment extends Fragment implements
 		co.shotType = ShowcaseView.TYPE_ONE_SHOT;
 		co.centerText = true;
 		co.hideOnClickOutside = true;
-		ShowcaseView showcaseView = ShowcaseView
-				.insertShowcaseView(
-						HexUtil.getScreenWidth(getActivity()) / 2,
-						HexUtil.getScreenHeight(getActivity()) / 15,
-						getActivity(),
-						"Custom Deck",
-						"This is where the magic happens, and you'll create your custom decks.",
-						co);
+		ShowcaseView showcaseView = ShowcaseView.insertShowcaseView(HexUtil.getScreenWidth(getActivity()) / 2,
+				HexUtil.getScreenHeight(getActivity()) / 15, getActivity(), "Custom Deck",
+				"This is where the magic happens, and you'll create your custom decks.", co);
 		showcaseView.setShowcase(ShowcaseView.NONE);
-		showcaseView.setOnShowcaseEventListener(new TutorialEventListener(
-				getActivity(), co, TutorialType.CUSTOMDECK));
+		showcaseView.setOnShowcaseEventListener(new TutorialEventListener(getActivity(), co, TutorialType.CUSTOMDECK));
 		showcaseView.show();
 		SharedPreferences.Editor editor = mPreferences.edit();
 		editor.putBoolean("firstTime", false);
@@ -516,30 +479,23 @@ public class CustomDeckFragment extends Fragment implements
 	 * Reload the custom deck menu data
 	 */
 	public void updateCustomDeckMenuData() {
-		ImageView championPortrait = (ImageView) mFilterDrawerFragment
-				.getView().findViewById(R.id.imageChampionPortrait);
-		TextView championName = (TextView) mFilterDrawerFragment.getView()
-				.findViewById(R.id.tvChampionName);
+		ImageView championPortrait = (ImageView) mFilterDrawerFragment.getView().findViewById(R.id.imageChampionPortrait);
+		TextView championName = (TextView) mFilterDrawerFragment.getView().findViewById(R.id.tvChampionName);
 		HexDeck currentCustomDeck = customDeck.getCurrentDeck();
 		if (currentCustomDeck != null && currentCustomDeck.champion != null) {
-			int portaitID = HexUtil.getResourceID(
-					currentCustomDeck.champion.hudPortraitSmall,
-					R.drawable.class);
+			int portaitID = HexUtil.getResourceID(currentCustomDeck.champion.hudPortraitSmall, R.drawable.class);
 			if (portaitID != -1) {
 				championPortrait.setImageResource(portaitID);
 			} else {
-				championPortrait
-						.setImageResource(R.drawable.championnoportaitsmall);
+				championPortrait.setImageResource(R.drawable.championnoportaitsmall);
 			}
 			championName.setText(currentCustomDeck.champion.name);
 		} else {
-			championPortrait
-					.setImageResource(R.drawable.championnoportaitsmall);
+			championPortrait.setImageResource(R.drawable.championnoportaitsmall);
 			championName.setText("No Champion Selected");
 		}
 		if (customDeck.getDeckData() != null) {
-			TextView deckCardCount = (TextView) mFilterDrawerFragment.getView()
-					.findViewById(R.id.tvDeckCardCount);
+			TextView deckCardCount = (TextView) mFilterDrawerFragment.getView().findViewById(R.id.tvDeckCardCount);
 			int cardCount = 0;
 			for (int value : customDeck.getDeckData().values()) {
 				cardCount += value;
@@ -561,11 +517,9 @@ public class CustomDeckFragment extends Fragment implements
 			reloadCustomDeckView();
 		} else {
 			if (isGridView) {
-				imAdapter
-						.getView(position, gridView.getChildAt(position), null);
+				imAdapter.getView(position, gridView.getChildAt(position), null);
 			} else {
-				lvAdapter
-						.getView(position, listView.getChildAt(position), null);
+				lvAdapter.getView(position, listView.getChildAt(position), null);
 			}
 			updateCustomDeckMenuData();
 			// Set button availability
@@ -591,8 +545,7 @@ public class CustomDeckFragment extends Fragment implements
 		} else {
 			deleteDeck.setEnabled(false);
 		}
-		if (customDeck.getCurrentDeck() == null
-				&& customDeck.getDeckCardList().isEmpty()) {
+		if (customDeck.getCurrentDeck() == null && customDeck.getDeckCardList().isEmpty()) {
 			saveDeck.setEnabled(false);
 		} else {
 			saveDeck.setEnabled(true);
@@ -606,8 +559,7 @@ public class CustomDeckFragment extends Fragment implements
 	 */
 	public void removeCardFromCustomDeck(int position, int value) {
 		if (position >= 0) {
-			AbstractCard card = isGridView == true ? imAdapter.masterDeck
-					.get(position) : lvAdapter.masterDeck.get(position);
+			AbstractCard card = isGridView == true ? imAdapter.masterDeck.get(position) : lvAdapter.masterDeck.get(position);
 			if (customDeck.removeCardFromDeck(card, value)) {
 				reloadCustomDeckView();
 			} else {
@@ -632,8 +584,7 @@ public class CustomDeckFragment extends Fragment implements
 	 */
 	private void setCustomDeckButtonListeners() {
 		final CustomDeckFragment fragment = this;
-		Button newDeck = (Button) mFilterDrawerFragment.getView().findViewById(
-				R.id.buttonNewDeck);
+		Button newDeck = (Button) mFilterDrawerFragment.getView().findViewById(R.id.buttonNewDeck);
 		newDeck.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -648,8 +599,7 @@ public class CustomDeckFragment extends Fragment implements
 
 		});
 
-		Button loadDeck = (Button) mFilterDrawerFragment.getView()
-				.findViewById(R.id.buttonLoadDeck);
+		Button loadDeck = (Button) mFilterDrawerFragment.getView().findViewById(R.id.buttonLoadDeck);
 		loadDeck.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -665,8 +615,7 @@ public class CustomDeckFragment extends Fragment implements
 
 		});
 
-		saveDeck = (Button) mFilterDrawerFragment.getView().findViewById(
-				R.id.buttonSaveDeck);
+		saveDeck = (Button) mFilterDrawerFragment.getView().findViewById(R.id.buttonSaveDeck);
 		saveDeck.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -681,8 +630,7 @@ public class CustomDeckFragment extends Fragment implements
 
 		});
 
-		deleteDeck = (Button) mFilterDrawerFragment.getView().findViewById(
-				R.id.buttonDeleteDeck);
+		deleteDeck = (Button) mFilterDrawerFragment.getView().findViewById(R.id.buttonDeleteDeck);
 		deleteDeck.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -691,17 +639,14 @@ public class CustomDeckFragment extends Fragment implements
 				if (customDeck.getCurrentDeck() != null) {
 					buildDeleteDeckConfirmationDialog();
 				} else {
-					Toast.makeText(mContext,
-							"Deck isn't saved, no need to delete.",
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(mContext, "Deck isn't saved, no need to delete.", Toast.LENGTH_SHORT).show();
 				}
 
 			}
 
 		});
 
-		selectChampion = (Button) mFilterDrawerFragment.getView().findViewById(
-				R.id.buttonSelectChampion);
+		selectChampion = (Button) mFilterDrawerFragment.getView().findViewById(R.id.buttonSelectChampion);
 		selectChampion.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -719,8 +664,7 @@ public class CustomDeckFragment extends Fragment implements
 	private void showNewDeckPopup() {
 		NewDeckDialogFragment newDeckDialog = new NewDeckDialogFragment();
 		newDeckDialog.setTargetFragment(this, 1);
-		newDeckDialog.show(getActivity().getSupportFragmentManager(),
-				"New Deck Popup");
+		newDeckDialog.show(getActivity().getSupportFragmentManager(), "New Deck Popup");
 	}
 
 	/**
@@ -729,8 +673,7 @@ public class CustomDeckFragment extends Fragment implements
 	private void showLoadDeckPopup() {
 		LoadDeckDialogFragment loadDeckDialog = new LoadDeckDialogFragment();
 		loadDeckDialog.setTargetFragment(this, 1);
-		loadDeckDialog.show(getActivity().getSupportFragmentManager(),
-				"Load Deck Popup");
+		loadDeckDialog.show(getActivity().getSupportFragmentManager(), "Load Deck Popup");
 	}
 
 	/**
@@ -739,8 +682,7 @@ public class CustomDeckFragment extends Fragment implements
 	private void showSelectChampionPopup() {
 		SelectChampionDialogFragment selectChampionDialog = new SelectChampionDialogFragment();
 		selectChampionDialog.setTargetFragment(this, 1);
-		selectChampionDialog.show(getActivity().getSupportFragmentManager(),
-				"Select Champion Popup");
+		selectChampionDialog.show(getActivity().getSupportFragmentManager(), "Select Champion Popup");
 	}
 
 	/**
@@ -780,17 +722,13 @@ public class CustomDeckFragment extends Fragment implements
 	private boolean saveDeck() {
 		if (customDeck.getCurrentDeck() != null) {
 			if (customDeck.saveDeck()) {
-				Toast.makeText(mContext, "Deck successfully saved.",
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(mContext, "Deck successfully saved.", Toast.LENGTH_SHORT).show();
 				return true;
 			} else {
-				Toast.makeText(mContext,
-						"Failed to save deck. Please try again.",
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(mContext, "Failed to save deck. Please try again.", Toast.LENGTH_SHORT).show();
 			}
 		} else {
-			Toast.makeText(mContext, "No deck to save.", Toast.LENGTH_SHORT)
-					.show();
+			Toast.makeText(mContext, "No deck to save.", Toast.LENGTH_SHORT).show();
 		}
 
 		return false;
@@ -803,20 +741,16 @@ public class CustomDeckFragment extends Fragment implements
 		if (customDeck.getCurrentDeck() != null) {
 			if (customDeck.deleteDeck()) {
 				reloadCustomDeck("Custom Deck");
-				Toast.makeText(mContext, "Deck successfully deleted.",
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(mContext, "Deck successfully deleted.", Toast.LENGTH_SHORT).show();
 			} else {
-				Toast.makeText(mContext,
-						"Failed to delete deck. Please try again.",
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(mContext, "Failed to delete deck. Please try again.", Toast.LENGTH_SHORT).show();
 			}
 
 		}
 	}
 
 	private void reloadCustomDeck(String deckName) {
-		((ActionBarActivity) getActivity()).getSupportActionBar().getTabAt(0)
-				.setText(deckName);
+		((ActionBarActivity) getActivity()).getSupportActionBar().getTabAt(0).setText(deckName);
 		reloadCustomDeckView();
 	}
 
@@ -842,22 +776,19 @@ public class CustomDeckFragment extends Fragment implements
 	private void buildDeleteDeckConfirmationDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 		builder.setTitle("Delete Deck");
-		builder.setMessage("Are you sure you want to delete deck: "
-				+ customDeck.getCurrentDeck().name + "?");
-		builder.setPositiveButton("Delete",
-				new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface arg0, int arg1) {
-						deleteDeck();
-					}
-				});
-		builder.setNegativeButton("Cancel",
-				new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface arg0, int arg1) {
+		builder.setMessage("Are you sure you want to delete deck: " + customDeck.getCurrentDeck().name + "?");
+		builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface arg0, int arg1) {
+				deleteDeck();
+			}
+		});
+		builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface arg0, int arg1) {
 
-					}
-				});
+			}
+		});
 
 		builder.show();
 
@@ -873,8 +804,7 @@ public class CustomDeckFragment extends Fragment implements
 	 * @param fragment
 	 *            - the CustomDeckFragment to invoke the given method on
 	 */
-	private void buildSaveUnsavedDeckDialog(final String methodName,
-			final CustomDeckFragment fragment) {
+	private void buildSaveUnsavedDeckDialog(final String methodName, final CustomDeckFragment fragment) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle("Save Deck?");
 		final EditText input = new EditText(getActivity());
@@ -886,33 +816,27 @@ public class CustomDeckFragment extends Fragment implements
 			builder.setMessage("This deck has unsaved changes, would you like to save it before proceeding?");
 		}
 
-		builder.setPositiveButton("Save",
-				new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int position) {
-						if (input.getText().toString().isEmpty()) {
-							Toast.makeText(getActivity(),
-									"You must enter a name before saving.",
-									Toast.LENGTH_SHORT).show();
-						} else if (customDeck.getCurrentDeck() != null) {
-							saveDeck();
-							invokeNoParamReflectiveMethod(methodName, fragment);
-						} else if (!saveUnsavedDeck(input.getText().toString())) {
-							Toast.makeText(getActivity(),
-									"Failed to save deck. Please try again.",
-									Toast.LENGTH_SHORT).show();
-						} else {
-							invokeNoParamReflectiveMethod(methodName, fragment);
-						}
-					}
-				});
-		builder.setNegativeButton("No Thanks!",
-				new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int position) {
-						invokeNoParamReflectiveMethod(methodName, fragment);
-					}
-				});
+		builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int position) {
+				if (input.getText().toString().isEmpty()) {
+					Toast.makeText(getActivity(), "You must enter a name before saving.", Toast.LENGTH_SHORT).show();
+				} else if (customDeck.getCurrentDeck() != null) {
+					saveDeck();
+					invokeNoParamReflectiveMethod(methodName, fragment);
+				} else if (!saveUnsavedDeck(input.getText().toString())) {
+					Toast.makeText(getActivity(), "Failed to save deck. Please try again.", Toast.LENGTH_SHORT).show();
+				} else {
+					invokeNoParamReflectiveMethod(methodName, fragment);
+				}
+			}
+		});
+		builder.setNegativeButton("No Thanks!", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int position) {
+				invokeNoParamReflectiveMethod(methodName, fragment);
+			}
+		});
 		final AlertDialog dialog = builder.create();
 		dialog.show(); // To show the AlertDialog
 		dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
@@ -921,22 +845,18 @@ public class CustomDeckFragment extends Fragment implements
 			@Override
 			public void afterTextChanged(Editable edit) {
 				if (!input.getText().toString().trim().isEmpty()) {
-					dialog.getButton(DialogInterface.BUTTON_POSITIVE)
-							.setEnabled(true);
+					dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true);
 				} else {
-					dialog.getButton(DialogInterface.BUTTON_POSITIVE)
-							.setEnabled(false);
+					dialog.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
 				}
 			}
 
 			@Override
-			public void beforeTextChanged(CharSequence cs, int start,
-					int before, int count) {
+			public void beforeTextChanged(CharSequence cs, int start, int before, int count) {
 			}
 
 			@Override
-			public void onTextChanged(CharSequence cs, int start, int before,
-					int count) {
+			public void onTextChanged(CharSequence cs, int start, int before, int count) {
 
 			}
 
@@ -952,12 +872,10 @@ public class CustomDeckFragment extends Fragment implements
 	 * @param fragment
 	 *            - the CustomDeckFragment to invoke the given method on
 	 */
-	private void invokeNoParamReflectiveMethod(final String methodName,
-			final CustomDeckFragment fragment) {
+	private void invokeNoParamReflectiveMethod(final String methodName, final CustomDeckFragment fragment) {
 		if (methodName != null) {
 			try {
-				Method method = CustomDeckFragment.class
-						.getDeclaredMethod(methodName);
+				Method method = CustomDeckFragment.class.getDeclaredMethod(methodName);
 				if (!method.isAccessible()) {
 					method.setAccessible(true);
 				}
@@ -977,12 +895,9 @@ public class CustomDeckFragment extends Fragment implements
 			public void run() {
 				if (listView.getChildCount() > 0) {
 					int last = listView.getLastVisiblePosition();
-					if (last == listView.getCount() - 1
-							&& listView.getChildAt(last).getBottom() >= listView
-									.getHeight()) {
-						listView.setLayoutParams(new LinearLayout.LayoutParams(
-								LayoutParams.MATCH_PARENT, listView.getHeight()
-										+ listView.getChildAt(last).getBottom()));
+					if (last == listView.getCount() - 1 && listView.getChildAt(last).getBottom() >= listView.getHeight()) {
+						listView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, listView.getHeight()
+								+ listView.getChildAt(last).getBottom()));
 					}
 				}
 			}
