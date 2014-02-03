@@ -46,8 +46,6 @@ public class SymbolImageSerializer implements JsonDeserializer<SymbolTemplate> {
 		SymbolTemplate template = gson.fromJson(json, SymbolTemplate.class);
 
 		template.templateId = resources.getIdentifier(template.imageName, "drawable", androidContext.getPackageName());
-		int test = resources.getIdentifier("gametext_attack", "drawable", androidContext.getPackageName());	
-		System.out.print(test);
 		return template;
 	}
 

@@ -170,7 +170,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			
 			champion = createNewChampion(results);
 		}catch(Exception ex){
-			System.out.println("****** ERROR GETTING CHAMPION ******");
+			System.err.println("****** ERROR GETTING CHAMPION ******");
 		}
 		
 		return champion;

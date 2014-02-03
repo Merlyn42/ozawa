@@ -74,7 +74,6 @@ public class ImageCache {
 		activityManager.getMemoryInfo(mi);
 		long availableMegs = mi.availMem / 1048576L;
 		int result = Long.valueOf(availableMegs).intValue();
-		System.out.println("Setting image cache to size:" +result+" As large memory class is"+availableMegs+"MB");
 		return result;
 	}
 	

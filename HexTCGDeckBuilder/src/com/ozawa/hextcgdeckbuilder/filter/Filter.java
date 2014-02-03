@@ -144,7 +144,6 @@ public class Filter {
 			if(!match(abstractCard.cardType,cardTypes))return false;
 		}
 		if (colors.size() != NUMBEROFCOLORS) {
-			System.out.println(abstractCard.resourceThresholdGranted==null?true:!match(abstractCard.resourceThresholdGranted[0].colorFlags,colors));
 			if(!match(abstractCard.colorFlags,colors)&&(abstractCard.resourceThresholdGranted==null?true:!match(abstractCard.resourceThresholdGranted[0].colorFlags,colors)))return false;
 		}
 
