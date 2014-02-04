@@ -81,8 +81,17 @@ public class TutorialEventListener implements OnShowcaseEventListener {
 		        currentShowcase = showcaseView;
 		        tutCount++;
 		        break;
-			}		
-			case 3:{ //change to list view tutorial				
+			}
+			case 3:{ //Filter menu tutorial END
+				showcaseView = createShowcaseView(0, (int)(HexUtil.getScreenHeight(activity) / 2), activity, 
+						"Filter Options", "Swipe right or tap outside the filter menu to close it", co, 1f);
+				showcaseView.animateGesture(0, HexUtil.getScreenHeight(activity) / 2, HexUtil.getScreenWidth(activity) / 2, HexUtil.getScreenHeight(activity) / 2, true);
+		        showcaseView.show();
+		        currentShowcase = showcaseView;
+		        tutCount++;
+		        break;
+			}
+			case 4:{ //change to list view tutorial				
 				showcaseView = ShowcaseView.insertShowcaseView(activity.findViewById(R.id.action_list_view),activity,"List View", "Click here to change view to a listview", co);
 				showcaseView.setScaleMultiplier(.5f);
 		        showcaseView.setOnShowcaseEventListener(this);
@@ -91,7 +100,7 @@ public class TutorialEventListener implements OnShowcaseEventListener {
 				tutCount++;
 				break;
 			}
-			case 4:{ // change to deck view
+			case 5:{ // change to deck view
 				showcaseView = ShowcaseView.insertShowcaseView(activity.findViewById(R.id.action_deck_view),activity,"Deck View", "Click here to change view to a deck view.", co);
 				showcaseView.setScaleMultiplier(.5f);
 		        showcaseView.setOnShowcaseEventListener(this);
@@ -100,7 +109,7 @@ public class TutorialEventListener implements OnShowcaseEventListener {
 				tutCount++;
 				break;
 			}
-			case 5:{ // Add card to custom deck
+			case 6:{ // Add card to custom deck
 				showcaseView = createShowcaseView(HexUtil.getScreenWidth(activity) / 2, (int)(HexUtil.getScreenHeight(activity) / 4), activity, 
 						"Add Cards to Custom Deck", "Swipe left to add a card to your custom deck.", co, 0.8f);
 		        showcaseView.animateGesture(HexUtil.getScreenWidth(activity) / 2, (int)(HexUtil.getScreenHeight(activity) / 2.1), (int)(HexUtil.getScreenWidth(activity) / 4), (int)(HexUtil.getScreenHeight(activity) / 2.1), true);
@@ -108,7 +117,7 @@ public class TutorialEventListener implements OnShowcaseEventListener {
 		        tutCount++;
 		        break;
 			}
-			case 6:{ // Add multiple cards to custom deck
+			case 7:{ // Add multiple cards to custom deck
 				showcaseView = createShowcaseView(HexUtil.getScreenWidth(activity) / 2, (int)(HexUtil.getScreenHeight(activity) / 4), activity, 
 						"Add Multiple Cards at Once", "Hold down to add multiple cards to your custom deck.", co, 0.8f);
 		        showcaseView.animateGesture(HexUtil.getScreenWidth(activity) / 2, (int)(HexUtil.getScreenHeight(activity) / 1.5), (int)(HexUtil.getScreenWidth(activity) / 2), (int)(HexUtil.getScreenHeight(activity) / 2.1), true);
@@ -117,7 +126,7 @@ public class TutorialEventListener implements OnShowcaseEventListener {
 		        tutCount++;
 		        break;
 			}
-			case 7:{ //Go to custom deck
+			case 8:{ //Go to custom deck
 				showcaseView = createShowcaseView(HexUtil.getScreenWidth(activity) / 2, (int)(HexUtil.getScreenHeight(activity) / 4), activity, 
 						"Custom Deck Screen", "Swipe right to view the custom deck.", co, 0.8f);
 				showcaseView.animateGesture(HexUtil.getScreenWidth(activity) / 2, HexUtil.getScreenHeight(activity) / 2, HexUtil.getScreenWidth(activity), HexUtil.getScreenHeight(activity) / 2, true);
