@@ -119,9 +119,9 @@ public class ExpansionDownloaderActivity extends Activity implements IDownloader
     private static final XAPKFile[] xAPKS = {
             new XAPKFile(
                     true, // true signifies a main file
-                    3, // the version of the APK that the file was uploaded
+                    1, // the version of the APK that the file was uploaded
                        // against
-                    52054871L // the length of the file in bytes
+                    53464007L // the length of the file in bytes
             )
             /*new XAPKFile(
                     false, // false signifies a patch file
@@ -435,7 +435,6 @@ public class ExpansionDownloaderActivity extends Activity implements IDownloader
             }
 
         } else {
-        	System.out.println("************ EXPANSION FILES GETTING VALIDATED ************");
             validateXAPKZipFiles();
             startSplashActivity();
         }
@@ -585,7 +584,6 @@ public class ExpansionDownloaderActivity extends Activity implements IDownloader
     }
     
     private void startSplashActivity(){
-    	System.out.println("************ EXPANSION FILES ALL GOOD YO ************");
 		Intent intent = new Intent(getBaseContext(), SplashActivity.class);
 		startActivity(intent);
 	}
