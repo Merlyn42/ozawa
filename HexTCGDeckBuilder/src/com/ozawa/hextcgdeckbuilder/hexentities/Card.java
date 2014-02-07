@@ -101,7 +101,7 @@ public class Card extends AbstractCard {
 		// get the portrait image
 		BitmapFactory.Options portraitFirstOptions = new BitmapFactory.Options();
 		portraitFirstOptions.inJustDecodeBounds = true;
-		HexUtil.getBitmapFromExpansionFiles(context, cardImagePath.concat(".jpg"), portraitFirstOptions);//BitmapFactory.decodeResource(resources, portraitId, portraitFirstOptions);
+		HexUtil.getBitmapFromExpansionFiles(context, cardImagePath, portraitFirstOptions);//BitmapFactory.decodeResource(resources, portraitId, portraitFirstOptions);
 		// used to scale the image, use only the part of the image to determine
 		// scaling.
 		int cutPortraitWidth = Double.valueOf(
@@ -114,7 +114,7 @@ public class Card extends AbstractCard {
 		BitmapFactory.Options portraitSecondOptions = new BitmapFactory.Options();
 		portraitSecondOptions = new BitmapFactory.Options();
 		portraitSecondOptions.inSampleSize = scale;
-		Bitmap portrait = HexUtil.getBitmapFromExpansionFiles(context, cardImagePath.concat(".jpg"), portraitSecondOptions);
+		Bitmap portrait = HexUtil.getBitmapFromExpansionFiles(context, cardImagePath, portraitSecondOptions);
 
 		Bitmap result = Bitmap.createBitmap(templateImage.getWidth(), templateImage.getHeight(), Bitmap.Config.ARGB_8888);
 		Canvas combine = new Canvas(result);
@@ -486,9 +486,7 @@ public class Card extends AbstractCard {
 			if (portrait == null) {
 				BitmapFactory.Options portraitOptions = new BitmapFactory.Options();
 				portraitOptions.inSampleSize = 4;
-				//portrait = BitmapFactory.decodeResource(mContext.getResources(),
-				//		HexUtil.getResourceID(this.cardImagePath, R.drawable.class), portraitOptions);
-				portrait = HexUtil.getBitmapFromExpansionFiles(mContext, this.cardImagePath.concat(".jpg"), portraitOptions);
+				portrait = HexUtil.getBitmapFromExpansionFiles(mContext, this.cardImagePath, portraitOptions);
 				if (portrait != null) {
 					double pL = defaultLayout.portraitLeft * portrait.getWidth();
 					double pR = defaultLayout.portraitRight * portrait.getWidth();

@@ -227,4 +227,10 @@ public class TutorialEventListener implements OnShowcaseEventListener {
 	public void onShowcaseViewShow(ShowcaseView showcaseView) {
 	}
 
+	@Override
+	public void onShowcaseViewClosed(ShowcaseView showcaseView) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

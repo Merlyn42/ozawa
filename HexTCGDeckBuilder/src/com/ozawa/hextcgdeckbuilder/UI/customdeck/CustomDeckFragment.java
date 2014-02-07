@@ -481,7 +481,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 		TextView championName = (TextView) mFilterDrawerFragment.getView().findViewById(R.id.tvChampionName);
 		HexDeck currentCustomDeck = customDeck.getCurrentDeck();
 		if (currentCustomDeck != null && currentCustomDeck.champion != null) {
-			Bitmap portait = HexUtil.getBitmapFromExpansionFiles(mContext, currentCustomDeck.champion.hudPortraitSmall.concat(".png"), null);//HexUtil.getResourceID(currentCustomDeck.champion.hudPortraitSmall, R.drawable.class);
+			Bitmap portait = HexUtil.getBitmapFromExpansionFiles(mContext, currentCustomDeck.champion.hudPortraitSmall, null);
 			if (portait != null) {
 				championPortrait.setImageBitmap(portait);
 			} else {

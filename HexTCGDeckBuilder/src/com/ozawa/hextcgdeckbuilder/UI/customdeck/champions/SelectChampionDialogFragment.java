@@ -84,10 +84,10 @@ public class SelectChampionDialogFragment extends DialogFragment {
 		HexUtil.populateTextViewWithHexHtml(selectedChampionGameText,selectedChampion.gameText);
 		final ImageView selectedChampionPortrait = (ImageView) relativeLayout.findViewById(R.id.imageChampionPortrait);		
 		if(selectedChampion.hudPortrait != null){
-			Bitmap portrait = HexUtil.getBitmapFromExpansionFiles(getActivity(), selectedChampion.hudPortrait.concat(".jpg"), null);
+			Bitmap portrait = HexUtil.getBitmapFromExpansionFiles(getActivity(), selectedChampion.hudPortrait, null);
 			selectedChampionPortrait.setImageBitmap(portrait);					
 		}else if(selectedChampion.hudPortraitSmall != null){
-			Bitmap portrait = HexUtil.getBitmapFromExpansionFiles(getActivity(), selectedChampion.hudPortraitSmall.concat(".png"), null);
+			Bitmap portrait = HexUtil.getBitmapFromExpansionFiles(getActivity(), selectedChampion.hudPortraitSmall, null);
 			selectedChampionPortrait.setImageBitmap(portrait);
 		}
 		
@@ -108,9 +108,9 @@ public class SelectChampionDialogFragment extends DialogFragment {
 					
 					Bitmap portrait = null;
 					if(champion.hudPortrait != null){
-						portrait = HexUtil.getBitmapFromExpansionFiles(getActivity(), champion.hudPortrait.concat(".jpg"), null);						
+						portrait = HexUtil.getBitmapFromExpansionFiles(getActivity(), champion.hudPortrait, null);						
 					}else if(champion.hudPortraitSmall != null){
-						portrait = HexUtil.getBitmapFromExpansionFiles(getActivity(), champion.hudPortraitSmall.concat(".png"), null);
+						portrait = HexUtil.getBitmapFromExpansionFiles(getActivity(), champion.hudPortraitSmall, null);
 					}
 					
 					if(portrait != null){

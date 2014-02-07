@@ -29,7 +29,6 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 
 import com.google.gson.Gson;
 
@@ -98,7 +97,7 @@ public class CardImagerMapperUtil {
 					writeJpeg(newImageFile, image, quality);
 				}
 
-				card.setM_CardImagePath(FilenameUtils.removeExtension(newImageFile.getName()));
+				card.setM_CardImagePath(newImageFile.getName());
 				String newCardJSON = JSONSerializer.serializeCardToJSON(card);
 
 				File newCardFile = new File(newCardLocation, newCardName + String.format("%05d", fileNumber) + ".json");
@@ -151,7 +150,7 @@ public class CardImagerMapperUtil {
 							System.out.println("Skipping champion file as image not found");
 						}
 
-						champ.hudPortraitSmall = FilenameUtils.removeExtension(newImageFile.getName());
+						champ.hudPortraitSmall = newImageFile.getName();
 					}
 
 					if (champ.hudPortrait != null) {
@@ -165,7 +164,7 @@ public class CardImagerMapperUtil {
 							System.out.println("Skipping champion file as image not found");
 						}
 
-						champ.hudPortrait = FilenameUtils.removeExtension(newImageFile.getName());
+						champ.hudPortrait = newImageFile.getName();
 					}
 					String newChampionJSON = gson.toJson(champ);
 

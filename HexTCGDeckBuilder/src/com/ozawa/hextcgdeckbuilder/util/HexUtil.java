@@ -23,21 +23,20 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 
-import com.android.vending.expansion.zipfile.APKExpansionSupport;
 import com.android.vending.expansion.zipfile.ZipResourceFile;
-import com.google.android.vending.expansion.downloader.Helpers;
 import com.ozawa.hextcgdeckbuilder.UI.listview.HtmlImageGetter;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 import com.ozawa.hextcgdeckbuilder.hexentities.ResourceCard;
+import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.graphics.Point;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.Html;
 import android.text.Spanned;
@@ -126,19 +125,29 @@ public class HexUtil {
 		return id;
 	}
 	
+	/**
+	 * Generate a Bitmap from an image file within the expansion files
+	 * 
+	 * @param mContext
+	 * @param fileName
+	 * @param portraitOptions
+	 * @return a Bitmap for the given file path, or null if no file is found
+	 */
 	public static Bitmap getBitmapFromExpansionFiles(Context mContext, String fileName, Options portraitOptions){
-		String mainExpansionFileName = Helpers.getExpansionAPKFileName(mContext, true, 1);
-		if(Helpers.doesFileExist(mContext, mainExpansionFileName, 53464007L, false)){
-			try {
-				ZipResourceFile expansionFile = APKExpansionSupport.getAPKExpansionZipFile(mContext, 1, 0);//new ZipResourceFile(Helpers.generateSaveFileName(mContext,mainExpansionFileName));
-				InputStream imageInputStream = expansionFile.getInputStream(mainExpansionFileName.substring(0, mainExpansionFileName.length() - 4) + "/" + fileName);
+		try {
+			Activity mActivity = ((Activity) mContext);
+			HexApplication app = (HexApplication) mActivity.getApplication();
+			ZipResourceFile expansionFile = app.getExpansionFile();
+			if(expansionFile != null){
+				InputStream imageInputStream = expansionFile.getInputStream(fileName);
 				
 				return BitmapFactory.decodeStream(imageInputStream, null, portraitOptions);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
 		return null;
 	}
 	
