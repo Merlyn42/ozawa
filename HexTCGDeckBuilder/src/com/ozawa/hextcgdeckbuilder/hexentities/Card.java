@@ -89,25 +89,19 @@ public class Card extends AbstractCard {
 	 * @param context
 	 *            The context to use to retrieve the image.
 	 * @return The bitmap of the card or null if no portrait is found
-	 * @Author Laurence Reading
 	 */
 
 	@Override
 	public Bitmap getCardBitmap(Context context, CardTemplate template, int maxWidth) {
 		Resources resources = context.getResources();
-		final int portraitId = resources.getIdentifier(cardImagePath.split("\\.")[0], "drawable", context.getPackageName());
 		
-		// no resourceID found
-		if (portraitId == 0)
-			return null;
-
 		// find the correct template
 		Bitmap templateImage = template.getImage(context, maxWidth);
 
 		// get the portrait image
 		BitmapFactory.Options portraitFirstOptions = new BitmapFactory.Options();
 		portraitFirstOptions.inJustDecodeBounds = true;
-		BitmapFactory.decodeResource(resources, portraitId, portraitFirstOptions);
+		HexUtil.getBitmapFromExpansionFiles(context, cardImagePath.concat(".jpg"), portraitFirstOptions);//BitmapFactory.decodeResource(resources, portraitId, portraitFirstOptions);
 		// used to scale the image, use only the part of the image to determine
 		// scaling.
 		int cutPortraitWidth = Double.valueOf(
@@ -120,7 +114,7 @@ public class Card extends AbstractCard {
 		BitmapFactory.Options portraitSecondOptions = new BitmapFactory.Options();
 		portraitSecondOptions = new BitmapFactory.Options();
 		portraitSecondOptions.inSampleSize = scale;
-		Bitmap portrait = BitmapFactory.decodeResource(resources, portraitId, portraitSecondOptions);
+		Bitmap portrait = HexUtil.getBitmapFromExpansionFiles(context, cardImagePath.concat(".jpg"), portraitSecondOptions);
 
 		Bitmap result = Bitmap.createBitmap(templateImage.getWidth(), templateImage.getHeight(), Bitmap.Config.ARGB_8888);
 		Canvas combine = new Canvas(result);
@@ -492,8 +486,9 @@ public class Card extends AbstractCard {
 			if (portrait == null) {
 				BitmapFactory.Options portraitOptions = new BitmapFactory.Options();
 				portraitOptions.inSampleSize = 4;
-				portrait = BitmapFactory.decodeResource(mContext.getResources(),
-						HexUtil.getResourceID(this.cardImagePath, R.drawable.class), portraitOptions);
+				//portrait = BitmapFactory.decodeResource(mContext.getResources(),
+				//		HexUtil.getResourceID(this.cardImagePath, R.drawable.class), portraitOptions);
+				portrait = HexUtil.getBitmapFromExpansionFiles(mContext, this.cardImagePath.concat(".jpg"), portraitOptions);
 				if (portrait != null) {
 					double pL = defaultLayout.portraitLeft * portrait.getWidth();
 					double pR = defaultLayout.portraitRight * portrait.getWidth();
