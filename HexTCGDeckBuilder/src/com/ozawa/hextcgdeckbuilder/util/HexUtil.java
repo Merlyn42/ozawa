@@ -23,15 +23,14 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 
+import com.android.vending.expansion.zipfile.APKExpansionSupport;
 import com.android.vending.expansion.zipfile.ZipResourceFile;
 import com.ozawa.hextcgdeckbuilder.UI.listview.HtmlImageGetter;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 import com.ozawa.hextcgdeckbuilder.hexentities.ResourceCard;
-import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -54,6 +53,8 @@ import android.widget.TextView;
  * Utility class that holds reusable methods for the application
  */
 public class HexUtil {
+	
+	private static ZipResourceFile expansionFile;
 	
 	private HexUtil(){}
 	
@@ -135,20 +136,28 @@ public class HexUtil {
 	 */
 	public static Bitmap getBitmapFromExpansionFiles(Context mContext, String fileName, Options portraitOptions){
 		try {
-			Activity mActivity = ((Activity) mContext);
-			HexApplication app = (HexApplication) mActivity.getApplication();
-			ZipResourceFile expansionFile = app.getExpansionFile();
+			ZipResourceFile expansionFile = getExpansionFile(mContext);
 			if(expansionFile != null){
-				InputStream imageInputStream = expansionFile.getInputStream(fileName);
+				InputStream imageInputStream = expansionFile.getInputStream("images/" + fileName);
 				
 				return BitmapFactory.decodeStream(imageInputStream, null, portraitOptions);
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
 		return null;
+	}
+	
+	public static ZipResourceFile getExpansionFile(Context mContext){
+		if(expansionFile == null){
+			try {
+				expansionFile = APKExpansionSupport.getAPKExpansionZipFile(mContext, 1, 0);
+			} catch (IOException e) {
+				
+			}
+		}
+		
+		return expansionFile;
 	}
 	
 	/**

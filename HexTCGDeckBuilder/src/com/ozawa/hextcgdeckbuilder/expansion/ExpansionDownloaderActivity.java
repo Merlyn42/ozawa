@@ -121,7 +121,7 @@ public class ExpansionDownloaderActivity extends Activity implements IDownloader
                     true, // true signifies a main file
                     1, // the version of the APK that the file was uploaded
                        // against
-                    53464007L // the length of the file in bytes
+                    64719012L // the length of the file in bytes
             )
             /*new XAPKFile(
                     false, // false signifies a patch file
@@ -300,6 +300,7 @@ public class ExpansionDownloaderActivity extends Activity implements IDownloader
                     mPauseButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                        	startSplashActivity();
                             finish();
                         }
                     });
@@ -586,6 +587,7 @@ public class ExpansionDownloaderActivity extends Activity implements IDownloader
     private void startSplashActivity(){
 		Intent intent = new Intent(getBaseContext(), SplashActivity.class);
 		startActivity(intent);
+		finish();
 	}
 
 }

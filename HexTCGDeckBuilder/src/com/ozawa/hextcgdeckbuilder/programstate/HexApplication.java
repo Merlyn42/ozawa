@@ -17,10 +17,6 @@
  ******************************************************************************/
 package com.ozawa.hextcgdeckbuilder.programstate;
 
-import java.io.IOException;
-
-import com.android.vending.expansion.zipfile.APKExpansionSupport;
-import com.android.vending.expansion.zipfile.ZipResourceFile;
 import com.ozawa.hextcgdeckbuilder.UI.CardsViewer;
 import com.ozawa.hextcgdeckbuilder.UI.customdeck.Deck;
 import com.ozawa.hextcgdeckbuilder.json.MasterDeck;
@@ -33,7 +29,6 @@ public class HexApplication extends Application {
 	CardsViewer cardLibraryViewer;
 	Deck cardLibrary;
 	Deck customDeck;
-	ZipResourceFile expansionFile;
 	
 	public Deck getCustomDeck(){
 		if(customDeck == null){
@@ -64,18 +59,6 @@ public class HexApplication extends Application {
 			cardLibraryViewer = new CardsViewer(getApplicationContext(), getCardLibrary());
 		}
 		return cardLibraryViewer;
-	}
-	
-	public ZipResourceFile getExpansionFile(){
-		if(expansionFile == null){
-			try {
-				expansionFile = APKExpansionSupport.getAPKExpansionZipFile(this, 1, 0);
-			} catch (IOException e) {
-				
-			}
-		}
-		
-		return expansionFile;
 	}
 
 }

@@ -115,39 +115,43 @@ public class Card extends AbstractCard {
 		portraitSecondOptions = new BitmapFactory.Options();
 		portraitSecondOptions.inSampleSize = scale;
 		Bitmap portrait = HexUtil.getBitmapFromExpansionFiles(context, cardImagePath, portraitSecondOptions);
-
+		
 		Bitmap result = Bitmap.createBitmap(templateImage.getWidth(), templateImage.getHeight(), Bitmap.Config.ARGB_8888);
 		Canvas combine = new Canvas(result);
-		Rect dstRect = new Rect();
-		Rect srcRect = new Rect();
-		dstRect.top = (int) (templateImage.getHeight() * template.top);
-		dstRect.bottom = (int) (templateImage.getHeight() * template.bottom);
-		dstRect.right = (int) (templateImage.getWidth() * template.right);
-		dstRect.left = (int) (templateImage.getWidth() * template.left);
-		srcRect.left = Double.valueOf(portrait.getWidth() * defaultLayout.portraitLeft).intValue();
-		srcRect.right = Double.valueOf(portrait.getWidth() * defaultLayout.portraitRight).intValue();
-		srcRect.top = Double.valueOf(portrait.getWidth() * defaultLayout.portraitTop).intValue();
-		srcRect.bottom = Double.valueOf(portrait.getWidth() * defaultLayout.portraitBottom).intValue();
-
-		combine.drawBitmap(portrait, srcRect, dstRect, null);
-		combine.drawBitmap(templateImage, 0f, 0f, null);
-
-		Paint paint = new Paint();
-		paint.setTextAlign(Paint.Align.LEFT);
-		paint.setColor(-1);
-		paint.setAntiAlias(true);
-
-		Bitmap threshold = getCardThresholdImage(context, template, templateImage);
-		if (template.fullCard) {
-			drawFullImageText(combine, templateImage, paint, resources, context, template,scale);
-			if (threshold != null) {
-				combine.drawBitmap(threshold, (templateImage.getWidth() / 14), (templateImage.getHeight() / 9.5f), null);
+		if(portrait != null){			
+			Rect dstRect = new Rect();
+			Rect srcRect = new Rect();
+			dstRect.top = (int) (templateImage.getHeight() * template.top);
+			dstRect.bottom = (int) (templateImage.getHeight() * template.bottom);
+			dstRect.right = (int) (templateImage.getWidth() * template.right);
+			dstRect.left = (int) (templateImage.getWidth() * template.left);
+			srcRect.left = Double.valueOf(portrait.getWidth() * defaultLayout.portraitLeft).intValue();
+			srcRect.right = Double.valueOf(portrait.getWidth() * defaultLayout.portraitRight).intValue();
+			srcRect.top = Double.valueOf(portrait.getWidth() * defaultLayout.portraitTop).intValue();
+			srcRect.bottom = Double.valueOf(portrait.getWidth() * defaultLayout.portraitBottom).intValue();
+	
+			combine.drawBitmap(portrait, srcRect, dstRect, null);
+			combine.drawBitmap(templateImage, 0f, 0f, null);
+	
+			Paint paint = new Paint();
+			paint.setTextAlign(Paint.Align.LEFT);
+			paint.setColor(-1);
+			paint.setAntiAlias(true);
+	
+			Bitmap threshold = getCardThresholdImage(context, template, templateImage);
+			if (template.fullCard) {
+				drawFullImageText(combine, templateImage, paint, resources, context, template,scale);
+				if (threshold != null) {
+					combine.drawBitmap(threshold, (templateImage.getWidth() / 14), (templateImage.getHeight() / 9.5f), null);
+				}
+			} else {
+				drawThumbnailText(combine, templateImage, paint, template,resources,scale);
+				if (threshold != null) {
+					combine.drawBitmap(threshold, (templateImage.getWidth() / 14), (templateImage.getHeight() / 4.2f), null);
+				}
 			}
-		} else {
-			drawThumbnailText(combine, templateImage, paint, template,resources,scale);
-			if (threshold != null) {
-				combine.drawBitmap(threshold, (templateImage.getWidth() / 14), (templateImage.getHeight() / 4.2f), null);
-			}
+		}else{
+			combine.drawBitmap(templateImage, 0f, 0f, null);
 		}
 
 		return result;
