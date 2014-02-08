@@ -27,7 +27,6 @@ import android.graphics.Rect;
 import android.os.Build;
 
 import com.google.gson.annotations.SerializedName;
-import com.ozawa.hextcgdeckbuilder.R;
 import com.ozawa.hextcgdeckbuilder.UI.CardTemplate;
 import com.ozawa.hextcgdeckbuilder.programstate.ImageCache;
 import com.ozawa.hextcgdeckbuilder.programstate.ImageCache.CacheType;
@@ -75,8 +74,7 @@ public class ResourceCard extends AbstractCard {
 			if (portrait == null) {
 				BitmapFactory.Options portraitOptions = new BitmapFactory.Options();
 				portraitOptions.inSampleSize = 4;
-				portrait = BitmapFactory.decodeResource(mContext.getResources(),
-						HexUtil.getResourceID(this.cardImagePath, R.drawable.class), portraitOptions);
+				portrait = HexUtil.getBitmapFromExpansionFiles(mContext, cardImagePath, portraitOptions);
 				if (portrait != null) {
 					double pL = defaultLayout.portraitLeft * portrait.getWidth();
 					double pR = defaultLayout.portraitRight * portrait.getWidth();

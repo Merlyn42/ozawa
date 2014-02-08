@@ -148,6 +148,12 @@ public class HexUtil {
 		return null;
 	}
 	
+	/**
+	 * Returns the expansion files as a ZipResourceFile
+	 * 
+	 * @param mContext
+	 * @return the combined main and patch expansion files
+	 */
 	public static ZipResourceFile getExpansionFile(Context mContext){
 		if(expansionFile == null){
 			try {

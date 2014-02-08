@@ -23,13 +23,6 @@ import com.ozawa.hextcgdeckbuilder.hexentities.HexDeck;
 import com.ozawa.hextcgdeckbuilder.enums.CardType;
 import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -37,7 +30,6 @@ import com.google.gson.GsonBuilder;
  * Class used to serialize and deserialize JSON to required Hex entities and vice versa.
  */
 public class JSONSerializer {
-	static final File HEXLOCATION = new File("D:\\Program Files (x86)\\Hex");
 	
 	/**
 	 * Deserialize a JSON String into a Card
@@ -72,31 +64,4 @@ public class JSONSerializer {
 		return newDeck;
 	}
 	
-	/**
-	 * Parse a given file to create a JSON String
-	 * 
-	 * @param file
-	 * @return A String that should contain JSON
-	 * @throws FileNotFoundException
-	 */
-	private static String getJSONFromFiles(File file) throws FileNotFoundException {
-		String json = "";
-		BufferedReader reader = new BufferedReader(new FileReader(file));
-		String line;
-		try {
-			while((line = reader.readLine()) != null){
-				json += line;				
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}finally{
-			try {
-				reader.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}			
-		
-		return json;
-	}
 }
