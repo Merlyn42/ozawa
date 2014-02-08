@@ -17,11 +17,9 @@
  ******************************************************************************/
 package com.ozawa.hextcgdeckbuilder.UI.customdeck.champions;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 import com.ozawa.hextcgdeckbuilder.R;
-import com.ozawa.hextcgdeckbuilder.R.drawable;
 import com.ozawa.hextcgdeckbuilder.UI.SelectChampionArrayAdapter;
 import com.ozawa.hextcgdeckbuilder.UI.customdeck.CustomDeckFragment;
 import com.ozawa.hextcgdeckbuilder.database.DatabaseHandler;
@@ -31,6 +29,7 @@ import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 import android.app.Dialog;
+import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -85,9 +84,11 @@ public class SelectChampionDialogFragment extends DialogFragment {
 		HexUtil.populateTextViewWithHexHtml(selectedChampionGameText,selectedChampion.gameText);
 		final ImageView selectedChampionPortrait = (ImageView) relativeLayout.findViewById(R.id.imageChampionPortrait);		
 		if(selectedChampion.hudPortrait != null){
-			selectedChampionPortrait.setImageResource(getResourceID(selectedChampion.hudPortrait));						
+			Bitmap portrait = HexUtil.getBitmapFromExpansionFiles(getActivity(), selectedChampion.hudPortrait, null);
+			selectedChampionPortrait.setImageBitmap(portrait);					
 		}else if(selectedChampion.hudPortraitSmall != null){
-			selectedChampionPortrait.setImageResource(getResourceID(selectedChampion.hudPortraitSmall));
+			Bitmap portrait = HexUtil.getBitmapFromExpansionFiles(getActivity(), selectedChampion.hudPortraitSmall, null);
+			selectedChampionPortrait.setImageBitmap(portrait);
 		}
 		
 		int portraitDimensions = HexUtil.getScreenWidth(getActivity())/3;
@@ -105,15 +106,15 @@ public class SelectChampionDialogFragment extends DialogFragment {
 					selectedChampionName.setText(champion.name);
 					HexUtil.populateTextViewWithHexHtml(selectedChampionGameText,champion.gameText);
 					
-					int championPortraitID = -1;
+					Bitmap portrait = null;
 					if(champion.hudPortrait != null){
-						championPortraitID = getResourceID(champion.hudPortrait);						
+						portrait = HexUtil.getBitmapFromExpansionFiles(getActivity(), champion.hudPortrait, null);						
 					}else if(champion.hudPortraitSmall != null){
-						championPortraitID = getResourceID(champion.hudPortraitSmall);
+						portrait = HexUtil.getBitmapFromExpansionFiles(getActivity(), champion.hudPortraitSmall, null);
 					}
 					
-					if(championPortraitID != -1){
-						selectedChampionPortrait.setImageResource(championPortraitID);
+					if(portrait != null){
+						selectedChampionPortrait.setImageBitmap(portrait);
 					}else{
 						selectedChampionPortrait.setImageResource(R.drawable.championnoportait);
 					}
@@ -156,26 +157,7 @@ public class SelectChampionDialogFragment extends DialogFragment {
 		}else{
 			selectChampion.setEnabled(false);
 		}
-		
-		
-		
-		
-		
 	
 		return dialog;
-	}
-	
-	private int getResourceID(String resourceName){
-		int id = -1;
-		try {
-		    Class<drawable> res = R.drawable.class;
-		    Field field = res.getField(resourceName);
-		    id = field.getInt(null);
-		}
-		catch (Exception e) {
-			Toast.makeText(getActivity().getApplicationContext(), "Could not find champion portrait." , Toast.LENGTH_SHORT).show();
-		}
-		
-		return id;
 	}
 }

@@ -19,7 +19,6 @@ package com.ozawa.hextcgdeckbuilder.hexentities;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -48,12 +47,10 @@ public class ResourceCard extends AbstractCard {
 	@SuppressLint("NewApi")
 	@Override
 	public Bitmap getCardBitmap(Context context, CardTemplate template, int maxWidth) {
-		Resources resources = context.getResources();
-		final int resourceId = resources.getIdentifier(cardImagePath.split("\\.")[0], "drawable", context.getPackageName());
-
+		
 		BitmapFactory.Options o = new BitmapFactory.Options();
 		o.inJustDecodeBounds = true;
-		BitmapFactory.decodeResource(resources, resourceId, o);
+		HexUtil.getBitmapFromExpansionFiles(context, cardImagePath, o);
 		int scale = 1;
 		while (o.outWidth / scale / 2 >= maxWidth)
 			scale *= 2;
@@ -63,15 +60,12 @@ public class ResourceCard extends AbstractCard {
         	o2.inMutable = true;
         } 
 		o2.inSampleSize = scale;
-		Bitmap output = BitmapFactory.decodeResource(resources, resourceId, o2);
-		//int left = Double.valueOf(o2.outWidth * defaultLayout.portraitLeft).intValue();
-		//int width = Double.valueOf(o2.outWidth * defaultLayout.portraitRight).intValue() - left;
-		//int top = Double.valueOf(o2.outHeight * defaultLayout.portraitTop).intValue();
-		//int height = Double.valueOf(o2.outHeight * defaultLayout.portraitBottom).intValue() - top;
+		Bitmap output = HexUtil.getBitmapFromExpansionFiles(context, cardImagePath, o2);
+		
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
         	output=output.copy(Bitmap.Config.ARGB_8888, true);
         } 
-		image = output;//Bitmap.createBitmap(output, left, top, width, height);
+		image = output;
 		return image;
 	}
 

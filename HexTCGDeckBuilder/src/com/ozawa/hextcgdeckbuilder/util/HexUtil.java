@@ -23,6 +23,8 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 
+import com.android.vending.expansion.zipfile.APKExpansionSupport;
+import com.android.vending.expansion.zipfile.ZipResourceFile;
 import com.ozawa.hextcgdeckbuilder.UI.listview.HtmlImageGetter;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Card;
@@ -30,6 +32,9 @@ import com.ozawa.hextcgdeckbuilder.hexentities.ResourceCard;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.BitmapFactory.Options;
 import android.graphics.Point;
 import android.os.Build;
 import android.text.Html;
@@ -48,6 +53,8 @@ import android.widget.TextView;
  * Utility class that holds reusable methods for the application
  */
 public class HexUtil {
+	
+	private static ZipResourceFile expansionFile;
 	
 	private HexUtil(){}
 	
@@ -117,6 +124,40 @@ public class HexUtil {
 		}
 		
 		return id;
+	}
+	
+	/**
+	 * Generate a Bitmap from an image file within the expansion files
+	 * 
+	 * @param mContext
+	 * @param fileName
+	 * @param portraitOptions
+	 * @return a Bitmap for the given file path, or null if no file is found
+	 */
+	public static Bitmap getBitmapFromExpansionFiles(Context mContext, String fileName, Options portraitOptions){
+		try {
+			ZipResourceFile expansionFile = getExpansionFile(mContext);
+			if(expansionFile != null){
+				InputStream imageInputStream = expansionFile.getInputStream("images/" + fileName);
+				
+				return BitmapFactory.decodeStream(imageInputStream, null, portraitOptions);
+			}
+		} catch (IOException e) {
+		}
+		
+		return null;
+	}
+	
+	public static ZipResourceFile getExpansionFile(Context mContext){
+		if(expansionFile == null){
+			try {
+				expansionFile = APKExpansionSupport.getAPKExpansionZipFile(mContext, 1, 0);
+			} catch (IOException e) {
+				
+			}
+		}
+		
+		return expansionFile;
 	}
 	
 	/**

@@ -17,12 +17,8 @@
  ******************************************************************************/
 package com.ozawa.hextcgdeckbuilder.programstate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.ozawa.hextcgdeckbuilder.UI.CardsViewer;
 import com.ozawa.hextcgdeckbuilder.UI.customdeck.Deck;
-import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.json.MasterDeck;
 
 import android.app.Application;

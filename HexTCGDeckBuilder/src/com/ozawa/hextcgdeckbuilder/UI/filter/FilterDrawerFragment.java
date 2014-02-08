@@ -52,10 +52,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ozawa.hextcgdeckbuilder.R;
-import com.ozawa.hextcgdeckbuilder.R.drawable;
-import com.ozawa.hextcgdeckbuilder.R.id;
-import com.ozawa.hextcgdeckbuilder.R.layout;
-import com.ozawa.hextcgdeckbuilder.R.string;
 import com.ozawa.hextcgdeckbuilder.UI.CardsViewer;
 import com.ozawa.hextcgdeckbuilder.enums.CardType;
 import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;

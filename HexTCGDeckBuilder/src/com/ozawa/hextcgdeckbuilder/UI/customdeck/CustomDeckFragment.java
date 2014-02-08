@@ -55,6 +55,7 @@ import android.gesture.GestureLibraries;
 import android.gesture.GestureLibrary;
 import android.gesture.GestureOverlayView;
 import android.gesture.Prediction;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -480,9 +481,9 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 		TextView championName = (TextView) mFilterDrawerFragment.getView().findViewById(R.id.tvChampionName);
 		HexDeck currentCustomDeck = customDeck.getCurrentDeck();
 		if (currentCustomDeck != null && currentCustomDeck.champion != null) {
-			int portaitID = HexUtil.getResourceID(currentCustomDeck.champion.hudPortraitSmall, R.drawable.class);
-			if (portaitID != -1) {
-				championPortrait.setImageResource(portaitID);
+			Bitmap portait = HexUtil.getBitmapFromExpansionFiles(mContext, currentCustomDeck.champion.hudPortraitSmall, null);
+			if (portait != null) {
+				championPortrait.setImageBitmap(portait);
 			} else {
 				championPortrait.setImageResource(R.drawable.championnoportaitsmall);
 			}
