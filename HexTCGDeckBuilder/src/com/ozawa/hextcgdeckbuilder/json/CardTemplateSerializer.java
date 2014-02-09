@@ -23,11 +23,13 @@ import android.content.Context;
 import android.content.res.Resources;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.ozawa.hextcgdeckbuilder.UI.CardTemplate;
+import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
 
 public class CardTemplateSerializer implements JsonDeserializer<CardTemplate> {
 
@@ -42,7 +44,9 @@ public class CardTemplateSerializer implements JsonDeserializer<CardTemplate> {
 	@Override
 	public CardTemplate deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 
-		Gson gson = new Gson();
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.registerTypeAdapter(ColorFlag[].class, new MultiValueSerializer<ColorFlag>(ColorFlag.class));
+		Gson gson = gsonBuilder.create();
 		CardTemplate template = gson.fromJson(json, CardTemplate.class);
 
 		template.templateId = resources.getIdentifier(template.templateName, "drawable", androidContext.getPackageName());
