@@ -247,6 +247,11 @@ public class Card extends AbstractCard {
 			cardTypes += " -- " + cardSubtype;
 
 		combine.drawText(cardTypes, templateImage.getWidth() / 13, templateImage.getHeight() - (templateImage.getHeight() / 2.97f), paint);
+		if(unique){
+			float textWidth = paint.measureText("Unique");
+			combine.drawText("Unique", (templateImage.getWidth() - (templateImage.getWidth() / 13)) - textWidth, templateImage.getHeight() - (templateImage.getHeight() / 2.97f), paint);
+		}
+		
 	}
 
 	private void drawGameText(String gameText, int length, Canvas combine, Bitmap templateImage, Paint paint, Resources resources,
