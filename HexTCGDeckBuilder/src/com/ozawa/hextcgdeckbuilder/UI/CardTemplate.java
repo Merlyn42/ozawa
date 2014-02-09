@@ -33,7 +33,7 @@ import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.json.JsonReader;
 
 /**
- * Stores reference data about CardTemplates 
+ * Stores reference data about CardTemplates
  */
 public class CardTemplate {
 	public double						top;
@@ -43,7 +43,7 @@ public class CardTemplate {
 	public String						templateName;
 	transient public int				templateId;
 	public boolean						isTroop;
-	public ColorFlag					color;
+	public ColorFlag[]					colors;
 	public boolean						fullCard;
 	public float						nameFontRatio;
 	public float						costFontRatio;
@@ -70,9 +70,11 @@ public class CardTemplate {
 		ArrayList<CardTemplate> results = new ArrayList<CardTemplate>();
 		for (CardTemplate template : templates) {
 			if (template.fullCard == isFullscreen) {
-				if (Arrays.asList(card.colorFlags).contains(template.color)) {
-					if (Arrays.asList(card.cardType).contains(CardType.TROOP) == template.isTroop) {
-						results.add(template);
+				if (Arrays.asList(template.colors).containsAll(Arrays.asList(card.colorFlags))) {
+					if (card.colorFlags.length > 1 || template.colors.length == 1) {
+						if (Arrays.asList(card.cardType).contains(CardType.TROOP) == template.isTroop) {
+							results.add(template);
+						}
 					}
 				}
 			}
@@ -108,26 +110,26 @@ public class CardTemplate {
 
 	}
 
-	public Bitmap getImage(Context context,int maxWidth) {
-        if (image == null || cachedImageWidthLimit !=maxWidth) {
-        	image = decodeImage(context, maxWidth);
-        	cachedImageWidthLimit=maxWidth;
-        }
+	public Bitmap getImage(Context context, int maxWidth) {
+		if (image == null || cachedImageWidthLimit != maxWidth) {
+			image = decodeImage(context, maxWidth);
+			cachedImageWidthLimit = maxWidth;
+		}
 		return image;
 	}
-	
-	private Bitmap decodeImage(Context context,int maxWidth){
+
+	private Bitmap decodeImage(Context context, int maxWidth) {
 		Resources resources = context.getResources();
-        BitmapFactory.Options templateFirstOptions = new BitmapFactory.Options();
-        templateFirstOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeResource(resources, templateId, templateFirstOptions);
-        int scale = 1;
-        while (templateFirstOptions.outWidth / scale / 2 >= maxWidth)
-            scale *= 2;
-        //Decode with inSampleSize
-        BitmapFactory.Options templateSecondOptions = new BitmapFactory.Options();
-        templateSecondOptions.inSampleSize = scale;
-        Bitmap templateImage = BitmapFactory.decodeResource(resources, templateId, templateSecondOptions);
-        return templateImage;
+		BitmapFactory.Options templateFirstOptions = new BitmapFactory.Options();
+		templateFirstOptions.inJustDecodeBounds = true;
+		BitmapFactory.decodeResource(resources, templateId, templateFirstOptions);
+		int scale = 1;
+		while (templateFirstOptions.outWidth / scale / 2 >= maxWidth)
+			scale *= 2;
+		// Decode with inSampleSize
+		BitmapFactory.Options templateSecondOptions = new BitmapFactory.Options();
+		templateSecondOptions.inSampleSize = scale;
+		Bitmap templateImage = BitmapFactory.decodeResource(resources, templateId, templateSecondOptions);
+		return templateImage;
 	}
 }
