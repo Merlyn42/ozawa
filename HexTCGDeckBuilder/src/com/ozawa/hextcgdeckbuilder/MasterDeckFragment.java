@@ -289,7 +289,7 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 		listView.setHapticFeedbackEnabled(true);
 		// Getting adapter by passing xml data ArrayList
 		if (lvAdapter == null)
-			lvAdapter = new DeckListViewAdapter(mainActivity, cardViewer);
+			lvAdapter = new DeckListViewAdapter(mainActivity, cardViewer, true);
 		cardViewer.setAdapter(lvAdapter);
 		listView.setAdapter(cardViewer.getAdapter());
 		// Click event for single list row

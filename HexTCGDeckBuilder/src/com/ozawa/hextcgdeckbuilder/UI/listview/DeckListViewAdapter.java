@@ -43,11 +43,19 @@ public class DeckListViewAdapter extends ImageAdapter {
 
 	private static LayoutInflater	inflater	= null;
 	private Context					mContext;
+	private boolean					isCardLibrary = false;
 
 	public DeckListViewAdapter(Context mContext, CardsViewer cardViewer) {
 		super(mContext, cardViewer);
 		this.mContext = mContext;
 		inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	}
+
+	public DeckListViewAdapter(Context mContext, CardsViewer cardViewer, boolean isCardLibrary) {
+		super(mContext, cardViewer);
+		this.mContext = mContext;
+		inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		this.isCardLibrary = isCardLibrary;
 	}
 
 	@Override
@@ -174,7 +182,7 @@ public class DeckListViewAdapter extends ImageAdapter {
 			customDeck = ((HexApplication) (mContext)).getCustomDeck();
 		}
 		HashMap<AbstractCard, Integer> customDeckData = customDeck.getDeckData();
-		if (customDeckData != null && customDeckData.get(card) != null) {
+		if (!isCardLibrary && customDeckData != null && customDeckData.get(card) != null) {
 			cardCount.setText("Count: " + customDeckData.get(card));
 		}
 		return vi;
