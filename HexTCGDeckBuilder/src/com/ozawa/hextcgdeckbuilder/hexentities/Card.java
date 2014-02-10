@@ -252,6 +252,16 @@ public class Card extends AbstractCard {
 			combine.drawText("Unique", (templateImage.getWidth() - (templateImage.getWidth() / 13)) - textWidth, templateImage.getHeight() - (templateImage.getHeight() / 2.97f), paint);
 		}
 		
+		if(!faction.equals("None")){
+			Bitmap factionImage = null;			
+			if(faction.equalsIgnoreCase("Aria")){
+				factionImage = BitmapFactory.decodeResource(resources, R.drawable.faction_ardent);				
+			} else if(faction.equalsIgnoreCase("Underworld")){
+				factionImage = BitmapFactory.decodeResource(resources, R.drawable.faction_underworld);				
+			}
+			factionImage = Bitmap.createScaledBitmap(factionImage, (int)(HexUtil.getScreenWidth(context) * template.factionRatio), (int)(HexUtil.getScreenWidth(context) * template.factionRatio), false);
+			combine.drawBitmap(factionImage, (templateImage.getWidth() - (templateImage.getWidth() / 15.5f)), templateImage.getHeight() - (templateImage.getHeight() / 2.75f) , paint);
+		}		
 	}
 
 	private void drawGameText(String gameText, int length, Canvas combine, Bitmap templateImage, Paint paint, Resources resources,

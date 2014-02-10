@@ -11,7 +11,8 @@
     "nameFontRatio": 0.06,
     "costFontRatio": 0.075,
     "typeFontRatio": 0.055,
-    "socketRatio": 0.17
+    "socketRatio": 0.17,
+	"factionRatio": 0
   },
   {
     "top": 0.1054,
@@ -25,7 +26,8 @@
     "nameFontRatio": 0.06,
     "costFontRatio": 0.075,
     "typeFontRatio": 0.055,
-    "socketRatio": 0.17
+    "socketRatio": 0.17,
+	"factionRatio": 0
   },
   {
     "top": 0.1054,
@@ -39,7 +41,8 @@
     "nameFontRatio": 0.06,
     "costFontRatio": 0.075,
     "typeFontRatio": 0.055,
-    "socketRatio": 0.17
+    "socketRatio": 0.17,
+	"factionRatio": 0
   },
   {
     "top": 0.1054,
@@ -53,7 +56,8 @@
     "nameFontRatio": 0.06,
     "costFontRatio": 0.075,
     "typeFontRatio": 0.055,
-    "socketRatio": 0.17
+    "socketRatio": 0.17,
+	"factionRatio": 0
   },
   {
     "top": 0.1054,
@@ -67,7 +71,8 @@
     "nameFontRatio": 0.06,
     "costFontRatio": 0.075,
     "typeFontRatio": 0.055,
-    "socketRatio": 0.17
+    "socketRatio": 0.17,
+	"factionRatio": 0
   },
   {
     "top": 0.1054,
@@ -81,7 +86,8 @@
     "nameFontRatio": 0.06,
     "costFontRatio": 0.075,
     "typeFontRatio": 0.055,
-    "socketRatio": 0.17
+    "socketRatio": 0.17,
+	"factionRatio": 0
   },
   {
     "top": 0.1054,
@@ -95,7 +101,8 @@
     "nameFontRatio": 0.06,
     "costFontRatio": 0.075,
     "typeFontRatio": 0.055,
-    "socketRatio": 0.17
+    "socketRatio": 0.17,
+	"factionRatio": 0
   },
   {
     "top": 0.0862,
@@ -109,7 +116,8 @@
     "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839,
-    "socketRatio": 0.192
+    "socketRatio": 0.192,
+	"factionRatio": 0.06
   },
   {
     "top": 0.0862,
@@ -123,7 +131,8 @@
     "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839,
-    "socketRatio": 0.192
+    "socketRatio": 0.192,
+	"factionRatio": 0.06
   },
   {
     "top": 0.0862,
@@ -137,7 +146,8 @@
     "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839,
-    "socketRatio": 0.192
+    "socketRatio": 0.192,
+	"factionRatio": 0.06
   },
   {
     "top": 0.0862,
@@ -151,7 +161,8 @@
     "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839,
-    "socketRatio": 0.192
+    "socketRatio": 0.192,
+	"factionRatio": 0.06
   },
   {
     "top": 0.0862,
@@ -165,7 +176,8 @@
     "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839,
-    "socketRatio": 0.192
+    "socketRatio": 0.192,
+	"factionRatio": 0.06
   },
   {
     "top": 0.0862,
@@ -179,7 +191,8 @@
     "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839,
-    "socketRatio": 0.192
+    "socketRatio": 0.192,
+	"factionRatio": 0.06
   },
   {
     "top": 0.0862,
@@ -193,7 +206,8 @@
     "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839,
-    "socketRatio": 0.192
+    "socketRatio": 0.192,
+	"factionRatio": 0.06
   },
   {
     "top": 0.1054,
@@ -207,7 +221,8 @@
     "nameFontRatio": 0.06,
     "costFontRatio": 0.075,
     "typeFontRatio": 0.055,
-    "socketRatio": 0.17
+    "socketRatio": 0.17,
+	"factionRatio": 0
   },
   {
     "top": 0.1054,
@@ -221,7 +236,8 @@
     "nameFontRatio": 0.06,
     "costFontRatio": 0.075,
     "typeFontRatio": 0.055,
-    "socketRatio": 0.17
+    "socketRatio": 0.17,
+	"factionRatio": 0
   },
   {
     "top": 0.1054,
@@ -235,7 +251,8 @@
     "nameFontRatio": 0.06,
     "costFontRatio": 0.075,
     "typeFontRatio": 0.055,
-    "socketRatio": 0.17
+    "socketRatio": 0.17,
+	"factionRatio": 0
   },
   {
     "top": 0.1054,
@@ -249,7 +266,8 @@
     "nameFontRatio": 0.06,
     "costFontRatio": 0.075,
     "typeFontRatio": 0.055,
-    "socketRatio": 0.17
+    "socketRatio": 0.17,
+	"factionRatio": 0
   },
   {
     "top": 0.1054,
@@ -263,7 +281,8 @@
     "nameFontRatio": 0.06,
     "costFontRatio": 0.075,
     "typeFontRatio": 0.055,
-    "socketRatio": 0.17
+    "socketRatio": 0.17,
+	"factionRatio": 0
   },
   {
     "top": 0.1054,
@@ -277,7 +296,8 @@
     "nameFontRatio": 0.06,
     "costFontRatio": 0.075,
     "typeFontRatio": 0.055,
-    "socketRatio": 0.17
+    "socketRatio": 0.17,
+	"factionRatio": 0
   },
   {
     "top": 0.1054,
@@ -291,7 +311,8 @@
     "nameFontRatio": 0.06,
     "costFontRatio": 0.075,
     "typeFontRatio": 0.055,
-    "socketRatio": 0.17
+    "socketRatio": 0.17,
+	"factionRatio": 0
   },
   {
     "top": 0.0862,
@@ -305,7 +326,8 @@
     "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839,
-    "socketRatio": 0.192
+    "socketRatio": 0.192,
+	"factionRatio": 0.06
   },
   {
     "top": 0.0862,
@@ -319,7 +341,8 @@
     "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839,
-    "socketRatio": 0.192
+    "socketRatio": 0.192,
+	"factionRatio": 0.06
   },
   {
     "top": 0.0862,
@@ -333,7 +356,8 @@
     "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839,
-    "socketRatio": 0.192
+    "socketRatio": 0.192,
+	"factionRatio": 0.06
   },
   {
     "top": 0.0862,
@@ -347,7 +371,8 @@
     "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839,
-    "socketRatio": 0.192
+    "socketRatio": 0.192,
+	"factionRatio": 0.06
   },
   {
     "top": 0.0862,
@@ -361,7 +386,8 @@
     "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839,
-    "socketRatio": 0.192
+    "socketRatio": 0.192,
+	"factionRatio": 0.06
   },
   {
     "top": 0.0862,
@@ -375,7 +401,8 @@
     "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839,
-    "socketRatio": 0.192
+    "socketRatio": 0.192,
+	"factionRatio": 0.06
   },
   {
     "top": 0.0862,
@@ -389,6 +416,7 @@
     "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839,
-    "socketRatio": 0.192
+    "socketRatio": 0.192,
+	"factionRatio": 0.06
   }
 ]

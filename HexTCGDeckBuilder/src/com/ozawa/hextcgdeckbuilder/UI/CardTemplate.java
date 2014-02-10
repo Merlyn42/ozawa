@@ -49,8 +49,9 @@ public class CardTemplate {
 	public float						costFontRatio;
 	public float						typeFontRatio;
 	public float						socketRatio;
+	public double 						factionRatio;
 	private Bitmap						image;
-	private int							cachedImageWidthLimit;
+	private int							cachedImageWidthLimit;	
 
 	private static List<CardTemplate>	ALLTEMPLATES;
 
