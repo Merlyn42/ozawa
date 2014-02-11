@@ -15,26 +15,18 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package com.ozawa.hextcgdeckbuilder.hexentities;
+package com.ozawa.hextcgdeckbuilder.filter;
 
 import java.util.Comparator;
 
-public class CardComparatorColor implements Comparator<AbstractCard> {
+import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
+import com.ozawa.hextcgdeckbuilder.hexentities.Card;
+
+public class CardComparatorName implements Comparator<AbstractCard>{
 
 	@Override
 	public int compare(AbstractCard o1, AbstractCard o2) {
-		if(o1.colorFlags[0]==null){
-			if(o2.colorFlags[0]==null){
-				return 0;
-			}
-			return 1;
-		}
-		if(o2.colorFlags[0]==null){
-			return -1;
-		}
-		
-		return o1.colorFlags[0].compareTo(o2.colorFlags[0]);
-		
+		return o1.name.compareTo(o2.name);
 	}
 
 }

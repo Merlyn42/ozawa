@@ -23,6 +23,8 @@ import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -35,6 +37,7 @@ public class Filter {
 	private final EnumSet<Attribute>	attributes;
 	private final EnumSet<ColorFlag>	colors;
 	private final EnumSet<CardType>		cardTypes;
+	private Comparator<AbstractCard>	comparator;
 	
 	private final static int NUMBEROFCARDTYPES = EnumSet.allOf(CardType.class).size();
 	private final static int NUMBEROFCOLORS = EnumSet.allOf(ColorFlag.class).size();
@@ -44,6 +47,7 @@ public class Filter {
 		colors = EnumSet.allOf(ColorFlag.class);
 		cardTypes = EnumSet.allOf(CardType.class);
         cardTypes.remove(CardType.CHAMPION);
+        comparator = new DualComparator(new CardComparatorColor(), new CardComparatorCost());
 	}
 
 	public String getFilterString() {
@@ -124,6 +128,10 @@ public class Filter {
 	public List<AbstractCard> filter(AbstractCard[] cards) {
 		return (filter(Arrays.asList(cards)));
 	}
+	
+	public void sort(List<? extends AbstractCard> cards) {
+		Collections.sort(cards, comparator);
+	}
 
 	public List<AbstractCard> filter(List<? extends AbstractCard> cards) {
 		ArrayList<AbstractCard> result = new ArrayList<AbstractCard>();
@@ -131,7 +139,6 @@ public class Filter {
 			if (filterCard(abstractCard)) {
 				result.add(abstractCard);
 			}
-
 		}
 		return result;
 	}

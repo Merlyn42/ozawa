@@ -15,15 +15,27 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-package com.ozawa.hextcgdeckbuilder.hexentities;
+package com.ozawa.hextcgdeckbuilder.filter;
 
 import java.util.Comparator;
 
-public class CardComparatorName implements Comparator<Card>{
+import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
+import com.ozawa.hextcgdeckbuilder.hexentities.Card;
+import com.ozawa.hextcgdeckbuilder.hexentities.ResourceCard;
+
+public class CardComparatorCost implements Comparator<AbstractCard> {
 
 	@Override
-	public int compare(Card o1, Card o2) {
-		return o1.name.compareTo(o2.name);
+	public int compare(AbstractCard card1, AbstractCard card2) {
+		int result;
+		if(card1 instanceof ResourceCard){
+			result = -100;
+		}else if(card2 instanceof ResourceCard){
+			result=100;
+		}else{
+			result= ((Card)card1).resourceCost - ((Card)card2).resourceCost;
+		}
+		return result;
 	}
 
 }

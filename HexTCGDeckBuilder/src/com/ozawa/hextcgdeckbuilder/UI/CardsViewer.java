@@ -21,9 +21,9 @@ import android.content.Context;
 import com.ozawa.hextcgdeckbuilder.ImageAdapter;
 import com.ozawa.hextcgdeckbuilder.UI.customdeck.Deck;
 import com.ozawa.hextcgdeckbuilder.enums.CardEnum;
+import com.ozawa.hextcgdeckbuilder.filter.CardComparatorColor;
 import com.ozawa.hextcgdeckbuilder.filter.Filter;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
-import com.ozawa.hextcgdeckbuilder.hexentities.CardComparatorColor;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,7 +40,7 @@ public class CardsViewer {
 	public CardsViewer(Context context, Deck deck) {
 		filter = new Filter();
 		this.deck = deck;
-		Collections.sort(deck.getDeckCardList(), comparator);
+		
 		adapter = new ImageAdapter(context, this);
 	}
 
@@ -50,7 +50,9 @@ public class CardsViewer {
 	}
 
 	public List<AbstractCard> getFilteredCardList() {
-		return filter.filter(deck.getDeckCardList());
+		List<AbstractCard> list = filter.filter(deck.getDeckCardList());
+		filter.sort(list);
+		return list;
 	}
 
 	public List<AbstractCard> getUnFilteredCardList() {
