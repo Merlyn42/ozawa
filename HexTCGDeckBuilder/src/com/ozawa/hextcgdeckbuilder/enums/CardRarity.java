@@ -31,7 +31,11 @@ public enum CardRarity implements CardEnum {
 	@SerializedName("Rare")
 	RARE("Rare"),
 	@SerializedName("Legendary")
-	LEGENDARY("Legendary");
+	LEGENDARY("Legendary"),
+	@SerializedName("Promo")
+	PROMO("Promo"),
+	@SerializedName("Land")
+	LAND("Land");
 	
 	private String rarity;
 	

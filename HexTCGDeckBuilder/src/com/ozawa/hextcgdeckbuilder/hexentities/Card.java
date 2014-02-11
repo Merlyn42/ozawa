@@ -35,6 +35,7 @@ import com.ozawa.hextcgdeckbuilder.R;
 import com.ozawa.hextcgdeckbuilder.UI.CardTemplate;
 import com.ozawa.hextcgdeckbuilder.UI.SymbolTemplate;
 import com.ozawa.hextcgdeckbuilder.enums.Attribute;
+import com.ozawa.hextcgdeckbuilder.enums.CardRarity;
 import com.ozawa.hextcgdeckbuilder.enums.CardType;
 import com.ozawa.hextcgdeckbuilder.programstate.ImageCache;
 import com.ozawa.hextcgdeckbuilder.programstate.ImageCache.CacheType;
@@ -253,15 +254,49 @@ public class Card extends AbstractCard {
 		}
 		
 		if(!faction.equals("None")){
-			Bitmap factionImage = null;			
-			if(faction.equalsIgnoreCase("Aria")){
-				factionImage = BitmapFactory.decodeResource(resources, R.drawable.faction_ardent);				
-			} else if(faction.equalsIgnoreCase("Underworld")){
-				factionImage = BitmapFactory.decodeResource(resources, R.drawable.faction_underworld);				
-			}
-			factionImage = Bitmap.createScaledBitmap(factionImage, (int)(HexUtil.getScreenWidth(context) * template.factionRatio), (int)(HexUtil.getScreenWidth(context) * template.factionRatio), false);
-			combine.drawBitmap(factionImage, (templateImage.getWidth() - (templateImage.getWidth() / 15.5f)), templateImage.getHeight() - (templateImage.getHeight() / 2.75f) , paint);
-		}		
+			drawFaction(combine,paint,templateImage,resources,context,template);
+		}
+		
+		drawRarity(combine,paint,templateImage,resources,context);
+	}
+	
+	private void drawFaction(Canvas combine, Paint paint, Bitmap templateImage, Resources res,Context context, CardTemplate template) {
+		Bitmap factionImage = null;			
+		if(faction.equalsIgnoreCase("Aria")){
+			factionImage = BitmapFactory.decodeResource(res, R.drawable.faction_ardent);
+		} else if(faction.equalsIgnoreCase("Underworld")){
+			factionImage = BitmapFactory.decodeResource(res, R.drawable.faction_underworld);				
+		}
+		factionImage = Bitmap.createScaledBitmap(factionImage, (int)(HexUtil.getScreenWidth(context) * template.factionRatio), (int)(HexUtil.getScreenWidth(context) * template.factionRatio), false);
+		combine.drawBitmap(factionImage, (templateImage.getWidth() - (templateImage.getWidth() / 14f)), templateImage.getHeight() - (templateImage.getHeight() / 2.7f) , paint);
+	}
+
+	private void drawRarity(Canvas combine, Paint paint, Bitmap templateImage, Resources res,Context context) {
+		Bitmap rarity = null;
+
+		switch(cardRarity){
+		
+		case COMMON:
+			rarity = BitmapFactory.decodeResource(res, R.drawable.rarity_common);			
+			break;
+		case UNCOMMON:
+			rarity = BitmapFactory.decodeResource(res, R.drawable.rarity_uncommon);			
+			break;
+		case RARE:
+			rarity = BitmapFactory.decodeResource(res, R.drawable.rarity_rare);			
+			break;
+		case LEGENDARY:
+			rarity = BitmapFactory.decodeResource(res, R.drawable.rarity_legendary);			
+			break;
+		case LAND:
+			rarity = BitmapFactory.decodeResource(res, R.drawable.rarity_system);			
+			break;
+		case PROMO:
+			rarity = BitmapFactory.decodeResource(res, R.drawable.rarity_promo);			
+			break;
+		}
+		rarity = Bitmap.createScaledBitmap(rarity, (int) (HexUtil.getScreenWidth(context) * 0.1438), (int) (HexUtil.getScreenHeight(context) * 0.0414), false);
+		combine.drawBitmap(rarity, templateImage.getWidth() / 3, templateImage.getHeight() - (templateImage.getHeight() / 25), paint);
 	}
 
 	private void drawGameText(String gameText, int length, Canvas combine, Bitmap templateImage, Paint paint, Resources resources,
