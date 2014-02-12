@@ -267,7 +267,7 @@ public class Card extends AbstractCard {
 		} else if(faction.equalsIgnoreCase("Underworld")){
 			factionImage = BitmapFactory.decodeResource(res, R.drawable.faction_underworld);				
 		}
-		factionImage = Bitmap.createScaledBitmap(factionImage, (int)(HexUtil.getScreenWidth(context) * template.factionRatio), (int)(HexUtil.getScreenWidth(context) * template.factionRatio), false);
+		//factionImage = Bitmap.createScaledBitmap(factionImage, (int)(HexUtil.getScreenWidth(context) * template.factionRatio), (int)(HexUtil.getScreenWidth(context) * template.factionRatio), false);
 		combine.drawBitmap(factionImage, (templateImage.getWidth() - (templateImage.getWidth() / 14f)), templateImage.getHeight() - (templateImage.getHeight() / 2.7f) , paint);
 	}
 
@@ -295,7 +295,7 @@ public class Card extends AbstractCard {
 			rarity = BitmapFactory.decodeResource(res, R.drawable.rarity_promo);			
 			break;
 		}
-		rarity = Bitmap.createScaledBitmap(rarity, (int) (HexUtil.getScreenWidth(context) * 0.1438), (int) (HexUtil.getScreenHeight(context) * 0.0414), false);
+		//rarity = Bitmap.createScaledBitmap(rarity, (int) (HexUtil.getScreenWidth(context) * 0.1438), (int) (HexUtil.getScreenHeight(context) * 0.0414), false);
 		combine.drawBitmap(rarity, templateImage.getWidth() / 3, templateImage.getHeight() - (templateImage.getHeight() / 25), paint);
 	}
 
