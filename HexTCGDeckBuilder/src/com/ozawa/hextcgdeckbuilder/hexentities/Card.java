@@ -71,11 +71,11 @@ public class Card extends AbstractCard {
 	@SerializedName("m_EquipmentSlots")
 	public GlobalIdentifier[]	equipmentSlots;
 	@SerializedName("m_VariableCost")
-	public int				variableCost;
+	public int					variableCost;
 	@SerializedName("m_VariableAttack")
-	public int				variableAttack;
+	public int					variableAttack;
 	@SerializedName("m_VariableHealth")
-	public int				variableHealth;
+	public int					variableHealth;
 
 	private float				line;
 	private static final int	fullTemplateWidth		= 890;
@@ -94,14 +94,16 @@ public class Card extends AbstractCard {
 	@Override
 	public Bitmap getCardBitmap(Context context, CardTemplate template, int maxWidth) {
 		Resources resources = context.getResources();
-		
+
 		// find the correct template
 		Bitmap templateImage = template.getImage(context, maxWidth);
 
 		// get the portrait image
 		BitmapFactory.Options portraitFirstOptions = new BitmapFactory.Options();
 		portraitFirstOptions.inJustDecodeBounds = true;
-		HexUtil.getBitmapFromExpansionFiles(context, cardImagePath, portraitFirstOptions);//BitmapFactory.decodeResource(resources, portraitId, portraitFirstOptions);
+		HexUtil.getBitmapFromExpansionFiles(context, cardImagePath, portraitFirstOptions);// BitmapFactory.decodeResource(resources,
+																							// portraitId,
+																							// portraitFirstOptions);
 		// used to scale the image, use only the part of the image to determine
 		// scaling.
 		int cutPortraitWidth = Double.valueOf(
@@ -115,10 +117,10 @@ public class Card extends AbstractCard {
 		portraitSecondOptions = new BitmapFactory.Options();
 		portraitSecondOptions.inSampleSize = scale;
 		Bitmap portrait = HexUtil.getBitmapFromExpansionFiles(context, cardImagePath, portraitSecondOptions);
-		
+
 		Bitmap result = Bitmap.createBitmap(templateImage.getWidth(), templateImage.getHeight(), Bitmap.Config.ARGB_8888);
 		Canvas combine = new Canvas(result);
-		if(portrait != null){			
+		if (portrait != null) {
 			Rect dstRect = new Rect();
 			Rect srcRect = new Rect();
 			dstRect.top = (int) (templateImage.getHeight() * template.top);
@@ -129,28 +131,28 @@ public class Card extends AbstractCard {
 			srcRect.right = Double.valueOf(portrait.getWidth() * defaultLayout.portraitRight).intValue();
 			srcRect.top = Double.valueOf(portrait.getWidth() * defaultLayout.portraitTop).intValue();
 			srcRect.bottom = Double.valueOf(portrait.getWidth() * defaultLayout.portraitBottom).intValue();
-	
+
 			combine.drawBitmap(portrait, srcRect, dstRect, null);
 			combine.drawBitmap(templateImage, 0f, 0f, null);
-	
+
 			Paint paint = new Paint();
 			paint.setTextAlign(Paint.Align.LEFT);
 			paint.setColor(-1);
 			paint.setAntiAlias(true);
-	
+
 			Bitmap threshold = getCardThresholdImage(context, template, templateImage);
 			if (template.fullCard) {
-				drawFullImageText(combine, templateImage, paint, resources, context, template,scale);
+				drawFullImageText(combine, templateImage, paint, resources, context, template, scale);
 				if (threshold != null) {
 					combine.drawBitmap(threshold, (templateImage.getWidth() / 14), (templateImage.getHeight() / 9.5f), null);
 				}
 			} else {
-				drawThumbnailText(combine, templateImage, paint, template,resources,scale);
+				drawThumbnailText(combine, templateImage, paint, template, resources, scale);
 				if (threshold != null) {
 					combine.drawBitmap(threshold, (templateImage.getWidth() / 14), (templateImage.getHeight() / 4.2f), null);
 				}
 			}
-		}else{
+		} else {
 			combine.drawBitmap(templateImage, 0f, 0f, null);
 		}
 
@@ -162,25 +164,28 @@ public class Card extends AbstractCard {
 		paint.setTextSize(imageHeight * template.nameFontRatio);
 		combine.drawText(getShortenedText(name, 17), templateImage.getWidth() / 3.3f, templateImage.getHeight() / 11f, paint);
 		paint.setTextSize(imageHeight * template.costFontRatio);
-		if (resourceCost > 9 ) {
+		if (resourceCost > 9) {
 			combine.drawText("" + resourceCost, templateImage.getWidth() / 9.5f, templateImage.getHeight() / 7.2f, paint);
-		} else if(variableCost == 1){
-			if(resourceCost == 0)
+		} else if (variableCost == 1) {
+			if (resourceCost == 0)
 				combine.drawText("X", templateImage.getWidth() / 7.7f, templateImage.getHeight() / 7.2f, paint);
 			else
 				combine.drawText(resourceCost + "X", templateImage.getWidth() / 9.5f, templateImage.getHeight() / 7.2f, paint);
-		}else {
+		} else {
 			combine.drawText("" + resourceCost, templateImage.getWidth() / 7.7f, templateImage.getHeight() / 7.2f, paint);
 		}
-		if (cardType[0].equals(CardType.TROOP)) {			
-			if(variableAttack == 1)
-				combine.drawText("X", templateImage.getWidth() / 9, templateImage.getHeight() - (templateImage.getHeight() / 11f),paint);
+		if (cardType[0].equals(CardType.TROOP)) {
+			if (variableAttack == 1)
+				combine.drawText("X", templateImage.getWidth() / 9, templateImage.getHeight() - (templateImage.getHeight() / 11f), paint);
 			else
-				combine.drawText(baseAttackValue, templateImage.getWidth() / 9, templateImage.getHeight() - (templateImage.getHeight() / 11f),paint);
-			if(variableHealth == 1)
-				combine.drawText("X", templateImage.getWidth() - (templateImage.getWidth() / 6.8f), templateImage.getHeight()- (templateImage.getHeight() / 11f), paint);
+				combine.drawText(baseAttackValue, templateImage.getWidth() / 9, templateImage.getHeight()
+						- (templateImage.getHeight() / 11f), paint);
+			if (variableHealth == 1)
+				combine.drawText("X", templateImage.getWidth() - (templateImage.getWidth() / 6.8f), templateImage.getHeight()
+						- (templateImage.getHeight() / 11f), paint);
 			else
-				combine.drawText(baseHealthValue, templateImage.getWidth() - (templateImage.getWidth() / 6.8f), templateImage.getHeight()- (templateImage.getHeight() / 11f), paint);
+				combine.drawText(baseHealthValue, templateImage.getWidth() - (templateImage.getWidth() / 6.8f), templateImage.getHeight()
+						- (templateImage.getHeight() / 11f), paint);
 		} else {
 			paint.setTextSize(imageHeight * template.typeFontRatio);
 			String cardTypes = "";
@@ -191,42 +196,46 @@ public class Card extends AbstractCard {
 			}
 			if (!cardSubtype.equals(""))
 				cardTypes += " -- " + cardSubtype;
-		
+
 			combine.drawText(getShortenedText(cardTypes, 24), templateImage.getWidth() / 11,
 					templateImage.getHeight() - (templateImage.getHeight() / 6.2f), paint);
 		}
-			
+
 		if (socketCount > 0) {
-			Bitmap socketImage = BitmapFactory.decodeResource(resources,R.drawable.gem_socket);
-			socketImage = Bitmap.createScaledBitmap(socketImage, (int)(templateImage.getWidth() * template.socketRatio),(int)(templateImage.getWidth() * template.socketRatio), true);
-			combine.drawBitmap(socketImage, templateImage.getWidth() - (templateImage.getWidth() / 5),templateImage.getHeight() / 1.57f, paint);
+			Bitmap socketImage = BitmapFactory.decodeResource(resources, R.drawable.gem_socket);
+			socketImage = Bitmap.createScaledBitmap(socketImage, (int) (templateImage.getWidth() * template.socketRatio),
+					(int) (templateImage.getWidth() * template.socketRatio), true);
+			combine.drawBitmap(socketImage, templateImage.getWidth() - (templateImage.getWidth() / 5), templateImage.getHeight() / 1.57f,
+					paint);
 		}
 	}
 
-	private void drawFullImageText(Canvas combine, Bitmap templateImage, Paint paint, Resources resources, final Context context, CardTemplate template, int scale) {
+	private void drawFullImageText(Canvas combine, Bitmap templateImage, Paint paint, Resources resources, final Context context,
+			CardTemplate template, int scale) {
 		float imageHeight = templateImage.getHeight();
 		float tempRatio = template.nameFontRatio;
 		paint.setTextSize(imageHeight * tempRatio);
-		combine.drawText(name, templateImage.getWidth() / 6, templateImage.getHeight() / 14, paint);		
+		combine.drawText(name, templateImage.getWidth() / 6, templateImage.getHeight() / 14, paint);
 		if (resourceCost > 9) {
 			combine.drawText("" + resourceCost, templateImage.getWidth() / 15, templateImage.getHeight() / 15, paint);
-		}else if(variableCost == 1){
-			if(resourceCost == 0)
+		} else if (variableCost == 1) {
+			if (resourceCost == 0)
 				combine.drawText("X", templateImage.getWidth() / 13, templateImage.getHeight() / 15, paint);
 			else
 				combine.drawText(resourceCost + "X", templateImage.getWidth() / 13, templateImage.getHeight() / 15, paint);
-		}else {
+		} else {
 			combine.drawText("" + resourceCost, templateImage.getWidth() / 13, templateImage.getHeight() / 15, paint);
-		}		
+		}
 		if (cardType[0].equals(CardType.TROOP)) {
-			if(variableAttack == 1){
-				combine.drawText("X", templateImage.getWidth() / 17, templateImage.getHeight() - (templateImage.getHeight() / 25),paint);
-			}else{
-				combine.drawText(baseAttackValue, templateImage.getWidth() / 17, templateImage.getHeight() - (templateImage.getHeight() / 25),paint);
+			if (variableAttack == 1) {
+				combine.drawText("X", templateImage.getWidth() / 17, templateImage.getHeight() - (templateImage.getHeight() / 25), paint);
+			} else {
+				combine.drawText(baseAttackValue, templateImage.getWidth() / 17, templateImage.getHeight()
+						- (templateImage.getHeight() / 25), paint);
 			}
-			if(variableHealth == 1){
+			if (variableHealth == 1) {
 				combine.drawText("X", templateImage.getWidth() - (templateImage.getWidth() / 11.5f), templateImage.getHeight()
-					- (templateImage.getHeight() / 25), paint);
+						- (templateImage.getHeight() / 25), paint);
 			} else {
 				combine.drawText(baseHealthValue, templateImage.getWidth() - (templateImage.getWidth() / 11.5f), templateImage.getHeight()
 						- (templateImage.getHeight() / 25), paint);
@@ -247,54 +256,66 @@ public class Card extends AbstractCard {
 			cardTypes += " -- " + cardSubtype;
 
 		combine.drawText(cardTypes, templateImage.getWidth() / 13, templateImage.getHeight() - (templateImage.getHeight() / 2.97f), paint);
-		if(unique){
+		if (unique) {
 			float textWidth = paint.measureText("Unique");
-			combine.drawText("Unique", (templateImage.getWidth() - (templateImage.getWidth() / 13)) - textWidth, templateImage.getHeight() - (templateImage.getHeight() / 2.97f), paint);
+			combine.drawText("Unique", (templateImage.getWidth() - (templateImage.getWidth() / 13)) - textWidth, templateImage.getHeight()
+					- (templateImage.getHeight() / 2.97f), paint);
 		}
-		
-		if(!faction.equals("None")){
-			drawFaction(combine,paint,templateImage,resources,context,template);
+
+		if (!faction.equals("None")) {
+			drawFaction(combine, paint, templateImage, resources, context, template);
 		}
-		
-		drawRarity(combine,paint,templateImage,resources,context);
-	}
-	
-	private void drawFaction(Canvas combine, Paint paint, Bitmap templateImage, Resources res,Context context, CardTemplate template) {
-		Bitmap factionImage = null;			
-		if(faction.equalsIgnoreCase("Aria")){
-			factionImage = BitmapFactory.decodeResource(res, R.drawable.faction_ardent);
-		} else if(faction.equalsIgnoreCase("Underworld")){
-			factionImage = BitmapFactory.decodeResource(res, R.drawable.faction_underworld);				
-		}
-		
-		combine.drawBitmap(factionImage, (templateImage.getWidth() - (templateImage.getWidth() / 14f)), templateImage.getHeight() - (templateImage.getHeight() / 2.7f) , paint);
+
+		drawRarity(combine, paint, templateImage, resources, context,template);
 	}
 
-	private void drawRarity(Canvas combine, Paint paint, Bitmap templateImage, Resources res,Context context) {
+	private void drawFaction(Canvas combine, Paint paint, Bitmap templateImage, Resources res, Context context, CardTemplate template) {
+		BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+		if (template.currentSubsample != null) {
+			bitmapOptions.inSampleSize = template.currentSubsample;
+		}
+		Bitmap factionImage = null;
+		if (faction.equalsIgnoreCase("Aria")) {
+			factionImage = BitmapFactory.decodeResource(res, R.drawable.faction_ardent, bitmapOptions);
+		} else if (faction.equalsIgnoreCase("Underworld")) {
+			factionImage = BitmapFactory.decodeResource(res, R.drawable.faction_underworld, bitmapOptions);
+		}
+
+		combine.drawBitmap(factionImage, (templateImage.getWidth() - (templateImage.getWidth() / 14f)), templateImage.getHeight()
+				- (templateImage.getHeight() / 2.7f), paint);
+	}
+
+	private void drawRarity(Canvas combine, Paint paint, Bitmap templateImage, Resources res, Context context, CardTemplate template) {
 		Bitmap rarity = null;
-
-		switch(cardRarity){
-		
+		BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+		if (template.currentSubsample != null) {
+			bitmapOptions.inSampleSize = template.currentSubsample;
+		}
+		int resourceId;
+		switch (cardRarity) {
 		case COMMON:
-			rarity = BitmapFactory.decodeResource(res, R.drawable.rarity_common);			
+			resourceId = R.drawable.rarity_common;
 			break;
 		case UNCOMMON:
-			rarity = BitmapFactory.decodeResource(res, R.drawable.rarity_uncommon);			
+			resourceId = R.drawable.rarity_uncommon;
 			break;
 		case RARE:
-			rarity = BitmapFactory.decodeResource(res, R.drawable.rarity_rare);			
+			resourceId = R.drawable.rarity_rare;
 			break;
 		case LEGENDARY:
-			rarity = BitmapFactory.decodeResource(res, R.drawable.rarity_legendary);			
+			resourceId = R.drawable.rarity_legendary;
 			break;
 		case LAND:
-			rarity = BitmapFactory.decodeResource(res, R.drawable.rarity_system);			
+			resourceId = R.drawable.rarity_system;
 			break;
 		case PROMO:
-			rarity = BitmapFactory.decodeResource(res, R.drawable.rarity_promo);			
+			resourceId = R.drawable.rarity_promo;
 			break;
+		default:
+			resourceId = R.drawable.rarity_common;
 		}
-		
+		rarity = BitmapFactory.decodeResource(res, resourceId,bitmapOptions);
+
 		combine.drawBitmap(rarity, templateImage.getWidth() / 3, templateImage.getHeight() - (templateImage.getHeight() / 25), paint);
 	}
 
@@ -330,12 +351,12 @@ public class Card extends AbstractCard {
 				}
 			}
 			if (paint.measureText(displayText) > (templateImage.getWidth() * 0.829)) {
-				String stuff = displayText.substring(0,displayText.lastIndexOf(" "));
-				drawTextWithImages(stuff, templateImage, combine, paint, resources, context);				
-				line += .06f;
-				stuff = displayText.substring(displayText.lastIndexOf(" "),displayText.length()-1);
+				String stuff = displayText.substring(0, displayText.lastIndexOf(" "));
 				drawTextWithImages(stuff, templateImage, combine, paint, resources, context);
-			} else{
+				line += .06f;
+				stuff = displayText.substring(displayText.lastIndexOf(" "), displayText.length() - 1);
+				drawTextWithImages(stuff, templateImage, combine, paint, resources, context);
+			} else {
 				drawTextWithImages(displayText, templateImage, combine, paint, resources, context);
 			}
 		}
