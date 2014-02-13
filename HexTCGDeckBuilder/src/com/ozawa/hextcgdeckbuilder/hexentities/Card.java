@@ -41,6 +41,8 @@ import com.ozawa.hextcgdeckbuilder.programstate.ImageCache.CacheType;
 import com.ozawa.hextcgdeckbuilder.programstate.ImageCache.ImageType;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
+import static java.lang.Math.round;
+
 /**
  * A non-resource card.
  * 
@@ -78,10 +80,6 @@ public class Card extends AbstractCard {
 	public int					variableHealth;
 
 	private float				line;
-	private static final int	fullTemplateWidth		= 890;
-	private static final int	fullTemplateHeigth		= 1240;
-	private static final int	thumbnailTemplateWidth	= 500;
-	private static final int	thumbnailTemplateHeigth	= 560;
 
 	/**
 	 * Creates or retrives the card image including portrait, template and text.
@@ -457,33 +455,37 @@ public class Card extends AbstractCard {
 			ArrayList<Bitmap> thresholds = new ArrayList<Bitmap>();
 			for (ResourceThreshold threshold : this.threshold) {
 				if (threshold.colorFlags != null && threshold.colorFlags.length > 0 && threshold.colorFlags[0] != null) {
+					String thresholdName =null;
 					switch (threshold.colorFlags[0]) {
 					case COLORLESS: {
 						break;
 					}
 					case BLOOD: {
-						addCardThresholdBitmapToList(mContext, thresholds, "cardthresholdblood", threshold.thresholdColorRequirement);
+						thresholdName="cardthresholdblood";
 						break;
 					}
 					case DIAMOND: {
-						addCardThresholdBitmapToList(mContext, thresholds, "cardthresholddiamond", threshold.thresholdColorRequirement);
+						thresholdName="cardthresholddiamond";
 						break;
 					}
 					case RUBY: {
-						addCardThresholdBitmapToList(mContext, thresholds, "cardthresholdruby", threshold.thresholdColorRequirement);
+						thresholdName="cardthresholdruby";
 						break;
 					}
 					case SAPPHIRE: {
-						addCardThresholdBitmapToList(mContext, thresholds, "cardthresholdsapphire", threshold.thresholdColorRequirement);
+						thresholdName="cardthresholdsapphire";
 						break;
 					}
 					case WILD: {
-						addCardThresholdBitmapToList(mContext, thresholds, "cardthresholdwild", threshold.thresholdColorRequirement);
+						thresholdName="cardthresholdwild";
 						break;
 					}
 					default: {
 						break;
 					}
+					}
+					if(thresholdName!=null){
+						addCardThresholdBitmapToList(mContext, thresholds, thresholdName, threshold.thresholdColorRequirement,template);
 					}
 				}
 			}
@@ -505,33 +507,30 @@ public class Card extends AbstractCard {
 						left -= image.getWidth();
 					}
 				} else if (template.fullCard) {
-					int width = templateImage.getWidth() / fullTemplateWidth;
-					int height = templateImage.getHeight() / fullTemplateHeigth;
-					allThresholds = Bitmap.createBitmap(width * 30, height * 500, Bitmap.Config.ARGB_8888);
+					int width = round(templateImage.getWidth() * template.thresholdWidthRatio);
+					int height = round(templateImage.getHeight() * template.thresholdHeightRatio);
+					allThresholds = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 
 					Canvas canvas = new Canvas(allThresholds);
 					canvas.drawColor(0, Mode.CLEAR);
 					int left = 0;
 					int top = 0;
-					int padding = height * 23;
-					int dimensions = width * 30;
+					int padding = round(templateImage.getHeight() * template.thresholdPaddingRatio);
 					for (Bitmap image : thresholds) {
-						image = Bitmap.createScaledBitmap(image, dimensions, dimensions, true);
 						canvas.drawBitmap(image, left, top, null);
 						top += image.getHeight() + padding;
 					}
 				} else {
-					int width = templateImage.getWidth();
-					int height = templateImage.getHeight();
-					allThresholds = Bitmap.createBitmap((width * 18) / thumbnailTemplateWidth, (height * 300) / thumbnailTemplateHeigth,
-							Bitmap.Config.ARGB_8888);
+					int width = round(templateImage.getWidth() * template.thresholdWidthRatio);
+					int height = round(templateImage.getHeight() * template.thresholdHeightRatio);
+					allThresholds = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 
 					Canvas canvas = new Canvas(allThresholds);
 					canvas.drawColor(0, Mode.CLEAR);
 					int left = 0;
 					int top = 0;
-					int padding = height * 12 / thumbnailTemplateHeigth;
-					int dimensions = width * 18 / thumbnailTemplateWidth;
+					int padding = round(templateImage.getHeight() * template.thresholdPaddingRatio);
+					int dimensions = width;
 					for (Bitmap image : thresholds) {
 						image = Bitmap.createScaledBitmap(image, dimensions, dimensions, true);
 						canvas.drawBitmap(image, left, top, null);
@@ -546,10 +545,14 @@ public class Card extends AbstractCard {
 		return null;
 	}
 
-	private void addCardThresholdBitmapToList(Context mContext, List<Bitmap> thresholds, String resourcesName, int thresholdCount) {
+	private void addCardThresholdBitmapToList(Context mContext, List<Bitmap> thresholds, String resourcesName, int thresholdCount, CardTemplate template) {
+		BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+		if (template.currentSubsample != null) {
+			bitmapOptions.inSampleSize = template.currentSubsample;
+		}
 		for (int i = 0; i < thresholdCount; i++) {
 			Bitmap thresh = BitmapFactory.decodeResource(mContext.getResources(), HexUtil.getResourceID(resourcesName, R.drawable.class),
-					null);
+					bitmapOptions);
 			thresholds.add(thresh);
 		}
 	}
