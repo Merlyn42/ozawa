@@ -142,7 +142,7 @@ public class Card extends AbstractCard {
 			if (template.fullCard) {
 				drawFullImageText(combine, templateImage, paint, resources, context, template, scale);
 				if (threshold != null) {
-					combine.drawBitmap(threshold, (templateImage.getWidth() / 14), (templateImage.getHeight() / 9.5f), null);
+					combine.drawBitmap(threshold, (templateImage.getWidth() / 13.6f), (templateImage.getHeight() / 9.1f), null);
 				}
 			} else {
 				drawThumbnailText(combine, templateImage, paint, template, resources, scale);
