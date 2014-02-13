@@ -128,7 +128,7 @@ public class CardTemplate {
 		BitmapFactory.Options templateFirstOptions = new BitmapFactory.Options();
 		templateFirstOptions.inJustDecodeBounds = true;
 		BitmapFactory.decodeResource(resources, templateId, templateFirstOptions);
-		currentSubsample = 2;
+		currentSubsample = 1;
 		while (templateFirstOptions.outWidth / currentSubsample / 2 >= maxWidth)
 			currentSubsample *= 2;
 		// Decode with inSampleSize
