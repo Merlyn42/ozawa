@@ -420,7 +420,7 @@
     "right": 0.94,
     "templateName": "diamond_troop",
     "isTroop": true,
-    "colors": "",
+    "colors": "Diamond",
     "fullCard": true,
     "thresholdPaddingRatio" : 0.01935,
     "thresholdHeightRatio" : 0.40322,
