@@ -45,6 +45,9 @@ public class CardTemplate {
 	public boolean						isTroop;
 	public ColorFlag[]					colors;
 	public boolean						fullCard;
+	public float 						thresholdWidthRatio;
+	public float 						thresholdHeightRatio;
+	public float						thresholdPaddingRatio;
 	public float						nameFontRatio;
 	public float						costFontRatio;
 	public float						typeFontRatio;
