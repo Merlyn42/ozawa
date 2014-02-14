@@ -90,7 +90,7 @@ public class DeckListViewAdapter extends ImageAdapter {
 
 		AbstractCard card = cardViewer.getFilteredCardList().get(position);
 
-		if (card.colorFlags.length > 0 && card.colorFlags[0] != null && !(card instanceof ResourceCard)) {
+		if (card.colorFlags.length == 1 && card.colorFlags[0] != null && !(card instanceof ResourceCard)) {
 			switch (card.colorFlags[0]) {
 			case COLORLESS: {
 				vi.setBackgroundResource(R.drawable.list_selector_colorless);
@@ -152,6 +152,10 @@ public class DeckListViewAdapter extends ImageAdapter {
 				vi.setBackgroundResource(R.drawable.list_selector_colorless);
 				portaitBorder.setBackgroundResource(R.drawable.portrait_border_colorless);
 			}
+		}else if(card.colorFlags.length > 1){
+			vi.setBackgroundResource(R.drawable.list_selector_gold);
+			portaitBorder.setBackgroundResource(R.drawable.portrait_border_gold);
+			portaitBorder.setPadding(5, 5, 5, 5);
 		} else {
 			vi.setBackgroundResource(R.drawable.list_selector_colorless);
 			portaitBorder.setBackgroundResource(R.drawable.portrait_border_colorless);
