@@ -21,26 +21,23 @@ import android.content.Context;
 import com.ozawa.hextcgdeckbuilder.ImageAdapter;
 import com.ozawa.hextcgdeckbuilder.UI.customdeck.Deck;
 import com.ozawa.hextcgdeckbuilder.enums.CardEnum;
-import com.ozawa.hextcgdeckbuilder.filter.CardComparatorColor;
 import com.ozawa.hextcgdeckbuilder.filter.Filter;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
 public class CardsViewer {
-	private Filter						filter;
-	private Deck						deck;
-	private ImageAdapter				adapter;
-	private Comparator<AbstractCard>	comparator	= new CardComparatorColor();
+	private Filter				filter;
+	private Deck				deck;
+	private ImageAdapter		adapter;
+	private List<AbstractCard>	cachedCardList	= null;
 
 	public CardsViewer(Context context, Deck deck) {
 		filter = new Filter();
 		this.deck = deck;
-		
+		filter.sort(deck.getDeckCardList());
 		adapter = new ImageAdapter(context, this);
 	}
 
@@ -50,9 +47,11 @@ public class CardsViewer {
 	}
 
 	public List<AbstractCard> getFilteredCardList() {
-		List<AbstractCard> list = filter.filter(deck.getDeckCardList());
-		filter.sort(list);
-		return list;
+		if (cachedCardList == null) {
+			cachedCardList = filter.filter(deck.getDeckCardList());
+			filter.sort(cachedCardList);
+		}
+		return cachedCardList;
 	}
 
 	public List<AbstractCard> getUnFilteredCardList() {
@@ -65,7 +64,7 @@ public class CardsViewer {
 
 	public void setFilterString(String filterString) {
 		filter.setFilterString(filterString);
-		adapter.notifyDataSetChanged();
+		updateDeckAndView();
 	}
 
 	public boolean toggleFilter(CardEnum e) {
@@ -77,7 +76,7 @@ public class CardsViewer {
 			filter.addFilter(e);
 			result = true;
 		}
-		adapter.notifyDataSetChanged();
+		updateDeckAndView();
 		return result;
 	}
 
@@ -97,9 +96,14 @@ public class CardsViewer {
 
 	public void updateDeckAndView() {
 		adapter.notifyDataSetChanged();
+		invalidateCardCache();
 	}
 
 	public Map<AbstractCard, Integer> getDeckData() {
 		return deck.getDeckData();
+	}
+
+	private void invalidateCardCache() {
+		cachedCardList = null;
 	}
 }
