@@ -484,8 +484,12 @@ public class Card extends AbstractCard {
 						break;
 					}
 					}
+					int subsample=1;
+					if(template!=null&&template.currentSubsample!=null){
+						subsample = template.currentSubsample.intValue();
+					}
 					if(thresholdName!=null){
-						addCardThresholdBitmapToList(mContext, thresholds, thresholdName, threshold.thresholdColorRequirement,template);
+						addCardThresholdBitmapToList(mContext, thresholds, thresholdName, threshold.thresholdColorRequirement,subsample);
 					}
 				}
 			}
@@ -545,11 +549,9 @@ public class Card extends AbstractCard {
 		return null;
 	}
 
-	private void addCardThresholdBitmapToList(Context mContext, List<Bitmap> thresholds, String resourcesName, int thresholdCount, CardTemplate template) {
+	private void addCardThresholdBitmapToList(Context mContext, List<Bitmap> thresholds, String resourcesName, int thresholdCount, int currentSubsample) {
 		BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-		if (template.currentSubsample != null) {
-			bitmapOptions.inSampleSize = template.currentSubsample;
-		}
+		bitmapOptions.inSampleSize = currentSubsample;
 		for (int i = 0; i < thresholdCount; i++) {
 			Bitmap thresh = BitmapFactory.decodeResource(mContext.getResources(), HexUtil.getResourceID(resourcesName, R.drawable.class),
 					bitmapOptions);
