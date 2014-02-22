@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Locale;
 
 import com.ozawa.hextcgdeckbuilder.enums.Attribute;
 import com.ozawa.hextcgdeckbuilder.enums.CardType;
@@ -142,10 +143,27 @@ public class Filter {
 		}
 		return result;
 	}
+	
+	private boolean searchCardText(AbstractCard card,String searchString){
+		String lowercase = searchString.toLowerCase();
+		if(card.cardSubtype.toLowerCase().contains(lowercase)){
+			return true;
+		}
+		if(card.gameText.toLowerCase().contains(lowercase)){
+			return true;
+		}
+		if(card.name.toLowerCase().contains(lowercase)){
+			return true;
+		}
+		return false;
+	}
 
 	private boolean filterCard(AbstractCard abstractCard) {
 		if (filterString!=null&&filterString.length()!=0){
-			if(!(abstractCard.gameText.toLowerCase().contains(filterString.toLowerCase())||abstractCard.name.toLowerCase().contains(filterString.toLowerCase())))return false;
+			if(!searchCardText(abstractCard,filterString)){
+				return false;
+			}
+			
 		}
 		if (cardTypes.size() != NUMBEROFCARDTYPES) {
 			if(!match(abstractCard.cardType,cardTypes))return false;
