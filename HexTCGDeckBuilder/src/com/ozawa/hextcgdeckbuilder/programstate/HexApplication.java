@@ -27,8 +27,10 @@ public class HexApplication extends Application {
 	
 	CardsViewer customDeckViewer;
 	CardsViewer cardLibraryViewer;
+	CardsViewer deckTestDrawViewer;
 	Deck cardLibrary;
 	Deck customDeck;
+	Deck testDrawDeck;
 	
 	public Deck getCustomDeck(){
 		if(customDeck == null){
@@ -46,6 +48,14 @@ public class HexApplication extends Application {
 		
 		return cardLibrary;
 	} 
+	
+	public Deck getTestDrawDeck(){
+		if(testDrawDeck == null){
+			testDrawDeck = new Deck(this);
+		}
+		
+		return testDrawDeck;
+	}
 
 	public CardsViewer getCustomDeckViewer() {
 		if(customDeckViewer==null){
@@ -59,6 +69,13 @@ public class HexApplication extends Application {
 			cardLibraryViewer = new CardsViewer(getApplicationContext(), getCardLibrary());
 		}
 		return cardLibraryViewer;
+	}
+	
+	public CardsViewer getTestDrawDeckViewer(){
+		if(deckTestDrawViewer==null){
+			deckTestDrawViewer = new CardsViewer(getApplicationContext(), getTestDrawDeck());
+		}
+		return deckTestDrawViewer;
 	}
 
 }

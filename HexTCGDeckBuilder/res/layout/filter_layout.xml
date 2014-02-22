@@ -210,6 +210,13 @@
         android:layout_height="wrap_content"
         android:text="Select Champion"
         android:visibility="invisible" />
+    
+    <Button
+        android:id="@+id/buttonDeckTestDraw"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Test Draw"
+        android:visibility="invisible" />
 
 </LinearLayout>
 </ScrollView>

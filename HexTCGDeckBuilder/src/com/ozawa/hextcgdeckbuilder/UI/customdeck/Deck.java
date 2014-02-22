@@ -225,6 +225,20 @@ public class Deck {
 	public boolean isUnsavedDeck() {
 		return (currentDeck == null && !deckData.isEmpty());
 	}
+	
+	/**
+	 * Get the size of the deck
+	 * 
+	 * @return the number of cards in the deck.
+	 */
+	public int getDeckSize(){
+		int deckSize = 0;
+		for (int value : this.deckData.values()) {
+			deckSize += value;
+		}
+		
+		return deckSize;
+	}
 
 	/**
 	 * Reset the deck

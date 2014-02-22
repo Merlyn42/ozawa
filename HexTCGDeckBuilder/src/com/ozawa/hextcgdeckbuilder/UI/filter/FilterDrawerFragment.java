@@ -235,6 +235,10 @@ public class FilterDrawerFragment extends Fragment implements TextWatcher {
 		Button selectChampion = (Button) scrollView.findViewById(R.id.buttonSelectChampion);
 		selectChampion.setHapticFeedbackEnabled(true);
 		selectChampion.setVisibility(View.VISIBLE);
+		
+		Button deckTestDraw = (Button) scrollView.findViewById(R.id.buttonDeckTestDraw);
+		deckTestDraw.setHapticFeedbackEnabled(true);
+		deckTestDraw.setVisibility(View.VISIBLE);
 
 		ImageView championPortrait = (ImageView) scrollView.findViewById(R.id.imageChampionPortrait);
 		championPortrait.setVisibility(View.VISIBLE);

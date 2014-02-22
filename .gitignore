@@ -36,3 +36,6 @@ Ozawa/App/src/main/res/drawable-hdpi/hex00004.png
 Ozawa/App/src/main/res/drawable-hdpi/hex00005.png
 Ozawa/App/src/main/res/drawable-hdpi/hex00006.png
 HexTCGDeckBuilder/gen/com/android/vending/expansion/downloader/R.java
+Ozawa/.gradle/
+Ozawa/App/build/apk/App-defaultFlavor-debug-unaligned.apk
+Ozawa/App/

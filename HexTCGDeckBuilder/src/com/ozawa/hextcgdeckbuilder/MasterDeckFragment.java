@@ -28,6 +28,7 @@ import com.ozawa.hextcgdeckbuilder.UI.listview.DeckListViewAdapter;
 import com.ozawa.hextcgdeckbuilder.UI.multiplecarddialogs.AbstractMultipleCardsDialogFragment;
 import com.ozawa.hextcgdeckbuilder.UI.multiplecarddialogs.AddMultipleCardsDialogFragment;
 import com.ozawa.hextcgdeckbuilder.UI.multiplecarddialogs.AddMultipleCardsDialogFragmentGinger;
+import com.ozawa.hextcgdeckbuilder.enums.DeckType;
 import com.ozawa.hextcgdeckbuilder.enums.TutorialType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
@@ -267,7 +268,7 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 				Intent i = new Intent(mainActivity, FullImageActivity.class);
 				// passing array index
 				i.putExtra("id", position);
-				i.putExtra("isMaster", true);
+				i.putExtra("deckType", DeckType.CARDLIBRARY);
 				startActivity(i);
 			}
 		});
@@ -302,7 +303,7 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 				Intent i = new Intent(mainActivity, FullImageActivity.class);
 				// passing array index
 				i.putExtra("id", position);
-				i.putExtra("isMaster", true);
+				i.putExtra("deckType", DeckType.CARDLIBRARY);
 				startActivity(i);
 			}
 		});

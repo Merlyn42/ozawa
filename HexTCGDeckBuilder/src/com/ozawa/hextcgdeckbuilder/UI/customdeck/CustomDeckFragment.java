@@ -32,11 +32,13 @@ import com.ozawa.hextcgdeckbuilder.UI.CustomViewPager;
 import com.ozawa.hextcgdeckbuilder.UI.PlaceholderFragment;
 import com.ozawa.hextcgdeckbuilder.UI.TutorialEventListener;
 import com.ozawa.hextcgdeckbuilder.UI.customdeck.champions.SelectChampionDialogFragment;
+import com.ozawa.hextcgdeckbuilder.UI.customdeck.deckstats.DeckTestDrawActivity;
 import com.ozawa.hextcgdeckbuilder.UI.filter.FilterDrawerFragment;
 import com.ozawa.hextcgdeckbuilder.UI.listview.DeckListViewAdapter;
 import com.ozawa.hextcgdeckbuilder.UI.multiplecarddialogs.AbstractMultipleCardsDialogFragment;
 import com.ozawa.hextcgdeckbuilder.UI.multiplecarddialogs.RemoveMultipleCardsDialogFragment;
 import com.ozawa.hextcgdeckbuilder.UI.multiplecarddialogs.RemoveMultipleCardsDialogFragmentGinger;
+import com.ozawa.hextcgdeckbuilder.enums.DeckType;
 import com.ozawa.hextcgdeckbuilder.enums.TutorialType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.HexDeck;
@@ -110,6 +112,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	private Button				saveDeck;
 	private Button				deleteDeck;
 	private Button				selectChampion;
+	private Button 				deckTestDraw;
 
 	// Tutorial
 	public static final String	PREFS_NAME	= "FirstLaunchPrefCustomDeck";
@@ -334,7 +337,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 				Intent i = new Intent(mContext, FullImageActivity.class);
 				// passing array index
 				i.putExtra("id", position);
-				i.putExtra("isMaster", false);
+				i.putExtra("deckType", DeckType.CUSTOMDECK);
 				startActivity(i);
 			}
 		});
@@ -376,7 +379,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 				Intent i = new Intent(mContext, FullImageActivity.class);
 				// passing array index
 				i.putExtra("id", position);
-				i.putExtra("isMaster", false);
+				i.putExtra("deckType", DeckType.CUSTOMDECK);
 				startActivity(i);
 			}
 		});
@@ -494,11 +497,8 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 		}
 		if (customDeck.getDeckData() != null) {
 			TextView deckCardCount = (TextView) mFilterDrawerFragment.getView().findViewById(R.id.tvDeckCardCount);
-			int cardCount = 0;
-			for (int value : customDeck.getDeckData().values()) {
-				cardCount += value;
-			}
-			deckCardCount.setText("Card Count: " + cardCount);
+			
+			deckCardCount.setText("Card Count: " + customDeck.getDeckSize());
 		}
 	}
 
@@ -540,8 +540,15 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	private void setDeckButtonAvailablity() {
 		if (customDeck.getCurrentDeck() != null) {
 			deleteDeck.setEnabled(true);
+			// Test draw only available when there are 60 or more cards in deck.
+			if(customDeck.getDeckSize() >= 60){
+				deckTestDraw.setEnabled(true);
+			}else{
+				deckTestDraw.setEnabled(false);
+			}
 		} else {
 			deleteDeck.setEnabled(false);
+			deckTestDraw.setEnabled(false);
 		}
 		if (customDeck.getCurrentDeck() == null && customDeck.getDeckCardList().isEmpty()) {
 			saveDeck.setEnabled(false);
@@ -651,6 +658,17 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 			public void onClick(View v) {
 				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 				showSelectChampionPopup();
+			}
+
+		});
+		
+		deckTestDraw = (Button) mFilterDrawerFragment.getView().findViewById(R.id.buttonDeckTestDraw);
+		deckTestDraw.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(mContext, DeckTestDrawActivity.class);
+                startActivity(intent);				
 			}
 
 		});
