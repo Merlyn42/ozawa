@@ -71,6 +71,15 @@ public class DeckTestDraw {
 	}
 	
 	/**
+	 * Get the full deck list
+	 * 
+	 * @return the full deck list for the test draw
+	 */
+	public List<AbstractCard> getFullDeck(){
+		return this.fullDeck;
+	}
+	
+	/**
 	 * Create a new deck and shuffle it
 	 * 
 	 * @param deck - a map of each card in the deck and how many of that card there is in the deck

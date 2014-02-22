@@ -56,7 +56,7 @@ public class DeckTestDrawActivity extends Activity {
 	private void setUpButtons() {
 		Button newHand = (Button) findViewById(R.id.buttonNewHand);
 		final Button mulligan = (Button) findViewById(R.id.buttonMulligan);
-		Button drawCard = (Button) findViewById(R.id.buttonDrawCard);
+		final Button drawCard = (Button) findViewById(R.id.buttonDrawCard);		
 		Button close = (Button) findViewById(R.id.buttonCloseDeckTestDraw);
 		
 		// Draw a new hand
@@ -67,6 +67,7 @@ public class DeckTestDrawActivity extends Activity {
 				currentHand.setDeckCardList(deckTestDraw.drawNewHand());
 				cardViewer.updateDeckAndView();
 				mulligan.setEnabled(true);
+				drawCard.setEnabled(true);
 			}
 		});
 		
@@ -83,6 +84,7 @@ public class DeckTestDrawActivity extends Activity {
 			}
 		});
 		
+		drawCard.setEnabled(false); // Disable draw card until a new hand is drawn
 		// Draw a card
 		drawCard.setOnClickListener(new OnClickListener() {
 			
@@ -91,6 +93,9 @@ public class DeckTestDrawActivity extends Activity {
 				currentHand.setDeckCardList(deckTestDraw.drawNextCard());	
 				cardViewer.updateDeckAndView();
 				mulligan.setEnabled(false);
+				if(currentHand.getDeckCardList().size() == deckTestDraw.getFullDeck().size()){
+					drawCard.setEnabled(false);
+				}
 			}
 		});
 		
