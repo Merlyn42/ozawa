@@ -47,7 +47,12 @@ public class DeckTestDrawActivity extends Activity {
 	    setUpButtons();
 	    
 	    TextView title = (TextView) findViewById(R.id.tvTestDrawCurrentDeck);
-	    title.setText("Current Deck: " + hexApp.getCustomDeck().getCurrentDeck().name);
+	    if(hexApp.getCustomDeck().getCurrentDeck() != null){
+	    	title.setText("Current Deck: " + hexApp.getCustomDeck().getCurrentDeck().name);
+	    }else{
+	    	title.setText("Deck not saved yet.");
+	    }
+	    
 	}
 	
 	/**
@@ -65,9 +70,14 @@ public class DeckTestDrawActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				currentHand.setDeckCardList(deckTestDraw.drawNewHand());
-				cardViewer.updateDeckAndView();
+				cardViewer.updateDeckAndView();				
 				mulligan.setEnabled(true);
-				drawCard.setEnabled(true);
+				// If the deck has 7 or less cards disable draw cards as we draw all cards at start
+				if(deckTestDraw.getFullDeck().size() <= 7){
+					drawCard.setEnabled(false);
+				}else{
+					drawCard.setEnabled(true);
+				}
 			}
 		});
 		
@@ -81,6 +91,7 @@ public class DeckTestDrawActivity extends Activity {
 				if(currentHand.getDeckCardList().size() == 0){
 					mulligan.setEnabled(false);
 				}
+				drawCard.setEnabled(true); // Ensure draw card is enabled if mulligan occurs
 			}
 		});
 		

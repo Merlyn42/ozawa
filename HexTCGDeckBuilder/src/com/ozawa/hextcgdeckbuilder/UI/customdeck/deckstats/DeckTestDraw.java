@@ -23,17 +23,23 @@ public class DeckTestDraw {
 	}
 	
 	/**
-	 * Draw a new hand of 7 cards
+	 * Draw a new hand of cards
 	 * 
-	 * @return a list of the first 7 cards of the newly shuffled deck
+	 * @return a list of the first cards of the newly shuffled deck
 	 */
 	public List<AbstractCard> drawNewHand(){
 		currentHand = new ArrayList<AbstractCard>();
 		shuffleDeck(fullDeck);
-		
-		for(int i = 0; i < 7; i++){
-			currentHand.add(fullDeck.get(i));
-		}		
+		// If testing a deck that has less than 7 cards.
+		if(fullDeck.size() < 7){
+			for(int i = 0; i < fullDeck.size(); i++){
+				currentHand.add(fullDeck.get(i));
+			}
+		}else{
+			for(int i = 0; i < 7; i++){
+				currentHand.add(fullDeck.get(i));
+			}		
+		}
 		
 		return currentHand;
 	}

@@ -543,21 +543,16 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	 */
 	private void setDeckButtonAvailablity() {
 		if (customDeck.getCurrentDeck() != null) {
-			deleteDeck.setEnabled(true);
-			// Test draw only available when there are 60 or more cards in deck.
-			if(customDeck.getDeckSize() >= 60){
-				deckTestDraw.setEnabled(true);
-			}else{
-				deckTestDraw.setEnabled(false);
-			}
+			deleteDeck.setEnabled(true);					
 		} else {
-			deleteDeck.setEnabled(false);
-			deckTestDraw.setEnabled(false);
+			deleteDeck.setEnabled(false);			
 		}
 		if (customDeck.getCurrentDeck() == null && customDeck.getDeckCardList().isEmpty()) {
 			saveDeck.setEnabled(false);
+			deckTestDraw.setEnabled(false);
 		} else {
 			saveDeck.setEnabled(true);
+			deckTestDraw.setEnabled(true);	
 		}
 	}
 
