@@ -30,6 +30,9 @@ import com.ozawa.hextcgdeckbuilder.UI.multiplecarddialogs.AddMultipleCardsDialog
 import com.ozawa.hextcgdeckbuilder.UI.multiplecarddialogs.AddMultipleCardsDialogFragmentGinger;
 import com.ozawa.hextcgdeckbuilder.enums.DeckType;
 import com.ozawa.hextcgdeckbuilder.enums.TutorialType;
+import com.ozawa.hextcgdeckbuilder.filter.CardComparatorColor;
+import com.ozawa.hextcgdeckbuilder.filter.CardComparatorCost;
+import com.ozawa.hextcgdeckbuilder.filter.DualComparator;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
@@ -219,6 +222,7 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 																			// pages
 					} else if (prediction.name.equalsIgnoreCase("anti clockwise") || prediction.name.equalsIgnoreCase("clockwise")) {
 						cardViewer.clearFilter();
+						cardViewer.setComparator(new DualComparator(new CardComparatorColor(), new CardComparatorCost()));
 						mNavigationDrawerFragment.updateFilterUI();
 					}
 				}

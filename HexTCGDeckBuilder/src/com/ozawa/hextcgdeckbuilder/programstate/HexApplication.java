@@ -19,6 +19,9 @@ package com.ozawa.hextcgdeckbuilder.programstate;
 
 import com.ozawa.hextcgdeckbuilder.UI.CardsViewer;
 import com.ozawa.hextcgdeckbuilder.UI.customdeck.Deck;
+import com.ozawa.hextcgdeckbuilder.filter.CardComparatorColor;
+import com.ozawa.hextcgdeckbuilder.filter.CardComparatorCost;
+import com.ozawa.hextcgdeckbuilder.filter.DualComparator;
 import com.ozawa.hextcgdeckbuilder.json.MasterDeck;
 
 import android.app.Application;
@@ -60,6 +63,7 @@ public class HexApplication extends Application {
 	public CardsViewer getCustomDeckViewer() {
 		if(customDeckViewer==null){
 			customDeckViewer = new CardsViewer(getApplicationContext(), getCustomDeck());
+			customDeckViewer.setComparator(new DualComparator(new CardComparatorColor(), new CardComparatorCost()));
 		}
 		return customDeckViewer;
 	}
@@ -67,6 +71,7 @@ public class HexApplication extends Application {
 	public CardsViewer getCardLibraryViewer() {
 		if(cardLibraryViewer==null){
 			cardLibraryViewer = new CardsViewer(getApplicationContext(), getCardLibrary());
+			cardLibraryViewer.setComparator(new DualComparator(new CardComparatorColor(), new CardComparatorCost()));
 		}
 		return cardLibraryViewer;
 	}

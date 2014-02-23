@@ -39,16 +39,23 @@ public class Filter {
 	private final EnumSet<ColorFlag>	colors;
 	private final EnumSet<CardType>		cardTypes;
 	private Comparator<AbstractCard>	comparator;
-	
-	private final static int NUMBEROFCARDTYPES = EnumSet.allOf(CardType.class).size();
-	private final static int NUMBEROFCOLORS = EnumSet.allOf(ColorFlag.class).size();
+
+	private final static int			NUMBEROFCARDTYPES	= EnumSet.allOf(CardType.class).size();
+	private final static int			NUMBEROFCOLORS		= EnumSet.allOf(ColorFlag.class).size();
+
+	public Comparator<AbstractCard> getComparator() {
+		return comparator;
+	}
+
+	public void setComparator(Comparator<AbstractCard> comparator) {
+		this.comparator = comparator;
+	}
 
 	public Filter() {
 		attributes = EnumSet.noneOf(Attribute.class);
 		colors = EnumSet.allOf(ColorFlag.class);
 		cardTypes = EnumSet.allOf(CardType.class);
-        cardTypes.remove(CardType.CHAMPION);
-        comparator = new DualComparator(new CardComparatorColor(), new CardComparatorCost());
+		cardTypes.remove(CardType.CHAMPION);
 	}
 
 	public String getFilterString() {
@@ -59,36 +66,35 @@ public class Filter {
 		this.filterString = filterString;
 	}
 
-    public void addFilter(CardEnum e){
-        if(e instanceof ColorFlag){
-            colors.add((ColorFlag)e);
-        }else if(e instanceof Attribute){
-            attributes.add((Attribute)e);
-        }else if(e instanceof CardType){
-        	if(e==CardType.TROOP||e==CardType.CONSTANT){
-        		cardTypes.add(CardType.ARTIFACT);
-        	}
-            cardTypes.add((CardType) e);
-        }else{
-            throw new RuntimeException("Unknown enum type");
-        }
-    }
+	public void addFilter(CardEnum e) {
+		if (e instanceof ColorFlag) {
+			colors.add((ColorFlag) e);
+		} else if (e instanceof Attribute) {
+			attributes.add((Attribute) e);
+		} else if (e instanceof CardType) {
+			if (e == CardType.TROOP || e == CardType.CONSTANT) {
+				cardTypes.add(CardType.ARTIFACT);
+			}
+			cardTypes.add((CardType) e);
+		} else {
+			throw new RuntimeException("Unknown enum type");
+		}
+	}
 
-    public void removeFilter(CardEnum e){
-        if(e instanceof ColorFlag){
-            colors.remove((ColorFlag) e);
-        }else if(e instanceof Attribute){
-            attributes.remove((Attribute) e);
-        }else if(e instanceof CardType){
-        	if(e==CardType.TROOP&&!isActive(CardType.CONSTANT)||e==CardType.CONSTANT&&!isActive(CardType.TROOP)){
-        		cardTypes.remove(CardType.ARTIFACT);
-        	}
-            cardTypes.remove((CardType) e);
-        }else{
-            throw new RuntimeException("Unknown enum type");
-        }
-    }
-
+	public void removeFilter(CardEnum e) {
+		if (e instanceof ColorFlag) {
+			colors.remove((ColorFlag) e);
+		} else if (e instanceof Attribute) {
+			attributes.remove((Attribute) e);
+		} else if (e instanceof CardType) {
+			if (e == CardType.TROOP && !isActive(CardType.CONSTANT) || e == CardType.CONSTANT && !isActive(CardType.TROOP)) {
+				cardTypes.remove(CardType.ARTIFACT);
+			}
+			cardTypes.remove((CardType) e);
+		} else {
+			throw new RuntimeException("Unknown enum type");
+		}
+	}
 
 	public void addAttribute(Attribute attribute) {
 		attributes.add(attribute);
@@ -115,23 +121,25 @@ public class Filter {
 	}
 
 	public boolean isActive(CardEnum e) {
-        if(e instanceof ColorFlag){
-            return colors.contains(e);
-        }else if(e instanceof Attribute){
-            return attributes.contains(e);
-        }else if(e instanceof CardType){
-            return cardTypes.contains(e);
-        }else{
-            throw new RuntimeException("Unknown enum type");
-        }
+		if (e instanceof ColorFlag) {
+			return colors.contains(e);
+		} else if (e instanceof Attribute) {
+			return attributes.contains(e);
+		} else if (e instanceof CardType) {
+			return cardTypes.contains(e);
+		} else {
+			throw new RuntimeException("Unknown enum type");
+		}
 	}
 
 	public List<AbstractCard> filter(AbstractCard[] cards) {
 		return (filter(Arrays.asList(cards)));
 	}
-	
+
 	public void sort(List<? extends AbstractCard> cards) {
-		Collections.sort(cards, comparator);
+		if (comparator != null) {
+			Collections.sort(cards, comparator);
+		}
 	}
 
 	public List<AbstractCard> filter(List<? extends AbstractCard> cards) {
@@ -143,33 +151,37 @@ public class Filter {
 		}
 		return result;
 	}
-	
-	private boolean searchCardText(AbstractCard card,String searchString){
+
+	private boolean searchCardText(AbstractCard card, String searchString) {
 		String lowercase = searchString.toLowerCase();
-		if(card.cardSubtype.toLowerCase().contains(lowercase)){
+		if (card.cardSubtype.toLowerCase().contains(lowercase)) {
 			return true;
 		}
-		if(card.gameText.toLowerCase().contains(lowercase)){
+		if (card.gameText.toLowerCase().contains(lowercase)) {
 			return true;
 		}
-		if(card.name.toLowerCase().contains(lowercase)){
+		if (card.name.toLowerCase().contains(lowercase)) {
 			return true;
 		}
 		return false;
 	}
 
 	private boolean filterCard(AbstractCard abstractCard) {
-		if (filterString!=null&&filterString.length()!=0){
-			if(!searchCardText(abstractCard,filterString)){
+		if (filterString != null && filterString.length() != 0) {
+			if (!searchCardText(abstractCard, filterString)) {
 				return false;
 			}
-			
+
 		}
 		if (cardTypes.size() != NUMBEROFCARDTYPES) {
-			if(!match(abstractCard.cardType,cardTypes))return false;
+			if (!match(abstractCard.cardType, cardTypes))
+				return false;
 		}
 		if (colors.size() != NUMBEROFCOLORS) {
-			if(!match(abstractCard.colorFlags,colors)&&(abstractCard.resourceThresholdGranted==null?true:!match(abstractCard.resourceThresholdGranted[0].colorFlags,colors)))return false;
+			if (!match(abstractCard.colorFlags, colors)
+					&& (abstractCard.resourceThresholdGranted == null ? true : !match(abstractCard.resourceThresholdGranted[0].colorFlags,
+							colors)))
+				return false;
 		}
 
 		if (abstractCard instanceof Card) {
@@ -185,8 +197,8 @@ public class Filter {
 		}
 		return true;
 	}
-	
-	private <T extends Enum<T>> boolean match(T[] cardValues,EnumSet<T> filterValues){
+
+	private <T extends Enum<T>> boolean match(T[] cardValues, EnumSet<T> filterValues) {
 		if (cardValues != null) {
 			for (T value : cardValues) {
 				if (filterValues.contains(value)) {

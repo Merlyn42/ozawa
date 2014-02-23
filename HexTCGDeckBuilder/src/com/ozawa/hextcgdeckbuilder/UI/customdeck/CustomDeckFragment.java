@@ -40,6 +40,9 @@ import com.ozawa.hextcgdeckbuilder.UI.multiplecarddialogs.RemoveMultipleCardsDia
 import com.ozawa.hextcgdeckbuilder.UI.multiplecarddialogs.RemoveMultipleCardsDialogFragmentGinger;
 import com.ozawa.hextcgdeckbuilder.enums.DeckType;
 import com.ozawa.hextcgdeckbuilder.enums.TutorialType;
+import com.ozawa.hextcgdeckbuilder.filter.CardComparatorColor;
+import com.ozawa.hextcgdeckbuilder.filter.CardComparatorCost;
+import com.ozawa.hextcgdeckbuilder.filter.DualComparator;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.HexDeck;
 import com.ozawa.hextcgdeckbuilder.json.MasterDeck;
@@ -266,6 +269,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 						}
 					} else if (prediction.name.equalsIgnoreCase("anti clockwise") || prediction.name.equalsIgnoreCase("clockwise")) {
 						cardViewer.clearFilter();
+						cardViewer.setComparator(new DualComparator(new CardComparatorColor(), new CardComparatorCost()));
 						mFilterDrawerFragment.updateFilterUI();
 					}
 				}

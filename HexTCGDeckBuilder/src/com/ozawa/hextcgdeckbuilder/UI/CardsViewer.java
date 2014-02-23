@@ -25,6 +25,7 @@ import com.ozawa.hextcgdeckbuilder.filter.Filter;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -44,6 +45,14 @@ public class CardsViewer {
 	public void clearFilter() {
 		filter = new Filter();
 		adapter.notifyDataSetChanged();
+	}
+	
+	public Comparator<AbstractCard> getComparator() {
+		return filter.getComparator();
+	}
+
+	public void setComparator(Comparator<AbstractCard> comparator) {
+		filter.setComparator(comparator);
 	}
 
 	public List<AbstractCard> getFilteredCardList() {
