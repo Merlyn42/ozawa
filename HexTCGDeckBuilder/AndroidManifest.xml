@@ -73,6 +73,11 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name="com.ozawa.hextcgdeckbuilder.UI.customdeck.deckstats.DeckTestDrawActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
         <service android:name="com.ozawa.hextcgdeckbuilder.expansion.ExpansionFileDownloaderService" android:label="@string/app_name" />
     	<receiver android:name="com.ozawa.hextcgdeckbuilder.expansion.ExpansionFileAlarmReceiver" android:label="@string/app_name" />
         <uses-library android:required="false" android:name="com.sec.android.app.multiwindow"> </uses-library>

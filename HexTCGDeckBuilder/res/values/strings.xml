@@ -47,5 +47,9 @@
     <string name="text_button_resume">Resume Download</string>
     <string name="text_button_cancel">Cancel</string>
     <string name="text_button_cancel_verify">Cancel Verification</string>
+    <string name="new_hand">New Hand</string>
+    <string name="mulligan">Mulligan</string>
+    <string name="draw_card">Draw Card</string>
+    <string name="close">Close</string>
 
 </resources>

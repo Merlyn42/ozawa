@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Hex TCG Deck Builder
+      Copyright ( C ) 2014  Chad Kinsella, Dave Kerr and Laurence Reading
+  
+      This program is free software: you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation, either version 3 of the License, or
+      (at your option) any later version.
+  
+      This program is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      GNU General Public License for more details.
+  
+      You should have received a copy of the GNU General Public License
+      along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <LinearLayout
+        android:id="@+id/linLayoutTestDrawTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom"
+        android:weightSum="3"
+        android:layout_alignParentTop="true" >
+        
+        <TextView
+	        android:id="@+id/tvTestDrawCurrentDeck"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:text="Current Deck: "
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:layout_weight="1" />
+        
+        <Button
+	        android:id="@+id/buttonCloseDeckTestDraw"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/close"
+	        android:layout_weight="2" />
+        
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/testDrawContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/linLayoutTestDrawTitle"
+        android:layout_above="@+id/linLayoutTestDrawButtons" >
+
+        <GridView
+            android:id="@+id/gridViewTestDraw"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:numColumns="3"
+            android:columnWidth="90dp"
+            android:horizontalSpacing="10dp"
+            android:verticalSpacing="10dp"
+            android:gravity="center"
+            android:stretchMode="columnWidth"/>
+    </FrameLayout>
+    
+    <LinearLayout
+        android:id="@+id/linLayoutTestDrawButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom"
+        android:weightSum="3"
+        android:layout_alignParentBottom="true" >
+       
+         <Button
+	        android:id="@+id/buttonNewHand"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/new_hand"
+	        android:layout_weight="1" />
+         
+	     <Button
+	        android:id="@+id/buttonMulligan"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/mulligan"
+	        android:layout_weight="1" />
+	     
+	     <Button
+	        android:id="@+id/buttonDrawCard"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/draw_card"
+	        android:layout_weight="1" />
+   
+   	</LinearLayout>
+
+</RelativeLayout>

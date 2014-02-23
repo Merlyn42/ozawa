@@ -27,6 +27,7 @@ import com.espian.showcaseview.ShowcaseView;
 import com.espian.showcaseview.ShowcaseView.ConfigOptions;
 import com.ozawa.hextcgdeckbuilder.UI.CardTemplate;
 import com.ozawa.hextcgdeckbuilder.UI.TutorialEventListener;
+import com.ozawa.hextcgdeckbuilder.enums.DeckType;
 import com.ozawa.hextcgdeckbuilder.enums.TutorialType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Card;
@@ -60,7 +61,7 @@ public class FullImageActivity extends Activity implements GestureOverlayView.On
 	private ImageView imageView;
 	private ImageButton socketGem;
 	private int cardCount;
-	private boolean isMaster;
+	private DeckType deckType;
 	
 	// Tutorial
 	public static final String PREFS_NAME = "FirstLaunchPrefFullscreen";
@@ -81,7 +82,7 @@ public class FullImageActivity extends Activity implements GestureOverlayView.On
 
         // Selected image id
         position = i.getExtras().getInt("id");
-        isMaster = i.getExtras().getBoolean("isMaster");
+        deckType = (DeckType) i.getExtras().getSerializable("deckType");
 
         imageView = (ImageView) findViewById(R.id.full_image_view);
         socketGem = (ImageButton) findViewById(R.id.buttonSocketGem);
@@ -176,14 +177,18 @@ public class FullImageActivity extends Activity implements GestureOverlayView.On
 	
 	private void setImage(){
 		AbstractCard card;
-		if(isMaster){
+		if(deckType == DeckType.CARDLIBRARY){
 			card = ((HexApplication)getApplication()).getCardLibraryViewer().getFilteredCardList().get(position);
         	imageView.setImageBitmap(card.getFullscreenCardBitmap(this));
         	cardCount = ((HexApplication)getApplication()).getCardLibraryViewer().getFilteredCardList().size();
-        } else{
+        } else if(deckType == DeckType.CUSTOMDECK){
         	card = ((HexApplication)getApplication()).getCustomDeckViewer().getFilteredCardList().get(position);
         	imageView.setImageBitmap(card.getFullscreenCardBitmap(this));
         	cardCount = ((HexApplication)getApplication()).getCustomDeckViewer().getFilteredCardList().size();
+        }else{
+        	card = ((HexApplication)getApplication()).getTestDrawDeckViewer().getFilteredCardList().get(position);
+        	imageView.setImageBitmap(card.getFullscreenCardBitmap(this));
+        	cardCount = ((HexApplication)getApplication()).getTestDrawDeckViewer().getFilteredCardList().size();
         }
 		if(card instanceof Card && ((Card) card).socketCount > 0){
     		setSocketButton(card);
