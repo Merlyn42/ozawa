@@ -160,30 +160,30 @@ public class Card extends AbstractCard {
 	private void drawThumbnailText(Canvas combine, Bitmap templateImage, Paint paint, CardTemplate template, Resources resources, int scale) {
 		float imageHeight = templateImage.getHeight();
 		paint.setTextSize(imageHeight * template.nameFontRatio);
-		combine.drawText(getShortenedText(name, 17), templateImage.getWidth() / 3.3f, templateImage.getHeight() / 11f, paint);
+		combine.drawText(getShortenedText(name, template.nameShortenedText), templateImage.getWidth() / template.nameWidth, templateImage.getHeight() / template.nameHeight, paint);
 		paint.setTextSize(imageHeight * template.costFontRatio);
 		if (resourceCost > 9) {
-			combine.drawText("" + resourceCost, templateImage.getWidth() / 9.5f, templateImage.getHeight() / 7.2f, paint);
+			combine.drawText("" + resourceCost, templateImage.getWidth() / template.bigResourceWidth, templateImage.getHeight() / template.bigResourceHeight, paint);
 		} else if (variableCost == 1) {
 			if (resourceCost == 0)
-				combine.drawText("X", templateImage.getWidth() / 7.7f, templateImage.getHeight() / 7.2f, paint);
+				combine.drawText("X", templateImage.getWidth() / template.smallResourceWidth, templateImage.getHeight() / template.smallResourceHeight, paint);
 			else
-				combine.drawText(resourceCost + "X", templateImage.getWidth() / 9.5f, templateImage.getHeight() / 7.2f, paint);
+				combine.drawText(resourceCost + "X", templateImage.getWidth() / template.bigResourceWidth, templateImage.getHeight() / template.bigResourceHeight, paint);
 		} else {
-			combine.drawText("" + resourceCost, templateImage.getWidth() / 7.7f, templateImage.getHeight() / 7.2f, paint);
+			combine.drawText("" + resourceCost, templateImage.getWidth() / template.smallResourceWidth, templateImage.getHeight() / template.smallResourceHeight, paint);
 		}
 		if (cardType[0].equals(CardType.TROOP)) {
 			if (variableAttack == 1)
-				combine.drawText("X", templateImage.getWidth() / 9, templateImage.getHeight() - (templateImage.getHeight() / 11f), paint);
+				combine.drawText("X", templateImage.getWidth() / template.atkWidth, templateImage.getHeight() - (templateImage.getHeight() / template.atkHeight), paint);
 			else
-				combine.drawText(baseAttackValue, templateImage.getWidth() / 9, templateImage.getHeight()
-						- (templateImage.getHeight() / 11f), paint);
+				combine.drawText(baseAttackValue, templateImage.getWidth() / template.atkWidth, templateImage.getHeight()
+						- (templateImage.getHeight() / template.atkHeight), paint);
 			if (variableHealth == 1)
-				combine.drawText("X", templateImage.getWidth() - (templateImage.getWidth() / 6.8f), templateImage.getHeight()
-						- (templateImage.getHeight() / 11f), paint);
+				combine.drawText("X", templateImage.getWidth() - (templateImage.getWidth() / template.defWidth), templateImage.getHeight()
+						- (templateImage.getHeight() / template.defHeight), paint);
 			else
-				combine.drawText(baseHealthValue, templateImage.getWidth() - (templateImage.getWidth() / 6.8f), templateImage.getHeight()
-						- (templateImage.getHeight() / 11f), paint);
+				combine.drawText(baseHealthValue, templateImage.getWidth() - (templateImage.getWidth() / template.defWidth), templateImage.getHeight()
+						- (templateImage.getHeight() / template.defHeight), paint);
 		} else {
 			paint.setTextSize(imageHeight * template.typeFontRatio);
 			String cardTypes = "";
@@ -195,8 +195,8 @@ public class Card extends AbstractCard {
 			if (!cardSubtype.equals(""))
 				cardTypes += " -- " + cardSubtype;
 
-			combine.drawText(getShortenedText(cardTypes, 24), templateImage.getWidth() / 11,
-					templateImage.getHeight() - (templateImage.getHeight() / 6.2f), paint);
+			combine.drawText(getShortenedText(cardTypes, template.cardTypeShortenedText), templateImage.getWidth() / template.cardTypeWidth,
+					templateImage.getHeight() - (templateImage.getHeight() / template.cardTypeHeight), paint);
 		}
 
 		if (socketCount > 0) {
@@ -210,40 +210,37 @@ public class Card extends AbstractCard {
 
 	private void drawFullImageText(Canvas combine, Bitmap templateImage, Paint paint, Resources resources, final Context context,
 			CardTemplate template, int scale) {
-		float imageHeight = templateImage.getHeight();
-		float tempRatio = template.nameFontRatio;
-		paint.setTextSize(imageHeight * tempRatio);
-		combine.drawText(name, templateImage.getWidth() / 6, templateImage.getHeight() / 14, paint);
+		float imageHeight = templateImage.getHeight();	
+		paint.setTextSize(imageHeight * template.nameFontRatio);
+		combine.drawText(name, templateImage.getWidth() / template.nameWidth, templateImage.getHeight() / template.nameHeight, paint);
 		if (resourceCost > 9) {
-			combine.drawText("" + resourceCost, templateImage.getWidth() / 15, templateImage.getHeight() / 15, paint);
+			combine.drawText("" + resourceCost, templateImage.getWidth() / template.bigResourceWidth, templateImage.getHeight() / template.bigResourceHeight, paint);
 		} else if (variableCost == 1) {
 			if (resourceCost == 0)
-				combine.drawText("X", templateImage.getWidth() / 13, templateImage.getHeight() / 15, paint);
+				combine.drawText("X", templateImage.getWidth() / template.smallResourceWidth, templateImage.getHeight() / template.smallResourceHeight, paint);
 			else
-				combine.drawText(resourceCost + "X", templateImage.getWidth() / 13, templateImage.getHeight() / 15, paint);
+				combine.drawText(resourceCost + "X", templateImage.getWidth() / template.smallResourceWidth, templateImage.getHeight() / template.smallResourceHeight, paint);
 		} else {
-			combine.drawText("" + resourceCost, templateImage.getWidth() / 13, templateImage.getHeight() / 15, paint);
+			combine.drawText("" + resourceCost, templateImage.getWidth() / template.smallResourceWidth, templateImage.getHeight() / template.smallResourceHeight, paint);
 		}
 		if (cardType[0].equals(CardType.TROOP)) {
 			if (variableAttack == 1) {
-				combine.drawText("X", templateImage.getWidth() / 17, templateImage.getHeight() - (templateImage.getHeight() / 25), paint);
+				combine.drawText("X", templateImage.getWidth() / template.atkWidth, templateImage.getHeight() - (templateImage.getHeight() / template.atkHeight), paint);
 			} else {
-				combine.drawText(baseAttackValue, templateImage.getWidth() / 17, templateImage.getHeight()
-						- (templateImage.getHeight() / 25), paint);
+				combine.drawText(baseAttackValue, templateImage.getWidth() / template.atkWidth, templateImage.getHeight()
+						- (templateImage.getHeight() / template.atkHeight), paint);
 			}
 			if (variableHealth == 1) {
-				combine.drawText("X", templateImage.getWidth() - (templateImage.getWidth() / 11.5f), templateImage.getHeight()
-						- (templateImage.getHeight() / 25), paint);
+				combine.drawText("X", templateImage.getWidth() - (templateImage.getWidth() / template.defWidth), templateImage.getHeight()
+						- (templateImage.getHeight() / template.defHeight), paint);
 			} else {
-				combine.drawText(baseHealthValue, templateImage.getWidth() - (templateImage.getWidth() / 11.5f), templateImage.getHeight()
-						- (templateImage.getHeight() / 25), paint);
+				combine.drawText(baseHealthValue, templateImage.getWidth() - (templateImage.getWidth() / template.defWidth), templateImage.getHeight()
+						- (templateImage.getHeight() / template.defHeight), paint);
 			}
 		}
-		tempRatio = template.costFontRatio;
-		paint.setTextSize(imageHeight * tempRatio);
-		drawGameText(gameText.trim(), 64, combine, templateImage, paint, resources, context);
-		tempRatio = template.typeFontRatio;
-		paint.setTextSize(imageHeight * tempRatio);
+		paint.setTextSize(imageHeight * template.costFontRatio);
+		drawGameText(gameText.trim(), 64, combine, templateImage, paint, resources, context,template);
+		paint.setTextSize(imageHeight * template.typeFontRatio);
 		String cardTypes = "";
 		for (int i = 0; i < cardType.length; i++) {
 			cardTypes += cardType[i].getCardType();
@@ -253,11 +250,11 @@ public class Card extends AbstractCard {
 		if (!cardSubtype.equals(""))
 			cardTypes += " -- " + cardSubtype;
 
-		combine.drawText(cardTypes, templateImage.getWidth() / 13, templateImage.getHeight() - (templateImage.getHeight() / 2.97f), paint);
+		combine.drawText(cardTypes, templateImage.getWidth() / template.cardTypeWidth, templateImage.getHeight() - (templateImage.getHeight() / template.cardTypeHeight), paint);
 		if (unique) {
 			float textWidth = paint.measureText("Unique");
-			combine.drawText("Unique", (templateImage.getWidth() - (templateImage.getWidth() / 13)) - textWidth, templateImage.getHeight()
-					- (templateImage.getHeight() / 2.97f), paint);
+			combine.drawText("Unique", (templateImage.getWidth() - (templateImage.getWidth() / template.uniqueWidth)) - textWidth, templateImage.getHeight()
+					- (templateImage.getHeight() / template.uniqueHeight), paint);
 		}
 
 		if (!faction.equals("None")) {
@@ -279,8 +276,8 @@ public class Card extends AbstractCard {
 			factionImage = BitmapFactory.decodeResource(res, R.drawable.faction_underworld, bitmapOptions);
 		}
 
-		combine.drawBitmap(factionImage, (templateImage.getWidth() - (templateImage.getWidth() / 14f)), templateImage.getHeight()
-				- (templateImage.getHeight() / 2.7f), paint);
+		combine.drawBitmap(factionImage, (templateImage.getWidth() - (templateImage.getWidth() / template.factionWidth)), templateImage.getHeight()
+				- (templateImage.getHeight() / template.factionHeight), paint);
 	}
 
 	private void drawRarity(Canvas combine, Paint paint, Bitmap templateImage, Resources res, Context context, CardTemplate template) {
@@ -314,20 +311,20 @@ public class Card extends AbstractCard {
 		}
 		rarity = BitmapFactory.decodeResource(res, resourceId, bitmapOptions);
 
-		combine.drawBitmap(rarity, templateImage.getWidth() / 3, templateImage.getHeight() - (templateImage.getHeight() / 25), paint);
+		combine.drawBitmap(rarity, templateImage.getWidth() / template.rarityWidth, templateImage.getHeight() - (templateImage.getHeight() / template.rarityHeight), paint);
 	}
 
 	private void drawGameText(String gameText, int length, Canvas combine, Bitmap templateImage, Paint paint, Resources resources,
-			Context context) {
+			Context context, CardTemplate template) {
 		line = 0f;
 		if (paint.measureText(gameText) < (templateImage.getWidth() * 0.829)) {
 			if (gameText.contains("<p>")) {
 				int pLocation = gameText.lastIndexOf("<p>") + 3;
 				String paragraph = gameText.substring(0, pLocation);
-				drawTextWithImages(paragraph, templateImage, combine, paint, resources, context);
-				drawTextWithImages(gameText.substring(pLocation, gameText.length()), templateImage, combine, paint, resources, context);
+				drawTextWithImages(paragraph, templateImage, combine, paint, resources, context,template);
+				drawTextWithImages(gameText.substring(pLocation, gameText.length()), templateImage, combine, paint, resources, context,template);
 			} else {
-				drawTextWithImages(gameText, templateImage, combine, paint, resources, context);
+				drawTextWithImages(gameText, templateImage, combine, paint, resources, context,template);
 			}
 		} else {
 			String displayText = "";
@@ -337,11 +334,11 @@ public class Card extends AbstractCard {
 					int pLocation = word.lastIndexOf("<p>") + 3;
 					String paragraph = word.substring(0, pLocation);
 					displayText += paragraph;
-					drawTextWithImages(displayText, templateImage, combine, paint, resources, context);
+					drawTextWithImages(displayText, templateImage, combine, paint, resources, context,template);
 					displayText = "" + word.substring(pLocation, word.length()) + " ";
 				} else {
 					if (paint.measureText(displayText + word) > (templateImage.getWidth() * 0.829)) {
-						drawTextWithImages(displayText, templateImage, combine, paint, resources, context);
+						drawTextWithImages(displayText, templateImage, combine, paint, resources, context,template);
 						displayText = "";
 						line += .06f;
 					}
@@ -350,21 +347,21 @@ public class Card extends AbstractCard {
 			}
 			if (paint.measureText(displayText) > (templateImage.getWidth() * 0.829)) {
 				String stuff = displayText.substring(0, displayText.lastIndexOf(" "));
-				drawTextWithImages(stuff, templateImage, combine, paint, resources, context);
+				drawTextWithImages(stuff, templateImage, combine, paint, resources, context,template);
 				line += .06f;
 				stuff = displayText.substring(displayText.lastIndexOf(" "), displayText.length() - 1);
-				drawTextWithImages(stuff, templateImage, combine, paint, resources, context);
+				drawTextWithImages(stuff, templateImage, combine, paint, resources, context,template);
 			} else {
-				drawTextWithImages(displayText, templateImage, combine, paint, resources, context);
+				drawTextWithImages(displayText, templateImage, combine, paint, resources, context,template);
 			}
 		}
 	}
 
 	private void drawTextWithImages(String displayText, Bitmap templateImage, Canvas combine, Paint paint, Resources resources,
-			Context context) {
+			Context context, CardTemplate template) {
 		String delims = "[\\[\\]<>]";
 		String[] stuff = displayText.split(delims);
-		float width = templateImage.getWidth() / 14;
+		float width = templateImage.getWidth() / template.gameTextWidth;
 		float baseline = (int) -paint.ascent();
 		int height = (int) (baseline + paint.descent());
 
@@ -373,7 +370,7 @@ public class Card extends AbstractCard {
 				if (stuff[i].equals(""))
 					continue;
 				Bitmap startImage = textAsBitmap(stuff[i], paint, templateImage, baseline, height);
-				combine.drawBitmap(startImage, width, templateImage.getHeight() / (1.46f - line), paint);
+				combine.drawBitmap(startImage, width, templateImage.getHeight() / (template.gameTextHeight - line), paint);
 				width += startImage.getWidth();
 
 			} else {
@@ -405,7 +402,7 @@ public class Card extends AbstractCard {
 					} else {
 						symbolImage = getSymbolImage(stuff[i], context, height);
 					}
-					combine.drawBitmap(symbolImage, width, templateImage.getHeight() / (1.46f - line), paint);
+					combine.drawBitmap(symbolImage, width, templateImage.getHeight() / (template.gameTextHeight - line), paint);
 					width += symbolImage.getWidth();
 				}
 			}

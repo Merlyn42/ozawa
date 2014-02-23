@@ -56,6 +56,30 @@ public class CardTemplate {
 	private Bitmap						image;
 	private int							cachedImageWidthLimit;
 	public Integer						currentSubsample;
+	public int 							nameShortenedText;
+	public float						nameWidth;
+	public float 						nameHeight;
+	public float						bigResourceWidth;
+	public float						bigResourceHeight;
+	public float						smallResourceWidth;
+	public float						smallResourceHeight;
+	public float						atkWidth;
+	public float						atkHeight;
+	public float						defWidth;
+	public float						defHeight;
+	public int							cardTypeShortenedText;
+	public float 						cardTypeWidth;
+	public float						cardTypeHeight;
+	public float						factionWidth;
+	public float						factionHeight;
+	public float						rarityWidth;
+	public float						rarityHeight;
+	public float						gameTextWidth;
+	public float						gameTextHeight;
+	public float						socketWidth;
+	public float						socketHeight;
+	public float						uniqueWidth;
+	public float						uniqueHeight;
 
 	private static List<CardTemplate>	ALLTEMPLATES;
 
