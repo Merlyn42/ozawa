@@ -26,6 +26,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -41,6 +42,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -53,8 +55,12 @@ import android.widget.Toast;
 
 import com.ozawa.hextcgdeckbuilder.R;
 import com.ozawa.hextcgdeckbuilder.UI.CardsViewer;
+import com.ozawa.hextcgdeckbuilder.UI.multiplecarddialogs.AbstractMultipleCardsDialogFragment;
+import com.ozawa.hextcgdeckbuilder.UI.multiplecarddialogs.RemoveMultipleCardsDialogFragment;
+import com.ozawa.hextcgdeckbuilder.UI.multiplecarddialogs.RemoveMultipleCardsDialogFragmentGinger;
 import com.ozawa.hextcgdeckbuilder.enums.CardType;
 import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
+import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation
@@ -198,6 +204,24 @@ public class FilterDrawerFragment extends Fragment implements TextWatcher {
 		buttons.add(button);
 		button.setUp(BitmapFactory.decodeResource(res, R.drawable.resource_on), BitmapFactory.decodeResource(res, R.drawable.resource_off),
 				CardType.RESOURCE, cardViewer);
+		
+		Button filterButton = (Button)scrollView.findViewById(R.id.buttonAdvFilter);
+		filterButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+            	AdvancedFilterDialogFragment advancedFilterDialog;
+    			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+    				advancedFilterDialog = new AdvancedFilterDialogFragment();
+    				advancedFilterDialog.cardsViewer=cardViewer;
+        			advancedFilterDialog.show(getActivity().getSupportFragmentManager(), "Remove Multiple Cards");
+    			}else{
+    				Toast.makeText(context, "Not available for this version of Android", Toast.LENGTH_LONG);
+    			}
+    			return;
+            }
+    });
+		
+		
 		EditText text = (EditText) scrollView.findViewById(R.id.SearchTextField);
 		text.addTextChangedListener(this);
 		searchText = text;

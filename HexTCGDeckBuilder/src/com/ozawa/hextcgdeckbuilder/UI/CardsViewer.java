@@ -75,6 +75,22 @@ public class CardsViewer {
 		filter.setFilterString(filterString);
 		updateDeckAndView();
 	}
+	
+	public int getMinCost() {
+		return filter.getMinCost();
+	}
+
+	public void setMinCost(int minCost) {
+		filter.setMinCost(minCost);
+	}
+
+	public int getMaxCost() {
+		return filter.getMaxCost();
+	}
+
+	public void setMaxCost(int maxCost) {
+		filter.setMaxCost(maxCost);
+	}
 
 	public boolean toggleFilter(CardEnum e) {
 		boolean result;

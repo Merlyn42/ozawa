@@ -27,15 +27,30 @@ import android.content.res.Resources;
 
 import com.ozawa.hextcgdeckbuilder.R;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
+import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 
 public class MasterDeck {
 	private static List<AbstractCard>	masterDeck;
+	private static Integer highestCardCost;
+
+	public static Integer getHighestCardCost() {
+		return highestCardCost;
+	}
 
 	public static List<AbstractCard> getMasterDeck(Context context) {
 		if (masterDeck == null) {
 			JsonReader jsonReader = new JsonReader(context);
 			try {
 				masterDeck = jsonReader.deserializeJSONInputStreamsToCard(getJson(context.getResources()));
+				int max = 0;
+				for(AbstractCard card:masterDeck){
+					if(card instanceof Card){
+						if(((Card)card).resourceCost>max){
+							max = ((Card)card).resourceCost;
+						}
+					}
+				}
+				highestCardCost=max;
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
 			}

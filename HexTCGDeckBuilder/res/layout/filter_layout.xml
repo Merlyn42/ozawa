@@ -146,6 +146,12 @@
 
         <requestFocus />
     </EditText>
+
+    <Button
+        android:id="@+id/buttonAdvFilter"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Advanced Filtering" />
     
     <ImageView
        	android:id="@+id/imageChampionPortrait"

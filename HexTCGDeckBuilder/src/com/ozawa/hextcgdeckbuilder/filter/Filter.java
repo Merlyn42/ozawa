@@ -20,6 +20,7 @@ package com.ozawa.hextcgdeckbuilder.filter;
 import com.ozawa.hextcgdeckbuilder.enums.CardEnum;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Card;
+import com.ozawa.hextcgdeckbuilder.json.MasterDeck;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,11 +35,15 @@ import com.ozawa.hextcgdeckbuilder.enums.CardType;
 import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
 
 public class Filter {
+
+
 	private String						filterString;
 	private final EnumSet<Attribute>	attributes;
 	private final EnumSet<ColorFlag>	colors;
 	private final EnumSet<CardType>		cardTypes;
 	private Comparator<AbstractCard>	comparator;
+	private int minCost;
+	private int maxCost;
 
 	private final static int			NUMBEROFCARDTYPES	= EnumSet.allOf(CardType.class).size();
 	private final static int			NUMBEROFCOLORS		= EnumSet.allOf(ColorFlag.class).size();
@@ -52,6 +57,8 @@ public class Filter {
 	}
 
 	public Filter() {
+		minCost=0;
+		maxCost=MasterDeck.getHighestCardCost();
 		attributes = EnumSet.noneOf(Attribute.class);
 		colors = EnumSet.allOf(ColorFlag.class);
 		cardTypes = EnumSet.allOf(CardType.class);
@@ -62,6 +69,22 @@ public class Filter {
 		return filterString;
 	}
 
+	public int getMinCost() {
+		return minCost;
+	}
+
+	public void setMinCost(int minCost) {
+		this.minCost = minCost;
+	}
+
+	public int getMaxCost() {
+		return maxCost;
+	}
+
+	public void setMaxCost(int maxCost) {
+		this.maxCost = maxCost;
+	}
+	
 	public void setFilterString(String filterString) {
 		this.filterString = filterString;
 	}
@@ -185,8 +208,13 @@ public class Filter {
 		}
 
 		if (abstractCard instanceof Card) {
+			
 			Card card;
 			card = (Card) abstractCard;
+			
+			if(card.resourceCost>maxCost||card.resourceCost<minCost){
+				return false;
+			}
 			if (!attributes.isEmpty()) {
 				for (Attribute att : attributes) {
 					if (!Arrays.asList(card.attributeFlags).contains(att)) {
