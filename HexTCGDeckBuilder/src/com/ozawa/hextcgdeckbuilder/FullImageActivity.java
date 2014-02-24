@@ -210,11 +210,26 @@ public class FullImageActivity extends Activity implements GestureOverlayView.On
 		int width = HexUtil.getScreenWidth(this);
 		int height = (int) (width * (1 / HexUtil.round(aspectRatio, 2, BigDecimal.ROUND_HALF_UP)));
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams((int)(width*template.socketRatio), (int)(width*template.socketRatio));
+        Bitmap socketImage = BitmapFactory.decodeResource(getResources(),R.drawable.gem_socket_new);
+		socketImage = Bitmap.createScaledBitmap(socketImage, (int)(width*template.socketRatio), (int)(width*template.socketRatio), true);
+		socketGem.setImageBitmap(socketImage);
+        lp.leftMargin = (int) (width - (width / 8.4f));
+        lp.topMargin = (int) (height / 3.3f) - ((HexUtil.getScreenHeight(this) - height) / 2);
+        socketGem.setLayoutParams(lp);		
+	}
+	
+	/*private void setSocketButton(AbstractCard card){
+		CardTemplate template = CardTemplate.findCardTemplate(card, true, CardTemplate.getAllTemplates(this));
+		
+		float aspectRatio = (float) HexUtil.getScreenWidth(this) / HexUtil.getScreenHeight(this);
+		int width = HexUtil.getScreenWidth(this);
+		int height = (int) (width * (1 / HexUtil.round(aspectRatio, 2, BigDecimal.ROUND_HALF_UP)));
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams((int)(width*template.socketRatio), (int)(width*template.socketRatio));
         Bitmap socketImage = BitmapFactory.decodeResource(getResources(),R.drawable.gem_socket);
 		socketImage = Bitmap.createScaledBitmap(socketImage, (int)(width*template.socketRatio), (int)(width*template.socketRatio), true);
 		socketGem.setImageBitmap(socketImage);
         lp.leftMargin = (int) (width - (width / 4.5f));
         lp.topMargin = (int) (height / 2.2f) - ((HexUtil.getScreenHeight(this) - height) / 2);
         socketGem.setLayoutParams(lp);		
-	}
+	}*/
 }
