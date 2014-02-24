@@ -207,11 +207,16 @@ public class Card extends AbstractCard {
 		}
 
 		if (socketCount > 0) {
-			Bitmap socketImage = BitmapFactory.decodeResource(resources, R.drawable.gem_socket);
+			Bitmap socketImage = BitmapFactory.decodeResource(resources, R.drawable.gem_socket_new);
+			socketImage = Bitmap.createScaledBitmap(socketImage, (int) (templateImage.getWidth() * template.socketRatio),
+					(int) (templateImage.getWidth() * template.socketRatio), true);
+			combine.drawBitmap(socketImage, templateImage.getWidth() - (templateImage.getWidth() / 6.5f), templateImage.getHeight() / 2.6f,
+					paint);
+			/*Bitmap socketImage = BitmapFactory.decodeResource(resources, R.drawable.gem_socket);
 			socketImage = Bitmap.createScaledBitmap(socketImage, (int) (templateImage.getWidth() * template.socketRatio),
 					(int) (templateImage.getWidth() * template.socketRatio), true);
 			combine.drawBitmap(socketImage, templateImage.getWidth() - (templateImage.getWidth() / 5), templateImage.getHeight() / 1.57f,
-					paint);
+					paint);*/
 		}
 	}
 
