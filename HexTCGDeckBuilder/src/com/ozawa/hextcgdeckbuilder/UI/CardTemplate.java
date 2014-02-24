@@ -45,8 +45,8 @@ public class CardTemplate {
 	public boolean						isTroop;
 	public ColorFlag[]					colors;
 	public boolean						fullCard;
-	public float 						thresholdWidthRatio;
-	public float 						thresholdHeightRatio;
+	public float						thresholdWidthRatio;
+	public float						thresholdHeightRatio;
 	public float						thresholdPaddingRatio;
 	public float						nameFontRatio;
 	public float						costFontRatio;
@@ -56,9 +56,9 @@ public class CardTemplate {
 	private Bitmap						image;
 	private int							cachedImageWidthLimit;
 	public Integer						currentSubsample;
-	public int 							nameShortenedText;
+	public int							nameShortenedText;
 	public float						nameWidth;
-	public float 						nameHeight;
+	public float						nameHeight;
 	public float						bigResourceWidth;
 	public float						bigResourceHeight;
 	public float						smallResourceWidth;
@@ -68,7 +68,7 @@ public class CardTemplate {
 	public float						defWidth;
 	public float						defHeight;
 	public int							cardTypeShortenedText;
-	public float 						cardTypeWidth;
+	public float						cardTypeWidth;
 	public float						cardTypeHeight;
 	public float						factionWidth;
 	public float						factionHeight;
@@ -80,6 +80,8 @@ public class CardTemplate {
 	public float						socketHeight;
 	public float						uniqueWidth;
 	public float						uniqueHeight;
+	public float						numberRatio;
+	public float						gameTextLength;
 
 	private static List<CardTemplate>	ALLTEMPLATES;
 
