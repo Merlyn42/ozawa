@@ -29,24 +29,22 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
-			android:gravity="center_vertical|left"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_height="wrap_content" >
+            android:gravity="center_vertical|left" >
 
             <NumberPicker
-                android:id="@+id/numberPickerMaxCost"
+                android:id="@+id/numberPickerMinCost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:baselineAligned="false"
                 tools:ignore="NewApi" />
 
             <TextView
-                android:id="@+id/textMaxCost"
+                android:id="@+id/textMinCost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Max\nCost"
+                android:text="Min\nCost"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
-
         </LinearLayout>
 
         <View
@@ -56,23 +54,23 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:gravity="center_vertical|right"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_height="wrap_content" >
+            android:gravity="center_vertical|right" >
 
             <TextView
-                android:id="@+id/textMinCost"
+                android:id="@+id/textMaxCost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Min\nCost"
+                android:text="Max\nCost"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <NumberPicker
-                android:id="@+id/numberPickerMinCost"
+                android:id="@+id/numberPickerMaxCost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:baselineAligned="false"
                 tools:ignore="NewApi" />
-
         </LinearLayout>
 
     </LinearLayout>
