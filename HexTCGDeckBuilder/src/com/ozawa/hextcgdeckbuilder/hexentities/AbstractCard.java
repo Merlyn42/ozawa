@@ -145,8 +145,7 @@ public abstract class AbstractCard {
 		} catch (OutOfMemoryError e) {
 			System.err.println("Ran out of memory, dumping some images from the cache");
 			ImageCache.emergencyDump(CacheType.GridView);
-			return getCardBitmap(context, CardTemplate.findCardTemplate(this, true, CardTemplate.getAllTemplates(context)),
-					HexUtil.getScreenWidth(context));
+			return getFullscreenCardBitmap(context);
 		}
 	}
 
