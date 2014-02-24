@@ -25,36 +25,55 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center"
         android:orientation="horizontal" >
 
-        <NumberPicker
-            android:id="@+id/numberPickerMaxCost"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:baselineAligned="false"
-            tools:ignore="NewApi" />
+			android:gravity="center_vertical|left"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" >
 
-        <TextView
-            android:id="@+id/textMaxCost"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Max Cost"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            <NumberPicker
+                android:id="@+id/numberPickerMaxCost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                tools:ignore="NewApi" />
 
-        <NumberPicker
-            android:id="@+id/numberPickerMinCost"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:ignore="NewApi" />
+            <TextView
+                android:id="@+id/textMaxCost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Max\nCost"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <TextView
-            android:id="@+id/textMinCost"
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:background="@android:color/darker_gray" />
+
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Min Cost"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:gravity="center_vertical|right"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/textMinCost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Min\nCost"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <NumberPicker
+                android:id="@+id/numberPickerMinCost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:ignore="NewApi" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
