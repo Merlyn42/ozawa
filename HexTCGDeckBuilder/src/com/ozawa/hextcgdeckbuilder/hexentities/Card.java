@@ -230,9 +230,12 @@ public class Card extends AbstractCard {
 			if (resourceCost == 0)
 				combine.drawText("X", templateImage.getWidth() / template.smallResourceWidth, templateImage.getHeight()
 						/ template.smallResourceHeight, paint);
-			else
-				combine.drawText(resourceCost + "X", templateImage.getWidth() / template.smallResourceWidth, templateImage.getHeight()
-						/ template.smallResourceHeight, paint);
+			else{
+				paint.setTextSize(imageHeight * 0.055f);				
+				combine.drawText(resourceCost + "X", templateImage.getWidth() / template.bigResourceWidth, templateImage.getHeight()
+						/ template.bigResourceHeight, paint);
+				paint.setTextSize(imageHeight * template.numberRatio);
+			}
 		} else {
 			combine.drawText("" + resourceCost, templateImage.getWidth() / template.smallResourceWidth, templateImage.getHeight()
 					/ template.smallResourceHeight, paint);
@@ -477,23 +480,23 @@ public class Card extends AbstractCard {
 						break;
 					}
 					case BLOOD: {
-						thresholdName = "cardthresholdblood";
+						thresholdName = "blood_threshold_new";
 						break;
 					}
 					case DIAMOND: {
-						thresholdName = "cardthresholddiamond";
+						thresholdName = "diamond_threshold_new";
 						break;
 					}
 					case RUBY: {
-						thresholdName = "cardthresholdruby";
+						thresholdName = "ruby_threshold_new";
 						break;
 					}
 					case SAPPHIRE: {
-						thresholdName = "cardthresholdsapphire";
+						thresholdName = "sapphire_threshold_new";
 						break;
 					}
 					case WILD: {
-						thresholdName = "cardthresholdwild";
+						thresholdName = "wild_threshold_new";
 						break;
 					}
 					default: {
