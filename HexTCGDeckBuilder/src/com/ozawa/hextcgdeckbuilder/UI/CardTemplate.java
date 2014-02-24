@@ -82,6 +82,8 @@ public class CardTemplate {
 	public float						uniqueHeight;
 	public float						numberRatio;
 	public float						gameTextLength;
+	public float						thresholdWidth;
+	public float						thresholdHeight;
 
 	private static List<CardTemplate>	ALLTEMPLATES;
 

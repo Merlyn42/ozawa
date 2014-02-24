@@ -31,7 +31,9 @@
 	"cardTypeWidth": 9,
 	"cardTypeHeight": 5.3,
 	"socketWidth": 5,
-	"socketHeight": 1.57
+	"socketHeight": 1.57,
+	"thresholdWidth": 21,
+	"thresholdHeight": 5
   },
   {
     "top": 0.1054,
@@ -65,7 +67,9 @@
 	"cardTypeWidth": 9,
 	"cardTypeHeight": 5.3,
 	"socketWidth": 5,
-	"socketHeight": 1.57
+	"socketHeight": 1.57,
+	"thresholdWidth": 21,
+	"thresholdHeight": 5
   },
   {
     "top": 0.1054,
@@ -99,7 +103,9 @@
 	"cardTypeWidth": 9,
 	"cardTypeHeight": 5.3,
 	"socketWidth": 5,
-	"socketHeight": 1.57
+	"socketHeight": 1.57,
+	"thresholdWidth": 21,
+	"thresholdHeight": 5
   },
   {
     "top": 0.1054,
@@ -133,7 +139,9 @@
 	"cardTypeWidth": 9,
 	"cardTypeHeight": 5.3,
 	"socketWidth": 5,
-	"socketHeight": 1.57
+	"socketHeight": 1.57,
+	"thresholdWidth": 21,
+	"thresholdHeight": 5
   },
   {
     "top": 0.1054,
@@ -167,7 +175,9 @@
 	"cardTypeWidth": 9,
 	"cardTypeHeight": 5.3,
 	"socketWidth": 5,
-	"socketHeight": 1.57
+	"socketHeight": 1.57,
+	"thresholdWidth": 21,
+	"thresholdHeight": 5
   },
   {
     "top": 0.1054,
@@ -201,7 +211,9 @@
 	"cardTypeWidth": 9,
 	"cardTypeHeight": 5.3,
 	"socketWidth": 5,
-	"socketHeight": 1.57
+	"socketHeight": 1.57,
+	"thresholdWidth": 21,
+	"thresholdHeight": 5
   },
   {
     "top": 0.1054,
@@ -235,7 +247,9 @@
 	"cardTypeWidth": 9,
 	"cardTypeHeight": 5.3,
 	"socketWidth": 5,
-	"socketHeight": 1.57
+	"socketHeight": 1.57,
+	"thresholdWidth": 21,
+	"thresholdHeight": 5
   },
   {
     "top": 0.0862,
@@ -277,7 +291,9 @@
 	"uniqueWidth": 8.5,
 	"uniqueHeight": 2.97,
 	"numberRatio": 0.06,
-	"gameTextLength": 0.896
+	"gameTextLength": 0.896,
+	"thresholdWidth": 13.6,
+	"thresholdHeight": 9.1
   },
   {
     "top": 0.0862,
@@ -319,7 +335,9 @@
 	"uniqueWidth": 8.5,
 	"uniqueHeight": 2.97,
 	"numberRatio": 0.06,
-	"gameTextLength": 0.896
+	"gameTextLength": 0.896,
+	"thresholdWidth": 13.6,
+	"thresholdHeight": 9.1
   },
   {
     "top": 0.0862,
@@ -361,7 +379,9 @@
 	"uniqueWidth": 8.5,
 	"uniqueHeight": 2.97,
 	"numberRatio": 0.06,
-	"gameTextLength": 0.896 
+	"gameTextLength": 0.896,
+	"thresholdWidth": 13.6,
+	"thresholdHeight": 9.1 
   },
   {
     "top": 0.0862,
@@ -403,7 +423,9 @@
 	"uniqueWidth": 8.5,
 	"uniqueHeight": 2.97,
 	"numberRatio": 0.06,
-	"gameTextLength": 0.896 
+	"gameTextLength": 0.896,
+	"thresholdWidth": 13.6,
+	"thresholdHeight": 9.1 
   },
   {
     "top": 0.0862,
@@ -445,7 +467,9 @@
 	"uniqueWidth": 8.5,
 	"uniqueHeight": 2.97,
 	"numberRatio": 0.06,
-	"gameTextLength": 0.896 
+	"gameTextLength": 0.896,
+	"thresholdWidth": 13.6,
+	"thresholdHeight": 9.1 
   },
   {
     "top": 0.0862,
@@ -487,7 +511,9 @@
 	"uniqueWidth": 8.5,
 	"uniqueHeight": 2.97,
 	"numberRatio": 0.06,
-	"gameTextLength": 0.896 
+	"gameTextLength": 0.896,
+	"thresholdWidth": 13.6,
+	"thresholdHeight": 9.1 
   },
   {
     "top": 0.0862,
@@ -529,7 +555,9 @@
 	"uniqueWidth": 8.5,
 	"uniqueHeight": 2.97,
 	"numberRatio": 0.06,
-	"gameTextLength": 0.896 
+	"gameTextLength": 0.896,
+	"thresholdWidth": 13.6,
+	"thresholdHeight": 9.1 
   },
   {
     "top": 0.1054,
@@ -563,7 +591,9 @@
 	"cardTypeWidth": 9,
 	"cardTypeHeight": 5.3,
 	"socketWidth": 5,
-	"socketHeight": 1.57
+	"socketHeight": 1.57,
+	"thresholdWidth": 21,
+	"thresholdHeight": 5
   },
   {
     "top": 0.1054,
@@ -597,7 +627,9 @@
 	"cardTypeWidth": 9,
 	"cardTypeHeight": 5.3,
 	"socketWidth": 5,
-	"socketHeight": 1.57
+	"socketHeight": 1.57,
+	"thresholdWidth": 21,
+	"thresholdHeight": 5
   },
   {
     "top": 0.1054,
@@ -631,7 +663,9 @@
 	"cardTypeWidth": 9,
 	"cardTypeHeight": 5.3,
 	"socketWidth": 5,
-	"socketHeight": 1.57
+	"socketHeight": 1.57,
+	"thresholdWidth": 21,
+	"thresholdHeight": 5
   },
   {
     "top": 0.1054,
@@ -665,7 +699,9 @@
 	"cardTypeWidth": 9,
 	"cardTypeHeight": 5.3,
 	"socketWidth": 5,
-	"socketHeight": 1.57
+	"socketHeight": 1.57,
+	"thresholdWidth": 21,
+	"thresholdHeight": 5
   },
   {
     "top": 0.1054,
@@ -699,7 +735,9 @@
 	"cardTypeWidth": 9,
 	"cardTypeHeight": 5.3,
 	"socketWidth": 5,
-	"socketHeight": 1.57
+	"socketHeight": 1.57,
+	"thresholdWidth": 21,
+	"thresholdHeight": 5
   },
   {
     "top": 0.1054,
@@ -733,7 +771,9 @@
 	"cardTypeWidth": 9,
 	"cardTypeHeight": 5.3,
 	"socketWidth": 5,
-	"socketHeight": 1.57
+	"socketHeight": 1.57,
+	"thresholdWidth": 21,
+	"thresholdHeight": 5
   },
   {
     "top": 0.1054,
@@ -767,7 +807,9 @@
 	"cardTypeWidth": 9,
 	"cardTypeHeight": 5.3,
 	"socketWidth": 5,
-	"socketHeight": 1.57
+	"socketHeight": 1.57,
+	"thresholdWidth": 21,
+	"thresholdHeight": 5
   },
   {
     "top": 0.0862,
@@ -809,7 +851,9 @@
 	"uniqueWidth": 8.5,
 	"uniqueHeight": 2.97,
 	"numberRatio": 0.06,
-	"gameTextLength": 0.896 
+	"gameTextLength": 0.896,
+	"thresholdWidth": 13.6,
+	"thresholdHeight": 9.1 
   },
   {
     "top": 0.0862,
@@ -851,7 +895,9 @@
 	"uniqueWidth": 8.5,
 	"uniqueHeight": 2.97,
 	"numberRatio": 0.06,
-	"gameTextLength": 0.896 
+	"gameTextLength": 0.896,
+	"thresholdWidth": 13.6,
+	"thresholdHeight": 9.1 
   },
   {
     "top": 0.0862,
@@ -893,7 +939,9 @@
 	"uniqueWidth": 8.5,
 	"uniqueHeight": 2.97,
 	"numberRatio": 0.06,
-	"gameTextLength": 0.896 
+	"gameTextLength": 0.896,
+	"thresholdWidth": 13.6,
+	"thresholdHeight": 9.1 
   },
   {
     "top": 0.0862,
@@ -935,7 +983,9 @@
 	"uniqueWidth": 8.5,
 	"uniqueHeight": 2.97,
 	"numberRatio": 0.06,
-	"gameTextLength": 0.896 
+	"gameTextLength": 0.896,
+	"thresholdWidth": 13.6,
+	"thresholdHeight": 9.1 
   },
   {
     "top": 0.0862,
@@ -977,7 +1027,9 @@
 	"uniqueWidth": 8.5,
 	"uniqueHeight": 2.97,
 	"numberRatio": 0.06,
-	"gameTextLength": 0.896 
+	"gameTextLength": 0.896,
+	"thresholdWidth": 13.6,
+	"thresholdHeight": 9.1 
   },
   {
     "top": 0.0862,
@@ -1019,7 +1071,9 @@
 	"uniqueWidth": 8.5,
 	"uniqueHeight": 2.97,
 	"numberRatio": 0.06,
-	"gameTextLength": 0.896 
+	"gameTextLength": 0.896,
+	"thresholdWidth": 13.6,
+	"thresholdHeight": 9.1 
   },
   {
     "top": 0.0862,
@@ -1061,6 +1115,8 @@
 	"uniqueWidth": 8.5,
 	"uniqueHeight": 2.97,
 	"numberRatio": 0.06,
-	"gameTextLength": 0.896 
+	"gameTextLength": 0.896,
+	"thresholdWidth": 13.6,
+	"thresholdHeight": 9.1 
   }
 ]
