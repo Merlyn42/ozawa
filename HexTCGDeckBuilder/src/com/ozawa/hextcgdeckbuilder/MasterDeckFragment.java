@@ -34,6 +34,7 @@ import com.ozawa.hextcgdeckbuilder.filter.CardComparatorColor;
 import com.ozawa.hextcgdeckbuilder.filter.CardComparatorCost;
 import com.ozawa.hextcgdeckbuilder.filter.DualComparator;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
+import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
@@ -66,6 +67,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 public class MasterDeckFragment extends Fragment implements FilterDrawerFragment.NavigationDrawerCallbacks,
 		GestureOverlayView.OnGesturePerformedListener {
@@ -363,18 +365,14 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 	 */
 	public boolean addCardToCustomDeck(int position, int value) {
 		AbstractCard card = cardViewer.getFilteredCardList().get(position);
+		
+		if ((card instanceof Card) && ((Card) card).cardNumber == 0) {
+			Toast.makeText(mainActivity.getApplicationContext(), card.name + " is a token card and cannot be added directly to decks.", Toast.LENGTH_SHORT)
+					.show();
+			return false;
+		}
 		((HexApplication) getActivity().getApplication()).getCustomDeck().addCardToDeck(card, value);
-		/*
-		 * if (card instanceof Card && ((Card) card).cardNumber == 0) {
-		 * Toast.makeText(mainActivity.getApplicationContext(), card.name +
-		 * " cannot be added directly to decks.", Toast.LENGTH_SHORT) .show();
-		 * return false; } HashMap<AbstractCard, Integer> customDeck =
-		 * ((DeckUIActivity) mainActivity).customDeck; if (customDeck.get(card)
-		 * == null) { customDeck.put(card, value); ((DeckUIActivity)
-		 * mainActivity).customDeckCardList.add(card); } else {
-		 * customDeck.put(card, customDeck.get(card) + value); }
-		 * ((DeckUIActivity) mainActivity).deckChanged = true;
-		 */
+
 		return true;
 	}
 
