@@ -517,14 +517,14 @@ public class Card extends AbstractCard {
 			Bitmap allThresholds = null;
 			if (!thresholds.isEmpty()) {
 				if (template == null) {
-					allThresholds = Bitmap.createBitmap(HexUtil.convertDensityPixelsToPixels(mContext, 100),
-							HexUtil.convertDensityPixelsToPixels(mContext, 8), Bitmap.Config.ARGB_8888);
+					allThresholds = Bitmap.createBitmap(HexUtil.convertDensityPixelsToPixels(mContext, 140),
+							HexUtil.convertDensityPixelsToPixels(mContext, 12), Bitmap.Config.ARGB_8888);
 
 					Canvas canvas = new Canvas(allThresholds);
 					canvas.drawColor(0, Mode.CLEAR);
-					int left = HexUtil.convertDensityPixelsToPixels(mContext, 92);
+					int left = HexUtil.convertDensityPixelsToPixels(mContext, 128);
 					int top = 0;
-					int dimensions = HexUtil.convertDensityPixelsToPixels(mContext, 8);
+					int dimensions = HexUtil.convertDensityPixelsToPixels(mContext, 12);
 					for (Bitmap image : thresholds) {
 						image = Bitmap.createScaledBitmap(image, dimensions, dimensions, true);
 						canvas.drawBitmap(image, left, top, null);
@@ -546,7 +546,7 @@ public class Card extends AbstractCard {
 					}
 				} else {
 					int width = round(templateImage.getWidth() * template.thresholdWidthRatio);
-					int height = round(templateImage.getHeight() * template.thresholdHeightRatio);
+					int height = round(templateImage.getHeight() *  template.thresholdHeightRatio);
 					allThresholds = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 
 					Canvas canvas = new Canvas(allThresholds);

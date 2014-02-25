@@ -8,8 +8,8 @@
     "isTroop": false,
     "colors": "Colorless",
     "fullCard": false,
-    "thresholdPaddingRatio" : 0.02143,
-    "thresholdHeightRatio" : 0.53571,
+    "thresholdPaddingRatio" : 0.01543,
+    "thresholdHeightRatio" : 0.43571,
     "thresholdWidthRatio" : 0.036,
     "nameFontRatio": 0.06,
     "costFontRatio": 0.075,
@@ -33,7 +33,7 @@
 	"socketWidth": 5,
 	"socketHeight": 1.57,
 	"thresholdWidth": 21,
-	"thresholdHeight": 5
+	"thresholdHeight": 4.8
   },
   {
     "top": 0.1054,
@@ -44,8 +44,8 @@
     "isTroop": false,
     "colors": "Blood",
     "fullCard": false,
-    "thresholdPaddingRatio" : 0.02143,
-    "thresholdHeightRatio" : 0.53571,
+    "thresholdPaddingRatio" : 0.01543,
+    "thresholdHeightRatio" : 0.43571,
     "thresholdWidthRatio" : 0.036,
     "nameFontRatio": 0.06,
     "costFontRatio": 0.075,
@@ -69,7 +69,7 @@
 	"socketWidth": 5,
 	"socketHeight": 1.57,
 	"thresholdWidth": 21,
-	"thresholdHeight": 5
+	"thresholdHeight": 4.8
   },
   {
     "top": 0.1054,
@@ -80,8 +80,8 @@
     "isTroop": false,
     "colors": "Diamond",
     "fullCard": false,
-    "thresholdPaddingRatio" : 0.02143,
-    "thresholdHeightRatio" : 0.53571,
+    "thresholdPaddingRatio" : 0.01543,
+    "thresholdHeightRatio" : 0.43571,
     "thresholdWidthRatio" : 0.036,
     "nameFontRatio": 0.06,
     "costFontRatio": 0.075,
@@ -105,7 +105,7 @@
 	"socketWidth": 5,
 	"socketHeight": 1.57,
 	"thresholdWidth": 21,
-	"thresholdHeight": 5
+	"thresholdHeight": 4.8
   },
   {
     "top": 0.1054,
@@ -116,8 +116,8 @@
     "isTroop": false,
     "colors": "Ruby",
     "fullCard": false,
-    "thresholdPaddingRatio" : 0.02143,
-    "thresholdHeightRatio" : 0.53571,
+    "thresholdPaddingRatio" : 0.01543,
+    "thresholdHeightRatio" : 0.43571,
     "thresholdWidthRatio" : 0.036,
     "nameFontRatio": 0.06,
     "costFontRatio": 0.075,
@@ -141,7 +141,7 @@
 	"socketWidth": 5,
 	"socketHeight": 1.57,
 	"thresholdWidth": 21,
-	"thresholdHeight": 5
+	"thresholdHeight": 4.8
   },
   {
     "top": 0.1054,
@@ -152,8 +152,8 @@
     "isTroop": false,
     "colors": "Sapphire",
     "fullCard": false,
-    "thresholdPaddingRatio" : 0.02143,
-    "thresholdHeightRatio" : 0.53571,
+    "thresholdPaddingRatio" : 0.01543,
+    "thresholdHeightRatio" : 0.43571,
     "thresholdWidthRatio" : 0.036,
     "nameFontRatio": 0.06,
     "costFontRatio": 0.075,
@@ -177,7 +177,7 @@
 	"socketWidth": 5,
 	"socketHeight": 1.57,
 	"thresholdWidth": 21,
-	"thresholdHeight": 5
+	"thresholdHeight": 4.8
   },
   {
     "top": 0.1054,
@@ -188,8 +188,8 @@
     "isTroop": false,
     "colors": "Wild",
     "fullCard": false,
-    "thresholdPaddingRatio" : 0.02143,
-    "thresholdHeightRatio" : 0.53571,
+    "thresholdPaddingRatio" : 0.01543,
+    "thresholdHeightRatio" : 0.43571,
     "thresholdWidthRatio" : 0.036,
     "nameFontRatio": 0.06,
     "costFontRatio": 0.075,
@@ -213,7 +213,7 @@
 	"socketWidth": 5,
 	"socketHeight": 1.57,
 	"thresholdWidth": 21,
-	"thresholdHeight": 5
+	"thresholdHeight": 4.8
   },
   {
     "top": 0.1054,
@@ -224,8 +224,8 @@
     "isTroop": false,
     "colors": "Wild|Sapphire|Ruby|Diamond|Blood",
     "fullCard": false,
-    "thresholdPaddingRatio" : 0.02143,
-    "thresholdHeightRatio" : 0.53571,
+    "thresholdPaddingRatio" : 0.01543,
+    "thresholdHeightRatio" : 0.43571,
     "thresholdWidthRatio" : 0.036,
     "nameFontRatio": 0.06,
     "costFontRatio": 0.075,
@@ -249,7 +249,7 @@
 	"socketWidth": 5,
 	"socketHeight": 1.57,
 	"thresholdWidth": 21,
-	"thresholdHeight": 5
+	"thresholdHeight": 4.8
   },
   {
     "top": 0.0862,
@@ -260,9 +260,9 @@
     "isTroop": false,
     "colors": "Colorless",
     "fullCard": true,
-    "thresholdPaddingRatio" : 0.025,
+    "thresholdPaddingRatio" : 0.0092,
     "thresholdHeightRatio" : 0.40322,
-    "thresholdWidthRatio" : 0.03371,
+    "thresholdWidthRatio" : 0.07371,
     "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839,
@@ -292,8 +292,8 @@
 	"uniqueHeight": 2.97,
 	"numberRatio": 0.046,
 	"gameTextLength": 0.896,
-	"thresholdWidth": 13.6,
-	"thresholdHeight": 9.1
+	"thresholdWidth": 20,
+	"thresholdHeight": 7.4
   },
   {
     "top": 0.0862,
@@ -304,9 +304,9 @@
     "isTroop": false,
     "colors": "Blood",
     "fullCard": true,
-    "thresholdPaddingRatio" : 0.025,
+    "thresholdPaddingRatio" : 0.0092,
     "thresholdHeightRatio" : 0.40322,
-    "thresholdWidthRatio" : 0.03371,
+    "thresholdWidthRatio" : 0.07371,
     "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839,
@@ -336,8 +336,8 @@
 	"uniqueHeight": 2.97,
 	"numberRatio": 0.046,
 	"gameTextLength": 0.896,
-	"thresholdWidth": 13.6,
-	"thresholdHeight": 9.1
+	"thresholdWidth": 20,
+	"thresholdHeight": 7.4
   },
   {
     "top": 0.0862,
@@ -348,9 +348,9 @@
     "isTroop": false,
     "colors": "Diamond",
     "fullCard": true,
-    "thresholdPaddingRatio" : 0.025,
+    "thresholdPaddingRatio" : 0.0092,
     "thresholdHeightRatio" : 0.40322,
-    "thresholdWidthRatio" : 0.03371,
+    "thresholdWidthRatio" : 0.07371,
     "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839,
@@ -380,8 +380,8 @@
 	"uniqueHeight": 2.97,
 	"numberRatio": 0.046,
 	"gameTextLength": 0.896,
-	"thresholdWidth": 13.6,
-	"thresholdHeight": 9.1 
+	"thresholdWidth": 20,
+	"thresholdHeight": 7.4 
   },
   {
     "top": 0.0862,
@@ -392,9 +392,9 @@
     "isTroop": false,
     "colors": "Ruby",
     "fullCard": true,
-    "thresholdPaddingRatio" : 0.025,
+    "thresholdPaddingRatio" : 0.0092,
     "thresholdHeightRatio" : 0.40322,
-    "thresholdWidthRatio" : 0.03371,
+    "thresholdWidthRatio" : 0.07371,
     "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839,
@@ -424,8 +424,8 @@
 	"uniqueHeight": 2.97,
 	"numberRatio": 0.046,
 	"gameTextLength": 0.896,
-	"thresholdWidth": 13.6,
-	"thresholdHeight": 9.1 
+	"thresholdWidth": 20,
+	"thresholdHeight": 7.4 
   },
   {
     "top": 0.0862,
@@ -436,9 +436,9 @@
     "isTroop": false,
     "colors": "Sapphire",
     "fullCard": true,
-    "thresholdPaddingRatio" : 0.025,
+    "thresholdPaddingRatio" : 0.0092,
     "thresholdHeightRatio" : 0.40322,
-    "thresholdWidthRatio" : 0.03371,
+    "thresholdWidthRatio" : 0.07371,
     "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839,
@@ -468,8 +468,8 @@
 	"uniqueHeight": 2.97,
 	"numberRatio": 0.046,
 	"gameTextLength": 0.896,
-	"thresholdWidth": 13.6,
-	"thresholdHeight": 9.1 
+	"thresholdWidth": 20,
+	"thresholdHeight": 7.4 
   },
   {
     "top": 0.0862,
@@ -480,9 +480,9 @@
     "isTroop": false,
     "colors": "Wild",
     "fullCard": true,
-    "thresholdPaddingRatio" : 0.025,
+    "thresholdPaddingRatio" : 0.0092,
     "thresholdHeightRatio" : 0.40322,
-    "thresholdWidthRatio" : 0.03371,
+    "thresholdWidthRatio" : 0.07371,
     "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839,
@@ -512,8 +512,8 @@
 	"uniqueHeight": 2.97,
 	"numberRatio": 0.046,
 	"gameTextLength": 0.896,
-	"thresholdWidth": 13.6,
-	"thresholdHeight": 9.1 
+	"thresholdWidth": 20,
+	"thresholdHeight": 7.4 
   },
   {
     "top": 0.0862,
@@ -524,9 +524,9 @@
     "isTroop": false,
     "colors": "Wild|Sapphire|Ruby|Diamond|Blood",
     "fullCard": true,
-    "thresholdPaddingRatio" : 0.025,
+    "thresholdPaddingRatio" : 0.0092,
     "thresholdHeightRatio" : 0.40322,
-    "thresholdWidthRatio" : 0.03371,
+    "thresholdWidthRatio" : 0.07371,
     "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839,
@@ -556,8 +556,8 @@
 	"uniqueHeight": 2.97,
 	"numberRatio": 0.046,
 	"gameTextLength": 0.896,
-	"thresholdWidth": 13.6,
-	"thresholdHeight": 9.1 
+	"thresholdWidth": 20,
+	"thresholdHeight": 7.4 
   },
   {
     "top": 0.1054,
@@ -568,8 +568,8 @@
     "isTroop": true,
     "colors": "Colorless",
     "fullCard": false,
-    "thresholdPaddingRatio" : 0.02143,
-    "thresholdHeightRatio" : 0.53571,
+    "thresholdPaddingRatio" : 0.01543,
+    "thresholdHeightRatio" : 0.43571,
     "thresholdWidthRatio" : 0.036,
     "nameFontRatio": 0.06,
     "costFontRatio": 0.075,
@@ -593,7 +593,7 @@
 	"socketWidth": 5,
 	"socketHeight": 1.57,
 	"thresholdWidth": 21,
-	"thresholdHeight": 5
+	"thresholdHeight": 4.8
   },
   {
     "top": 0.1054,
@@ -604,8 +604,8 @@
     "isTroop": true,
     "colors": "Blood",
     "fullCard": false,
-    "thresholdPaddingRatio" : 0.02143,
-    "thresholdHeightRatio" : 0.53571,
+    "thresholdPaddingRatio" : 0.01543,
+    "thresholdHeightRatio" : 0.43571,
     "thresholdWidthRatio" : 0.036,
     "nameFontRatio": 0.06,
     "costFontRatio": 0.075,
@@ -629,7 +629,7 @@
 	"socketWidth": 5,
 	"socketHeight": 1.57,
 	"thresholdWidth": 21,
-	"thresholdHeight": 5
+	"thresholdHeight": 4.8
   },
   {
     "top": 0.1054,
@@ -640,8 +640,8 @@
     "isTroop": true,
     "colors": "Diamond",
     "fullCard": false,
-    "thresholdPaddingRatio" : 0.02143,
-    "thresholdHeightRatio" : 0.53571,
+    "thresholdPaddingRatio" : 0.01543,
+    "thresholdHeightRatio" : 0.43571,
     "thresholdWidthRatio" : 0.036,
     "nameFontRatio": 0.06,
     "costFontRatio": 0.075,
@@ -665,7 +665,7 @@
 	"socketWidth": 5,
 	"socketHeight": 1.57,
 	"thresholdWidth": 21,
-	"thresholdHeight": 5
+	"thresholdHeight": 4.8
   },
   {
     "top": 0.1054,
@@ -676,8 +676,8 @@
     "isTroop": true,
     "colors": "Ruby",
     "fullCard": false,
-    "thresholdPaddingRatio" : 0.02143,
-    "thresholdHeightRatio" : 0.53571,
+    "thresholdPaddingRatio" : 0.01543,
+    "thresholdHeightRatio" : 0.43571,
     "thresholdWidthRatio" : 0.036,
     "nameFontRatio": 0.06,
     "costFontRatio": 0.075,
@@ -701,7 +701,7 @@
 	"socketWidth": 5,
 	"socketHeight": 1.57,
 	"thresholdWidth": 21,
-	"thresholdHeight": 5
+	"thresholdHeight": 4.8
   },
   {
     "top": 0.1054,
@@ -712,8 +712,8 @@
     "isTroop": true,
     "colors": "Sapphire",
     "fullCard": false,
-    "thresholdPaddingRatio" : 0.02143,
-    "thresholdHeightRatio" : 0.53571,
+    "thresholdPaddingRatio" : 0.01543,
+    "thresholdHeightRatio" : 0.43571,
     "thresholdWidthRatio" : 0.036,
     "nameFontRatio": 0.06,
     "costFontRatio": 0.075,
@@ -737,7 +737,7 @@
 	"socketWidth": 5,
 	"socketHeight": 1.57,
 	"thresholdWidth": 21,
-	"thresholdHeight": 5
+	"thresholdHeight": 4.8
   },
   {
     "top": 0.1054,
@@ -748,8 +748,8 @@
     "isTroop": true,
     "colors": "Wild",
     "fullCard": false,
-    "thresholdPaddingRatio" : 0.02143,
-    "thresholdHeightRatio" : 0.53571,
+    "thresholdPaddingRatio" : 0.01543,
+    "thresholdHeightRatio" : 0.43571,
     "thresholdWidthRatio" : 0.036,
     "nameFontRatio": 0.06,
     "costFontRatio": 0.075,
@@ -773,7 +773,7 @@
 	"socketWidth": 5,
 	"socketHeight": 1.57,
 	"thresholdWidth": 21,
-	"thresholdHeight": 5
+	"thresholdHeight": 4.8
   },
   {
     "top": 0.1054,
@@ -784,8 +784,8 @@
     "isTroop": true,
     "colors": "Wild|Sapphire|Ruby|Diamond|Blood",
     "fullCard": false,
-    "thresholdPaddingRatio" : 0.02143,
-    "thresholdHeightRatio" : 0.53571,
+    "thresholdPaddingRatio" : 0.01543,
+    "thresholdHeightRatio" : 0.43571,
     "thresholdWidthRatio" : 0.036,
     "nameFontRatio": 0.06,
     "costFontRatio": 0.075,
@@ -809,7 +809,7 @@
 	"socketWidth": 5,
 	"socketHeight": 1.57,
 	"thresholdWidth": 21,
-	"thresholdHeight": 5
+	"thresholdHeight": 4.8
   },
   {
     "top": 0.0862,
@@ -820,9 +820,9 @@
     "isTroop": true,
     "colors": "Colorless",
     "fullCard": true,
-    "thresholdPaddingRatio" : 0.025,
+    "thresholdPaddingRatio" : 0.0092,
     "thresholdHeightRatio" : 0.40322,
-    "thresholdWidthRatio" : 0.03371,
+    "thresholdWidthRatio" : 0.07371,
     "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839,
@@ -852,8 +852,8 @@
 	"uniqueHeight": 2.97,
 	"numberRatio": 0.046,
 	"gameTextLength": 0.896,
-	"thresholdWidth": 13.6,
-	"thresholdHeight": 9.1 
+	"thresholdWidth": 20,
+	"thresholdHeight": 7.4 
   },
   {
     "top": 0.0862,
@@ -864,9 +864,9 @@
     "isTroop": true,
     "colors": "Blood",
     "fullCard": true,
-    "thresholdPaddingRatio" : 0.025,
+    "thresholdPaddingRatio" : 0.0092,
     "thresholdHeightRatio" : 0.40322,
-    "thresholdWidthRatio" : 0.03371,
+    "thresholdWidthRatio" : 0.07371,
     "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839,
@@ -896,8 +896,8 @@
 	"uniqueHeight": 2.97,
 	"numberRatio": 0.046,
 	"gameTextLength": 0.896,
-	"thresholdWidth": 13.6,
-	"thresholdHeight": 9.1 
+	"thresholdWidth": 20,
+	"thresholdHeight": 7.4 
   },
   {
     "top": 0.0862,
@@ -908,9 +908,9 @@
     "isTroop": true,
     "colors": "Diamond",
     "fullCard": true,
-    "thresholdPaddingRatio" : 0.025,
+    "thresholdPaddingRatio" : 0.0092,
     "thresholdHeightRatio" : 0.40322,
-    "thresholdWidthRatio" : 0.03371,
+    "thresholdWidthRatio" : 0.07371,
     "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839,
@@ -940,8 +940,8 @@
 	"uniqueHeight": 2.97,
 	"numberRatio": 0.046,
 	"gameTextLength": 0.896,
-	"thresholdWidth": 13.6,
-	"thresholdHeight": 9.1 
+	"thresholdWidth": 20,
+	"thresholdHeight": 7.4 
   },
   {
     "top": 0.0862,
@@ -952,9 +952,9 @@
     "isTroop": true,
     "colors": "Ruby",
     "fullCard": true,
-    "thresholdPaddingRatio" : 0.025,
+    "thresholdPaddingRatio" : 0.0092,
     "thresholdHeightRatio" : 0.40322,
-    "thresholdWidthRatio" : 0.03371,
+    "thresholdWidthRatio" : 0.07371,
     "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839,
@@ -984,8 +984,8 @@
 	"uniqueHeight": 2.97,
 	"numberRatio": 0.046,
 	"gameTextLength": 0.896,
-	"thresholdWidth": 13.6,
-	"thresholdHeight": 9.1 
+	"thresholdWidth": 20,
+	"thresholdHeight": 7.4 
   },
   {
     "top": 0.0862,
@@ -996,9 +996,9 @@
     "isTroop": true,
     "colors": "Sapphire",
     "fullCard": true,
-    "thresholdPaddingRatio" : 0.025,
+    "thresholdPaddingRatio" : 0.0092,
     "thresholdHeightRatio" : 0.40322,
-    "thresholdWidthRatio" : 0.03371,
+    "thresholdWidthRatio" : 0.07371,
     "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839,
@@ -1028,8 +1028,8 @@
 	"uniqueHeight": 2.97,
 	"numberRatio": 0.046,
 	"gameTextLength": 0.896,
-	"thresholdWidth": 13.6,
-	"thresholdHeight": 9.1 
+	"thresholdWidth": 20,
+	"thresholdHeight": 7.4 
   },
   {
     "top": 0.0862,
@@ -1040,9 +1040,9 @@
     "isTroop": true,
     "colors": "Wild",
     "fullCard": true,
-    "thresholdPaddingRatio" : 0.025,
+    "thresholdPaddingRatio" : 0.0092,
     "thresholdHeightRatio" : 0.40322,
-    "thresholdWidthRatio" : 0.03371,
+    "thresholdWidthRatio" : 0.07371,
     "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839,
@@ -1072,8 +1072,8 @@
 	"uniqueHeight": 2.97,
 	"numberRatio": 0.046,
 	"gameTextLength": 0.896,
-	"thresholdWidth": 13.6,
-	"thresholdHeight": 9.1 
+	"thresholdWidth": 20,
+	"thresholdHeight": 7.4 
   },
   {
     "top": 0.0862,
@@ -1084,9 +1084,9 @@
     "isTroop": true,
     "colors": "Wild|Sapphire|Ruby|Diamond|Blood",
     "fullCard": true,
-    "thresholdPaddingRatio" : 0.025,
+    "thresholdPaddingRatio" : 0.0092,
     "thresholdHeightRatio" : 0.40322,
-    "thresholdWidthRatio" : 0.03371,
+    "thresholdWidthRatio" : 0.07371,
     "nameFontRatio": 0.03,
     "costFontRatio": 0.019354839,
     "typeFontRatio": 0.019354839,
@@ -1116,7 +1116,7 @@
 	"uniqueHeight": 2.97,
 	"numberRatio": 0.046,
 	"gameTextLength": 0.896,
-	"thresholdWidth": 13.6,
-	"thresholdHeight": 9.1 
+	"thresholdWidth": 20,
+	"thresholdHeight": 7.4 
   }
 ]
