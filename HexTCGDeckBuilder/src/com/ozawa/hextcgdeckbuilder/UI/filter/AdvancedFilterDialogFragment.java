@@ -50,26 +50,26 @@ import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
 
 @SuppressLint("NewApi")
 public class AdvancedFilterDialogFragment extends DialogFragment {
-	NumberPicker	minCost;
-	NumberPicker	maxCost;
-	Button			acceptButton;
-	CardsViewer		cardsViewer;
-	Spinner			primarySpinner;
-	Spinner			secondarySpinner;
-	public String	deckName;			// possible values "library" or "custom"
+	private NumberPicker	minCost;
+	private NumberPicker	maxCost;
+	private Button			acceptButton;
+	private CardsViewer		cardsViewer;
+	private Spinner			primarySpinner;
+	private Spinner			secondarySpinner;
+	public Boolean			isCustomDeck=null;			// possible values "library" or "custom"
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		final Dialog dialog = new Dialog(getActivity());
 		dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		dialog.setContentView(R.layout.advanced_filter_popup);
-		if(deckName==null){
-			deckName= savedInstanceState.getString("deckName");
+		if(isCustomDeck==null){
+			isCustomDeck= savedInstanceState.getBoolean("isCustomDeck");
 		}
 		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0xaa000000));
-		if (deckName.equals("custom")) {
+		if (isCustomDeck) {
 			cardsViewer = ((HexApplication) getActivity().getApplication()).getCustomDeckViewer();
-		} else if (deckName.equals("library")) {
+		} else if (!isCustomDeck) {
 			cardsViewer = ((HexApplication) getActivity().getApplication()).getCardLibraryViewer();
 		}else{
 			dialog.dismiss();
@@ -128,7 +128,7 @@ public class AdvancedFilterDialogFragment extends DialogFragment {
 	@Override
 	public void onSaveInstanceState(Bundle arg0) {
 		super.onSaveInstanceState(arg0);
-		arg0.putString("deckName", deckName);
+		arg0.putBoolean("deckName", isCustomDeck);
 	}
 
 	private Comparator<AbstractCard> getComparator() {
