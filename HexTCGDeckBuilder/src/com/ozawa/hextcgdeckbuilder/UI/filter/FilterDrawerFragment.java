@@ -216,7 +216,7 @@ public class FilterDrawerFragment extends Fragment implements TextWatcher {
     				advancedFilterDialog.isCustomDeck=isCustomDeck;
         			advancedFilterDialog.show(getActivity().getSupportFragmentManager(), "Remove Multiple Cards");
     			}else{
-    				Toast.makeText(context, "Not available for this version of Android", Toast.LENGTH_LONG);
+    				Toast.makeText(context, "Not available for this version of Android", Toast.LENGTH_LONG).show();
     			}
     			return;
             }
