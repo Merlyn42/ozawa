@@ -550,7 +550,7 @@ public class Card extends AbstractCard {
 					}
 				} else {
 					int width = round(templateImage.getWidth() * template.thresholdWidthRatio);
-					int height = round(templateImage.getHeight() * template.thresholdHeightRatio);
+					int height = round(templateImage.getHeight() *  template.thresholdHeightRatio);
 					allThresholds = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 
 					Canvas canvas = new Canvas(allThresholds);
