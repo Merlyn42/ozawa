@@ -227,19 +227,15 @@ public class Card extends AbstractCard {
 		combine.drawText(name, templateImage.getWidth() / template.nameWidth, templateImage.getHeight() / template.nameHeight, paint);
 		paint.setTextSize(imageHeight * template.numberRatio);
 		if (resourceCost > 9) {
-			paint.setTextSize(imageHeight * 0.055f);
 			combine.drawText("" + resourceCost, templateImage.getWidth() / template.bigResourceWidth, templateImage.getHeight()
 					/ template.bigResourceHeight, paint);
-			paint.setTextSize(imageHeight * template.numberRatio);
 		} else if (variableCost == 1) {
 			if (resourceCost == 0)
 				combine.drawText("X", templateImage.getWidth() / template.smallResourceWidth, templateImage.getHeight()
 						/ template.smallResourceHeight, paint);
-			else{
-				paint.setTextSize(imageHeight * 0.055f);				
+			else{				
 				combine.drawText(resourceCost + "X", templateImage.getWidth() / template.bigResourceWidth, templateImage.getHeight()
 						/ template.bigResourceHeight, paint);
-				paint.setTextSize(imageHeight * template.numberRatio);
 			}
 		} else {
 			combine.drawText("" + resourceCost, templateImage.getWidth() / template.smallResourceWidth, templateImage.getHeight()
