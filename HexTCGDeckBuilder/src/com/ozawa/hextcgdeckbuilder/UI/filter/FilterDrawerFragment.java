@@ -104,6 +104,7 @@ public class FilterDrawerFragment extends Fragment implements TextWatcher {
 	private boolean						mFromSavedInstanceState;
 	private boolean						mUserLearnedDrawer;
 
+	private boolean isCustomDeck;
 	public FilterDrawerFragment() {
 
 	}
@@ -212,10 +213,10 @@ public class FilterDrawerFragment extends Fragment implements TextWatcher {
             	AdvancedFilterDialogFragment advancedFilterDialog;
     			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
     				advancedFilterDialog = new AdvancedFilterDialogFragment();
-    				advancedFilterDialog.cardsViewer=cardViewer;
+    				advancedFilterDialog.isCustomDeck=isCustomDeck;
         			advancedFilterDialog.show(getActivity().getSupportFragmentManager(), "Remove Multiple Cards");
     			}else{
-    				Toast.makeText(context, "Not available for this version of Android", Toast.LENGTH_LONG);
+    				Toast.makeText(context, "Not available for this version of Android", Toast.LENGTH_LONG).show();
     			}
     			return;
             }
@@ -283,7 +284,7 @@ public class FilterDrawerFragment extends Fragment implements TextWatcher {
 	 * @param drawerLayout
 	 *            The DrawerLayout containing this fragment's UI.
 	 */
-	public void setUp(CardsViewer iCardViewer, Context iContext, int fragmentId, DrawerLayout drawerLayout) {
+	public void setUp(CardsViewer iCardViewer, Context iContext, int fragmentId, DrawerLayout drawerLayout, boolean isCustomDeck) {
 		context = iContext;
 		cardViewer = iCardViewer;
 		mFragmentContainerView = getActivity().findViewById(fragmentId);
@@ -349,12 +350,12 @@ public class FilterDrawerFragment extends Fragment implements TextWatcher {
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 	}
 
-	public void setUp(View frag, CardsViewer iCardViewer, Context iContext, int fragmentId, DrawerLayout drawerLayout) {
+	public void setUp(View frag, CardsViewer iCardViewer, Context iContext, int fragmentId, DrawerLayout drawerLayout,boolean isCustomDeck) {
 		context = iContext;
 		cardViewer = iCardViewer;
 		mFragmentContainerView = frag.findViewById(fragmentId);
 		mDrawerLayout = drawerLayout;
-
+		this.isCustomDeck=isCustomDeck;
 		// set a custom shadow that overlays the main content when the drawer
 		// opens
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);

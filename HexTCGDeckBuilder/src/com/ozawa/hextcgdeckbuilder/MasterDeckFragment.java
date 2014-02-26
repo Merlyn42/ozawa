@@ -160,7 +160,7 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 				R.id.master_deck_navigation_drawer);
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(uiLayout, cardViewer, mainActivity, R.id.master_deck_navigation_drawer,
-				(DrawerLayout) uiLayout.findViewById(R.id.master_deck_drawer_layout));
+				(DrawerLayout) uiLayout.findViewById(R.id.master_deck_drawer_layout),false);
 		FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
 		transaction.add(R.id.master_deck_navigation_drawer, mNavigationDrawerFragment).commit();
 

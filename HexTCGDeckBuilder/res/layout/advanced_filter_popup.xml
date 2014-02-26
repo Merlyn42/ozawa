@@ -75,165 +75,49 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/textSorting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sorting"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
     <LinearLayout
         android:layout_width="match_parent"
+        android:gravity="center"
         android:layout_height="wrap_content" >
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/textView2"
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:orientation="vertical" >
+            android:layout_height="wrap_content"
+            android:text="Primary"
+            
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Sort Type"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+        <Spinner
+            android:id="@+id/spinnerPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/textNone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="None"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/textColour"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Colour"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center" >
 
-            <TextView
-                android:id="@+id/textCost"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Cost"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <TextView
-                android:id="@+id/textName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Name"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <TextView
-                android:id="@+id/textType"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Type"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <TextView
-                android:id="@+id/TextSubtype"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Subtype"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        </LinearLayout>
-
-        <RadioGroup
-            android:id="@+id/radioGroupPrimary"
+        <TextView
+            android:id="@+id/TextSecondary"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical" >
+            android:layout_height="wrap_content"
+            android:text="Secondary"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Primary"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <RadioButton
-                android:id="@+id/radioButtonNonePrimary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <RadioButton
-                android:id="@+id/radioButtonColourPrimary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <RadioButton
-                android:id="@+id/radioButtonCostPrimary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <RadioButton
-                android:id="@+id/radioButtonNamePrimary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <RadioButton
-                android:id="@+id/radioButtonTypePrimary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <RadioButton
-                android:id="@+id/radioButtonSubtypePrimary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        </RadioGroup>
-
-        <RadioGroup
-            android:id="@+id/radioGroupSecondary"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Secondary"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <RadioButton
-                android:id="@+id/radioButtonNoneSecondary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <RadioButton
-                android:id="@+id/radioButtonColourSecondary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <RadioButton
-                android:id="@+id/radioButtonCostSecondary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <RadioButton
-                android:id="@+id/radioButtonNameSecondary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <RadioButton
-                android:id="@+id/radioButtonTypeSecondary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <RadioButton
-                android:id="@+id/radioButtonSubtypeSecondary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        </RadioGroup>
+        <Spinner
+            android:id="@+id/spinnerSecondary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
