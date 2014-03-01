@@ -1,5 +1,6 @@
 import hexentities.Card;
 import hexentities.Champion;
+import hexentities.Gem;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -42,6 +43,7 @@ public class CardImagerMapperUtil {
 
 	private static String		newCardName				= "hexcard";
 	private static String		newChampionName			= "champion";
+	private static String		newGemName				= "gemdata";
 	public final static String	VERSION					= "v1.0";
 	public static float			quality					= 0.6f;
 
@@ -185,6 +187,46 @@ public class CardImagerMapperUtil {
 			}
 		}
 
+		/**
+		 * Generate Gem JSON
+		 */
+		ArrayList<Gem> allGems = new ArrayList<Gem>();
+		try {
+			File[] gemFiles = new File(hexLocation, "Items\\Gems").listFiles();
+
+			for (File gemFile : gemFiles) {
+				String gemJSON = JSONSerializer.getJSONFromFiles(gemFile);
+				try {
+					allGems.add(JSONSerializer.deserializeJSONtoGem(gemJSON));
+
+				} catch (Exception e) {
+					System.err.println("Unable to parse file:" + gemFile.getName());
+					throw e;
+				}
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		for (Gem gem : allGems) {
+			try {
+				String newGemJSON = JSONSerializer.serializeGemToJSON(gem);
+
+				File newGemFile = new File(newCardLocation, newGemName + gem.id.getM_Guid().replace("-", "_") + ".json");
+				FileOutputStream newGemOutput = new FileOutputStream(newGemFile);
+				for (byte b : newGemJSON.getBytes()) {
+					try {
+						newGemOutput.write(b);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				newGemOutput.close();
+			} catch (IOException e) {
+				System.out.println("Skipping file as error loading gem data for gem " + gem.name);
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private static BufferedImage openImage(File f) throws IOException {
@@ -253,16 +295,16 @@ public class CardImagerMapperUtil {
 			System.out.println("Written by havocx42");
 			return;
 		}
-		
+
 		if (cmd.hasOption("quality")) {
 			Boolean fail = false;
-			Integer value =null;
-			try{
+			Integer value = null;
+			try {
 				value = Integer.valueOf(cmd.getOptionValue("quality"));
-			}catch(Exception e){
+			} catch (Exception e) {
 				fail = true;
 			}
-			if (!fail&&value != null && value > 0 && value <= 100) {
+			if (!fail && value != null && value > 0 && value <= 100) {
 				quality = value / 100.0f;
 				System.out.println("Setting quality to: " + quality);
 			} else {

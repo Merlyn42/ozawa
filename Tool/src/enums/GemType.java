@@ -1,4 +1,4 @@
-package com.ozawa.hextcgdeckbuilder.enums;
+package enums;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -47,5 +47,4 @@ public enum GemType {
 	WILDMAJOR1,
 	@SerializedName("Wild_Major_2")
 	WILDMAJOR2;
-
 }

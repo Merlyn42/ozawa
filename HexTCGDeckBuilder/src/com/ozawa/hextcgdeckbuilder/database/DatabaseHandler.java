@@ -26,8 +26,11 @@ import java.util.List;
 
 import com.google.gson.Gson;
 import com.ozawa.hextcgdeckbuilder.R;
+import com.ozawa.hextcgdeckbuilder.enums.GemType;
+import com.ozawa.hextcgdeckbuilder.enums.ItemType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Champion;
+import com.ozawa.hextcgdeckbuilder.hexentities.Gem;
 import com.ozawa.hextcgdeckbuilder.hexentities.HexDeck;
 import com.ozawa.hextcgdeckbuilder.hexentities.DeckResource;
 import com.ozawa.hextcgdeckbuilder.hexentities.GlobalIdentifier;
@@ -64,6 +67,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	private static final String	CARD_COUNT				= "card_count";
 	private static final String	DECK_ID					= "deck_id";
 	private static final String	CHAMPION_NAME			= "champion_name";
+	private static final String	GEM_ID					= "gem_id";
 
 	// Champion Columns
 	private static final String	SET_ID					= "set_id";
@@ -78,18 +82,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	private static final String	DESCRIPTION				= "description";
 
 	public List<Champion>		allChampions;
+	public List<Gem>			allGems;
 
 	public DatabaseHandler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
-		allChampions = generateAllChampionsFromJson(context);
+		populateChampionData(context);
 
-		for (Champion champion : generateAllChampionsFromJson(context)) {
-			if (getChampion(champion.name) != null) {
-				updateChampion(champion);
-			} else {
-				addChampion(champion);
-			}
-		}
+		populateGemData(context);
 	}
 
 	@Override
@@ -102,7 +101,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				+ CHAMPION_NAME + " TEXT, " + "FOREIGN KEY(" + CHAMPION_NAME + ") REFERENCES " + TABLE_CHAMPIONS + "(" + NAME + "));";
 
 		String CREATE_DECK_RESOURCES_TABLE = "CREATE TABLE " + TABLE_DECK_RESOURCES + " ( " + CARD_ID + " TEXT, " + CARD_COUNT
-				+ " INTEGER, " + DECK_ID + " INTEGER NOT NULL, " + "FOREIGN KEY(" + DECK_ID + ") REFERENCES " + TABLE_DECKS + "(" + ID
+				+ " INTEGER, " + DECK_ID + " INTEGER NOT NULL, " + GEM_ID + "TEXT, " + "FOREIGN KEY(" + DECK_ID + ") REFERENCES "
+				+ TABLE_DECKS + "(" + ID + ") ON DELETE CASCADE), " + "FOREIGN KEY(" + GEM_ID + ") REFERENCES " + TABLE_GEMS + "(" + ID
 				+ ") ON DELETE CASCADE);";
 
 		String CREATE_CHAMPIONS_TABLE = "CREATE TABLE " + TABLE_CHAMPIONS + " (" + NAME + " TEXT PRIMARY KEY," + SET_ID + " TEXT, "
@@ -269,6 +269,179 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			}
 		}
 		return jsonFiles;
+	}
+
+	/**
+	 * Add or update Champion data in database
+	 * 
+	 * @param context
+	 */
+	private void populateChampionData(Context context) {
+		allChampions = generateAllChampionsFromJson(context);
+
+		for (Champion champion : allChampions) {
+			if (getChampion(champion.name) != null) {
+				updateChampion(champion);
+			} else {
+				addChampion(champion);
+			}
+		}
+	}
+
+	/**
+	 * Gem Table Database Methods
+	 */
+
+	public boolean addGem(Gem gem) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		boolean inserted = true;
+		ContentValues values = new ContentValues();
+		values.put(NAME, gem.name);
+		values.put(ID, gem.id.gUID);
+		values.put(BASEPRICE, gem.basePrice);
+		values.put(GEMTYPE, gem.gemType.toString());
+		values.put(ITEMTYPE, gem.type.toString());
+
+		try {
+			db.beginTransaction();
+			db.insert(TABLE_GEMS, null, values);
+			db.setTransactionSuccessful();
+		} catch (Exception ex) {
+			inserted = false;
+		} finally {
+			db.endTransaction(); // If error occurs during transaction, no data
+									// is committed
+			db.close();
+		}
+
+		return inserted;
+	}
+
+	public Gem getGem(String id) {
+		SQLiteDatabase db = this.getReadableDatabase();
+		Gem gem = null;
+		try {
+			Cursor results = db.query(TABLE_GEMS, new String[] { NAME, ID, BASEPRICE, GEMTYPE, ITEMTYPE }, ID + "= ?", new String[] { id },
+					null, null, null, null);
+
+			if (results == null) {
+				return null;
+			}
+
+			results.moveToFirst();
+
+			gem = createNewGem(results);
+		} catch (Exception ex) {
+		}
+
+		return gem;
+	}
+
+	public boolean updateGem(Gem gem) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		boolean updated = true;
+		ContentValues values = new ContentValues();
+		values.put(NAME, gem.name);
+		values.put(ID, gem.id.gUID);
+		values.put(BASEPRICE, gem.basePrice);
+		values.put(GEMTYPE, gem.gemType.toString());
+		values.put(ITEMTYPE, gem.type.toString());
+		try {
+			db.beginTransaction();
+			db.update(TABLE_GEMS, values, ID + "= ?", new String[] { gem.id.gUID });
+			db.setTransactionSuccessful();
+		} catch (Exception ex) {
+			updated = false;
+		} finally {
+			db.endTransaction();
+			db.close();
+		}
+		return updated;
+	}
+
+	public boolean deleteGem(Gem gem) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		boolean deleted = true;
+
+		try {
+			db.beginTransaction();
+			db.delete(TABLE_GEMS, ID + " = ?", new String[] { gem.id.gUID });
+			db.setTransactionSuccessful();
+		} catch (Exception ex) {
+			deleted = false;
+		} finally {
+			db.endTransaction(); // If error occurs during transaction, no data
+									// is committed
+			db.close();
+		}
+
+		return deleted;
+	}
+
+	private Gem createNewGem(Cursor results) {
+		Gem gem = new Gem();
+
+		gem.id = new GlobalIdentifier(String.valueOf(results.getInt(results.getColumnIndex(ID))));
+		gem.name = results.getString(results.getColumnIndex(NAME));
+		gem.basePrice = results.getInt(results.getColumnIndex(BASEPRICE));
+		gem.gemType = GemType.valueOf(results.getString(results.getColumnIndex(GEMTYPE)));
+		gem.type = ItemType.valueOf(results.getString(results.getColumnIndex(ITEMTYPE)));
+
+		return gem;
+	}
+
+	private List<Gem> generateAllGemsFromJson(Context context) {
+		ArrayList<Gem> allGems = new ArrayList<Gem>();
+
+		try {
+			ArrayList<InputStream> gemFiles = getGemJson(context);
+			Gson gson = new Gson();
+			for (InputStream json : gemFiles) {
+				allGems.add(gson.fromJson(new InputStreamReader(json), Gem.class));
+			}
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+
+		return allGems;
+	}
+
+	private ArrayList<InputStream> getGemJson(Context context) throws IllegalAccessException {
+		Field[] rawFields = R.raw.class.getFields();
+		ArrayList<InputStream> jsonFiles = new ArrayList<InputStream>();
+
+		for (int count = 0; count < rawFields.length; count++) {
+			int rid = rawFields[count].getInt(rawFields[count]);
+			try {
+				Resources res = context.getResources();
+				String name = res.getResourceName(rid);
+				if (name.contains("gemdata")) {
+					InputStream inputStream = res.openRawResource(rid);
+					if (inputStream != null) {
+						jsonFiles.add(inputStream);
+					}
+				}
+			} catch (Exception e) {
+			}
+		}
+		return jsonFiles;
+	}
+
+	/**
+	 * Add or update Gem data in database
+	 * 
+	 * @param context
+	 */
+	private void populateGemData(Context context) {
+		allGems = generateAllGemsFromJson(context);
+
+		for (Gem gem : allGems) {
+			if (getGem(gem.id.gUID) != null) {
+				updateGem(gem);
+			} else {
+				addGem(gem);
+			}
+		}
 	}
 
 	/**
