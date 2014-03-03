@@ -28,10 +28,11 @@ import android.content.res.Resources;
 import com.ozawa.hextcgdeckbuilder.R;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Card;
+import com.ozawa.hextcgdeckbuilder.hexentities.LinkedCards;
 
 public class MasterDeck {
 	private static List<AbstractCard>	masterDeck;
-	private static Integer highestCardCost;
+	private static Integer				highestCardCost;
 
 	public static Integer getHighestCardCost() {
 		return highestCardCost;
@@ -42,20 +43,101 @@ public class MasterDeck {
 			JsonReader jsonReader = new JsonReader(context);
 			try {
 				masterDeck = jsonReader.deserializeJSONInputStreamsToCard(getJson(context.getResources()));
+				ArrayList<String> names = getNames(masterDeck);
 				int max = 0;
-				for(AbstractCard card:masterDeck){
-					if(card instanceof Card){
-						if(((Card)card).resourceCost>max){
-							max = ((Card)card).resourceCost;
+				for (AbstractCard card : masterDeck) {
+					if (card instanceof Card) {
+						parseForLinks((Card) card, masterDeck, names);
+						if (((Card) card).resourceCost > max) {
+							max = ((Card) card).resourceCost;
 						}
 					}
 				}
-				highestCardCost=max;
+				highestCardCost = max;
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
 			}
 		}
 		return masterDeck;
+	}
+
+	private static ArrayList<String> getNames(List<AbstractCard> allCards) {
+		ArrayList<String> names = new ArrayList<String>();
+		for (AbstractCard card : masterDeck) {
+			if (card instanceof Card) {
+				names.add(card.name);
+			}
+		}
+		return names;
+	}
+
+	private static void parseForLinks(Card card, List<AbstractCard> allCards, ArrayList<String> names) {
+		if (card.gameText.contains("<b>")) {
+			String delims = "[<>]";
+			String[] words = card.gameText.split(delims);
+			for (int i = 0; i < words.length; i++) {
+				if (words[i].equals("b")) {
+					if (checkFullName(words[i + 1], names)) {
+						mergeLinkedCards(card, getFullMatchedCard(words[i + 1], allCards));
+					} else if(checkPartialName(words[i + 1], names)){
+						mergeLinkedCards(card, getPartialMatchedCard(words[i + 1], allCards));
+					}
+				}
+			}
+		}
+	}
+
+	private static boolean checkFullName(String name, ArrayList<String> names) {
+		for (String cardName : names) {
+			if (cardName.equals(name)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static boolean checkPartialName(String name, ArrayList<String> names) {
+		for (String cardName : names) {
+			if(cardName.contains(name)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private static void mergeLinkedCards(Card card, ArrayList<Card> otherCards) {
+		for (Card otherCard : otherCards) {
+			if (!card.linkedCards.adjacenyList.contains(otherCard) && !card.name.equals(otherCard.name)) {
+				card.linkedCards.adjacenyList.add(otherCard.linkedCards);
+			}
+			if (!otherCard.linkedCards.adjacenyList.contains(card) && !otherCard.name.equals(card.name)) {
+				otherCard.linkedCards.adjacenyList.add(card.linkedCards);
+			}
+		}
+	}
+
+	private static ArrayList<Card> getPartialMatchedCard(String name, List<AbstractCard> allCards) {
+		ArrayList<Card> matchedCards = new ArrayList<Card>();
+		for (AbstractCard card : allCards) {
+			if (card instanceof Card) {
+				if (card.name.contains(name)) {
+					matchedCards.add((Card) card);
+				}
+			}
+		}
+		return matchedCards;
+	}
+	
+	private static ArrayList<Card> getFullMatchedCard(String name, List<AbstractCard> allCards) {
+		ArrayList<Card> matchedCards = new ArrayList<Card>();
+		for (AbstractCard card : allCards) {
+			if (card instanceof Card) {
+				if (card.name.equals(name)) {
+					matchedCards.add((Card) card);
+				}
+			}
+		}
+		return matchedCards;
 	}
 
 	private static ArrayList<InputStream> getJson(Resources res) throws IllegalAccessException {

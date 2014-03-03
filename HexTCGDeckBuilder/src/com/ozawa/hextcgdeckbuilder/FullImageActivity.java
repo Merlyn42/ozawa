@@ -27,10 +27,12 @@ import com.espian.showcaseview.ShowcaseView;
 import com.espian.showcaseview.ShowcaseView.ConfigOptions;
 import com.ozawa.hextcgdeckbuilder.UI.CardTemplate;
 import com.ozawa.hextcgdeckbuilder.UI.TutorialEventListener;
+import com.ozawa.hextcgdeckbuilder.UI.filter.FilterDrawerFragment;
 import com.ozawa.hextcgdeckbuilder.enums.DeckType;
 import com.ozawa.hextcgdeckbuilder.enums.TutorialType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Card;
+import com.ozawa.hextcgdeckbuilder.hexentities.LinkedCards;
 import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
@@ -56,39 +58,40 @@ import android.widget.Toast;
 
 public class FullImageActivity extends Activity implements GestureOverlayView.OnGesturePerformedListener {
 
-	private GestureLibrary gesLibrary;
-	private int position;
-	private ImageView imageView;
-	private ImageButton socketGem;
-	private int cardCount;
-	private DeckType deckType;
-	
-	// Tutorial
-	public static final String PREFS_NAME = "FirstLaunchPrefFullscreen";
-	private SharedPreferences mPreferences;
-	
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.full_image);
+	private GestureLibrary			gesLibrary;
+	private int						position;
+	private ImageView				imageView;
+	private ImageButton				socketGem;
+	private int						cardCount;
+	private DeckType				deckType;
+	private FilterDrawerFragment	mNavigationDrawerFragment;
 
-        // get intent data
-        Intent i = getIntent();
-        
+	// Tutorial
+	public static final String		PREFS_NAME	= "FirstLaunchPrefFullscreen";
+	private SharedPreferences		mPreferences;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.full_image);
+
+		// get intent data
+		Intent i = getIntent();
+
 		gesLibrary = GestureLibraries.fromRawResource(this, R.raw.gestures);
 		if (!gesLibrary.load()) {
 			this.finish();
 		}
 
-        // Selected image id
-        position = i.getExtras().getInt("id");
-        deckType = (DeckType) i.getExtras().getSerializable("deckType");
+		// Selected image id
+		position = i.getExtras().getInt("id");
+		deckType = (DeckType) i.getExtras().getSerializable("deckType");
 
-        imageView = (ImageView) findViewById(R.id.full_image_view);
-        socketGem = (ImageButton) findViewById(R.id.buttonSocketGem);
-        setImage();
-        
-        imageView.setOnLongClickListener(new OnLongClickListener() {			
+		imageView = (ImageView) findViewById(R.id.full_image_view);
+		socketGem = (ImageButton) findViewById(R.id.buttonSocketGem);
+		setImage();		
+
+		imageView.setOnLongClickListener(new OnLongClickListener() {
 
 			@Override
 			public boolean onLongClick(View v) {
@@ -97,28 +100,39 @@ public class FullImageActivity extends Activity implements GestureOverlayView.On
 				return true;
 			}
 		});
-        
-        socketGem.setOnClickListener(new OnClickListener() {
-			
+
+		imageView.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Card card = (Card) ((HexApplication) getApplication()).getCardLibraryViewer().getFilteredCardList().get(position);
+				for (LinkedCards lc : card.linkedCards.adjacenyList) {
+					Toast.makeText(getApplicationContext(), lc.card.name, Toast.LENGTH_SHORT).show();
+				}
+			}
+		});
+
+		socketGem.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View v) {
 				Toast.makeText(getApplicationContext(), "Socketing cards coming soon!", Toast.LENGTH_SHORT).show();
 			}
 		});
-        
+
 		GestureOverlayView gestureOverlayView = (GestureOverlayView) findViewById(R.id.fullImageGestureOverlayView);
-		gestureOverlayView.addOnGesturePerformedListener(this);	
+		gestureOverlayView.addOnGesturePerformedListener(this);
 		gestureOverlayView.setGestureVisible(false);
-		
+
 		// Tutorial
 		mPreferences = getSharedPreferences(PREFS_NAME, 0);
 		boolean firstTime = mPreferences.getBoolean("firstTime", true);
-		if (firstTime) { 
+		if (firstTime) {
 			showTutorial();
-		}		
-    }
-    
-    /**
+		}
+	}
+
+	/**
 	 * Show the app's tutorial
 	 */
 	@SuppressWarnings("deprecation")
@@ -127,21 +141,22 @@ public class FullImageActivity extends Activity implements GestureOverlayView.On
 		co.shotType = ShowcaseView.TYPE_ONE_SHOT;
 		co.centerText = true;
 		co.hideOnClickOutside = true;
-		ShowcaseView showcaseView = ShowcaseView.insertShowcaseView(HexUtil.getScreenWidth(this) / 2, (int)(HexUtil.getScreenHeight(this) / 15), this, "Fullscreen View", 
-				"Check out the hi-res on these bad boys. Here is a close up of the card and all it's interesting data.", co);     
+		ShowcaseView showcaseView = ShowcaseView.insertShowcaseView(HexUtil.getScreenWidth(this) / 2,
+				(int) (HexUtil.getScreenHeight(this) / 15), this, "Fullscreen View",
+				"Check out the hi-res on these bad boys. Here is a close up of the card and all it's interesting data.", co);
 		showcaseView.setShowcase(ShowcaseView.NONE);
-		showcaseView.setOnShowcaseEventListener(new TutorialEventListener(this,co, TutorialType.FULLSCREEN));        
+		showcaseView.setOnShowcaseEventListener(new TutorialEventListener(this, co, TutorialType.FULLSCREEN));
 		showcaseView.show();
 		SharedPreferences.Editor editor = mPreferences.edit();
-	    editor.putBoolean("firstTime", false);
-	    editor.commit();
+		editor.putBoolean("firstTime", false);
+		editor.commit();
 	}
-    
-    @Override
-    protected void onPause(){
-    	super.onPause();
-    	finish();
-    }
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		finish();
+	}
 
 	@Override
 	public void onGesturePerformed(GestureOverlayView gestureOverlayView, Gesture gesture) {
@@ -150,86 +165,93 @@ public class FullImageActivity extends Activity implements GestureOverlayView.On
 			for (Prediction prediction : predictions) {
 				if (prediction.score > 1.0) {
 					if (prediction.name.equalsIgnoreCase("swipe right")) {
-						if(position > 0){
-							position --;
+						if (position > 0) {
+							position--;
 							setImage();
-						} else{
+						} else {
 							Toast.makeText(this, "No more cards, Jumping to the end", Toast.LENGTH_SHORT).show();
 							position = cardCount - 1;
 							setImage();
 						}
 					} else if (prediction.name.equalsIgnoreCase("swipe left")) {
-						if(position < cardCount - 1){
-							position ++;
+						if (position < cardCount - 1) {
+							position++;
 							setImage();
-						} else{
+						} else {
 							position = 0;
 							Toast.makeText(this, "No more cards, Jumping to the start", Toast.LENGTH_SHORT).show();
 							setImage();
-						}						
-					}else if(prediction.name.equalsIgnoreCase("anti clockwise") || prediction.name.equalsIgnoreCase("clockwise")){
-                    	finish();
-                    }
+						}
+					} else if (prediction.name.equalsIgnoreCase("anti clockwise") || prediction.name.equalsIgnoreCase("clockwise")) {
+						finish();
+					}
 				}
 			}
 		}
 	}
-	
-	private void setImage(){
+
+	private void setImage() {
 		AbstractCard card;
-		if(deckType == DeckType.CARDLIBRARY){
-			card = ((HexApplication)getApplication()).getCardLibraryViewer().getFilteredCardList().get(position);
-        	imageView.setImageBitmap(card.getFullscreenCardBitmap(this));
-        	cardCount = ((HexApplication)getApplication()).getCardLibraryViewer().getFilteredCardList().size();
-        } else if(deckType == DeckType.CUSTOMDECK){
-        	card = ((HexApplication)getApplication()).getCustomDeckViewer().getFilteredCardList().get(position);
-        	imageView.setImageBitmap(card.getFullscreenCardBitmap(this));
-        	cardCount = ((HexApplication)getApplication()).getCustomDeckViewer().getFilteredCardList().size();
-        }else{
-        	card = ((HexApplication)getApplication()).getTestDrawDeckViewer().getFilteredCardList().get(position);
-        	imageView.setImageBitmap(card.getFullscreenCardBitmap(this));
-        	cardCount = ((HexApplication)getApplication()).getTestDrawDeckViewer().getFilteredCardList().size();
-        }
-		if(card instanceof Card && ((Card) card).socketCount > 0){
-    		setSocketButton(card);
-    		socketGem.setVisibility(View.VISIBLE);
-    	}else{
-    		socketGem.setVisibility(View.INVISIBLE);
-    	}
+		if (deckType == DeckType.CARDLIBRARY) {
+			card = ((HexApplication) getApplication()).getCardLibraryViewer().getFilteredCardList().get(position);
+			imageView.setImageBitmap(card.getFullscreenCardBitmap(this));
+			cardCount = ((HexApplication) getApplication()).getCardLibraryViewer().getFilteredCardList().size();
+		} else if (deckType == DeckType.CUSTOMDECK) {
+			card = ((HexApplication) getApplication()).getCustomDeckViewer().getFilteredCardList().get(position);
+			imageView.setImageBitmap(card.getFullscreenCardBitmap(this));
+			cardCount = ((HexApplication) getApplication()).getCustomDeckViewer().getFilteredCardList().size();
+		} else {
+			card = ((HexApplication) getApplication()).getTestDrawDeckViewer().getFilteredCardList().get(position);
+			imageView.setImageBitmap(card.getFullscreenCardBitmap(this));
+			cardCount = ((HexApplication) getApplication()).getTestDrawDeckViewer().getFilteredCardList().size();
+		}
+		if (card instanceof Card && ((Card) card).socketCount > 0) {
+			setSocketButton(card);
+			socketGem.setVisibility(View.VISIBLE);
+		} else {
+			socketGem.setVisibility(View.INVISIBLE);
+		}
 	}
-	
+
 	/**
 	 * Add the socketgem button to the fullscreen image
 	 * 
 	 * @param card
 	 */
-	private void setSocketButton(AbstractCard card){
+	private void setSocketButton(AbstractCard card) {
 		CardTemplate template = CardTemplate.findCardTemplate(card, true, CardTemplate.getAllTemplates(this));
-		
+
 		float aspectRatio = (float) HexUtil.getScreenWidth(this) / HexUtil.getScreenHeight(this);
 		int width = HexUtil.getScreenWidth(this);
 		int height = (int) (width * (1 / HexUtil.round(aspectRatio, 2, BigDecimal.ROUND_HALF_UP)));
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams((int)(width*template.socketRatio), (int)(width*template.socketRatio));
-        Bitmap socketImage = BitmapFactory.decodeResource(getResources(),R.drawable.gem_socket_new);
-		socketImage = Bitmap.createScaledBitmap(socketImage, (int)(width*template.socketRatio), (int)(width*template.socketRatio), true);
+		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams((int) (width * template.socketRatio),
+				(int) (width * template.socketRatio));
+		Bitmap socketImage = BitmapFactory.decodeResource(getResources(), R.drawable.gem_socket_new);
+		socketImage = Bitmap.createScaledBitmap(socketImage, (int) (width * template.socketRatio), (int) (width * template.socketRatio),
+				true);
 		socketGem.setImageBitmap(socketImage);
-        lp.leftMargin = (int) (width - (width / 8.4f));
-        lp.topMargin = (int) (height / 3.3f) - ((HexUtil.getScreenHeight(this) - height) / 2);
-        socketGem.setLayoutParams(lp);		
+		lp.leftMargin = (int) (width - (width / 8.4f));
+		lp.topMargin = (int) (height / 3.3f) - ((HexUtil.getScreenHeight(this) - height) / 2);
+		socketGem.setLayoutParams(lp);
 	}
-	
-	/*private void setSocketButton(AbstractCard card){
-		CardTemplate template = CardTemplate.findCardTemplate(card, true, CardTemplate.getAllTemplates(this));
-		
-		float aspectRatio = (float) HexUtil.getScreenWidth(this) / HexUtil.getScreenHeight(this);
-		int width = HexUtil.getScreenWidth(this);
-		int height = (int) (width * (1 / HexUtil.round(aspectRatio, 2, BigDecimal.ROUND_HALF_UP)));
-        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams((int)(width*template.socketRatio), (int)(width*template.socketRatio));
-        Bitmap socketImage = BitmapFactory.decodeResource(getResources(),R.drawable.gem_socket);
-		socketImage = Bitmap.createScaledBitmap(socketImage, (int)(width*template.socketRatio), (int)(width*template.socketRatio), true);
-		socketGem.setImageBitmap(socketImage);
-        lp.leftMargin = (int) (width - (width / 4.5f));
-        lp.topMargin = (int) (height / 2.2f) - ((HexUtil.getScreenHeight(this) - height) / 2);
-        socketGem.setLayoutParams(lp);		
-	}*/
+
+	/*
+	 * private void setSocketButton(AbstractCard card){ CardTemplate template =
+	 * CardTemplate.findCardTemplate(card, true,
+	 * CardTemplate.getAllTemplates(this));
+	 * 
+	 * float aspectRatio = (float) HexUtil.getScreenWidth(this) /
+	 * HexUtil.getScreenHeight(this); int width = HexUtil.getScreenWidth(this);
+	 * int height = (int) (width * (1 / HexUtil.round(aspectRatio, 2,
+	 * BigDecimal.ROUND_HALF_UP))); RelativeLayout.LayoutParams lp = new
+	 * RelativeLayout.LayoutParams((int)(width*template.socketRatio),
+	 * (int)(width*template.socketRatio)); Bitmap socketImage =
+	 * BitmapFactory.decodeResource(getResources(),R.drawable.gem_socket);
+	 * socketImage = Bitmap.createScaledBitmap(socketImage,
+	 * (int)(width*template.socketRatio), (int)(width*template.socketRatio),
+	 * true); socketGem.setImageBitmap(socketImage); lp.leftMargin = (int)
+	 * (width - (width / 4.5f)); lp.topMargin = (int) (height / 2.2f) -
+	 * ((HexUtil.getScreenHeight(this) - height) / 2);
+	 * socketGem.setLayoutParams(lp); }
+	 */
 }

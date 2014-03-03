@@ -78,7 +78,8 @@ public class Card extends AbstractCard {
 	public int					variableAttack;
 	@SerializedName("m_VariableHealth")
 	public int					variableHealth;
-
+	
+	public LinkedCards			linkedCards = new LinkedCards(this);
 	private float				line;
 
 	/**
