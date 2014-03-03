@@ -199,7 +199,7 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 				R.id.custom_deck_navigation_drawer);
 		// Set up the drawer.
 		mFilterDrawerFragment.setUp(uiLayout, cardViewer, mContext, R.id.custom_deck_navigation_drawer,
-				(DrawerLayout) uiLayout.findViewById(R.id.custom_deck_drawer_layout));
+				(DrawerLayout) uiLayout.findViewById(R.id.custom_deck_drawer_layout),true);
 		mFilterDrawerFragment.setUpCustomDeckViews();
 		setCustomDeckButtonListeners();
 		FragmentTransaction transaction = getChildFragmentManager().beginTransaction();

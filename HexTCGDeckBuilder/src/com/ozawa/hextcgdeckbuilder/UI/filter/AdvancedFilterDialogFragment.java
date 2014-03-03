@@ -27,40 +27,73 @@ import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 
+import com.ozawa.hextcgdeckbuilder.DeckUIActivity;
 import com.ozawa.hextcgdeckbuilder.R;
 import com.ozawa.hextcgdeckbuilder.UI.CardsViewer;
+import com.ozawa.hextcgdeckbuilder.UI.customdeck.CustomDeckFragment;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.filter.CardComparatorColor;
 import com.ozawa.hextcgdeckbuilder.filter.CardComparatorName;
 import com.ozawa.hextcgdeckbuilder.filter.CardComparatorCost;
 import com.ozawa.hextcgdeckbuilder.filter.CardComparatorSubtype;
+import com.ozawa.hextcgdeckbuilder.filter.CardComparatorThreshold;
 import com.ozawa.hextcgdeckbuilder.filter.CardComparatorType;
 import com.ozawa.hextcgdeckbuilder.filter.DualComparator;
 import com.ozawa.hextcgdeckbuilder.json.MasterDeck;
+import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
 
 @SuppressLint("NewApi")
 public class AdvancedFilterDialogFragment extends DialogFragment {
-	NumberPicker		minCost;
-	NumberPicker		maxCost;
-	Button				acceptButton;
-	public CardsViewer	cardsViewer;
-	RadioGroup			primaryRadioGroup;
-	RadioGroup			secondaryRadioGroup;
+	private NumberPicker	minCost;
+	private NumberPicker	maxCost;
+	private Button			acceptButton;
+	private CardsViewer		cardsViewer;
+	private Spinner			primarySpinner;
+	private Spinner			secondarySpinner;
+	public Boolean			isCustomDeck=null;			// possible values "library" or "custom"
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		final Dialog dialog = new Dialog(getActivity());
 		dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		dialog.setContentView(R.layout.advanced_filter_popup);
-
+		if(isCustomDeck==null){
+			isCustomDeck= savedInstanceState.getBoolean("isCustomDeck");
+		}
 		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0xaa000000));
+		if (isCustomDeck) {
+			cardsViewer = ((HexApplication) getActivity().getApplication()).getCustomDeckViewer();
+		} else if (!isCustomDeck) {
+			cardsViewer = ((HexApplication) getActivity().getApplication()).getCardLibraryViewer();
+		}else{
+			dialog.dismiss();
+			return dialog;
+		}
 
-		primaryRadioGroup = (RadioGroup) dialog.findViewById(R.id.radioGroupPrimary);
-		secondaryRadioGroup = (RadioGroup) dialog.findViewById(R.id.radioGroupSecondary);
+		primarySpinner = (Spinner) dialog.findViewById(R.id.spinnerPrimary);
+		secondarySpinner = (Spinner) dialog.findViewById(R.id.spinnerSecondary);
+
+		ArrayAdapter<SortingType> primaryAdapter = new ArrayAdapter<SortingType>(getActivity(), android.R.layout.simple_spinner_item,
+				SortingType.values());
+		// Specify the layout to use when the list of choices appears
+		primaryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		// Apply the adapter to the spinner
+		primarySpinner.setAdapter(primaryAdapter);
+		primarySpinner.setSelection(0);
+
+		ArrayAdapter<SortingType> secondaryAdapter = new ArrayAdapter<SortingType>(getActivity(), android.R.layout.simple_spinner_item,
+				SortingType.values());
+		// Specify the layout to use when the list of choices appears
+		secondaryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		// Apply the adapter to the spinner
+		secondarySpinner.setAdapter(secondaryAdapter);
+		secondarySpinner.setSelection(0);
 
 		minCost = (NumberPicker) dialog.findViewById(R.id.numberPickerMinCost);
 		maxCost = (NumberPicker) dialog.findViewById(R.id.numberPickerMaxCost);
@@ -83,7 +116,8 @@ public class AdvancedFilterDialogFragment extends DialogFragment {
 				cardsViewer.setMinCost(minCost.getValue());
 				cardsViewer.updateDeckAndView();
 				Comparator<AbstractCard> comparator = getComparator();
-				if(comparator!=null)cardsViewer.setComparator(comparator);
+				if (comparator != null)
+					cardsViewer.setComparator(comparator);
 				dialog.dismiss();
 			}
 		});
@@ -91,52 +125,55 @@ public class AdvancedFilterDialogFragment extends DialogFragment {
 		return dialog;
 	}
 
-	private Comparator<AbstractCard> getComparator() {
-		Comparator<AbstractCard> result;
-		Comparator<AbstractCard> primary = getSingleComparator(primaryRadioGroup);
-		Comparator<AbstractCard> secondary = getSingleComparator(secondaryRadioGroup);
-		if(primary==null&&secondary==null){
-			result = null;
-		}else if(secondary==null){
-			result=primary;
-		}else if(primary==null){
-			result=secondary;
-		}else{
-			result = new DualComparator(primary,secondary);
-		}
-		return result;
-		
+	@Override
+	public void onSaveInstanceState(Bundle arg0) {
+		super.onSaveInstanceState(arg0);
+		arg0.putBoolean("deckName", isCustomDeck);
 	}
 
-	private Comparator<AbstractCard> getSingleComparator(RadioGroup group) {
+	private Comparator<AbstractCard> getComparator() {
+		Comparator<AbstractCard> result;
+		Comparator<AbstractCard> primary = getSingleComparator(primarySpinner);
+		Comparator<AbstractCard> secondary = getSingleComparator(secondarySpinner);
+		if (primary == null && secondary == null) {
+			result = null;
+		} else if (secondary == null) {
+			result = primary;
+		} else if (primary == null) {
+			result = secondary;
+		} else {
+			result = new DualComparator(primary, secondary);
+		}
+		return result;
+
+	}
+
+	private Comparator<AbstractCard> getSingleComparator(Spinner spinner) {
 		Comparator<AbstractCard> comparator = null;
-		int id = group.getCheckedRadioButtonId();
-		switch (id) {
-		case R.id.radioButtonNonePrimary:
-		case R.id.radioButtonNoneSecondary:
+		SortingType selected = (SortingType) spinner.getSelectedItem();
+		switch (selected) {
+		case None:
 			break;
-		case R.id.radioButtonColourPrimary:
-		case R.id.radioButtonColourSecondary:
+		case Colour:
 			comparator = new CardComparatorColor();
 			break;
-		case R.id.radioButtonCostPrimary:
-		case R.id.radioButtonCostSecondary:
+		case Cost:
 			comparator = new CardComparatorCost();
 			break;
-		case R.id.radioButtonNamePrimary:
-		case R.id.radioButtonNameSecondary:
+		case Name:
 			comparator = new CardComparatorName();
 			break;
-		case R.id.radioButtonTypePrimary:
-		case R.id.radioButtonTypeSecondary:
+		case Type:
 			comparator = new CardComparatorType();
 			break;
-		case R.id.radioButtonSubtypePrimary:
-		case R.id.radioButtonSubtypeSecondary:
+		case Subtype:
 			comparator = new CardComparatorSubtype();
 			break;
+		case Threshold:
+			comparator = new CardComparatorThreshold();
+			break;
 		default:
-			comparator= null;
+			comparator = null;
 			break;
 		}
 		return comparator;

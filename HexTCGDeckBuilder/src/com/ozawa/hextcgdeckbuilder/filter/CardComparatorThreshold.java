@@ -22,12 +22,13 @@ import java.util.Comparator;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 import com.ozawa.hextcgdeckbuilder.hexentities.ResourceCard;
+import com.ozawa.hextcgdeckbuilder.hexentities.ResourceThreshold;
 
-public class CardComparatorCost implements Comparator<AbstractCard> {
+public class CardComparatorThreshold implements Comparator<AbstractCard> {
 
 	@Override
 	public int compare(AbstractCard card1, AbstractCard card2) {
-		int result;
+		int result = 0;
 		boolean firstCardEmpty = card1 instanceof ResourceCard || ((Card) card1).threshold == null;
 		boolean secondCardEmpty = card2 instanceof ResourceCard || ((Card) card2).threshold == null;
 		if (firstCardEmpty && secondCardEmpty) {
@@ -37,7 +38,12 @@ public class CardComparatorCost implements Comparator<AbstractCard> {
 		} else if (secondCardEmpty) {
 			result = 1;
 		} else {
-			result = ((Card) card1).resourceCost - ((Card) card2).resourceCost;
+			for (ResourceThreshold threshold : ((Card) card1).threshold) {
+				result += threshold.thresholdColorRequirement;
+			}
+			for (ResourceThreshold threshold : ((Card) card2).threshold) {
+				result -= threshold.thresholdColorRequirement;
+			}
 		}
 		return result;
 	}
