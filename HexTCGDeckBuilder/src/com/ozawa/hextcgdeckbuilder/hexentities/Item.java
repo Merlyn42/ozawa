@@ -16,4 +16,8 @@ abstract class Item {
 	public ItemType			type;
 	@SerializedName("m_Description")
 	public String			description;
+	
+	public String getID(){
+		return this.id.gUID;
+	}
 }

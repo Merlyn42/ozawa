@@ -27,6 +27,8 @@ import com.espian.showcaseview.ShowcaseView;
 import com.espian.showcaseview.ShowcaseView.ConfigOptions;
 import com.ozawa.hextcgdeckbuilder.UI.CardTemplate;
 import com.ozawa.hextcgdeckbuilder.UI.TutorialEventListener;
+import com.ozawa.hextcgdeckbuilder.UI.customdeck.champions.SelectChampionDialogFragment;
+import com.ozawa.hextcgdeckbuilder.UI.customdeck.sockets.SocketCardDialogFragment;
 import com.ozawa.hextcgdeckbuilder.UI.filter.FilterDrawerFragment;
 import com.ozawa.hextcgdeckbuilder.enums.DeckType;
 import com.ozawa.hextcgdeckbuilder.enums.TutorialType;
@@ -47,6 +49,7 @@ import android.gesture.Prediction;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -56,7 +59,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-public class FullImageActivity extends Activity implements GestureOverlayView.OnGesturePerformedListener {
+public class FullImageActivity extends ActionBarActivity implements GestureOverlayView.OnGesturePerformedListener {
 
 	private GestureLibrary			gesLibrary;
 	private int						position;
@@ -69,6 +72,8 @@ public class FullImageActivity extends Activity implements GestureOverlayView.On
 	// Tutorial
 	public static final String		PREFS_NAME	= "FirstLaunchPrefFullscreen";
 	private SharedPreferences		mPreferences;
+	
+	AbstractCard card;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -116,6 +121,8 @@ public class FullImageActivity extends Activity implements GestureOverlayView.On
 
 			@Override
 			public void onClick(View v) {
+				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+				showSocketCardPopup((Card)card);
 				Toast.makeText(getApplicationContext(), "Socketing cards coming soon!", Toast.LENGTH_SHORT).show();
 			}
 		});
@@ -191,7 +198,7 @@ public class FullImageActivity extends Activity implements GestureOverlayView.On
 	}
 
 	private void setImage() {
-		AbstractCard card;
+		//AbstractCard card;
 		if (deckType == DeckType.CARDLIBRARY) {
 			card = ((HexApplication) getApplication()).getCardLibraryViewer().getFilteredCardList().get(position);
 			imageView.setImageBitmap(card.getFullscreenCardBitmap(this));
@@ -233,6 +240,14 @@ public class FullImageActivity extends Activity implements GestureOverlayView.On
 		lp.leftMargin = (int) (width - (width / 8.4f));
 		lp.topMargin = (int) (height / 3.3f) - ((HexUtil.getScreenHeight(this) - height) / 2);
 		socketGem.setLayoutParams(lp);
+	}
+	
+	/**
+	 * Display the Load Deck Dialog
+	 */
+	private void showSocketCardPopup(Card card) {
+		SocketCardDialogFragment socketCardDialog = SocketCardDialogFragment.newInstance(card.id);
+		socketCardDialog.show(getSupportFragmentManager(), "Socket Card Popup");
 	}
 
 	/*

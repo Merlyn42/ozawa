@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <RelativeLayout 
+        android:id="@+id/relLayoutSocketButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp">
+    
+	    <ImageButton 
+	        android:id="@+id/button_socket_one"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:padding="3dip"
+	        android:layout_alignParentLeft="true"
+	        android:background="@drawable/gem_socket_new"
+	        android:layout_marginRight="5dip"
+	        android:contentDescription="Gem Socket"/>
+	    
+	    <ImageButton 
+	        android:id="@+id/button_socket_two"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:padding="3dip"
+	        android:layout_toRightOf="@id/button_socket_one"
+	        android:background="@drawable/gem_socket_new"
+	        android:layout_marginRight="5dip"
+	        android:contentDescription="Gem Socket"/>
+	    
+	    <ImageButton 
+	        android:id="@+id/button_socket_three"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:padding="3dip"
+	        android:layout_toRightOf="@id/button_socket_two"
+	        android:background="@drawable/gem_socket_new"
+	        android:layout_marginRight="5dip"
+	        android:contentDescription="Gem Socket"/>
+	    
+	    <ImageButton 
+	        android:id="@+id/button_socket_four"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:padding="3dip"
+	        android:layout_toRightOf="@id/button_socket_three"
+	        android:background="@drawable/gem_socket_new"
+	        android:layout_marginRight="5dip"
+	        android:contentDescription="Gem Socket"/>
+    
+    </RelativeLayout>
+    
+    <RelativeLayout
+        android:id="@+id/relLayoutSelectedGem"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/relLayoutSocketButtons" >
+	    
+        <!-- Gem Name -->
+	    <TextView
+	        android:id="@+id/selected_gem_name"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:textColor="@drawable/list_selector_text_color"
+	        android:typeface="sans"
+	        android:textAppearance="?android:attr/textAppearanceLarge"
+	        android:textStyle="bold"/>
+	
+	    <!-- Gem Text -->
+	    <TextView
+	        android:id="@+id/selected_gem_text"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@id/selected_gem_name"
+	        android:textColor="@drawable/list_selector_text_color"
+	        android:textAppearance="?android:attr/textAppearanceMedium"
+	        android:layout_marginTop="1dip"
+	        android:layout_marginBottom="3dp"
+	        android:layout_alignParentLeft="true"/>
+	    
+   </RelativeLayout>
+    
+    <LinearLayout
+        android:id="@+id/linLayoutSelectGemButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom"
+        android:weightSum="3"
+        android:layout_alignParentBottom="true" >
+       
+         <Button
+	        android:id="@+id/buttonCancelSocketGem"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/cancel"
+	        android:layout_weight="1" />
+         
+         <Button
+	        android:id="@+id/buttonSaveSelectedGems"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/save"
+	        android:layout_weight="1" />
+         
+	     <Button
+	        android:id="@+id/buttonSocketAll"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="@string/socket_all"
+	        android:layout_weight="1" />
+   
+   	</LinearLayout>
+    
+    <LinearLayout
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical"
+	        android:layout_below="@+id/relLayoutSelectedGem"
+	        android:layout_above="@id/linLayoutSelectGemButtons" >
+	        	
+	        	<ListView
+	         		android:id="@+id/listviewGems"
+	         		android:layout_height="match_parent"
+	         		android:layout_width="match_parent">
+	    		</ListView>
+        		
+     </LinearLayout>
+    
+
+</RelativeLayout>

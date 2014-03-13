@@ -51,6 +51,9 @@
     <string name="mulligan">Mulligan</string>
     <string name="draw_card">Draw Card</string>
     <string name="close">Close</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="socket_all">Socket All</string>
    
 
 </resources>

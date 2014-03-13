@@ -25,6 +25,9 @@ import android.content.Context;
 
 import com.ozawa.hextcgdeckbuilder.database.DatabaseHandler;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
+import com.ozawa.hextcgdeckbuilder.hexentities.Gem;
+import com.ozawa.hextcgdeckbuilder.hexentities.GemResource;
+import com.ozawa.hextcgdeckbuilder.hexentities.GlobalIdentifier;
 import com.ozawa.hextcgdeckbuilder.hexentities.HexDeck;
 import com.ozawa.hextcgdeckbuilder.hexentities.DeckResource;
 
@@ -44,9 +47,12 @@ public class Deck {
 															// and
 															// delete decks
 
+	private List<GemResource>				gemResources;
+
 	public Deck(Context mContext) {
 		deckData = new HashMap<AbstractCard, Integer>();
 		setDeckCardList(new ArrayList<AbstractCard>());
+		setGemResources(new ArrayList<GemResource>());
 		dbHandler = new DatabaseHandler(mContext);
 		deckChanged = false;
 	}
@@ -156,7 +162,7 @@ public class Deck {
 		if (newDeckID == -1) {
 			return null;
 		}
-		if(resetDeckData){
+		if (resetDeckData) {
 			resetDeck();
 		}
 		currentDeck = dbHandler.getDeck(String.valueOf(newDeckID));
@@ -184,7 +190,8 @@ public class Deck {
 	 * @return true if the Deck saved successfully, otherwise false
 	 */
 	public boolean saveDeck() {
-		if (currentDeck != null && dbHandler.updateDeck(currentDeck) && dbHandler.updateDeckResources(currentDeck, deckData)) {
+		if (currentDeck != null && dbHandler.updateDeck(currentDeck) && dbHandler.updateDeckResources(currentDeck, deckData)
+				&& dbHandler.updateGemResources(gemResources)) {
 			deckChanged = false;
 			return true;
 		}
@@ -225,18 +232,18 @@ public class Deck {
 	public boolean isUnsavedDeck() {
 		return (currentDeck == null && !deckData.isEmpty());
 	}
-	
+
 	/**
 	 * Get the size of the deck
 	 * 
 	 * @return the number of cards in the deck.
 	 */
-	public int getDeckSize(){
+	public int getDeckSize() {
 		int deckSize = 0;
 		for (int value : this.deckData.values()) {
 			deckSize += value;
 		}
-		
+
 		return deckSize;
 	}
 
@@ -274,5 +281,66 @@ public class Deck {
 		}
 
 		setDeckCardList(new ArrayList<AbstractCard>(deckData.keySet()));
+	}
+
+	/**
+	 * Get the GemResources for the current deck
+	 * 
+	 * @return The GemResources for the current deck
+	 */
+	public List<GemResource> getGemResources() {
+		return this.gemResources;
+	}
+
+	/**
+	 * Set the GemResources for the current deck
+	 * 
+	 * @param gemResources
+	 */
+	public void setGemResources(List<GemResource> gemResources) {
+		this.gemResources = gemResources;
+	}
+
+	/**
+	 * Add a GemResource to the current deck
+	 * 
+	 * @param gemResource
+	 * @return true if the GemResource was added, otherwise false
+	 */
+	public boolean addGemResource(GemResource gemResource) {
+		return this.gemResources.add(gemResource);
+	}
+	
+	public void removePreviousGemResourcesForCard(GlobalIdentifier cardId) {
+		for(GemResource gemResource : gemResources){
+			if(gemResource.cardId == cardId){
+				gemResources.remove(gemResource);
+			}
+		}
+	}
+
+	public void createGemResource(Gem selectedGem, GlobalIdentifier cardId) {
+		GemResource existingResource = getGemResourceForCardAndGem(cardId, selectedGem.id);
+		if(existingResource != null){
+			existingResource.gemCount++;
+		}else{
+			GemResource gemResource = new GemResource();
+			gemResource.gemId = selectedGem.id;
+			gemResource.deckId = getCurrentDeck().id;
+			gemResource.cardId = cardId;
+			gemResource.gemCount = 1;
+			
+			gemResources.add(gemResource);
+		}
+	}
+
+	private GemResource getGemResourceForCardAndGem(GlobalIdentifier cardId, GlobalIdentifier gemId) {
+		for(GemResource gemResource : gemResources){
+			if(gemResource.cardId == cardId && gemResource.gemId == gemId){
+				return gemResource;
+			}
+		}
+		
+		return null;
 	}
 }
