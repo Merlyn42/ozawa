@@ -994,9 +994,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 		try {
 			db.beginTransaction();
-			for(GemResource gemResource : gemResources){
-				deleteGemResourceFromDeck(gemResource, db);
-			}
+			
+			deleteGemResourceFromDeck(gemResources.get(0).deckId.gUID, db);			
 			addGemResources(gemResources, db);
 
 			db.setTransactionSuccessful();
@@ -1043,8 +1042,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 * @param deckId
 	 * @param db
 	 */
-	private void deleteGemResourceFromDeck(GemResource gemResource, SQLiteDatabase db){
-		db.delete(TABLE_GEM_RESOURCES, GEM_ID + " = ? AND " + DECK_ID + "= ? AND " + CARD_ID + " = ?", new String[] {gemResource.gemId.gUID, gemResource.deckId.gUID, gemResource.cardId.gUID});
+	private void deleteGemResourceFromDeck(String deckId, SQLiteDatabase db){
+		db.delete(TABLE_GEM_RESOURCES, DECK_ID + "= ?", new String[] {deckId});
 	}
 
 	/**

@@ -17,7 +17,8 @@
 	        android:layout_alignParentLeft="true"
 	        android:background="@drawable/gem_socket_new"
 	        android:layout_marginRight="5dip"
-	        android:contentDescription="Gem Socket"/>
+	        android:contentDescription="Gem Socket"
+	        android:visibility="invisible"/>
 	    
 	    <ImageButton 
 	        android:id="@+id/button_socket_two"
@@ -27,7 +28,8 @@
 	        android:layout_toRightOf="@id/button_socket_one"
 	        android:background="@drawable/gem_socket_new"
 	        android:layout_marginRight="5dip"
-	        android:contentDescription="Gem Socket"/>
+	        android:contentDescription="Gem Socket"
+	        android:visibility="invisible"/>
 	    
 	    <ImageButton 
 	        android:id="@+id/button_socket_three"
@@ -37,7 +39,8 @@
 	        android:layout_toRightOf="@id/button_socket_two"
 	        android:background="@drawable/gem_socket_new"
 	        android:layout_marginRight="5dip"
-	        android:contentDescription="Gem Socket"/>
+	        android:contentDescription="Gem Socket"
+	        android:visibility="invisible"/>
 	    
 	    <ImageButton 
 	        android:id="@+id/button_socket_four"
@@ -47,7 +50,8 @@
 	        android:layout_toRightOf="@id/button_socket_three"
 	        android:background="@drawable/gem_socket_new"
 	        android:layout_marginRight="5dip"
-	        android:contentDescription="Gem Socket"/>
+	        android:contentDescription="Gem Socket"
+	        android:visibility="invisible"/>
     
     </RelativeLayout>
     

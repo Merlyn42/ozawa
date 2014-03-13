@@ -281,6 +281,7 @@ public class Deck {
 		}
 
 		setDeckCardList(new ArrayList<AbstractCard>(deckData.keySet()));
+		setGemResources(dbHandler.getAllGemResourcesForDeck(deck.getID()));
 	}
 
 	/**
@@ -313,8 +314,9 @@ public class Deck {
 	
 	public void removePreviousGemResourcesForCard(GlobalIdentifier cardId) {
 		for(GemResource gemResource : gemResources){
-			if(gemResource.cardId == cardId){
+			if(gemResource.cardId.gUID.equalsIgnoreCase(cardId.gUID)){
 				gemResources.remove(gemResource);
+				break;
 			}
 		}
 	}
@@ -336,11 +338,20 @@ public class Deck {
 
 	private GemResource getGemResourceForCardAndGem(GlobalIdentifier cardId, GlobalIdentifier gemId) {
 		for(GemResource gemResource : gemResources){
-			if(gemResource.cardId == cardId && gemResource.gemId == gemId){
+			if(gemResource.cardId.gUID.equalsIgnoreCase(cardId.gUID) && gemResource.gemId.gUID.equalsIgnoreCase(gemId.gUID)){
 				return gemResource;
 			}
 		}
 		
+		return null;
+	}
+
+	public AbstractCard getCardById(GlobalIdentifier cardId) {
+		for(AbstractCard card : deckCardList){
+			if(card.id.gUID.equalsIgnoreCase(cardId.gUID)){
+				return card;
+			}
+		}
 		return null;
 	}
 }
