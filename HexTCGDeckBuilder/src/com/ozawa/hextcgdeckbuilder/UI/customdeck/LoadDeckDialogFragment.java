@@ -24,6 +24,7 @@ import com.ozawa.hextcgdeckbuilder.R;
 import com.ozawa.hextcgdeckbuilder.UI.LoadDeckArrayAdapter;
 import com.ozawa.hextcgdeckbuilder.database.DatabaseHandler;
 import com.ozawa.hextcgdeckbuilder.hexentities.HexDeck;
+import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
 
 import android.app.Dialog;
 import android.graphics.drawable.ColorDrawable;
@@ -54,7 +55,8 @@ public class LoadDeckDialogFragment extends DialogFragment {
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState){
 		final Dialog dialog = new Dialog(getActivity());
-		DatabaseHandler dbHandler = new DatabaseHandler(getActivity());
+		HexApplication hexApplication = (HexApplication) getActivity().getApplication();
+		DatabaseHandler dbHandler = hexApplication.getDatabaseHandler();
 		List<HexDeck> allDecks = dbHandler.getAllDecks();
 		dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		dialog.setContentView(R.layout.load_deck_popup);

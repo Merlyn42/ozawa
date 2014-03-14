@@ -17,28 +17,27 @@
  ******************************************************************************/
 package com.ozawa.hextcgdeckbuilder;
 
-/**
- * Created by dkerr on 12/20/13.
- */
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.espian.showcaseview.ShowcaseView;
 import com.espian.showcaseview.ShowcaseView.ConfigOptions;
 import com.ozawa.hextcgdeckbuilder.UI.CardTemplate;
 import com.ozawa.hextcgdeckbuilder.UI.TutorialEventListener;
-import com.ozawa.hextcgdeckbuilder.UI.customdeck.champions.SelectChampionDialogFragment;
 import com.ozawa.hextcgdeckbuilder.UI.customdeck.sockets.SocketCardDialogFragment;
 import com.ozawa.hextcgdeckbuilder.UI.filter.FilterDrawerFragment;
 import com.ozawa.hextcgdeckbuilder.enums.DeckType;
 import com.ozawa.hextcgdeckbuilder.enums.TutorialType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Card;
+import com.ozawa.hextcgdeckbuilder.hexentities.Gem;
+import com.ozawa.hextcgdeckbuilder.hexentities.GemResource;
 import com.ozawa.hextcgdeckbuilder.hexentities.LinkedCards;
 import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.gesture.Gesture;
@@ -64,7 +63,7 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 	private GestureLibrary			gesLibrary;
 	private int						position;
 	private ImageView				imageView;
-	private ImageButton				socketGem;
+	public ImageButton				socketGem;
 	private int						cardCount;
 	private DeckType				deckType;
 	private FilterDrawerFragment	mNavigationDrawerFragment;
@@ -72,14 +71,16 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 	// Tutorial
 	public static final String		PREFS_NAME	= "FirstLaunchPrefFullscreen";
 	private SharedPreferences		mPreferences;
-	
-	AbstractCard card;
+
+	private AbstractCard			card;
+
+	private HexApplication			hexApplication;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.full_image);
-
+		hexApplication = (HexApplication) getApplication();
 		// get intent data
 		Intent i = getIntent();
 
@@ -94,7 +95,7 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 
 		imageView = (ImageView) findViewById(R.id.full_image_view);
 		socketGem = (ImageButton) findViewById(R.id.buttonSocketGem);
-		setImage();		
+		setImage();
 
 		imageView.setOnLongClickListener(new OnLongClickListener() {
 
@@ -122,8 +123,11 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 			@Override
 			public void onClick(View v) {
 				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-				showSocketCardPopup((Card)card);
-				Toast.makeText(getApplicationContext(), "Socketing cards coming soon!", Toast.LENGTH_SHORT).show();
+				if (deckType == DeckType.CUSTOMDECK) {
+					showSocketCardPopup((Card) card);
+				} else {
+					Toast.makeText(getApplicationContext(), "You must be in the custom deck to socket cards.", Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
 
@@ -198,7 +202,7 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 	}
 
 	private void setImage() {
-		//AbstractCard card;
+		// AbstractCard card;
 		if (deckType == DeckType.CARDLIBRARY) {
 			card = ((HexApplication) getApplication()).getCardLibraryViewer().getFilteredCardList().get(position);
 			imageView.setImageBitmap(card.getFullscreenCardBitmap(this));
@@ -233,7 +237,7 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 		int height = (int) (width * (1 / HexUtil.round(aspectRatio, 2, BigDecimal.ROUND_HALF_UP)));
 		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams((int) (width * template.socketRatio),
 				(int) (width * template.socketRatio));
-		Bitmap socketImage = BitmapFactory.decodeResource(getResources(), R.drawable.gem_socket_new);
+		Bitmap socketImage = Gem.getGemSocketedImage(card, hexApplication, null);
 		socketImage = Bitmap.createScaledBitmap(socketImage, (int) (width * template.socketRatio), (int) (width * template.socketRatio),
 				true);
 		socketGem.setImageBitmap(socketImage);
@@ -241,7 +245,7 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 		lp.topMargin = (int) (height / 3.3f) - ((HexUtil.getScreenHeight(this) - height) / 2);
 		socketGem.setLayoutParams(lp);
 	}
-	
+
 	/**
 	 * Display the Load Deck Dialog
 	 */

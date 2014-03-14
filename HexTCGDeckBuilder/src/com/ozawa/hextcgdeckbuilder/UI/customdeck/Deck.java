@@ -30,6 +30,7 @@ import com.ozawa.hextcgdeckbuilder.hexentities.GemResource;
 import com.ozawa.hextcgdeckbuilder.hexentities.GlobalIdentifier;
 import com.ozawa.hextcgdeckbuilder.hexentities.HexDeck;
 import com.ozawa.hextcgdeckbuilder.hexentities.DeckResource;
+import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
 
 public class Deck {
 
@@ -53,7 +54,7 @@ public class Deck {
 		deckData = new HashMap<AbstractCard, Integer>();
 		setDeckCardList(new ArrayList<AbstractCard>());
 		setGemResources(new ArrayList<GemResource>());
-		dbHandler = new DatabaseHandler(mContext);
+		dbHandler = (mContext instanceof HexApplication) ? ((HexApplication)mContext).getDatabaseHandler() : new DatabaseHandler(mContext);
 		deckChanged = false;
 	}
 
@@ -313,12 +314,13 @@ public class Deck {
 	}
 	
 	public void removePreviousGemResourcesForCard(GlobalIdentifier cardId) {
+		ArrayList<GemResource> containedResources = new ArrayList<GemResource>();
 		for(GemResource gemResource : gemResources){
 			if(gemResource.cardId.gUID.equalsIgnoreCase(cardId.gUID)){
-				gemResources.remove(gemResource);
-				break;
+				containedResources.add(gemResource);
 			}
 		}
+		gemResources.removeAll(containedResources);
 	}
 
 	public void createGemResource(Gem selectedGem, GlobalIdentifier cardId) {

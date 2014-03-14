@@ -58,7 +58,8 @@ public class SelectChampionDialogFragment extends DialogFragment {
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState){
 		final Dialog dialog = new Dialog(getActivity());
-		DatabaseHandler dbHandler = new DatabaseHandler(getActivity());
+		HexApplication hexApplication = (HexApplication) getActivity().getApplication();
+		DatabaseHandler dbHandler = hexApplication.getDatabaseHandler();
 		final List<Champion> allChampions = dbHandler.allChampions;
 		currentCustomDeck = ((HexApplication)getActivity().getApplication()).getCustomDeck().getCurrentDeck();
 		

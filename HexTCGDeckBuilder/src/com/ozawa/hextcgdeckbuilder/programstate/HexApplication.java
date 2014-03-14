@@ -19,6 +19,7 @@ package com.ozawa.hextcgdeckbuilder.programstate;
 
 import com.ozawa.hextcgdeckbuilder.UI.CardsViewer;
 import com.ozawa.hextcgdeckbuilder.UI.customdeck.Deck;
+import com.ozawa.hextcgdeckbuilder.database.DatabaseHandler;
 import com.ozawa.hextcgdeckbuilder.filter.CardComparatorColor;
 import com.ozawa.hextcgdeckbuilder.filter.CardComparatorCost;
 import com.ozawa.hextcgdeckbuilder.filter.DualComparator;
@@ -34,6 +35,7 @@ public class HexApplication extends Application {
 	Deck cardLibrary;
 	Deck customDeck;
 	Deck testDrawDeck;
+	DatabaseHandler dbHandler;
 	
 	public Deck getCustomDeck(){
 		if(customDeck == null){
@@ -81,6 +83,14 @@ public class HexApplication extends Application {
 			deckTestDrawViewer = new CardsViewer(getApplicationContext(), getTestDrawDeck());
 		}
 		return deckTestDrawViewer;
+	}
+	
+	public DatabaseHandler getDatabaseHandler(){
+		if(dbHandler == null){
+			dbHandler = new DatabaseHandler(getApplicationContext());
+		}
+		
+		return dbHandler;
 	}
 
 }
