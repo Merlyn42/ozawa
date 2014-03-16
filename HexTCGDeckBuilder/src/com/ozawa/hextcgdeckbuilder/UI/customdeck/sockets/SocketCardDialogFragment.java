@@ -3,6 +3,7 @@ package com.ozawa.hextcgdeckbuilder.UI.customdeck.sockets;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ozawa.hextcgdeckbuilder.FullImageActivity;
 import com.ozawa.hextcgdeckbuilder.R;
 import com.ozawa.hextcgdeckbuilder.UI.customdeck.Deck;
 import com.ozawa.hextcgdeckbuilder.database.DatabaseHandler;
@@ -16,6 +17,7 @@ import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -55,6 +57,7 @@ public class SocketCardDialogFragment extends DialogFragment {
 	ImageButton					socketTwo;
 	ImageButton					socketThree;
 	ImageButton					socketFour;
+	Bitmap						selectedSocketButtonBackground;
 
 	// Select Gem Text
 	TextView					selectedGemName;
@@ -91,6 +94,14 @@ public class SocketCardDialogFragment extends DialogFragment {
 		return dialog;
 	}
 
+	/**
+	 * Create the Gem Resources for the selected gems that will be stored in the
+	 * database when the deck is saved
+	 * 
+	 * @param currentCustomDeck
+	 * @param currentGemResources
+	 * @return the current list of gem resources
+	 */
 	protected List<GemResource> createGemResourceFromSelectedGems(Deck currentCustomDeck, List<GemResource> currentGemResources) {
 		currentCustomDeck.removePreviousGemResourcesForCard(cardId);
 
@@ -115,6 +126,9 @@ public class SocketCardDialogFragment extends DialogFragment {
 		return currentGemResources;
 	}
 
+	/**
+	 * Sets the current gems sockets when the screen is loaded
+	 */
 	private void setGemSockets() {
 		if (!currentGemResources.isEmpty()) {
 			List<GemResource> currentGemSockets = getGemResourcesForCurrentCard();
@@ -135,6 +149,12 @@ public class SocketCardDialogFragment extends DialogFragment {
 		}
 	}
 
+	/**
+	 * Sets the gem in the given gem socket and updates the image
+	 * 
+	 * @param selectedSocket
+	 * @param gem
+	 */
 	protected void setGemSocket(int selectedSocket, Gem gem) {
 		switch (selectedSocket) {
 		case 0: {
@@ -163,6 +183,13 @@ public class SocketCardDialogFragment extends DialogFragment {
 		}
 	}
 
+	/**
+	 * Find a gem from a list of gems, with the given id
+	 * 
+	 * @param gemResource
+	 * @param allGems
+	 * @return the gem with the given id, if found, otherwise null
+	 */
 	private Gem getGemFromAllGems(GemResource gemResource, List<Gem> allGems) {
 		for (Gem gem : allGems) {
 			if (gem.id.gUID.equalsIgnoreCase(gemResource.gemId.gUID)) {
@@ -173,6 +200,11 @@ public class SocketCardDialogFragment extends DialogFragment {
 		return null;
 	}
 
+	/**
+	 * Find all the gem resources associated with the current card
+	 * 
+	 * @return all the gem resources associated with the current card
+	 */
 	private List<GemResource> getGemResourcesForCurrentCard() {
 		ArrayList<GemResource> currentResources = new ArrayList<GemResource>();
 
@@ -185,6 +217,12 @@ public class SocketCardDialogFragment extends DialogFragment {
 		return currentResources;
 	}
 
+	/**
+	 * Set up the socket image buttons
+	 * 
+	 * @param dialog
+	 * @param count
+	 */
 	private void setSocketButtons(Dialog dialog, int count) {
 		for (int i = 0; i < count; i++) {
 			ImageButton socket = null;
@@ -192,6 +230,7 @@ public class SocketCardDialogFragment extends DialogFragment {
 			case 0: {
 				socketOne = (ImageButton) dialog.findViewById(R.id.button_socket_one);
 				socketOne.setVisibility(View.VISIBLE);
+				socketOne.setBackgroundResource(R.drawable.gem_socket_selected_background);
 				socket = socketOne;
 				break;
 			}
@@ -230,12 +269,53 @@ public class SocketCardDialogFragment extends DialogFragment {
 					if (gem != null) {
 						selectedGemName.setText(gem.name);
 						HexUtil.populateTextViewWithHexHtml(selectedGemText, gem.description);
+						v.setBackgroundResource(R.drawable.gem_socket_selected_background);
+					} else {
+						selectedGemName.setText("");
+						HexUtil.populateTextViewWithHexHtml(selectedGemText, "");
 					}
+					setSocketButtonBackground(v);
 				}
 			});
 		}
 	}
 
+	/**
+	 * Set the socket background to be selected
+	 * 
+	 * @param view
+	 */
+	private void setSocketButtonBackground(View view) {
+		if (socketOne != null) {
+			setSocketButtonBackgroundColor(socketOne, Color.TRANSPARENT);
+		}
+		if (socketTwo != null) {
+			setSocketButtonBackgroundColor(socketTwo, Color.TRANSPARENT);
+		}
+		if (socketThree != null) {
+			setSocketButtonBackgroundColor(socketThree, Color.TRANSPARENT);
+		}
+		if (socketFour != null) {
+			setSocketButtonBackgroundColor(socketFour, Color.TRANSPARENT);
+		}
+		view.setBackgroundResource(R.drawable.gem_socket_selected_background);
+	}
+
+	/**
+	 * Set the socket background to the given colour
+	 * 
+	 * @param view
+	 * @param colourId
+	 */
+	private void setSocketButtonBackgroundColor(View view, int colourId) {
+		view.setBackgroundColor(colourId);
+	}
+
+	/**
+	 * Set up the selected gem text and the gem listview
+	 * 
+	 * @param dialog
+	 */
 	private void setupSelectedGemAndListView(final Dialog dialog) {
 		SocketCardArrayAdapter adapter = new SocketCardArrayAdapter(getActivity(), R.layout.popup_socket_card, allGems);
 
@@ -265,6 +345,11 @@ public class SocketCardDialogFragment extends DialogFragment {
 		});
 	}
 
+	/**
+	 * Set up the menu buttons for canceling, saving, and socketing all gems
+	 * 
+	 * @param dialog
+	 */
 	private void setupMenuButtons(final Dialog dialog) {
 		linearLayout = (LinearLayout) dialog.findViewById(R.id.linLayoutSelectGemButtons);
 
@@ -285,6 +370,10 @@ public class SocketCardDialogFragment extends DialogFragment {
 			public void onClick(View v) {
 				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 				if (createGemResourceFromSelectedGems(currentCustomDeck, currentGemResources) != null) {
+					// Update the socket on the full screen image
+					if (getActivity() instanceof FullImageActivity) {
+						((FullImageActivity) getActivity()).setSocketButton(currentCard);
+					}
 					Toast.makeText(getActivity().getApplicationContext(), "Gems socketed.", Toast.LENGTH_SHORT).show();
 					dialog.dismiss();
 				} else {
@@ -308,19 +397,37 @@ public class SocketCardDialogFragment extends DialogFragment {
 		});
 	}
 
+	/**
+	 * Socket all the gems sockets with the given gem
+	 * 
+	 * @param gem
+	 */
 	protected void setAllSockets(Gem gem) {
 		for (int i = 0; i < currentCustomDeck.getDeckData().get(currentCard); i++) {
 			setGemSocket(i, gem);
 		}
 	}
 
+	/**
+	 * Create the scaled socket image
+	 * 
+	 * @param gem
+	 * @return the scaled socket image with the given gem
+	 */
 	private Bitmap getScaledSocketImage(Gem gem) {
 		Bitmap socketImage = gem == null ? BitmapFactory.decodeResource(hexApplication.getResources(), R.drawable.gem_socket_new) : Gem
 				.getGemSocketedImage(currentCard, hexApplication, gem);
 		int dimension = HexUtil.getScreenHeight(hexApplication) / 8;
+
 		return Bitmap.createScaledBitmap(socketImage, dimension, dimension, true);
 	}
 
+	/**
+	 * Get the gem in the selected socket
+	 * 
+	 * @param socketNumber
+	 * @return the gem in the selected socket
+	 */
 	private Gem getGemInSocket(int socketNumber) {
 		switch (socketNumber) {
 		case 0: {

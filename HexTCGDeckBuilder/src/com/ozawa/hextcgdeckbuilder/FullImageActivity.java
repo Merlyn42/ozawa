@@ -124,8 +124,12 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 			public void onClick(View v) {
 				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 				if (deckType == DeckType.CUSTOMDECK) {
-					showSocketCardPopup((Card) card);
-				} else {
+					if (hexApplication.getCustomDeck().isUnsavedDeck()) {
+						Toast.makeText(getApplicationContext(), "Deck must be saved before socketing cards.", Toast.LENGTH_SHORT).show();
+					} else {
+						showSocketCardPopup((Card) card);
+					}
+				} else if (deckType == DeckType.CARDLIBRARY) {
 					Toast.makeText(getApplicationContext(), "You must be in the custom deck to socket cards.", Toast.LENGTH_SHORT).show();
 				}
 			}
@@ -229,7 +233,7 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 	 * 
 	 * @param card
 	 */
-	private void setSocketButton(AbstractCard card) {
+	public void setSocketButton(AbstractCard card) {
 		CardTemplate template = CardTemplate.findCardTemplate(card, true, CardTemplate.getAllTemplates(this));
 
 		float aspectRatio = (float) HexUtil.getScreenWidth(this) / HexUtil.getScreenHeight(this);
