@@ -78,9 +78,16 @@ public class Card extends AbstractCard {
 	public int					variableAttack;
 	@SerializedName("m_VariableHealth")
 	public int					variableHealth;
-	
-	public LinkedCards			linkedCards = new LinkedCards(this);
+
+	public LinkedCards			linkedCards	= new LinkedCards(this);
 	private float				line;
+
+	/**
+	 * @return true if the card has a socket, otherwise false
+	 */
+	public boolean isSocketable() {
+		return this.socketCount >= 1;
+	}
 
 	/**
 	 * Creates or retrives the card image including portrait, template and text.
@@ -143,12 +150,14 @@ public class Card extends AbstractCard {
 			if (template.fullCard) {
 				drawFullImageText(combine, templateImage, paint, resources, context, template, scale);
 				if (threshold != null) {
-					combine.drawBitmap(threshold, (templateImage.getWidth() / template.thresholdWidth), (templateImage.getHeight() / template.thresholdHeight), null);
+					combine.drawBitmap(threshold, (templateImage.getWidth() / template.thresholdWidth),
+							(templateImage.getHeight() / template.thresholdHeight), null);
 				}
 			} else {
 				drawThumbnailText(combine, templateImage, paint, template, resources, scale);
 				if (threshold != null) {
-					combine.drawBitmap(threshold, (templateImage.getWidth() / template.thresholdWidth), (templateImage.getHeight() / template.thresholdHeight), null);
+					combine.drawBitmap(threshold, (templateImage.getWidth() / template.thresholdWidth),
+							(templateImage.getHeight() / template.thresholdHeight), null);
 				}
 			}
 		} else {
@@ -213,11 +222,16 @@ public class Card extends AbstractCard {
 					(int) (templateImage.getWidth() * template.socketRatio), true);
 			combine.drawBitmap(socketImage, templateImage.getWidth() - (templateImage.getWidth() / 6.5f), templateImage.getHeight() / 2.6f,
 					paint);
-			/*Bitmap socketImage = BitmapFactory.decodeResource(resources, R.drawable.gem_socket);
-			socketImage = Bitmap.createScaledBitmap(socketImage, (int) (templateImage.getWidth() * template.socketRatio),
-					(int) (templateImage.getWidth() * template.socketRatio), true);
-			combine.drawBitmap(socketImage, templateImage.getWidth() - (templateImage.getWidth() / 5), templateImage.getHeight() / 1.57f,
-					paint);*/
+			/*
+			 * Bitmap socketImage = BitmapFactory.decodeResource(resources,
+			 * R.drawable.gem_socket); socketImage =
+			 * Bitmap.createScaledBitmap(socketImage, (int)
+			 * (templateImage.getWidth() * template.socketRatio), (int)
+			 * (templateImage.getWidth() * template.socketRatio), true);
+			 * combine.drawBitmap(socketImage, templateImage.getWidth() -
+			 * (templateImage.getWidth() / 5), templateImage.getHeight() /
+			 * 1.57f, paint);
+			 */
 		}
 	}
 
@@ -234,7 +248,7 @@ public class Card extends AbstractCard {
 			if (resourceCost == 0)
 				combine.drawText("X", templateImage.getWidth() / template.smallResourceWidth, templateImage.getHeight()
 						/ template.smallResourceHeight, paint);
-			else{				
+			else {
 				combine.drawText(resourceCost + "X", templateImage.getWidth() / template.bigResourceWidth, templateImage.getHeight()
 						/ template.bigResourceHeight, paint);
 			}
@@ -547,7 +561,7 @@ public class Card extends AbstractCard {
 					}
 				} else {
 					int width = round(templateImage.getWidth() * template.thresholdWidthRatio);
-					int height = round(templateImage.getHeight() *  template.thresholdHeightRatio);
+					int height = round(templateImage.getHeight() * template.thresholdHeightRatio);
 					allThresholds = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 
 					Canvas canvas = new Canvas(allThresholds);

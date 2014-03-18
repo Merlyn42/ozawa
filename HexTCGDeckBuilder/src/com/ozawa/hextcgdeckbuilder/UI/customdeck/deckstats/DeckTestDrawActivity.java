@@ -36,7 +36,7 @@ public class DeckTestDrawActivity extends Activity {
 	    setContentView(R.layout.activity_test_draw);
 	    HexApplication hexApp = (HexApplication) this.getApplication();
 	    
-	    deckTestDraw = new DeckTestDraw(hexApp.getCustomDeck());
+	    deckTestDraw = new DeckTestDraw(hexApp);
 	    currentHand = hexApp.getTestDrawDeck();
 	    
 	    if(cardViewer == null){
