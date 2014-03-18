@@ -73,6 +73,7 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 	private SharedPreferences		mPreferences;
 
 	private AbstractCard			card;
+	private Gem						currentGem;
 
 	private HexApplication			hexApplication;
 
@@ -131,6 +132,14 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 					}
 				} else if (deckType == DeckType.CARDLIBRARY) {
 					Toast.makeText(getApplicationContext(), "You must be in the custom deck to socket cards.", Toast.LENGTH_SHORT).show();
+				} else if (deckType == DeckType.TESTDRAW) {
+					if (currentGem != null) {
+						Toast.makeText(getApplicationContext(),
+								HexUtil.parseStringAsHexHtml(currentGem.description, getApplicationContext(), 0), Toast.LENGTH_SHORT)
+								.show();
+					} else {
+						Toast.makeText(getApplicationContext(), "No gem socketed.", Toast.LENGTH_SHORT).show();
+					}
 				}
 			}
 		});
@@ -241,7 +250,7 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 		int height = (int) (width * (1 / HexUtil.round(aspectRatio, 2, BigDecimal.ROUND_HALF_UP)));
 		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams((int) (width * template.socketRatio),
 				(int) (width * template.socketRatio));
-		Bitmap socketImage = getGemSocketedImage(card, hexApplication, null);
+		Bitmap socketImage = getGemSocketedImage(card, hexApplication);
 		socketImage = Bitmap.createScaledBitmap(socketImage, (int) (width * template.socketRatio), (int) (width * template.socketRatio),
 				true);
 		socketGem.setImageBitmap(socketImage);
@@ -250,12 +259,15 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 		socketGem.setLayoutParams(lp);
 	}
 
-	private Bitmap getGemSocketedImage(AbstractCard card, HexApplication hexApplication, Gem gem) {
-		if (deckType == DeckType.TESTDRAW) {
-			gem = hexApplication.getCustomDeck().getSocketedGemForCard(position, card);
+	private Bitmap getGemSocketedImage(AbstractCard card, HexApplication hexApplication) {
+		if (deckType == DeckType.TESTDRAW && !hexApplication.getCustomDeck().getSocketCards().isEmpty()) {
+			currentGem = hexApplication.getCustomDeck().getSocketedGemForCard(position, card);
+			if (currentGem == null) {
+				return BitmapFactory.decodeResource(hexApplication.getResources(), R.drawable.gem_socket_new);
+			}
 		}
 
-		return Gem.getGemSocketedImage(card, hexApplication, gem);
+		return Gem.getGemSocketedImage(card, hexApplication, currentGem);
 	}
 
 	/**

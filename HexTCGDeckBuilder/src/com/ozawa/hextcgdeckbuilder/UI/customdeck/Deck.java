@@ -410,7 +410,10 @@ public class Deck {
 		SocketedCard socketedCard = getSocketedCard(position);
 
 		if (socketedCard == null) {
-			return updateSocketedCard(position, card).gem;
+			socketedCard = updateSocketedCard(position, card);
+			if(socketedCard == null){
+				return null;
+			}
 		}
 
 		return socketedCard.gem;

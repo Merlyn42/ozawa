@@ -43,6 +43,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Interpolator.Result;
 
 /**
  * Database Handler classed used to read and write application information to
@@ -51,49 +52,53 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHandler extends SQLiteOpenHelper {
 
 	// Database Version
-	private static final int	DATABASE_VERSION		= 2;
+	private static final int	DATABASE_VERSION			= 2;
 	// Database Name
-	private static final String	DATABASE_NAME			= "HexTCGDeckBuilderDB";
+	private static final String	DATABASE_NAME				= "HexTCGDeckBuilderDB";
 
 	// Table Names
-	private static final String	TABLE_DECKS				= "decks";
-	private static final String	TABLE_DECK_RESOURCES	= "deck_resources";
-	private static final String	TABLE_CHAMPIONS			= "champions";
-	private static final String	TABLE_GEMS				= "gems";
-	private static final String	TABLE_GEM_RESOURCES		= "gem_resources";
+	private static final String	TABLE_DECKS					= "decks";
+	private static final String	TABLE_DECK_RESOURCES		= "deck_resources";
+	private static final String	TABLE_CHAMPIONS				= "champions";
+	private static final String	TABLE_GEMS					= "gems";
+	private static final String	TABLE_GEM_RESOURCES			= "gem_resources";
 
 	// Column Names
-	private static final String	ID						= "id";
-	private static final String	NAME					= "name";
-	private static final String	CARD_ID					= "card_id";
-	private static final String	CARD_COUNT				= "card_count";
-	private static final String	DECK_ID					= "deck_id";
-	private static final String	CHAMPION_NAME			= "champion_name";
-	private static final String	GEM_ID					= "gem_id";
-	private static final String	GEM_COUNT				= "gem_count";
+	private static final String	ID							= "id";
+	private static final String	NAME						= "name";
+	private static final String	CARD_ID						= "card_id";
+	private static final String	CARD_COUNT					= "card_count";
+	private static final String	DECK_ID						= "deck_id";
+	private static final String	CHAMPION_NAME				= "champion_name";
+	private static final String	GEM_ID						= "gem_id";
+	private static final String	GEM_COUNT					= "gem_count";
 
 	// Champion Columns
-	private static final String	SET_ID					= "set_id";
-	private static final String	HUD_PORTRAIT			= "hud_portrait";
-	private static final String	HUD_PORTRAIT_SMALL		= "hud_portrait_small";
-	private static final String	GAME_TEXT				= "game_text";
+	private static final String	SET_ID						= "set_id";
+	private static final String	HUD_PORTRAIT				= "hud_portrait";
+	private static final String	HUD_PORTRAIT_SMALL			= "hud_portrait_small";
+	private static final String	GAME_TEXT					= "game_text";
 
 	// Gem Columns
-	private static final String	BASEPRICE				= "base_price";
-	private static final String	GEMTYPE					= "gem_type";
-	private static final String	ITEMTYPE				= "item_type";
-	private static final String	DESCRIPTION				= "description";
+	private static final String	BASEPRICE					= "base_price";
+	private static final String	GEMTYPE						= "gem_type";
+	private static final String	ITEMTYPE					= "item_type";
+	private static final String	DESCRIPTION					= "description";
 
 	public List<Champion>		allChampions;
 	public List<Gem>			allGems;
-	
-	// Tables	
-	private String CREATE_GEMS_TABLE = "CREATE TABLE " + TABLE_GEMS + " (" + ID + " TEXT PRIMARY KEY, " + NAME + " TEXT," + DESCRIPTION
-			+ " TEXT, " + BASEPRICE + " INTEGER, " + GEMTYPE + " TEXT," + ITEMTYPE + " TEXT);";
 
-	private String CREATE_GEM_RESOURCES_TABLE = "CREATE TABLE " + TABLE_GEM_RESOURCES + " ( " + CARD_ID + " TEXT, " + GEM_COUNT + " INTEGER, " + DECK_ID + " INTEGER NOT NULL, " + GEM_ID + " TEXT NOT NULL, "
-			+ "FOREIGN KEY(" + DECK_ID + ") REFERENCES " + TABLE_DECKS + "(" + ID + ") ON DELETE CASCADE, " + "FOREIGN KEY(" + GEM_ID
-			+ ") REFERENCES " + TABLE_GEMS + "(" + ID + ") ON DELETE CASCADE);";
+	// Tables
+	private String				CREATE_GEMS_TABLE			= "CREATE TABLE " + TABLE_GEMS + " (" + ID + " TEXT PRIMARY KEY, " + NAME
+																	+ " TEXT," + DESCRIPTION + " TEXT, " + BASEPRICE + " INTEGER, "
+																	+ GEMTYPE + " TEXT," + ITEMTYPE + " TEXT);";
+
+	private String				CREATE_GEM_RESOURCES_TABLE	= "CREATE TABLE " + TABLE_GEM_RESOURCES + " ( " + CARD_ID + " TEXT, "
+																	+ GEM_COUNT + " INTEGER, " + DECK_ID + " INTEGER NOT NULL, " + GEM_ID
+																	+ " TEXT NOT NULL, " + "FOREIGN KEY(" + DECK_ID + ") REFERENCES "
+																	+ TABLE_DECKS + "(" + ID + ") ON DELETE CASCADE, " + "FOREIGN KEY("
+																	+ GEM_ID + ") REFERENCES " + TABLE_GEMS + "(" + ID
+																	+ ") ON DELETE CASCADE);";
 
 	public DatabaseHandler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -120,29 +125,31 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 		db.execSQL(CREATE_CHAMPIONS_TABLE);
 		db.execSQL(CREATE_DECKS_TABLE);
-		db.execSQL(CREATE_DECK_RESOURCES_TABLE);	
+		db.execSQL(CREATE_DECK_RESOURCES_TABLE);
 		db.execSQL(CREATE_GEMS_TABLE);
 		db.execSQL(CREATE_GEM_RESOURCES_TABLE);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		switch(oldVersion){
-			case 1:{
-				db.execSQL(CREATE_GEMS_TABLE);
-				db.execSQL(CREATE_GEM_RESOURCES_TABLE);
-			}
-			default:{
-				break;
-			}
+		switch (oldVersion) {
+		case 1: {
+			db.execSQL(CREATE_GEMS_TABLE);
+			db.execSQL(CREATE_GEM_RESOURCES_TABLE);
 		}
-		
-		/*db.execSQL("DROP TABLE IF EXISTS " + TABLE_CHAMPIONS);
-		db.execSQL("DROP TABLE IF EXISTS " + TABLE_DECKS);
-		db.execSQL("DROP TABLE IF EXISTS " + TABLE_DECK_RESOURCES);
-		db.execSQL("DROP TABLE IF EXISTS " + TABLE_GEMS);
+		default: {
+			break;
+		}
+		}
 
-		this.onCreate(db);*/
+		/*
+		 * db.execSQL("DROP TABLE IF EXISTS " + TABLE_CHAMPIONS);
+		 * db.execSQL("DROP TABLE IF EXISTS " + TABLE_DECKS);
+		 * db.execSQL("DROP TABLE IF EXISTS " + TABLE_DECK_RESOURCES);
+		 * db.execSQL("DROP TABLE IF EXISTS " + TABLE_GEMS);
+		 * 
+		 * this.onCreate(db);
+		 */
 	}
 
 	@Override
@@ -317,6 +324,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		values.put(NAME, gem.name);
 		values.put(ID, gem.id.gUID);
 		values.put(BASEPRICE, gem.basePrice);
+		values.put(DESCRIPTION, gem.description);
 		values.put(GEMTYPE, gem.gemType.toString());
 		values.put(ITEMTYPE, gem.type.toString());
 
@@ -339,8 +347,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getReadableDatabase();
 		Gem gem = null;
 		try {
-			Cursor results = db.query(TABLE_GEMS, new String[] { NAME, ID, BASEPRICE, GEMTYPE, ITEMTYPE }, ID + "= ?", new String[] { id },
-					null, null, null, null);
+			Cursor results = db.query(TABLE_GEMS, new String[] { NAME, ID, BASEPRICE, DESCRIPTION, GEMTYPE, ITEMTYPE }, ID + "= ?",
+					new String[] { id }, null, null, null, null);
 
 			if (results == null) {
 				return null;
@@ -362,6 +370,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		values.put(NAME, gem.name);
 		values.put(ID, gem.id.gUID);
 		values.put(BASEPRICE, gem.basePrice);
+		values.put(DESCRIPTION, gem.description);
 		values.put(GEMTYPE, gem.gemType.toString());
 		values.put(ITEMTYPE, gem.type.toString());
 		try {
@@ -402,6 +411,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		gem.id = new GlobalIdentifier(String.valueOf(results.getInt(results.getColumnIndex(ID))));
 		gem.name = results.getString(results.getColumnIndex(NAME));
 		gem.basePrice = results.getInt(results.getColumnIndex(BASEPRICE));
+		gem.description = results.getString(results.getColumnIndex(DESCRIPTION));
 		gem.gemType = GemType.valueOf(results.getString(results.getColumnIndex(GEMTYPE)));
 		gem.type = ItemType.valueOf(results.getString(results.getColumnIndex(ITEMTYPE)));
 
@@ -898,7 +908,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 		return deckResources;
 	}
-	
+
 	/**
 	 * Gem Resources Table Database Methods
 	 */
@@ -927,7 +937,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 									// is committed
 			db.close();
 		}
-		
+
 		return gemResourcesAdded;
 	}
 
@@ -940,7 +950,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	public boolean addGemResource(GemResource gemResource) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		boolean gemResourcesAdded = true;
-		
+
 		ContentValues values = new ContentValues();
 		values.put(DECK_ID, gemResource.deckId.gUID);
 		values.put(GEM_COUNT, gemResource.gemCount);
@@ -958,7 +968,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 									// is committed
 			db.close();
 		}
-		
+
 		return gemResourcesAdded;
 	}
 
@@ -994,8 +1004,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 		try {
 			db.beginTransaction();
-			
-			deleteGemResourceFromDeck(gemResources.get(0).deckId.gUID, db);			
+
+			deleteGemResourceFromDeck(gemResources.get(0).deckId.gUID, db);
 			addGemResources(gemResources, db);
 
 			db.setTransactionSuccessful();
@@ -1024,7 +1034,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 		try {
 			db.beginTransaction();
-			db.update(TABLE_GEM_RESOURCES, values, GEM_ID + " = ? AND " + DECK_ID + " = ? AND " + CARD_ID + " = ?", new String[] { gemResource.gemId.gUID, gemResource.deckId.gUID, gemResource.cardId.gUID});
+			db.update(TABLE_GEM_RESOURCES, values, GEM_ID + " = ? AND " + DECK_ID + " = ? AND " + CARD_ID + " = ?", new String[] {
+					gemResource.gemId.gUID, gemResource.deckId.gUID, gemResource.cardId.gUID });
 			db.setTransactionSuccessful();
 		} catch (Exception ex) {
 
@@ -1035,15 +1046,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		}
 
 	}
-	
+
 	/**
-	 * Delete 
+	 * Delete
+	 * 
 	 * @param gemId
 	 * @param deckId
 	 * @param db
 	 */
-	private void deleteGemResourceFromDeck(String deckId, SQLiteDatabase db){
-		db.delete(TABLE_GEM_RESOURCES, DECK_ID + "= ?", new String[] {deckId});
+	private void deleteGemResourceFromDeck(String deckId, SQLiteDatabase db) {
+		db.delete(TABLE_GEM_RESOURCES, DECK_ID + "= ?", new String[] { deckId });
 	}
 
 	/**
@@ -1079,7 +1091,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 *            - the database
 	 */
 	private void deleteAllGemResourcesForDeck(String deckId, SQLiteDatabase db) {
-		db.delete(TABLE_GEM_RESOURCES, DECK_ID + "= ?", new String[] {deckId});
+		db.delete(TABLE_GEM_RESOURCES, DECK_ID + "= ?", new String[] { deckId });
 	}
 
 	/**
@@ -1097,7 +1109,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 		try {
 			db.beginTransaction();
-			db.delete(TABLE_GEM_RESOURCES, GEM_ID + " = ? AND " + DECK_ID + "= ? AND " + CARD_ID + "= ?", new String[] { gemResource.gemId.gUID, gemResource.deckId.gUID, gemResource.cardId.gUID });
+			db.delete(TABLE_GEM_RESOURCES, GEM_ID + " = ? AND " + DECK_ID + "= ? AND " + CARD_ID + "= ?", new String[] {
+					gemResource.gemId.gUID, gemResource.deckId.gUID, gemResource.cardId.gUID });
 			db.setTransactionSuccessful();
 		} catch (Exception ex) {
 
@@ -1121,8 +1134,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getReadableDatabase();
 		GemResource newGemResource = null;
 		try {
-			Cursor results = db.query(TABLE_GEM_RESOURCES, new String[] { GEM_ID, DECK_ID, CARD_ID }, GEM_ID + " = ? AND " + DECK_ID + "= ? AND " + CARD_ID + "= ?", new String[] {
-					gemID, deckID, cardID }, null, null, null, null);
+			Cursor results = db.query(TABLE_GEM_RESOURCES, new String[] { GEM_ID, DECK_ID, CARD_ID }, GEM_ID + " = ? AND " + DECK_ID
+					+ "= ? AND " + CARD_ID + "= ?", new String[] { gemID, deckID, cardID }, null, null, null, null);
 
 			if (results == null) {
 				return null;
@@ -1249,7 +1262,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 		return deckResource;
 	}
-	
+
 	/**
 	 * Create a new Gem Resource instance for the given database data
 	 * 
