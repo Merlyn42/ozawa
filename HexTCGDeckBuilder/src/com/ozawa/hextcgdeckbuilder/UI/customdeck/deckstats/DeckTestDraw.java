@@ -8,10 +8,7 @@ import java.util.List;
 import android.app.Application;
 
 import com.ozawa.hextcgdeckbuilder.UI.customdeck.Deck;
-import com.ozawa.hextcgdeckbuilder.database.DatabaseHandler;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
-import com.ozawa.hextcgdeckbuilder.hexentities.Gem;
-import com.ozawa.hextcgdeckbuilder.hexentities.GemResource;
 import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
 
 /**
@@ -22,17 +19,18 @@ public class DeckTestDraw {
 
 	private List<AbstractCard>	fullDeck;
 	private List<AbstractCard>	currentHand;
-	private List<SocketedCard>	socketedCards;
+
 	private HexApplication		hexApplication;
+	private Deck				currentDeck;
 
 	public DeckTestDraw(Application application) {
 		this.hexApplication = (HexApplication) application;
+		this.currentDeck = hexApplication.getCustomDeck();
 		this.fullDeck = createAndShuffleDeck(hexApplication.getCustomDeck());
 		this.currentHand = new ArrayList<AbstractCard>();
-
-		if (hexApplication.getCustomDeck().getCurrentDeck() != null) {
-			this.socketedCards = getSocketedCardsInDeck(hexApplication.getCustomDeck().getCurrentDeck().getID());
-		}
+		this.currentDeck.initializeSocketCards(); // Set up the socketed cards
+													// for the current deck's
+													// test draw
 	}
 
 	/**
@@ -53,12 +51,11 @@ public class DeckTestDraw {
 				currentHand.add(fullDeck.get(i));
 			}
 		}
-		
-		resetSocketedCard(); // Reset the socketed cards
-		
+
+		currentDeck.resetSocketedCard(); // Reset the socketed cards
+
 		return currentHand;
 	}
-	
 
 	/**
 	 * Mulligan the current hand a draw a new one with one less card
@@ -75,9 +72,9 @@ public class DeckTestDraw {
 				currentHand.add(fullDeck.get(i));
 			}
 		}
-		
-		resetSocketedCard(); // Reset the socketed cards
-		
+
+		currentDeck.resetSocketedCard(); // Reset the socketed cards
+
 		return currentHand;
 	}
 
@@ -138,114 +135,5 @@ public class DeckTestDraw {
 	 */
 	private void shuffleDeck(List<AbstractCard> newDeck) {
 		Collections.shuffle(newDeck);
-	}
-
-	/**
-	 * Populate the list of socketed cards for the current deck
-	 * 
-	 * @param deckId
-	 * @return a list of socketed cards for the current deck
-	 */
-	private List<SocketedCard> getSocketedCardsInDeck(String deckId) {
-		DatabaseHandler dbHandler = hexApplication.getDatabaseHandler();
-		List<GemResource> gemResources = dbHandler.getAllGemResourcesForDeck(deckId);
-		ArrayList<SocketedCard> socketedCards = new ArrayList<SocketedCard>();
-		if (!gemResources.isEmpty()) {
-			for (GemResource gemResource : gemResources) {
-				for (AbstractCard card : fullDeck) {
-					if (card.getID().equalsIgnoreCase(gemResource.cardId.gUID)) {
-						socketedCards.add(new SocketedCard(card, dbHandler.getGem(gemResource.gemId.gUID)));
-						break;
-					}
-				}
-			}
-		}
-		return socketedCards;
-	}
-
-	/**
-	 * Return the gem for the card in the given position
-	 * 
-	 * @param position
-	 * @param card
-	 * @return the gem for the card in the given position, if one exists,
-	 *         otherwise returns null
-	 */
-	public Gem getSocketedGemForCard(int position, AbstractCard card) {
-		SocketedCard socketedCard = getSocketedCard(position);
-
-		if (socketedCard == null) {
-			return updateSocketedCard(position, card).gem;
-		}
-
-		return socketedCard.gem;
-	}
-
-	/**
-	 * Update a socketed card with the position if it does not have one
-	 * 
-	 * @param position
-	 * @param card
-	 * @return the socketed card with the new position, otherwise returns null
-	 */
-	private SocketedCard updateSocketedCard(int position, AbstractCard card) {
-		for (SocketedCard socketedCard : socketedCards) {
-			if (socketedCard.getPostision() == -1 && socketedCard.card.getID().equalsIgnoreCase(card.getID())) {
-				socketedCard.setPosition(position);
-				return socketedCard;
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Get the Socketed Card in the given position
-	 * 
-	 * @param position
-	 * @return the Socketed Card in the given position
-	 */
-	private SocketedCard getSocketedCard(int position) {
-		for (SocketedCard socketedCard : socketedCards) {
-			if (socketedCard.getPostision() == position) {
-				return socketedCard;
-			}
-		}
-
-		return null;
-	}
-	
-	/**
-	 * Reset the list of socketed cards for the deck by changing the position to -1
-	 */
-	private void resetSocketedCard() {
-		if(!socketedCards.isEmpty()){
-			for(SocketedCard socketedCard : socketedCards){
-				socketedCard.setPosition(-1);
-			}
-		}		
-	}
-
-	/**
-	 * Private class to store socketed card data for cards in the test draw hand
-	 */
-	private class SocketedCard {
-
-		private int			position;
-		public AbstractCard	card;
-		public Gem			gem;
-
-		public SocketedCard(AbstractCard card, Gem gem) {
-			this.card = card;
-			this.gem = gem;
-			this.position = -1;
-		}
-
-		public int getPostision() {
-			return this.position;
-		}
-
-		public void setPosition(int position) {
-			this.position = position;
-		}
 	}
 }

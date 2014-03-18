@@ -215,12 +215,12 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 			card = ((HexApplication) getApplication()).getCustomDeckViewer().getFilteredCardList().get(position);
 			imageView.setImageBitmap(card.getFullscreenCardBitmap(this));
 			cardCount = ((HexApplication) getApplication()).getCustomDeckViewer().getFilteredCardList().size();
-		} else {
+		} else if (deckType == DeckType.TESTDRAW) {
 			card = ((HexApplication) getApplication()).getTestDrawDeckViewer().getFilteredCardList().get(position);
 			imageView.setImageBitmap(card.getFullscreenCardBitmap(this));
 			cardCount = ((HexApplication) getApplication()).getTestDrawDeckViewer().getFilteredCardList().size();
 		}
-		if (card instanceof Card && ((Card) card).socketCount > 0) {
+		if (card instanceof Card && ((Card) card).isSocketable()) {
 			setSocketButton(card);
 			socketGem.setVisibility(View.VISIBLE);
 		} else {
@@ -241,13 +241,21 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 		int height = (int) (width * (1 / HexUtil.round(aspectRatio, 2, BigDecimal.ROUND_HALF_UP)));
 		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams((int) (width * template.socketRatio),
 				(int) (width * template.socketRatio));
-		Bitmap socketImage = Gem.getGemSocketedImage(card, hexApplication, null);
+		Bitmap socketImage = getGemSocketedImage(card, hexApplication, null);
 		socketImage = Bitmap.createScaledBitmap(socketImage, (int) (width * template.socketRatio), (int) (width * template.socketRatio),
 				true);
 		socketGem.setImageBitmap(socketImage);
 		lp.leftMargin = (int) (width - (width / 8.4f));
 		lp.topMargin = (int) (height / 3.3f) - ((HexUtil.getScreenHeight(this) - height) / 2);
 		socketGem.setLayoutParams(lp);
+	}
+
+	private Bitmap getGemSocketedImage(AbstractCard card, HexApplication hexApplication, Gem gem) {
+		if (deckType == DeckType.TESTDRAW) {
+			gem = hexApplication.getCustomDeck().getSocketedGemForCard(position, card);
+		}
+
+		return Gem.getGemSocketedImage(card, hexApplication, gem);
 	}
 
 	/**
