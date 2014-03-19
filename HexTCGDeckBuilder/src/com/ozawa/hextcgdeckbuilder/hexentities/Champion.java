@@ -21,18 +21,24 @@ import com.google.gson.annotations.SerializedName;
 
 public class Champion {
 
+	@SerializedName("m_Id")
+	public GlobalIdentifier	id;
 	@SerializedName("m_Name")
-	public String name;
+	public String			name;
 	@SerializedName("m_SetId")
-	public GlobalIdentifier setID;
+	public GlobalIdentifier	setID;
 	@SerializedName("m_HudPortrait")
-	public String hudPortrait;
+	public String			hudPortrait;
 	@SerializedName("m_HudSmall")
-	public String hudPortraitSmall;
+	public String			hudPortraitSmall;
 	@SerializedName("m_GameText")
-	public String gameText;
-	
-	public String getSetID(){
+	public String			gameText;
+
+	public String getId() {
+		return this.id.gUID;
+	}
+
+	public String getSetID() {
 		return this.setID.gUID;
 	}
 }

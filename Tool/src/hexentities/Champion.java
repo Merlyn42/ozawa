@@ -3,7 +3,9 @@ package hexentities;
 import com.google.gson.annotations.SerializedName;
 
 public class Champion {
-
+	
+	@SerializedName("m_Id")
+	public M_Id		id;
 	@SerializedName("m_Name")
 	public String name;
 	@SerializedName("m_SetId")

@@ -36,7 +36,7 @@ import com.google.gson.Gson;
 import json.JSONSerializer;
 
 public class CardImagerMapperUtil {
-	private static String		imageName				= "hex";
+	private static String		imageName				= "hexcardportrait";
 	private static String		championPortrait		= "championportait";
 	private static String		championPortraitSmall	= "championportaitsmall";
 	private static int			fileNumber				= 1;
@@ -94,7 +94,7 @@ public class CardImagerMapperUtil {
 				File newImageFile = portraitMap.get(cardImagePath);
 				if (newImageFile == null) {
 					File imageFile = new File(hexLocation, cardImagePath);
-					newImageFile = new File(newImageLocation, imageName + String.format("%05d", fileNumber) + ".jpg");
+					newImageFile = new File(newImageLocation, imageName + card.getM_Id().getM_Guid().replace("-", "_") + ".jpg");
 					BufferedImage image = openImage(imageFile);
 					writeJpeg(newImageFile, image, quality);
 				}
@@ -102,7 +102,7 @@ public class CardImagerMapperUtil {
 				card.setM_CardImagePath(newImageFile.getName());
 				String newCardJSON = JSONSerializer.serializeCardToJSON(card);
 
-				File newCardFile = new File(newCardLocation, newCardName + String.format("%05d", fileNumber) + ".json");
+				File newCardFile = new File(newCardLocation, newCardName + card.getM_Id().getM_Guid().replace("-", "_") + ".json");
 				FileOutputStream newCardOutput = new FileOutputStream(newCardFile);
 				for (byte b : newCardJSON.getBytes()) {
 					try {
@@ -145,7 +145,7 @@ public class CardImagerMapperUtil {
 					if (champ.hudPortraitSmall != null) {
 						String championImagePath = champ.hudPortraitSmall;
 						File imageFile = new File(hexLocation, championImagePath);
-						File newImageFile = new File(newImageLocation, championPortraitSmall + String.format("%05d", fileNumber) + ".png");
+						File newImageFile = new File(newImageLocation, championPortraitSmall + champ.id.getM_Guid().replace("-", "_") + ".png");
 						try {
 							FileUtils.copyFile(imageFile, newImageFile);
 						} catch (IOException e) {
@@ -158,7 +158,7 @@ public class CardImagerMapperUtil {
 					if (champ.hudPortrait != null) {
 						String championImagePath = champ.hudPortrait;
 						File imageFile = new File(hexLocation, championImagePath);
-						File newImageFile = new File(newImageLocation, championPortrait + String.format("%05d", fileNumber) + ".jpg");
+						File newImageFile = new File(newImageLocation, championPortrait + champ.id.getM_Guid().replace("-", "_") + ".jpg");
 						try {
 							BufferedImage image = openImage(imageFile);
 							writeJpeg(newImageFile, image, quality);
@@ -170,7 +170,7 @@ public class CardImagerMapperUtil {
 					}
 					String newChampionJSON = gson.toJson(champ);
 
-					File newChampionFile = new File(newCardLocation, newChampionName + String.format("%05d", fileNumber) + ".json");
+					File newChampionFile = new File(newCardLocation, newChampionName + champ.id.getM_Guid().replace("-", "_") + ".json");
 					FileOutputStream newChampionOutput = new FileOutputStream(newChampionFile);
 					for (byte b : newChampionJSON.getBytes()) {
 						try {
