@@ -42,15 +42,14 @@ import android.gesture.GestureLibrary;
 import android.gesture.GestureOverlayView;
 import android.gesture.Prediction;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -79,7 +78,6 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 	private HexApplication			hexApplication;    
     private ListView 				mLinkedCardList;
     private DrawerLayout 			mDrawerLayout;    
-    private ActionBarDrawerToggle 	mDrawerToggle;
 
 
 	@Override
@@ -113,25 +111,6 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 				card = ((Card)(((HexApplication) getApplication()).getTestDrawDeckViewer().getFilteredCardList().get(subPosition))).linkedCards.adjacenyList.get(position).card;
 			}
 		}
-		
-        // ActionBarDrawerToggle ties together the the proper interactions
-        // between the sliding drawer and the action bar app icon
-        mDrawerToggle = new ActionBarDrawerToggle(
-                this,                  /* host Activity */
-                mDrawerLayout,         /* DrawerLayout object */
-                R.drawable.ic_drawer,  /* nav drawer image to replace 'Up' caret */
-                R.string.drawer_open,  /* "open drawer" description for accessibility */
-                R.string.drawer_close  /* "close drawer" description for accessibility */
-                ) {
-            public void onDrawerClosed(View view) {                
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-
-            public void onDrawerOpened(View drawerView) {
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-        };
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
 		
 		mLinkedCardList = (ListView) findViewById(R.id.left_drawer);
 		if (card instanceof Card && ((Card) card).linkedCards.adjacenyList.size() > 0){		 		 
