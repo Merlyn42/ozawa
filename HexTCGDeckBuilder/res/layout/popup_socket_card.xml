@@ -15,7 +15,7 @@
 	        android:layout_height="wrap_content"
 	        android:padding="3dip"
 	        android:layout_alignParentLeft="true"
-	        android:background="@drawable/gem_socket_new"
+	        android:src="@drawable/gem_socket_new"
 	        android:layout_marginRight="5dip"
 	        android:contentDescription="Gem Socket"
 	        android:visibility="invisible"/>
@@ -26,7 +26,7 @@
 	        android:layout_height="wrap_content"
 	        android:padding="3dip"
 	        android:layout_toRightOf="@id/button_socket_one"
-	        android:background="@drawable/gem_socket_new"
+	        android:src="@drawable/gem_socket_new"
 	        android:layout_marginRight="5dip"
 	        android:contentDescription="Gem Socket"
 	        android:visibility="invisible"/>
@@ -37,7 +37,7 @@
 	        android:layout_height="wrap_content"
 	        android:padding="3dip"
 	        android:layout_toRightOf="@id/button_socket_two"
-	        android:background="@drawable/gem_socket_new"
+	        android:src="@drawable/gem_socket_new"
 	        android:layout_marginRight="5dip"
 	        android:contentDescription="Gem Socket"
 	        android:visibility="invisible"/>
@@ -48,7 +48,7 @@
 	        android:layout_height="wrap_content"
 	        android:padding="3dip"
 	        android:layout_toRightOf="@id/button_socket_three"
-	        android:background="@drawable/gem_socket_new"
+	        android:src="@drawable/gem_socket_new"
 	        android:layout_marginRight="5dip"
 	        android:contentDescription="Gem Socket"
 	        android:visibility="invisible"/>
@@ -82,7 +82,7 @@
 	        android:textColor="@drawable/list_selector_text_color"
 	        android:textAppearance="?android:attr/textAppearanceMedium"
 	        android:layout_marginTop="1dip"
-	        android:layout_marginBottom="3dp"
+	        android:layout_marginBottom="8dp"
 	        android:layout_alignParentLeft="true"/>
 	    
    </RelativeLayout>

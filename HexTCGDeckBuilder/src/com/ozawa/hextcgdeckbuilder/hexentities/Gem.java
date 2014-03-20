@@ -1,6 +1,8 @@
 package com.ozawa.hextcgdeckbuilder.hexentities;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
@@ -49,16 +51,33 @@ public class Gem extends Item {
 	}
 
 	private static Gem getGemFromCard(AbstractCard card, HexApplication hexApplication) {
+		List<Gem> allGems = getAllGemsFromCard(card, hexApplication);
+		if(!allGems.isEmpty()){
+			return getAllGemsFromCard(card, hexApplication).get(0);
+		}
+		
+		return null;
+	}
+	
+	public static Gem getRandomGemFromCard(AbstractCard card, HexApplication hexApplication){
+		List<Gem> allGems = getAllGemsFromCard(card, hexApplication);
+		Random rand = new Random(allGems.size());
+		
+		return allGems.get(rand.nextInt());
+	}
+	
+	public static List<Gem> getAllGemsFromCard(AbstractCard card, HexApplication hexApplication){
 		List<GemResource> gemResources = hexApplication.getCustomDeck().getGemResources();
+		ArrayList<Gem> allGems = new ArrayList<Gem>();
 		if (!gemResources.isEmpty()) {
 			for (GemResource gemResource : gemResources) {
 				if (gemResource.cardId.gUID.equalsIgnoreCase(card.id.gUID)) {
-					return hexApplication.getDatabaseHandler().getGem(gemResource.gemId.gUID);
+					allGems.add(hexApplication.getDatabaseHandler().getGem(gemResource.gemId.gUID));
 				}
 			}
 		}
 
-		return null;
+		return allGems;
 	}
 
 }

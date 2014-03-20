@@ -75,6 +75,7 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 
 	private String[] 				noCards = {"No linked cards"};
 	private AbstractCard			card;
+	private Gem						currentGem;
 	private HexApplication			hexApplication;    
     private ListView 				mLinkedCardList;
     private DrawerLayout 			mDrawerLayout;    
@@ -171,9 +172,21 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 			public void onClick(View v) {
 				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 				if (deckType == DeckType.CUSTOMDECK) {
-					showSocketCardPopup((Card) card);
-				} else {
+					if (hexApplication.getCustomDeck().isUnsavedDeck()) {
+						Toast.makeText(getApplicationContext(), "Deck must be saved before socketing cards.", Toast.LENGTH_SHORT).show();
+					} else {
+						showSocketCardPopup((Card) card);
+					}
+				} else if (deckType == DeckType.CARDLIBRARY) {
 					Toast.makeText(getApplicationContext(), "You must be in the custom deck to socket cards.", Toast.LENGTH_SHORT).show();
+				} else if (deckType == DeckType.TESTDRAW) {
+					if (currentGem != null) {
+						Toast.makeText(getApplicationContext(),
+								HexUtil.parseStringAsHexHtml(currentGem.description, getApplicationContext(), 0), Toast.LENGTH_SHORT)
+								.show();
+					} else {
+						Toast.makeText(getApplicationContext(), "No gem socketed.", Toast.LENGTH_SHORT).show();
+					}
 				}
 			}
 		});
@@ -276,7 +289,7 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 		} else if(deckType == DeckType.LINKEDCARD){
 			
 		}
-		if (card instanceof Card && ((Card) card).socketCount > 0) {
+		if (card instanceof Card && ((Card) card).isSocketable()) {
 			setSocketButton(card);
 			socketGem.setVisibility(View.VISIBLE);
 		} else {
@@ -294,7 +307,7 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 	 * 
 	 * @param card
 	 */
-	private void setSocketButton(AbstractCard card) {
+	public void setSocketButton(AbstractCard card) {
 		CardTemplate template = CardTemplate.findCardTemplate(card, true, CardTemplate.getAllTemplates(this));
 
 		float aspectRatio = (float) HexUtil.getScreenWidth(this) / HexUtil.getScreenHeight(this);
@@ -302,13 +315,24 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 		int height = (int) (width * (1 / HexUtil.round(aspectRatio, 2, BigDecimal.ROUND_HALF_UP)));
 		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams((int) (width * template.socketRatio),
 				(int) (width * template.socketRatio));
-		Bitmap socketImage = Gem.getGemSocketedImage(card, hexApplication, null);
+		Bitmap socketImage = getGemSocketedImage(card, hexApplication);
 		socketImage = Bitmap.createScaledBitmap(socketImage, (int) (width * template.socketRatio), (int) (width * template.socketRatio),
 				true);
 		socketGem.setImageBitmap(socketImage);
 		lp.leftMargin = (int) (width - (width / 8.4f));
 		lp.topMargin = (int) (height / 3.3f) - ((HexUtil.getScreenHeight(this) - height) / 2);
 		socketGem.setLayoutParams(lp);
+	}
+
+	private Bitmap getGemSocketedImage(AbstractCard card, HexApplication hexApplication) {
+		if (deckType == DeckType.TESTDRAW && !hexApplication.getCustomDeck().getSocketCards().isEmpty()) {
+			currentGem = hexApplication.getCustomDeck().getSocketedGemForCard(position, card);
+			if (currentGem == null) {
+				return BitmapFactory.decodeResource(hexApplication.getResources(), R.drawable.gem_socket_new);
+			}
+		}
+
+		return Gem.getGemSocketedImage(card, hexApplication, currentGem);
 	}
 
 	/**

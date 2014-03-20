@@ -49,12 +49,13 @@ public class Deck {
 															// delete decks
 
 	private List<GemResource>				gemResources;
+	private List<SocketedCard>				socketedCards;
 
 	public Deck(Context mContext) {
 		deckData = new HashMap<AbstractCard, Integer>();
 		setDeckCardList(new ArrayList<AbstractCard>());
 		setGemResources(new ArrayList<GemResource>());
-		dbHandler = (mContext instanceof HexApplication) ? ((HexApplication)mContext).getDatabaseHandler() : new DatabaseHandler(mContext);
+		dbHandler = (mContext instanceof HexApplication) ? ((HexApplication) mContext).getDatabaseHandler() : new DatabaseHandler(mContext);
 		deckChanged = false;
 	}
 
@@ -312,11 +313,11 @@ public class Deck {
 	public boolean addGemResource(GemResource gemResource) {
 		return this.gemResources.add(gemResource);
 	}
-	
+
 	public void removePreviousGemResourcesForCard(GlobalIdentifier cardId) {
 		ArrayList<GemResource> containedResources = new ArrayList<GemResource>();
-		for(GemResource gemResource : gemResources){
-			if(gemResource.cardId.gUID.equalsIgnoreCase(cardId.gUID)){
+		for (GemResource gemResource : gemResources) {
+			if (gemResource.cardId.gUID.equalsIgnoreCase(cardId.gUID)) {
 				containedResources.add(gemResource);
 			}
 		}
@@ -325,35 +326,165 @@ public class Deck {
 
 	public void createGemResource(Gem selectedGem, GlobalIdentifier cardId) {
 		GemResource existingResource = getGemResourceForCardAndGem(cardId, selectedGem.id);
-		if(existingResource != null){
+		if (existingResource != null) {
 			existingResource.gemCount++;
-		}else{
+		} else {
 			GemResource gemResource = new GemResource();
 			gemResource.gemId = selectedGem.id;
 			gemResource.deckId = getCurrentDeck().id;
 			gemResource.cardId = cardId;
 			gemResource.gemCount = 1;
-			
+
 			gemResources.add(gemResource);
 		}
 	}
 
 	private GemResource getGemResourceForCardAndGem(GlobalIdentifier cardId, GlobalIdentifier gemId) {
-		for(GemResource gemResource : gemResources){
-			if(gemResource.cardId.gUID.equalsIgnoreCase(cardId.gUID) && gemResource.gemId.gUID.equalsIgnoreCase(gemId.gUID)){
+		for (GemResource gemResource : gemResources) {
+			if (gemResource.cardId.gUID.equalsIgnoreCase(cardId.gUID) && gemResource.gemId.gUID.equalsIgnoreCase(gemId.gUID)) {
 				return gemResource;
 			}
 		}
-		
+
 		return null;
 	}
 
 	public AbstractCard getCardById(GlobalIdentifier cardId) {
-		for(AbstractCard card : deckCardList){
-			if(card.id.gUID.equalsIgnoreCase(cardId.gUID)){
+		for (AbstractCard card : deckCardList) {
+			if (card.id.gUID.equalsIgnoreCase(cardId.gUID)) {
 				return card;
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Initialize the socketed cards for the current deck
+	 */
+	public void initializeSocketCards() {
+		socketedCards = getSocketedCardsInDeck(getCurrentDeck().getID());
+	}
+
+	/**
+	 * @return a list of socketed cards
+	 */
+	public List<SocketedCard> getSocketCards() {
+		if (socketedCards == null || socketedCards.isEmpty()) {
+			socketedCards = getSocketedCardsInDeck(getCurrentDeck().getID());
+		}
+
+		return socketedCards;
+	}
+
+	/**
+	 * Populate the list of socketed cards for the current deck
+	 * 
+	 * @param deckId
+	 * @return a list of socketed cards for the current deck
+	 */
+	private List<SocketedCard> getSocketedCardsInDeck(String deckId) {
+		List<GemResource> gemResources = dbHandler.getAllGemResourcesForDeck(deckId);
+		ArrayList<SocketedCard> socketedCards = new ArrayList<SocketedCard>();
+		if (!gemResources.isEmpty()) {
+			for (GemResource gemResource : gemResources) {
+				for (AbstractCard card : getDeckCardList()) {
+					if (card.getID().equalsIgnoreCase(gemResource.cardId.gUID)) {
+						socketedCards.add(new SocketedCard(card, dbHandler.getGem(gemResource.gemId.gUID)));
+						break;
+					}
+				}
+			}
+		}
+		return socketedCards;
+	}
+
+	/**
+	 * Return the gem for the card in the given position
+	 * 
+	 * @param position
+	 * @param card
+	 * @return the gem for the card in the given position, if one exists,
+	 *         otherwise returns null
+	 */
+	public Gem getSocketedGemForCard(int position, AbstractCard card) {
+		SocketedCard socketedCard = getSocketedCard(position);
+
+		if (socketedCard == null) {
+			socketedCard = updateSocketedCard(position, card);
+			if(socketedCard == null){
+				return null;
+			}
+		}
+
+		return socketedCard.gem;
+	}
+
+	/**
+	 * Update a socketed card with the position if it does not have one
+	 * 
+	 * @param position
+	 * @param card
+	 * @return the socketed card with the new position, otherwise returns null
+	 */
+	private SocketedCard updateSocketedCard(int position, AbstractCard card) {
+		for (SocketedCard socketedCard : socketedCards) {
+			if (socketedCard.getPostision() == -1 && socketedCard.card.getID().equalsIgnoreCase(card.getID())) {
+				socketedCard.setPosition(position);
+				return socketedCard;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Get the Socketed Card in the given position
+	 * 
+	 * @param position
+	 * @return the Socketed Card in the given position
+	 */
+	private SocketedCard getSocketedCard(int position) {
+		for (SocketedCard socketedCard : socketedCards) {
+			if (socketedCard.getPostision() == position) {
+				return socketedCard;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Reset the list of socketed cards for the deck by changing the position to
+	 * -1
+	 */
+	public void resetSocketedCard() {
+		if (!socketedCards.isEmpty()) {
+			for (SocketedCard socketedCard : socketedCards) {
+				socketedCard.setPosition(-1);
+			}
+		}
+	}
+
+	/**
+	 * Private class to store socketed card data for cards in the test draw hand
+	 */
+	private class SocketedCard {
+
+		private int			position;
+		public AbstractCard	card;
+		public Gem			gem;
+
+		public SocketedCard(AbstractCard card, Gem gem) {
+			this.card = card;
+			this.gem = gem;
+			this.position = -1;
+		}
+
+		public int getPostision() {
+			return this.position;
+		}
+
+		public void setPosition(int position) {
+			this.position = position;
+		}
 	}
 }
