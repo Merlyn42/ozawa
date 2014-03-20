@@ -22,7 +22,9 @@ import com.ozawa.hextcgdeckbuilder.UI.CustomViewPager;
 import com.ozawa.hextcgdeckbuilder.UI.TabPagerAdapter;
 import com.ozawa.hextcgdeckbuilder.UI.customdeck.CustomDeckFragment;
 import com.ozawa.hextcgdeckbuilder.UI.filter.FilterDrawerFragment;
+import com.ozawa.hextcgdeckbuilder.settings.AboutActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
@@ -131,6 +133,10 @@ public class DeckUIActivity extends ActionBarActivity implements ActionBar.TabLi
     	}else if(item.getItemId() == R.id.view_tutorial){
     		viewPager.setCurrentItem(1); // Change to Card Library
         	masterDeckFragment.showTutorial();
+        	return true;
+    	}else if(item.getItemId() == R.id.action_about){
+    		Intent i = new Intent(this, AboutActivity.class);
+			startActivity(i);
         	return true;
     	}else{
     		return super.onOptionsItemSelected(item);
