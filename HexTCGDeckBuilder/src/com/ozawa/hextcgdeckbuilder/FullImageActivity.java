@@ -31,6 +31,7 @@ import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 import com.ozawa.hextcgdeckbuilder.hexentities.Gem;
 import com.ozawa.hextcgdeckbuilder.linkedcards.LinkedCardAdapter;
+import com.ozawa.hextcgdeckbuilder.linkedcards.LinkedCards;
 import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
@@ -73,11 +74,11 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 	private SharedPreferences		mPreferences;
 
 	private String[] 				noCards = {"No linked cards"};
+	private boolean					linkedCards;	
 	private AbstractCard			card;
 	private Gem						currentGem;
 	private HexApplication			hexApplication;    
-    private ListView 				mLinkedCardList;
-    private DrawerLayout 			mDrawerLayout;    
+    private ListView 				mLinkedCardList;      
 
 
 	@Override
@@ -87,7 +88,6 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 		hexApplication = (HexApplication) getApplication();
 		// get intent data
 		Intent i = getIntent();
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.linkedcards_drawer_layout);
 		gesLibrary = GestureLibraries.fromRawResource(this, R.raw.gestures);
 		if (!gesLibrary.load()) {
 			this.finish();
@@ -113,11 +113,7 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 		}
 		
 		mLinkedCardList = (ListView) findViewById(R.id.left_drawer);
-		if (card instanceof Card && ((Card) card).linkedCards.adjacenyList.size() > 0){		 		 
-		 mLinkedCardList.setAdapter(new LinkedCardAdapter(this,((Card)card).linkedCards.adjacenyList));		 
-		} else {
-			mLinkedCardList.setAdapter(new ArrayAdapter<String>(this,R.layout.linked_card_list_item,noCards));
-		}
+
 		mLinkedCardList.setTextFilterEnabled(true);
 		mLinkedCardList.setOnItemClickListener(new OnItemClickListener() {
 	        @Override
@@ -182,14 +178,23 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 		}
 	}
 	
+	private String[] getCardNames(ArrayList<LinkedCards> adjacenyList) {
+		String[] cardNames = new String[adjacenyList.size()];
+		for(int i = 0; i < adjacenyList.size();i++){
+			cardNames[i] = adjacenyList.get(i).card.name;
+		}
+		return cardNames;
+	}
+
 	private void goToFullImagePage(int listPosition){
-		Intent i = new Intent(this, FullImageActivity.class);
-		android.util.Log.e("***HEX", "****GOT HERE****");
-		i.putExtra("id", listPosition);
-		i.putExtra("deckType", DeckType.LINKEDCARD);
-		i.putExtra("subPosition", position);
-		i.putExtra("subDeckType", DeckType.CARDLIBRARY);								
-		startActivity(i);
+		if(linkedCards){
+			Intent i = new Intent(this, FullImageActivity.class);		
+			i.putExtra("id", listPosition);
+			i.putExtra("deckType", DeckType.LINKEDCARD);
+			i.putExtra("subPosition", position);
+			i.putExtra("subDeckType", DeckType.CARDLIBRARY);								
+			startActivity(i);
+		}
 	}
 
 	/**
@@ -274,10 +279,12 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 		} else {
 			socketGem.setVisibility(View.INVISIBLE);
 		}
-		if(card instanceof Card && ((Card)card).linkedCards.adjacenyList.size() > 0){				 
-			mLinkedCardList.setAdapter(new LinkedCardAdapter(this,((Card)card).linkedCards.adjacenyList));
-		} else{
+		if (card instanceof Card && ((Card) card).linkedCards.adjacenyList.size() > 0){		 		 
+			mLinkedCardList.setAdapter(new ArrayAdapter<String>(this,R.layout.linked_card_list_item,getCardNames(((Card)card).linkedCards.adjacenyList)));
+			linkedCards = true;
+		} else {
 			mLinkedCardList.setAdapter(new ArrayAdapter<String>(this,R.layout.linked_card_list_item,noCards));
+			linkedCards = false;
 		}
 	}
 
@@ -292,7 +299,7 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 		float aspectRatio = (float) HexUtil.getScreenWidth(this) / HexUtil.getScreenHeight(this);
 		int width = HexUtil.getScreenWidth(this);
 		int height = (int) (width * (1 / HexUtil.round(aspectRatio, 2, BigDecimal.ROUND_HALF_UP)));
-		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams((int) (width * template.socketRatio),
+		DrawerLayout.LayoutParams lp = new DrawerLayout.LayoutParams((int) (width * template.socketRatio),
 				(int) (width * template.socketRatio));
 		Bitmap socketImage = getGemSocketedImage(card, hexApplication);
 		socketImage = Bitmap.createScaledBitmap(socketImage, (int) (width * template.socketRatio), (int) (width * template.socketRatio),
@@ -300,6 +307,7 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 		socketGem.setImageBitmap(socketImage);
 		lp.leftMargin = (int) (width - (width / 8.4f));
 		lp.topMargin = (int) (height / 3.3f) - ((HexUtil.getScreenHeight(this) - height) / 2);
+		
 		socketGem.setLayoutParams(lp);
 	}
 
