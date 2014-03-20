@@ -19,25 +19,21 @@ package com.ozawa.hextcgdeckbuilder;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.List;
 
 import com.espian.showcaseview.ShowcaseView;
 import com.espian.showcaseview.ShowcaseView.ConfigOptions;
 import com.ozawa.hextcgdeckbuilder.UI.CardTemplate;
 import com.ozawa.hextcgdeckbuilder.UI.TutorialEventListener;
 import com.ozawa.hextcgdeckbuilder.UI.customdeck.sockets.SocketCardDialogFragment;
-import com.ozawa.hextcgdeckbuilder.UI.filter.FilterDrawerFragment;
 import com.ozawa.hextcgdeckbuilder.enums.DeckType;
 import com.ozawa.hextcgdeckbuilder.enums.TutorialType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 import com.ozawa.hextcgdeckbuilder.hexentities.Gem;
-import com.ozawa.hextcgdeckbuilder.hexentities.GemResource;
-import com.ozawa.hextcgdeckbuilder.hexentities.LinkedCards;
+import com.ozawa.hextcgdeckbuilder.linkedcards.LinkedCardAdapter;
 import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.gesture.Gesture;
@@ -46,15 +42,21 @@ import android.gesture.GestureLibrary;
 import android.gesture.GestureOverlayView;
 import android.gesture.Prediction;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -66,15 +68,18 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 	public ImageButton				socketGem;
 	private int						cardCount;
 	private DeckType				deckType;
-	private FilterDrawerFragment	mNavigationDrawerFragment;
 
 	// Tutorial
 	public static final String		PREFS_NAME	= "FirstLaunchPrefFullscreen";
 	private SharedPreferences		mPreferences;
 
+	private String[] 				noCards = {"No linked cards"};
 	private AbstractCard			card;
+	private HexApplication			hexApplication;    
+    private ListView 				mLinkedCardList;
+    private DrawerLayout 			mDrawerLayout;    
+    private ActionBarDrawerToggle 	mDrawerToggle;
 
-	private HexApplication			hexApplication;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -83,16 +88,69 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 		hexApplication = (HexApplication) getApplication();
 		// get intent data
 		Intent i = getIntent();
-
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.linkedcards_drawer_layout);
 		gesLibrary = GestureLibraries.fromRawResource(this, R.raw.gestures);
 		if (!gesLibrary.load()) {
 			this.finish();
 		}
-
-		// Selected image id
 		position = i.getExtras().getInt("id");
 		deckType = (DeckType) i.getExtras().getSerializable("deckType");
+		if (deckType == DeckType.CARDLIBRARY) {
+			card = ((HexApplication) getApplication()).getCardLibraryViewer().getFilteredCardList().get(position);
+		}else if (deckType == DeckType.CUSTOMDECK) {
+			card = ((HexApplication) getApplication()).getCustomDeckViewer().getFilteredCardList().get(position);	
+		} else if(deckType == DeckType.TESTDRAW){
+			card = ((HexApplication) getApplication()).getTestDrawDeckViewer().getFilteredCardList().get(position);
+		} else if(deckType == DeckType.LINKEDCARD){
+			DeckType subDeckType = (DeckType)i.getExtras().getSerializable("subDeckType");
+			int subPosition = i.getExtras().getInt("subPosition");
+			if (subDeckType == DeckType.CARDLIBRARY) {
+				card = ((Card)(((HexApplication) getApplication()).getCardLibraryViewer().getFilteredCardList().get(subPosition))).linkedCards.adjacenyList.get(position).card;				
+			}else if (subDeckType == DeckType.CUSTOMDECK) {
+				card = ((Card)(((HexApplication) getApplication()).getCustomDeckViewer().getFilteredCardList().get(subPosition))).linkedCards.adjacenyList.get(position).card;
+			} else if(subDeckType == DeckType.TESTDRAW){
+				card = ((Card)(((HexApplication) getApplication()).getTestDrawDeckViewer().getFilteredCardList().get(subPosition))).linkedCards.adjacenyList.get(position).card;
+			}
+		}
+		
+        // ActionBarDrawerToggle ties together the the proper interactions
+        // between the sliding drawer and the action bar app icon
+        mDrawerToggle = new ActionBarDrawerToggle(
+                this,                  /* host Activity */
+                mDrawerLayout,         /* DrawerLayout object */
+                R.drawable.ic_drawer,  /* nav drawer image to replace 'Up' caret */
+                R.string.drawer_open,  /* "open drawer" description for accessibility */
+                R.string.drawer_close  /* "close drawer" description for accessibility */
+                ) {
+            public void onDrawerClosed(View view) {                
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
 
+            public void onDrawerOpened(View drawerView) {
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+		
+		mLinkedCardList = (ListView) findViewById(R.id.left_drawer);
+		if (card instanceof Card && ((Card) card).linkedCards.adjacenyList.size() > 0){		 		 
+		 mLinkedCardList.setAdapter(new LinkedCardAdapter(this,((Card)card).linkedCards.adjacenyList));		 
+		} else {
+			mLinkedCardList.setAdapter(new ArrayAdapter<String>(this,R.layout.linked_card_list_item,noCards));
+		}
+		mLinkedCardList.setTextFilterEnabled(true);
+		mLinkedCardList.setOnItemClickListener(new OnItemClickListener() {
+	        @Override
+	        public void onItemClick(AdapterView<?> parent, View view, int listPosition, long id) {
+	            if(card instanceof Card){
+					// Sending image id to FullScreenActivity
+	            	goToFullImagePage(listPosition);
+	            }
+	        }
+		});
+		
+	
+		
 		imageView = (ImageView) findViewById(R.id.full_image_view);
 		socketGem = (ImageButton) findViewById(R.id.buttonSocketGem);
 		setImage();
@@ -104,17 +162,6 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 				finish();
 				return true;
-			}
-		});
-
-		imageView.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Card card = (Card) ((HexApplication) getApplication()).getCardLibraryViewer().getFilteredCardList().get(position);
-				for (LinkedCards lc : card.linkedCards.adjacenyList) {
-					Toast.makeText(getApplicationContext(), lc.card.name, Toast.LENGTH_SHORT).show();
-				}
 			}
 		});
 
@@ -141,6 +188,16 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 		if (firstTime) {
 			showTutorial();
 		}
+	}
+	
+	private void goToFullImagePage(int listPosition){
+		Intent i = new Intent(this, FullImageActivity.class);
+		android.util.Log.e("***HEX", "****GOT HERE****");
+		i.putExtra("id", listPosition);
+		i.putExtra("deckType", DeckType.LINKEDCARD);
+		i.putExtra("subPosition", position);
+		i.putExtra("subDeckType", DeckType.CARDLIBRARY);								
+		startActivity(i);
 	}
 
 	/**
@@ -172,29 +229,31 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 	@Override
 	public void onGesturePerformed(GestureOverlayView gestureOverlayView, Gesture gesture) {
 		ArrayList<Prediction> predictions = gesLibrary.recognize(gesture);
-		if (predictions.size() > 0) {
-			for (Prediction prediction : predictions) {
-				if (prediction.score > 1.0) {
-					if (prediction.name.equalsIgnoreCase("swipe right")) {
-						if (position > 0) {
-							position--;
-							setImage();
-						} else {
-							Toast.makeText(this, "No more cards, Jumping to the end", Toast.LENGTH_SHORT).show();
-							position = cardCount - 1;
-							setImage();
+		if(deckType != DeckType.LINKEDCARD){
+			if (predictions.size() > 0) {
+				for (Prediction prediction : predictions) {
+					if (prediction.score > 1.0) {
+						if (prediction.name.equalsIgnoreCase("swipe right")) {
+							if (position > 0) {
+								position--;
+								setImage();
+							} else {
+								Toast.makeText(this, "No more cards, Jumping to the end", Toast.LENGTH_SHORT).show();
+								position = cardCount - 1;
+								setImage();
+							}
+						} else if (prediction.name.equalsIgnoreCase("swipe left")) {
+							if (position < cardCount - 1) {
+								position++;
+								setImage();
+							} else {
+								position = 0;
+								Toast.makeText(this, "No more cards, Jumping to the start", Toast.LENGTH_SHORT).show();
+								setImage();
+							}
+						} else if (prediction.name.equalsIgnoreCase("anti clockwise") || prediction.name.equalsIgnoreCase("clockwise")) {
+							finish();
 						}
-					} else if (prediction.name.equalsIgnoreCase("swipe left")) {
-						if (position < cardCount - 1) {
-							position++;
-							setImage();
-						} else {
-							position = 0;
-							Toast.makeText(this, "No more cards, Jumping to the start", Toast.LENGTH_SHORT).show();
-							setImage();
-						}
-					} else if (prediction.name.equalsIgnoreCase("anti clockwise") || prediction.name.equalsIgnoreCase("clockwise")) {
-						finish();
 					}
 				}
 			}
@@ -202,7 +261,6 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 	}
 
 	private void setImage() {
-		// AbstractCard card;
 		if (deckType == DeckType.CARDLIBRARY) {
 			card = ((HexApplication) getApplication()).getCardLibraryViewer().getFilteredCardList().get(position);
 			imageView.setImageBitmap(card.getFullscreenCardBitmap(this));
@@ -211,16 +269,23 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 			card = ((HexApplication) getApplication()).getCustomDeckViewer().getFilteredCardList().get(position);
 			imageView.setImageBitmap(card.getFullscreenCardBitmap(this));
 			cardCount = ((HexApplication) getApplication()).getCustomDeckViewer().getFilteredCardList().size();
-		} else {
+		} else if(deckType == DeckType.TESTDRAW) {
 			card = ((HexApplication) getApplication()).getTestDrawDeckViewer().getFilteredCardList().get(position);
 			imageView.setImageBitmap(card.getFullscreenCardBitmap(this));
 			cardCount = ((HexApplication) getApplication()).getTestDrawDeckViewer().getFilteredCardList().size();
+		} else if(deckType == DeckType.LINKEDCARD){
+			
 		}
 		if (card instanceof Card && ((Card) card).socketCount > 0) {
 			setSocketButton(card);
 			socketGem.setVisibility(View.VISIBLE);
 		} else {
 			socketGem.setVisibility(View.INVISIBLE);
+		}
+		if(card instanceof Card && ((Card)card).linkedCards.adjacenyList.size() > 0){				 
+			mLinkedCardList.setAdapter(new LinkedCardAdapter(this,((Card)card).linkedCards.adjacenyList));
+		} else{
+			mLinkedCardList.setAdapter(new ArrayAdapter<String>(this,R.layout.linked_card_list_item,noCards));
 		}
 	}
 

@@ -28,7 +28,7 @@ import android.content.res.Resources;
 import com.ozawa.hextcgdeckbuilder.R;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Card;
-import com.ozawa.hextcgdeckbuilder.hexentities.LinkedCards;
+import com.ozawa.hextcgdeckbuilder.linkedcards.LinkedCards;
 
 public class MasterDeck {
 	private static List<AbstractCard>	masterDeck;

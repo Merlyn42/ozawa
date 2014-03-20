@@ -36,6 +36,7 @@
     <string name="new_deck_name">New Deck Name</string>
     <string name="select_champion">Select Champion</string>
     <string name="full_image_description">Full card view</string>
+    <string name="socket_image_description">Socket Image</string>
     <string name="text_paused_cellular">Would you like to enable downloading over cellular connections? Depending on your data plan, this may cost you money.</string>
     <string name="text_paused_cellular_2">If you choose not to enable downloading over cellular connections, the download will automatically resume when wi-fi is available.</string>
     <string name="text_button_resume_cellular">Resume download</string>
@@ -54,6 +55,7 @@
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="socket_all">Socket All</string>
-   
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>   
 
 </resources>

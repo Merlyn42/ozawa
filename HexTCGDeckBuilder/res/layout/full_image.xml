@@ -14,12 +14,13 @@
       GNU General Public License for more details.
   
       You should have received a copy of the GNU General Public License
-      along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      along with this program.  If not, see <http://www.gnu.org/licenses/>.-->
+      
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linkedcards_drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_height="match_parent">
     
 	<android.gesture.GestureOverlayView
         android:layout_width="match_parent"
@@ -34,11 +35,22 @@
 	        android:contentDescription="@string/full_image_description"/>	    
     </android.gesture.GestureOverlayView>
     
+	<ListView
+        android:id="@+id/left_drawer"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="right"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"
+        android:background="#111"/>
+    
 	<ImageButton
 	        android:id="@+id/buttonSocketGem"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:src="@drawable/gem_socket"
 	        android:background="@null"
-	        android:visibility="invisible" />
-</RelativeLayout>
+	        android:visibility="invisible"
+	        android:contentDescription="@string/socket_image_description" />
+</android.support.v4.widget.DrawerLayout>

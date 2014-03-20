@@ -4,6 +4,7 @@ public enum DeckType {
 	
 	CARDLIBRARY,
 	CUSTOMDECK,
-	TESTDRAW;
+	TESTDRAW,
+	LINKEDCARD;
 
 }

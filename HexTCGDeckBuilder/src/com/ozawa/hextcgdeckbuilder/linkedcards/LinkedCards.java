@@ -1,6 +1,8 @@
-package com.ozawa.hextcgdeckbuilder.hexentities;
+package com.ozawa.hextcgdeckbuilder.linkedcards;
 
 import java.util.ArrayList;
+
+import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 
 public class LinkedCards {
 
