@@ -107,10 +107,10 @@ public class MasterDeck {
 	
 	private static void mergeLinkedCards(Card card, ArrayList<Card> otherCards) {
 		for (Card otherCard : otherCards) {
-			if (!card.linkedCards.adjacenyList.contains(otherCard) && !card.name.equals(otherCard.name)) {
+			if (!card.linkedCards.adjacenyList.contains(otherCard.linkedCards) && !card.name.equals(otherCard.name)) {
 				card.linkedCards.adjacenyList.add(otherCard.linkedCards);
 			}
-			if (!otherCard.linkedCards.adjacenyList.contains(card) && !otherCard.name.equals(card.name)) {
+			if (!otherCard.linkedCards.adjacenyList.contains(card.linkedCards) && !otherCard.name.equals(card.name)) {
 				otherCard.linkedCards.adjacenyList.add(card.linkedCards);
 			}
 		}
