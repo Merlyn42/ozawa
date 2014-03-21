@@ -30,12 +30,12 @@ public class CardImageMapper {
 	private Map<String, byte[]>	oldHashData				= new HashMap<String, byte[]>();
 	private Map<String, byte[]>	newHashData				= new HashMap<String, byte[]>();
 	private File				hexLocation;
-	private static String		newCardName				= "hexcard";
-	private static String		imageName				= "hexcardportrait";
-	private static String		championPortrait		= "championportait";
-	private static String		championPortraitSmall	= "championportaitsmall";
-	private static String		newChampionName			= "champion";
-	private static String		newGemName				= "gemdata";
+	private static String		newCardName				= "cards/hexcard";
+	private static String		imageName				= "images/hexcardportrait";
+	private static String		championPortrait		= "images/championportait";
+	private static String		championPortraitSmall	= "images/championportaitsmall";
+	private static String		newChampionName			= "champions/champion";
+	private static String		newGemName				= "gems/gemdata";
 	private float				quality					= 0.6f;
 	private ZipOutputStream		target;
 
