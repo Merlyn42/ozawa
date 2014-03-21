@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -25,13 +27,8 @@ import com.google.gson.GsonBuilder;
  */
 public class JSONSerializer {
 
-	/**
-	 * Deserialize a JSON String into a Card
-	 * 
-	 * @param json
-	 * @return A Card deserialized from the given JSON
-	 */
-	public static Card deserializeJSONtoCard(String json) {
+	
+	public static Card deserializeJSONtoCard(InputStream json) {
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.registerTypeAdapter(Attribute[].class, new MultiValueSerializer<Attribute>(Attribute.class));
 		gsonBuilder.registerTypeAdapter(ColorFlag[].class, new MultiValueSerializer<ColorFlag>(ColorFlag.class));
@@ -39,14 +36,12 @@ public class JSONSerializer {
 		gsonBuilder.registerTypeAdapter(Boolean.class, new BooleanSerializer());
 		gsonBuilder.setPrettyPrinting();
 		Gson gson = gsonBuilder.create();
-
-		Card newCard = gson.fromJson(json, Card.class);
-
+		Card newCard = gson.fromJson(new InputStreamReader(json), Card.class);
 		return newCard;
 	}
 
 	/**
-	 * Deserialize a JSON String into a Card
+	 * Serialize a Card into a JSON String 
 	 * 
 	 * @param json
 	 * @return A Card deserialized from the given JSON
@@ -99,14 +94,14 @@ public class JSONSerializer {
 	 * @param json
 	 * @return A Gem deserialized from the given JSON
 	 */
-	public static Gem deserializeJSONtoGem(String json) {
+	public static Gem deserializeJSONtoGem(InputStream json) {
 		GsonBuilder gsonBuilder = new GsonBuilder();
 		gsonBuilder.registerTypeAdapter(GemType[].class, new MultiValueSerializer<GemType>(GemType.class));
 		gsonBuilder.registerTypeAdapter(ItemType[].class, new MultiValueSerializer<ItemType>(ItemType.class));
 		gsonBuilder.setPrettyPrinting();
 		Gson gson = gsonBuilder.create();
 
-		Gem newGem = gson.fromJson(json, Gem.class);
+		Gem newGem = gson.fromJson(new InputStreamReader(json), Gem.class);
 
 		return newGem;
 	}

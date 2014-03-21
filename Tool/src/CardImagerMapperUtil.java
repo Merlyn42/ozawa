@@ -1,7 +1,3 @@
-import hexentities.Card;
-import hexentities.Champion;
-import hexentities.Gem;
-
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -9,9 +5,16 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.security.NoSuchAlgorithmException;
+import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -22,6 +25,7 @@ import javax.imageio.spi.IIORegistry;
 import javax.imageio.spi.ImageWriterSpi;
 import javax.imageio.spi.ServiceRegistry;
 import javax.imageio.stream.FileImageOutputStream;
+import javax.imageio.stream.MemoryCacheImageOutputStream;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -29,218 +33,159 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
-import org.apache.commons.io.FileUtils;
-
-import com.google.gson.Gson;
-
-import json.JSONSerializer;
 
 public class CardImagerMapperUtil {
-	private static String		imageName				= "hexcardportrait";
-	private static String		championPortrait		= "championportait";
-	private static String		championPortraitSmall	= "championportaitsmall";
-	private static int			fileNumber				= 1;
 
-	private static String		newCardName				= "hexcard";
-	private static String		newChampionName			= "champion";
-	private static String		newGemName				= "gemdata";
-	public final static String	VERSION					= "v1.0";
-	public static float			quality					= 0.6f;
+	public final static String	VERSION	= "v1.0";
+	public static float			quality	= 0.6f;
 
-	public static void generateImageAndCardJSONData(File hexLocation, File target) {
-		File newImageLocation = new File(target, "\\res\\drawable-nodpi\\");
-		File newCardLocation = new File(target, "\\res\\raw\\");
-		HashMap<String, File> portraitMap = new HashMap<String, File>();
-		// File[] cardFiles = new
-		// File("C:\\Program Files (x86)\\Hex\\Data\\Sets\\Set001\\CardDefinitions").listFiles();
+	public static void generateImageAndCardJSONData(File hexLocation, File target, File previous, boolean previousIsMain)
+			throws NoSuchAlgorithmException {
+
+		ZipOutputStream out;
 		try {
-			target.mkdir();
-			newCardLocation.getParentFile().mkdir();
-			newCardLocation.mkdir();
-			newImageLocation.mkdir();
-		} catch (Exception e) {
+			out = new ZipOutputStream(new FileOutputStream(target));
+		} catch (FileNotFoundException e1) {
+			System.err.println("Unable to create target Zip");
+			e1.printStackTrace();
+			return;
 		}
-		if (!newCardLocation.exists() || !newImageLocation.exists()) {
-			throw new RuntimeException("Location not found");
-		}
-		ArrayList<Card> allCards = new ArrayList<Card>();
-		try {
-			FilenameFilter filter = new FilenameFilter() {
-				@Override
-				public boolean accept(File directory, String fileName) {
-					return !fileName.endsWith("~");
-				}
-			};
-			File[] cardFiles = new File(hexLocation, "Sets\\Set001\\CardDefinitions").listFiles(filter);
 
-			for (File cardFile : cardFiles) {
-				String cardJSON = JSONSerializer.getJSONFromFiles(cardFile);
+		CardImageMapper mapper = new CardImageMapper(hexLocation, out, quality);
+
+		InputStream hashes = null;
+		ZipFile originalZip;
+		try {
+			if (previous != null) {
+				originalZip = new ZipFile(previous);
+				hashes = originalZip.getInputStream(originalZip.getEntry("hashes.json"));
+				mapper.loadOldHashData(hashes);
+			}
+		} catch (ZipException e2) {
+			e2.printStackTrace();
+			return;
+		} catch (IOException e2) {
+			e2.printStackTrace();
+			return;
+		}
+
+		FilenameFilter filter = new FilenameFilter() {
+			@Override
+			public boolean accept(File directory, String fileName) {
+				return !fileName.endsWith("~");
+			}
+		};
+		File[] cardFiles = new File(hexLocation, "Sets\\Set001\\CardDefinitions").listFiles(filter);
+
+		for (File cardFile : cardFiles) {
+			try {
+				mapper.transcribeCardFile(cardFile);
+			} catch (Exception e) {
+				System.err.println("Unable to copy card file:" + cardFile.getName());
+				e.printStackTrace();
+			}
+		}
+
+		File[] championFiles = new File(hexLocation, "Champions\\Templates").listFiles();
+
+		for (File championFile : championFiles) {
+			try {
+				mapper.transcribeChampionFile(championFile);
+			} catch (IOException e) {
+				System.err.println("Unable to copy champion file:" + championFile.getName());
+				e.printStackTrace();
+			}
+		}
+
+		// Generate Gem JSON
+
+		File[] gemFiles = new File(hexLocation, "Items\\Gems").listFiles();
+		for (File gemFile : gemFiles) {
+			try {
+				mapper.transcribeGemFile(gemFile);
+			} catch (IOException e) {
+				System.err.println("Unable to copy gem file:" + gemFile.getName());
+				e.printStackTrace();
+			}
+		}
+		
+		List<String> entries = mapper.zipEntries;
+		
+		ZipEntry newHashes = new ZipEntry("hashes.json");
+		try {
+			out.putNextEntry(newHashes);
+			out.write(mapper.getNewHashData());
+			entries.add(newHashes.getName());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		if (!previousIsMain) {
+			if (previous != null) {
 				try {
-					allCards.add(JSONSerializer.deserializeJSONtoCard(cardJSON));
-
-				} catch (Exception e) {
-					System.err.println("Unable to parse file:" + cardFile.getName());
-					throw e;
+					originalZip = new ZipFile(previous);
+					patch(originalZip,out,entries);
+				} catch (ZipException e) {
+					e.printStackTrace();
+					return;
+				} catch (IOException e) {
+					e.printStackTrace();
+					return;
 				}
-			}
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-
-		for (Card card : allCards) {
-			try {
-				String cardImagePath = card.getM_CardImagePath();
-				File newImageFile = portraitMap.get(cardImagePath);
-				if (newImageFile == null) {
-					File imageFile = new File(hexLocation, cardImagePath);
-					newImageFile = new File(newImageLocation, imageName + card.getM_Id().getM_Guid().replace("-", "_") + ".jpg");
-					BufferedImage image = openImage(imageFile);
-					writeJpeg(newImageFile, image, quality);
-				}
-
-				card.setM_CardImagePath(newImageFile.getName());
-				String newCardJSON = JSONSerializer.serializeCardToJSON(card);
-
-				File newCardFile = new File(newCardLocation, newCardName + card.getM_Id().getM_Guid().replace("-", "_") + ".json");
-				FileOutputStream newCardOutput = new FileOutputStream(newCardFile);
-				for (byte b : newCardJSON.getBytes()) {
-					try {
-						newCardOutput.write(b);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-				newCardOutput.close();
-				fileNumber++;
-			} catch (FileNotFoundException e) {
-				System.out.println("Skipping file as image not found" + card.getM_Name());
-			} catch (IOException e) {
-				System.out.println("Skipping file as error loading image" + card.getM_Name());
-				e.printStackTrace();
 			}
 		}
 
-		/**
-		 * Generate Champion JSON and Images
-		 */
-		fileNumber = 1;
-		Gson gson = new Gson();
-		ArrayList<Champion> allChampions = new ArrayList<Champion>();
+
+		
 		try {
-			File[] championFiles = new File(hexLocation, "Champions\\Templates").listFiles();
-
-			for (File championFile : championFiles) {
-				String championJSON = JSONSerializer.getJSONFromFiles(championFile);
-				allChampions.add(gson.fromJson(championJSON, Champion.class));
-			}
-
-		} catch (FileNotFoundException e) {
+			out.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		for (Champion champ : allChampions) {
-			try {
-				if (champ.gameText != null && !champ.gameText.trim().contentEquals("")) {
-					if (champ.hudPortraitSmall != null) {
-						String championImagePath = champ.hudPortraitSmall;
-						File imageFile = new File(hexLocation, championImagePath);
-						File newImageFile = new File(newImageLocation, championPortraitSmall + champ.id.getM_Guid().replace("-", "_") + ".png");
-						try {
-							FileUtils.copyFile(imageFile, newImageFile);
-						} catch (IOException e) {
-							System.out.println("Skipping champion file as image not found");
-						}
+	}
 
-						champ.hudPortraitSmall = newImageFile.getName();
-					}
-
-					if (champ.hudPortrait != null) {
-						String championImagePath = champ.hudPortrait;
-						File imageFile = new File(hexLocation, championImagePath);
-						File newImageFile = new File(newImageLocation, championPortrait + champ.id.getM_Guid().replace("-", "_") + ".jpg");
-						try {
-							BufferedImage image = openImage(imageFile);
-							writeJpeg(newImageFile, image, quality);
-						} catch (IOException e) {
-							System.out.println("Skipping champion file as image not found");
-						}
-
-						champ.hudPortrait = newImageFile.getName();
-					}
-					String newChampionJSON = gson.toJson(champ);
-
-					File newChampionFile = new File(newCardLocation, newChampionName + champ.id.getM_Guid().replace("-", "_") + ".json");
-					FileOutputStream newChampionOutput = new FileOutputStream(newChampionFile);
-					for (byte b : newChampionJSON.getBytes()) {
-						try {
-							newChampionOutput.write(b);
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
-					newChampionOutput.close();
-					fileNumber++;
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+	// copy input to output stream
+	private static void copyEntry(InputStream input, OutputStream output) throws IOException {
+		byte[] BUFFER = new byte[4096 * 1024];
+		int bytesRead;
+		while ((bytesRead = input.read(BUFFER)) != -1) {
+			output.write(BUFFER, 0, bytesRead);
 		}
+	}
 
-		/**
-		 * Generate Gem JSON
-		 */
-		ArrayList<Gem> allGems = new ArrayList<Gem>();
-		try {
-			File[] gemFiles = new File(hexLocation, "Items\\Gems").listFiles();
+	private static void patch(ZipFile originalZip, ZipOutputStream output, List<String> currentEntryList) throws IOException {
 
-			for (File gemFile : gemFiles) {
-				String gemJSON = JSONSerializer.getJSONFromFiles(gemFile);
-				try {
-					allGems.add(JSONSerializer.deserializeJSONtoGem(gemJSON));
+		// copy contents from original zip to the modded zip
+		Enumeration<? extends ZipEntry> entries = originalZip.entries();
+		while (entries.hasMoreElements()) {
+			ZipEntry e = entries.nextElement();
 
-				} catch (Exception e) {
-					System.err.println("Unable to parse file:" + gemFile.getName());
-					throw e;
+			String name = e.getName();
+			if (!currentEntryList.contains(name)) {
+				output.putNextEntry(e);
+				if (!e.isDirectory()) {
+					copyEntry(originalZip.getInputStream(e), output);
 				}
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-
-		for (Gem gem : allGems) {
-			try {
-				String newGemJSON = JSONSerializer.serializeGemToJSON(gem);
-
-				File newGemFile = new File(newCardLocation, newGemName + gem.id.getM_Guid().replace("-", "_") + ".json");
-				FileOutputStream newGemOutput = new FileOutputStream(newGemFile);
-				for (byte b : newGemJSON.getBytes()) {
-					try {
-						newGemOutput.write(b);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-				newGemOutput.close();
-			} catch (IOException e) {
-				System.out.println("Skipping file as error loading gem data for gem " + gem.name);
-				e.printStackTrace();
+				output.closeEntry();
 			}
 		}
 	}
 
-	private static BufferedImage openImage(File f) throws IOException {
+	public static BufferedImage openImage(InputStream is) throws IOException {
 
 		BufferedImage bufferedImage;
 
-		bufferedImage = ImageIO.read(f);
+		bufferedImage = ImageIO.read(is);
 		BufferedImage newBufferedImage = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(), BufferedImage.TYPE_INT_RGB);
 		newBufferedImage.createGraphics().drawImage(bufferedImage, 0, 0, Color.BLACK, null);
 
 		return newBufferedImage;
 	}
 
-	private static void writeJpeg(File f, BufferedImage image, float quality) throws IOException {
+	public static void writeJpeg(File f, BufferedImage image, float quality) throws IOException {
 		JPEGImageWriteParam jpegParams = new JPEGImageWriteParam(null);
 		jpegParams.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
 		jpegParams.setCompressionQuality(quality);
@@ -250,7 +195,17 @@ public class CardImagerMapperUtil {
 		writer.write(null, new IIOImage(image, null, null), jpegParams);
 	}
 
-	private static ImageWriter getJpegWriter() throws IOException {
+	public static void writeJpegToOutputStream(OutputStream output, BufferedImage image, float quality) throws IOException {
+		JPEGImageWriteParam jpegParams = new JPEGImageWriteParam(null);
+		jpegParams.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+		jpegParams.setCompressionQuality(quality);
+
+		ImageWriter writer = getJpegWriter();
+		writer.setOutput(new MemoryCacheImageOutputStream(output));
+		writer.write(null, new IIOImage(image, null, null), jpegParams);
+	}
+
+	public static ImageWriter getJpegWriter() throws IOException {
 		// use IIORegistry to get the available services
 		IIORegistry registry = IIORegistry.getDefaultInstance();
 		// return an iterator for the available ImageWriterSpi for jpeg images
@@ -280,11 +235,13 @@ public class CardImagerMapperUtil {
 
 	}
 
-	public static void main(String args[]) throws ParseException {
+	public static void main(String args[]) throws ParseException, NoSuchAlgorithmException {
 		Options options = new Options();
 		options.addOption("source", true, "Root directory of the Hex installation");
 		options.addOption("target", true, "Target directory to write to");
 		options.addOption("quality", true, "The quality to save the images as [1-100]");
+		options.addOption("patch", true, "The previous patch file");
+		options.addOption("main", true, "The main file to base this patch on");
 		options.addOption("version", false, "Print the version information and exit");
 		options.addOption("help", false, "Print this message");
 		CommandLineParser parser = new PosixParser();
@@ -321,6 +278,13 @@ public class CardImagerMapperUtil {
 			return;
 		}
 
+		if (cmd.hasOption("main") && cmd.hasOption("patch")) {
+			System.err.println("can't have both a main file and a patch file specified!");
+			HelpFormatter formatter = new HelpFormatter();
+			formatter.printHelp("Ozawa Tool", options);
+			return;
+		}
+
 		final String target;
 		final String source;
 
@@ -330,9 +294,30 @@ public class CardImagerMapperUtil {
 		File targetFile = new File(target);
 		File sourceFile = new File(source, "\\Data\\");
 
-		cleanTarget(targetFile);
+		boolean main = true;
+		File previousFile = null;
+		if (cmd.hasOption("main")) {
+			final String previous;
+			previous = cmd.getOptionValue("main");
+			previousFile = new File(previous);
+			main = true;
+		}
 
-		generateImageAndCardJSONData(sourceFile, targetFile);
+		if (cmd.hasOption("patch")) {
+			final String previous;
+			previous = cmd.getOptionValue("patch");
+			previousFile = new File(previous);
+			main = false;
+		}
+
+		// cleanTarget(targetFile);
+
+		generateImageAndCardJSONData(sourceFile, targetFile, previousFile, main);
+
+	}
+
+	public String getGuid() {
+		return null;
 
 	}
 
