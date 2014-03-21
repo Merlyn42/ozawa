@@ -36,6 +36,7 @@
     <string name="new_deck_name">New Deck Name</string>
     <string name="select_champion">Select Champion</string>
     <string name="full_image_description">Full card view</string>
+    <string name="socket_image_description">Socket Image</string>
     <string name="text_paused_cellular">Would you like to enable downloading over cellular connections? Depending on your data plan, this may cost you money.</string>
     <string name="text_paused_cellular_2">If you choose not to enable downloading over cellular connections, the download will automatically resume when wi-fi is available.</string>
     <string name="text_button_resume_cellular">Resume download</string>
@@ -54,6 +55,19 @@
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="socket_all">Socket All</string>
-   
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>   
+    <string name="about">About</string>
+    <string name="about_us">The Hex TCG Deck Builder App for Android is developed by Three Cool Guys: Chad (Chaxtreme), Laurence (Drisen Morl\'Baal), and Dave (Hawkstalion).</string>
+    
+    
+    <!-- Site Links -->
+    <string name="officialcontent">Official Content</string>
+    <string name="hextcg"><a href="http://www.HexTCG.com">HexTCG Official Website</a></string>
+    <string name="hextcgforum"><a href="http://forums.cryptozoic.com/">HexTCG Official Forums</a></string>
+    <string name="communitycontent">Community Content</string>
+    <string name="hextcgpodcast"><a href="http://www.thresholdpodcast.com">Threshold: The Hex Podcast</a> - For your weekly Hex Podcast of deliciousness!</string>
+    <string name="hextcgpro"><a href="http://hextcgpro.com/">HexTCG Pro</a> - Bringing the Hex Community together one tournament at a time.</string>
+    <string name="hextcgreddit"><a href="http://www.reddit.com/r/hextcg">Hex TCG Reddit</a> - Because who doesn\'t like browsing for hours.</string>
 
 </resources>

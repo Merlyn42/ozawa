@@ -68,7 +68,7 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
-        <activity
+    	<activity
             android:name="com.ozawa.hextcgdeckbuilder.FullImageActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
@@ -76,6 +76,11 @@
         <activity
             android:name="com.ozawa.hextcgdeckbuilder.UI.customdeck.deckstats.DeckTestDrawActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.ozawa.hextcgdeckbuilder.settings.AboutActivity"
+            android:label="@string/about"
             android:screenOrientation="portrait" >
         </activity>
         <service android:name="com.ozawa.hextcgdeckbuilder.expansion.ExpansionFileDownloaderService" android:label="@string/app_name" />
