@@ -350,8 +350,12 @@ public class Deck {
 	}
 
 	public AbstractCard getCardById(GlobalIdentifier cardId) {
+		return getCardById(cardId.gUID);
+	}
+	
+	public AbstractCard getCardById(String cardId) {
 		for (AbstractCard card : deckCardList) {
-			if (card.id.gUID.equalsIgnoreCase(cardId.gUID)) {
+			if (card.id.gUID.equalsIgnoreCase(cardId)) {
 				return card;
 			}
 		}

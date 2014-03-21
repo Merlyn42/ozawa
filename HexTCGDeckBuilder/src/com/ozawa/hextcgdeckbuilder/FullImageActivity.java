@@ -19,6 +19,7 @@ package com.ozawa.hextcgdeckbuilder;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.espian.showcaseview.ShowcaseView;
 import com.espian.showcaseview.ShowcaseView.ConfigOptions;
@@ -30,8 +31,7 @@ import com.ozawa.hextcgdeckbuilder.enums.TutorialType;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 import com.ozawa.hextcgdeckbuilder.hexentities.Gem;
-import com.ozawa.hextcgdeckbuilder.linkedcards.LinkedCardAdapter;
-import com.ozawa.hextcgdeckbuilder.linkedcards.LinkedCards;
+import com.ozawa.hextcgdeckbuilder.linkedcards.LinkedCardsDialogFragment;
 import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
@@ -45,126 +45,65 @@ import android.gesture.Prediction;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 public class FullImageActivity extends ActionBarActivity implements GestureOverlayView.OnGesturePerformedListener {
 
-	private GestureLibrary			gesLibrary;
-	private int						position;
-	private ImageView				imageView;
-	public ImageButton				socketGem;
-	private int						cardCount;
-	private DeckType				deckType;
+	private GestureLibrary		gesLibrary;
+	private int					position;
+	private ImageView			imageView;
+	public ImageButton			socketGem;
+	private int					cardCount;
+	private DeckType			deckType;
 
 	// Tutorial
-	public static final String		PREFS_NAME	= "FirstLaunchPrefFullscreen";
-	private SharedPreferences		mPreferences;
+	public static final String	PREFS_NAME	= "FirstLaunchPrefFullscreen";
+	private SharedPreferences	mPreferences;
 
-	private String[] 				noCards = {"No linked cards"};
-	private boolean					linkedCards;	
-	private AbstractCard			card;
-	private Gem						currentGem;
-	private HexApplication			hexApplication;    
-    private ListView 				mLinkedCardList;      
-
+	private AbstractCard		card;
+	private Gem					currentGem;
+	private HexApplication		hexApplication;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.full_image);
 		hexApplication = (HexApplication) getApplication();
-		// get intent data
-		Intent i = getIntent();
+
 		gesLibrary = GestureLibraries.fromRawResource(this, R.raw.gestures);
 		if (!gesLibrary.load()) {
 			this.finish();
 		}
+
+		// get intent data
+		Intent i = getIntent();
 		position = i.getExtras().getInt("id");
 		deckType = (DeckType) i.getExtras().getSerializable("deckType");
-		if (deckType == DeckType.CARDLIBRARY) {
-			card = ((HexApplication) getApplication()).getCardLibraryViewer().getFilteredCardList().get(position);
-		}else if (deckType == DeckType.CUSTOMDECK) {
-			card = ((HexApplication) getApplication()).getCustomDeckViewer().getFilteredCardList().get(position);	
-		} else if(deckType == DeckType.TESTDRAW){
-			card = ((HexApplication) getApplication()).getTestDrawDeckViewer().getFilteredCardList().get(position);
-		} else if(deckType == DeckType.LINKEDCARD){
-			DeckType subDeckType = (DeckType)i.getExtras().getSerializable("subDeckType");
-			int subPosition = i.getExtras().getInt("subPosition");
-			if (subDeckType == DeckType.CARDLIBRARY) {
-				card = ((Card)(((HexApplication) getApplication()).getCardLibraryViewer().getFilteredCardList().get(subPosition))).linkedCards.adjacenyList.get(position).card;				
-			}else if (subDeckType == DeckType.CUSTOMDECK) {
-				card = ((Card)(((HexApplication) getApplication()).getCustomDeckViewer().getFilteredCardList().get(subPosition))).linkedCards.adjacenyList.get(position).card;
-			} else if(subDeckType == DeckType.TESTDRAW){
-				card = ((Card)(((HexApplication) getApplication()).getTestDrawDeckViewer().getFilteredCardList().get(subPosition))).linkedCards.adjacenyList.get(position).card;
-			}
+		String cardId = i.getExtras().getString("cardId");
+
+		if (cardId != null) {
+			card = hexApplication.getCardLibrary().getCardById(cardId);
+		} else if (deckType == DeckType.CARDLIBRARY) {
+			card = hexApplication.getCardLibraryViewer().getFilteredCardList().get(position);
+		} else if (deckType == DeckType.CUSTOMDECK) {
+			card = hexApplication.getCustomDeckViewer().getFilteredCardList().get(position);
+		} else if (deckType == DeckType.TESTDRAW) {
+			card = hexApplication.getTestDrawDeckViewer().getFilteredCardList().get(position);
 		}
-		
-		mLinkedCardList = (ListView) findViewById(R.id.left_drawer);
 
-		mLinkedCardList.setTextFilterEnabled(true);
-		mLinkedCardList.setOnItemClickListener(new OnItemClickListener() {
-	        @Override
-	        public void onItemClick(AdapterView<?> parent, View view, int listPosition, long id) {
-	            if(card instanceof Card){
-					// Sending image id to FullScreenActivity
-	            	goToFullImagePage(listPosition);
-	            }
-	        }
-		});
-		
-	
-		
-		imageView = (ImageView) findViewById(R.id.full_image_view);
-		socketGem = (ImageButton) findViewById(R.id.buttonSocketGem);
-		setImage();
+		if (card instanceof Card && ((Card) card).isSocketable()) {
+			setSocketButton(card);
+		}
 
-		imageView.setOnLongClickListener(new OnLongClickListener() {
-
-			@Override
-			public boolean onLongClick(View v) {
-				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-				finish();
-				return true;
-			}
-		});
-
-		socketGem.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-				if (deckType == DeckType.CUSTOMDECK) {
-					if (hexApplication.getCustomDeck().isUnsavedDeck()) {
-						Toast.makeText(getApplicationContext(), "Deck must be saved before socketing cards.", Toast.LENGTH_SHORT).show();
-					} else {
-						showSocketCardPopup((Card) card);
-					}
-				} else if (deckType == DeckType.CARDLIBRARY) {
-					Toast.makeText(getApplicationContext(), "You must be in the custom deck to socket cards.", Toast.LENGTH_SHORT).show();
-				} else if (deckType == DeckType.TESTDRAW) {
-					if (currentGem != null) {
-						Toast.makeText(getApplicationContext(),
-								HexUtil.parseStringAsHexHtml(currentGem.description, getApplicationContext(), 0), Toast.LENGTH_SHORT)
-								.show();
-					} else {
-						Toast.makeText(getApplicationContext(), "No gem socketed.", Toast.LENGTH_SHORT).show();
-					}
-				}
-			}
-		});
+		setCardImage();
 
 		GestureOverlayView gestureOverlayView = (GestureOverlayView) findViewById(R.id.fullImageGestureOverlayView);
 		gestureOverlayView.addOnGesturePerformedListener(this);
@@ -175,25 +114,6 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 		boolean firstTime = mPreferences.getBoolean("firstTime", true);
 		if (firstTime) {
 			showTutorial();
-		}
-	}
-	
-	private String[] getCardNames(ArrayList<LinkedCards> adjacenyList) {
-		String[] cardNames = new String[adjacenyList.size()];
-		for(int i = 0; i < adjacenyList.size();i++){
-			cardNames[i] = adjacenyList.get(i).card.name;
-		}
-		return cardNames;
-	}
-
-	private void goToFullImagePage(int listPosition){
-		if(linkedCards){
-			Intent i = new Intent(this, FullImageActivity.class);		
-			i.putExtra("id", listPosition);
-			i.putExtra("deckType", DeckType.LINKEDCARD);
-			i.putExtra("subPosition", position);
-			i.putExtra("subDeckType", DeckType.CARDLIBRARY);								
-			startActivity(i);
 		}
 	}
 
@@ -220,13 +140,15 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 	@Override
 	protected void onPause() {
 		super.onPause();
-		finish();
+		if (deckType == DeckType.LINKEDCARD) {
+			finish();
+		}
 	}
 
 	@Override
 	public void onGesturePerformed(GestureOverlayView gestureOverlayView, Gesture gesture) {
 		ArrayList<Prediction> predictions = gesLibrary.recognize(gesture);
-		if(deckType != DeckType.LINKEDCARD){
+		if (deckType != DeckType.LINKEDCARD) {
 			if (predictions.size() > 0) {
 				for (Prediction prediction : predictions) {
 					if (prediction.score > 1.0) {
@@ -257,34 +179,59 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 		}
 	}
 
-	private void setImage() {
-		if (deckType == DeckType.CARDLIBRARY) {
-			card = ((HexApplication) getApplication()).getCardLibraryViewer().getFilteredCardList().get(position);
-			imageView.setImageBitmap(card.getFullscreenCardBitmap(this));
-			cardCount = ((HexApplication) getApplication()).getCardLibraryViewer().getFilteredCardList().size();
-		} else if (deckType == DeckType.CUSTOMDECK) {
-			card = ((HexApplication) getApplication()).getCustomDeckViewer().getFilteredCardList().get(position);
-			imageView.setImageBitmap(card.getFullscreenCardBitmap(this));
-			cardCount = ((HexApplication) getApplication()).getCustomDeckViewer().getFilteredCardList().size();
-		} else if(deckType == DeckType.TESTDRAW) {
-			card = ((HexApplication) getApplication()).getTestDrawDeckViewer().getFilteredCardList().get(position);
-			imageView.setImageBitmap(card.getFullscreenCardBitmap(this));
-			cardCount = ((HexApplication) getApplication()).getTestDrawDeckViewer().getFilteredCardList().size();
-		} else if(deckType == DeckType.LINKEDCARD){
-			
+	/**
+	 * Set the card image for the activity
+	 */
+	private void setCardImage() {
+		imageView = (ImageView) findViewById(R.id.full_image_view);
+		setImage();
+		imageView.setOnLongClickListener(new OnLongClickListener() {
+
+			@Override
+			public boolean onLongClick(View v) {
+				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+				finish();
+				return true;
+			}
+		});
+		if (card instanceof Card) {
+			imageView.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					showLinkedCardsPopup(card);
+				}
+			});
 		}
+	}
+
+	/**
+	 * Set the card image for the imageview
+	 */
+	private void setImage() {
+		// Default to Card Library
+		List<AbstractCard> filteredList = hexApplication.getCardLibraryViewer().getFilteredCardList();
+
+		if (deckType == DeckType.CUSTOMDECK) {
+			filteredList = hexApplication.getCustomDeckViewer().getFilteredCardList();
+			cardCount = hexApplication.getCustomDeckViewer().getFilteredCardList().size();
+		} else if (deckType == DeckType.TESTDRAW) {
+			filteredList = hexApplication.getTestDrawDeckViewer().getFilteredCardList();
+			cardCount = hexApplication.getTestDrawDeckViewer().getFilteredCardList().size();
+		}
+		// If not viewing a linked card, update the card and count
+		if (deckType != DeckType.LINKEDCARD) {
+			card = filteredList.get(position);
+			cardCount = filteredList.size();
+		}
+
+		imageView.setImageBitmap(card.getFullscreenCardBitmap(this));
+
 		if (card instanceof Card && ((Card) card).isSocketable()) {
 			setSocketButton(card);
 			socketGem.setVisibility(View.VISIBLE);
-		} else {
+		} else if (socketGem != null) {
 			socketGem.setVisibility(View.INVISIBLE);
-		}
-		if (card instanceof Card && ((Card) card).linkedCards.adjacenyList.size() > 0){		 		 
-			mLinkedCardList.setAdapter(new ArrayAdapter<String>(this,R.layout.linked_card_list_item,getCardNames(((Card)card).linkedCards.adjacenyList)));
-			linkedCards = true;
-		} else {
-			mLinkedCardList.setAdapter(new ArrayAdapter<String>(this,R.layout.linked_card_list_item,noCards));
-			linkedCards = false;
 		}
 	}
 
@@ -294,12 +241,14 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 	 * @param card
 	 */
 	public void setSocketButton(AbstractCard card) {
+		socketGem = (ImageButton) findViewById(R.id.buttonSocketGem);
+
 		CardTemplate template = CardTemplate.findCardTemplate(card, true, CardTemplate.getAllTemplates(this));
 
 		float aspectRatio = (float) HexUtil.getScreenWidth(this) / HexUtil.getScreenHeight(this);
 		int width = HexUtil.getScreenWidth(this);
 		int height = (int) (width * (1 / HexUtil.round(aspectRatio, 2, BigDecimal.ROUND_HALF_UP)));
-		DrawerLayout.LayoutParams lp = new DrawerLayout.LayoutParams((int) (width * template.socketRatio),
+		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams((int) (width * template.socketRatio),
 				(int) (width * template.socketRatio));
 		Bitmap socketImage = getGemSocketedImage(card, hexApplication);
 		socketImage = Bitmap.createScaledBitmap(socketImage, (int) (width * template.socketRatio), (int) (width * template.socketRatio),
@@ -307,10 +256,19 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 		socketGem.setImageBitmap(socketImage);
 		lp.leftMargin = (int) (width - (width / 8.4f));
 		lp.topMargin = (int) (height / 3.3f) - ((HexUtil.getScreenHeight(this) - height) / 2);
-		
+
 		socketGem.setLayoutParams(lp);
+
+		setSocketListener();
 	}
 
+	/**
+	 * Get the socket image for the card
+	 * 
+	 * @param card
+	 * @param hexApplication
+	 * @return the socket image for the card
+	 */
 	private Bitmap getGemSocketedImage(AbstractCard card, HexApplication hexApplication) {
 		if (deckType == DeckType.TESTDRAW && !hexApplication.getCustomDeck().getSocketCards().isEmpty()) {
 			currentGem = hexApplication.getCustomDeck().getSocketedGemForCard(position, card);
@@ -323,11 +281,51 @@ public class FullImageActivity extends ActionBarActivity implements GestureOverl
 	}
 
 	/**
+	 * Set the socket listener
+	 */
+	private void setSocketListener() {
+		socketGem.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+				if (deckType == DeckType.CUSTOMDECK) {
+					if (hexApplication.getCustomDeck().isUnsavedDeck()) {
+						Toast.makeText(getApplicationContext(), "Deck must be saved before socketing cards.", Toast.LENGTH_SHORT).show();
+					} else {
+						showSocketCardPopup((Card) card);
+					}
+				} else if (deckType == DeckType.CARDLIBRARY || deckType == DeckType.LINKEDCARD) {
+					Toast.makeText(getApplicationContext(), "You must be in the custom deck to socket cards.", Toast.LENGTH_SHORT).show();
+				} else if (deckType == DeckType.TESTDRAW) {
+					if (currentGem != null) {
+						Toast.makeText(getApplicationContext(),
+								HexUtil.parseStringAsHexHtml(currentGem.description, getApplicationContext(), 0), Toast.LENGTH_SHORT)
+								.show();
+					} else {
+						Toast.makeText(getApplicationContext(), "No gem socketed.", Toast.LENGTH_SHORT).show();
+					}
+				}
+			}
+		});
+	}
+
+	/**
 	 * Display the Load Deck Dialog
 	 */
 	private void showSocketCardPopup(Card card) {
 		SocketCardDialogFragment socketCardDialog = SocketCardDialogFragment.newInstance(card.id);
 		socketCardDialog.show(getSupportFragmentManager(), "Socket Card Popup");
+	}
+
+	/**
+	 * Display the Linked Cards Dialog
+	 * 
+	 * @param card
+	 */
+	private void showLinkedCardsPopup(AbstractCard card) {
+		LinkedCardsDialogFragment linkedCardDialog = LinkedCardsDialogFragment.newInstance(card.getID());
+		linkedCardDialog.show(getSupportFragmentManager(), "Related Cards");
 	}
 
 	/*
