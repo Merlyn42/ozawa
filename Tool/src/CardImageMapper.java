@@ -66,10 +66,10 @@ public class CardImageMapper {
 		gemDigestStream.close();
 		byte[] gemDigest = md.digest();
 		String newGemJSON = JSONSerializer.serializeGemToJSON(gem);
-		String guid = newGemName + gem.id.getM_Guid().replace("-", "_");
+		String guid = newGemName + gem.id.getM_Guid().replace("-", "_") + ".json";
 		newHashData.put(guid, gemDigest);
 		if (!compareDigests(gemDigest, oldHashData.get(guid))) {
-			ZipEntry newGemEntry = new ZipEntry(guid + ".json");
+			ZipEntry newGemEntry = new ZipEntry(guid);
 			target.putNextEntry(newGemEntry);
 			zipEntries.add(newGemEntry.getName());
 			target.write(newGemJSON.getBytes());
@@ -89,9 +89,9 @@ public class CardImageMapper {
 			if (champ.hudPortraitSmall != null) {
 				String championImagePath = champ.hudPortraitSmall;
 				File imageFile = new File(hexLocation, championImagePath);
-				String guid = championPortraitSmall + champ.id.getM_Guid().replace("-", "_");
+				String guid = championPortraitSmall + champ.id.getM_Guid().replace("-", "_") + ".png";
 
-				ZipEntry smallPortEntry = new ZipEntry(guid + ".png");
+				ZipEntry smallPortEntry = new ZipEntry(guid);
 
 				MessageDigest md = MessageDigest.getInstance("MD5");
 				FileInputStream stream = new FileInputStream(imageFile);
@@ -119,7 +119,7 @@ public class CardImageMapper {
 				MessageDigest md = MessageDigest.getInstance("MD5");
 				String championImagePath = champ.hudPortrait;
 				File imageFile = new File(hexLocation, championImagePath);
-				String guid = championPortrait + champ.id.getM_Guid().replace("-", "_");
+				String guid = championPortrait + champ.id.getM_Guid().replace("-", "_") + ".jpg";
 
 				FileInputStream stream = new FileInputStream(imageFile);
 				DigestInputStream dis = new DigestInputStream(stream, md);
@@ -128,7 +128,7 @@ public class CardImageMapper {
 				byte[] portraitDigest = md.digest();
 				newHashData.put(guid, portraitDigest);
 				if (!compareDigests(portraitDigest, oldHashData.get(guid))) {
-					ZipEntry newImageEntry = new ZipEntry(guid + ".jpg");
+					ZipEntry newImageEntry = new ZipEntry(guid);
 					target.putNextEntry(newImageEntry);
 					zipEntries.add(newImageEntry.getName());
 					CardImagerMapperUtil.writeJpegToOutputStream(target, image, quality);
@@ -137,11 +137,11 @@ public class CardImageMapper {
 				}
 
 			}
-			String guid = newChampionName + champ.id.getM_Guid().replace("-", "_");
+			String guid = newChampionName + champ.id.getM_Guid().replace("-", "_") + ".json";
 			newHashData.put(guid, champDigest);
 			if (!compareDigests(champDigest, oldHashData.get(guid))) {
 				String newChampionJSON = gson.toJson(champ);
-				ZipEntry newChampionEntry = new ZipEntry(guid + ".json");
+				ZipEntry newChampionEntry = new ZipEntry(guid);
 				target.putNextEntry(newChampionEntry);
 				zipEntries.add(newChampionEntry.getName());
 				target.write(newChampionJSON.getBytes());
@@ -158,8 +158,8 @@ public class CardImageMapper {
 		DigestInputStream cardDigestStream = new DigestInputStream(cardStream, cardMD);
 		Card card = JSONSerializer.deserializeJSONtoCard(cardDigestStream);
 		cardDigestStream.close();
-		String imageGuid = imageName + card.getM_Id().getM_Guid().replace("-", "_");
-		String cardGuid = newCardName + card.getM_Id().getM_Guid().replace("-", "_");
+		String imageGuid = imageName + card.getM_Id().getM_Guid().replace("-", "_") + ".jpg";
+		String cardGuid = newCardName + card.getM_Id().getM_Guid().replace("-", "_") + ".json";
 		String cardImagePath = card.getM_CardImagePath();
 		File imageFile = new File(hexLocation, cardImagePath);
 		FileInputStream stream = new FileInputStream(imageFile);
@@ -169,7 +169,7 @@ public class CardImageMapper {
 		byte[] newImageDigest = imageMD.digest();
 		newHashData.put(imageGuid, newImageDigest);
 		if (!compareDigests(newImageDigest, oldHashData.get(imageGuid))) {
-			ZipEntry newImageEntry = new ZipEntry(imageGuid + ".jpg");
+			ZipEntry newImageEntry = new ZipEntry(imageGuid);
 			target.putNextEntry(newImageEntry);
 			zipEntries.add(newImageEntry.getName());
 			CardImagerMapperUtil.writeJpegToOutputStream(target, image, quality);
@@ -181,7 +181,7 @@ public class CardImageMapper {
 		newHashData.put(cardGuid, newCardDigest);
 		if (!compareDigests(newCardDigest, oldHashData.get(cardGuid))) {
 			String newCardJSON = JSONSerializer.serializeCardToJSON(card);
-			ZipEntry newCardEntry = new ZipEntry(cardGuid + ".json");
+			ZipEntry newCardEntry = new ZipEntry(cardGuid);
 			target.putNextEntry(newCardEntry);
 			zipEntries.add(newCardEntry.getName());
 			target.write(newCardJSON.getBytes());

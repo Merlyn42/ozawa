@@ -35,6 +35,7 @@ import com.ozawa.hextcgdeckbuilder.hexentities.GemResource;
 import com.ozawa.hextcgdeckbuilder.hexentities.HexDeck;
 import com.ozawa.hextcgdeckbuilder.hexentities.DeckResource;
 import com.ozawa.hextcgdeckbuilder.hexentities.GlobalIdentifier;
+import com.ozawa.hextcgdeckbuilder.json.JsonReader;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -263,7 +264,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		ArrayList<Champion> allChamps = new ArrayList<Champion>();
 
 		try {
-			ArrayList<InputStream> championFiles = getChampionJson(context);
+			ArrayList<InputStream> championFiles = JsonReader.getJson(context,"champions/champion");
 			Gson gson = new Gson();
 			for (InputStream json : championFiles) {
 				allChamps.add(gson.fromJson(new InputStreamReader(json), Champion.class));
@@ -273,27 +274,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		}
 
 		return allChamps;
-	}
-
-	private ArrayList<InputStream> getChampionJson(Context context) throws IllegalAccessException {
-		Field[] rawFields = R.raw.class.getFields();
-		ArrayList<InputStream> jsonFiles = new ArrayList<InputStream>();
-
-		for (int count = 0; count < rawFields.length; count++) {
-			int rid = rawFields[count].getInt(rawFields[count]);
-			try {
-				Resources res = context.getResources();
-				String name = res.getResourceName(rid);
-				if (name.contains("champion") && !name.contains("portrait")) {
-					InputStream inputStream = res.openRawResource(rid);
-					if (inputStream != null) {
-						jsonFiles.add(inputStream);
-					}
-				}
-			} catch (Exception e) {
-			}
-		}
-		return jsonFiles;
 	}
 
 	/**
@@ -422,7 +402,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		ArrayList<Gem> allGems = new ArrayList<Gem>();
 
 		try {
-			ArrayList<InputStream> gemFiles = getGemJson(context);
+			ArrayList<InputStream> gemFiles = JsonReader.getJson(context,"gems/gemdata");
 			Gson gson = new Gson();
 			for (InputStream json : gemFiles) {
 				allGems.add(gson.fromJson(new InputStreamReader(json), Gem.class));
@@ -434,26 +414,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		return allGems;
 	}
 
-	private ArrayList<InputStream> getGemJson(Context context) throws IllegalAccessException {
-		Field[] rawFields = R.raw.class.getFields();
-		ArrayList<InputStream> jsonFiles = new ArrayList<InputStream>();
-
-		for (int count = 0; count < rawFields.length; count++) {
-			int rid = rawFields[count].getInt(rawFields[count]);
-			try {
-				Resources res = context.getResources();
-				String name = res.getResourceName(rid);
-				if (name.contains("gemdata")) {
-					InputStream inputStream = res.openRawResource(rid);
-					if (inputStream != null) {
-						jsonFiles.add(inputStream);
-					}
-				}
-			} catch (Exception e) {
-			}
-		}
-		return jsonFiles;
-	}
 
 	/**
 	 * Add or update Gem data in database
