@@ -160,7 +160,7 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 				R.id.master_deck_navigation_drawer);
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(uiLayout, cardViewer, mainActivity, R.id.master_deck_navigation_drawer,
-				(DrawerLayout) uiLayout.findViewById(R.id.master_deck_drawer_layout),false);
+				(DrawerLayout) uiLayout.findViewById(R.id.master_deck_drawer_layout), false);
 		FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
 		transaction.add(R.id.master_deck_navigation_drawer, mNavigationDrawerFragment).commit();
 
@@ -365,13 +365,20 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 	 */
 	public boolean addCardToCustomDeck(int position, int value) {
 		AbstractCard card = cardViewer.getFilteredCardList().get(position);
-		
+
 		if ((card instanceof Card) && ((Card) card).cardNumber == 0) {
-			Toast.makeText(mainActivity.getApplicationContext(), card.name + " is a token card and cannot be added directly to decks.", Toast.LENGTH_SHORT)
-					.show();
+			Toast.makeText(mainActivity.getApplicationContext(), card.name + " is a token card and cannot be added directly to decks.",
+					Toast.LENGTH_SHORT).show();
 			return false;
 		}
-		((HexApplication) getActivity().getApplication()).getCustomDeck().addCardToDeck(card, value);
+		Integer cardCount = ((HexApplication) getActivity().getApplication()).getCustomDeck().getDeckData().get(card);
+		if (card instanceof Card && cardCount != null && cardCount >= 4) {
+			Toast.makeText(mainActivity.getApplicationContext(), "You cannot add more than 4 of one card to your deck.", Toast.LENGTH_SHORT)
+					.show();
+			return false;
+		} else {
+			((HexApplication) getActivity().getApplication()).getCustomDeck().addCardToDeck(card, value);
+		}
 
 		return true;
 	}

@@ -237,18 +237,21 @@ public class SocketCardDialogFragment extends DialogFragment {
 			case 1: {
 				socketTwo = (ImageButton) dialog.findViewById(R.id.button_socket_two);
 				socketTwo.setVisibility(View.VISIBLE);
+				setSocketButtonBackgroundColor(socketTwo, Color.TRANSPARENT);
 				socket = socketTwo;
 				break;
 			}
 			case 2: {
 				socketThree = (ImageButton) dialog.findViewById(R.id.button_socket_three);
 				socketThree.setVisibility(View.VISIBLE);
+				setSocketButtonBackgroundColor(socketThree, Color.TRANSPARENT);
 				socket = socketThree;
 				break;
 			}
 			case 3: {
 				socketFour = (ImageButton) dialog.findViewById(R.id.button_socket_four);
 				socketFour.setVisibility(View.VISIBLE);
+				setSocketButtonBackgroundColor(socketFour, Color.TRANSPARENT);
 				socket = socketFour;
 				break;
 			}

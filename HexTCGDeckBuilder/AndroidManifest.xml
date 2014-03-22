@@ -18,8 +18,8 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ozawa.hextcgdeckbuilder"
-    android:versionCode="6"
-    android:versionName="1.2" >
+    android:versionCode="10"
+    android:versionName="1.3" >
 	
     <!-- Required to access Android Market Licensing -->
 	<uses-permission android:name="com.android.vending.CHECK_LICENSE" />
