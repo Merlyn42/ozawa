@@ -1,92 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    
-    <RelativeLayout  
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content">
+	<LinearLayout 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical">
 	    
-	    <ImageView
-	        android:id="@+id/ivHexAppLogo"
+	    <RelativeLayout  
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content">
+		    
+		    <ImageView
+		        android:id="@+id/ivHexAppLogo"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_centerHorizontal="true"
+		        android:src="@drawable/hextcgdeckbuildericon" />
+		</RelativeLayout>
+	
+	    <TextView
+	        android:id="@+id/tvAboutUs"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:layout_centerHorizontal="true"
-	        android:src="@drawable/hextcgdeckbuildericon" />
-	</RelativeLayout>
-
-    <TextView
-        android:id="@+id/tvAboutUs"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="5dp"
-        android:paddingBottom="10dp"
-        android:text="@string/about_us"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/tvOfficialSites"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="5dp"
-        android:paddingBottom="10dp"
-        android:text="@string/officialcontent"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/tvHexTCG"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="5dp"
-        android:paddingBottom="8dp"
-        android:text="@string/hextcg"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/tvHexTCGForum"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="5dp"
-        android:paddingBottom="8dp"
-        android:text="@string/hextcgforum"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/tvCommunity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="2dp"
-        android:paddingLeft="5dp"
-        android:paddingBottom="10dp"
-        android:text="@string/communitycontent"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
-        android:id="@+id/tvHexPodcast"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="5dp"
-        android:paddingBottom="8dp"
-        android:text="@string/hextcgpodcast"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-    
-    <TextView
-        android:id="@+id/tvHexTCGPro"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="5dp"
-        android:paddingBottom="8dp"
-        android:text="@string/hextcgpro"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-    
-    <TextView
-        android:id="@+id/tvHexTCGReddit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="5dp"
-        android:paddingBottom="8dp"
-        android:text="@string/hextcgreddit"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-</LinearLayout>
+	        android:paddingLeft="5dp"
+	        android:paddingBottom="10dp"
+	        android:text="@string/about_us"
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+	
+	    <TextView
+	        android:id="@+id/tvOfficialSites"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:paddingLeft="5dp"
+	        android:paddingBottom="10dp"
+	        android:text="@string/officialcontent"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+	
+	    <TextView
+	        android:id="@+id/tvHexTCG"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:paddingLeft="5dp"
+	        android:paddingBottom="8dp"
+	        android:text="@string/hextcg"
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+	
+	    <TextView
+	        android:id="@+id/tvHexTCGForum"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:paddingLeft="5dp"
+	        android:paddingBottom="8dp"
+	        android:text="@string/hextcgforum"
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+	
+	    <TextView
+	        android:id="@+id/tvCommunity"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:paddingTop="2dp"
+	        android:paddingLeft="5dp"
+	        android:paddingBottom="10dp"
+	        android:text="@string/communitycontent"
+	        android:textAppearance="?android:attr/textAppearanceLarge" />
+	
+	    <TextView
+	        android:id="@+id/tvHexPodcast"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:paddingLeft="5dp"
+	        android:paddingBottom="8dp"
+	        android:text="@string/hextcgpodcast"
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+	    
+	    <TextView
+	        android:id="@+id/tvHexTCGPro"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:paddingLeft="5dp"
+	        android:paddingBottom="8dp"
+	        android:text="@string/hextcgpro"
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+	    
+	    <TextView
+	        android:id="@+id/tvHexTCGReddit"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:paddingLeft="5dp"
+	        android:paddingBottom="8dp"
+	        android:text="@string/hextcgreddit"
+	        android:textAppearance="?android:attr/textAppearanceMedium" />
+	
+	</LinearLayout>
+</ScrollView>
