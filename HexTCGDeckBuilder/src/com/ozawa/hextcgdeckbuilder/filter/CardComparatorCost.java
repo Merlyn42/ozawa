@@ -28,8 +28,8 @@ public class CardComparatorCost implements Comparator<AbstractCard> {
 	@Override
 	public int compare(AbstractCard card1, AbstractCard card2) {
 		int result;
-		boolean firstCardEmpty = card1 instanceof ResourceCard || ((Card) card1).threshold == null;
-		boolean secondCardEmpty = card2 instanceof ResourceCard || ((Card) card2).threshold == null;
+		boolean firstCardEmpty = card1 instanceof ResourceCard;
+		boolean secondCardEmpty = card2 instanceof ResourceCard;
 		if (firstCardEmpty && secondCardEmpty) {
 			result = 0;
 		} else if (firstCardEmpty) {

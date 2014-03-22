@@ -18,8 +18,11 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
+
+/**
+ * Dialog to show the user all of the linked cards related to the current card
+ */
 
 public class LinkedCardsDialogFragment extends DialogFragment {
 
@@ -54,7 +57,6 @@ public class LinkedCardsDialogFragment extends DialogFragment {
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Toast.makeText(getActivity(), "Linked cards working.", Toast.LENGTH_SHORT).show();
 				goToFullImagePage(linkedCards.get(position).card.getID());
 			}
 
@@ -63,6 +65,12 @@ public class LinkedCardsDialogFragment extends DialogFragment {
 		return dialog;
 	}
 
+	/**
+	 * Get the linked card list for the given card
+	 * 
+	 * @param cardId
+	 * @return the linked card list for the given card
+	 */
 	private ArrayList<LinkedCards> getCardLinkedList(String cardId) {
 		AbstractCard card = hexApplication.getCardLibrary().getCardById(cardId);
 
@@ -72,6 +80,11 @@ public class LinkedCardsDialogFragment extends DialogFragment {
 		return null;
 	}
 
+	/**
+	 * Open a full image activity for the given card
+	 * 
+	 * @param cardId
+	 */
 	private void goToFullImagePage(String cardId) {
 		Intent i = new Intent(getActivity(), FullImageActivity.class);
 		i.putExtra("cardId", cardId);

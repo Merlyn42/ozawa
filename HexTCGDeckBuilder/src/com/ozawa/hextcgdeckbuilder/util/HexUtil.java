@@ -157,7 +157,7 @@ public class HexUtil {
 	public static ZipResourceFile getExpansionFile(Context mContext){
 		if(expansionFile == null){
 			try {
-				expansionFile = APKExpansionSupport.getAPKExpansionZipFile(mContext, 6, 0);
+				expansionFile = APKExpansionSupport.getAPKExpansionZipFile(mContext, 10, 0);
 			} catch (IOException e) {
 				
 			}
