@@ -159,6 +159,7 @@ public class CardImageMapper {
 		Card card = JSONSerializer.deserializeJSONtoCard(cardDigestStream);
 		cardDigestStream.close();
 		String imageGuid = imageName + card.getM_Id().getM_Guid().replace("-", "_") + ".jpg";
+		card.setM_CardImagePath(imageGuid);
 		String cardGuid = newCardName + card.getM_Id().getM_Guid().replace("-", "_") + ".json";
 		String cardImagePath = card.getM_CardImagePath();
 		File imageFile = new File(hexLocation, cardImagePath);
@@ -174,9 +175,8 @@ public class CardImageMapper {
 			zipEntries.add(newImageEntry.getName());
 			CardImagerMapperUtil.writeJpegToOutputStream(target, image, quality);
 			target.closeEntry();
-			card.setM_CardImagePath(newImageEntry.getName());
 		}
-
+		
 		byte[] newCardDigest = cardMD.digest();
 		newHashData.put(cardGuid, newCardDigest);
 		if (!compareDigests(newCardDigest, oldHashData.get(cardGuid))) {
