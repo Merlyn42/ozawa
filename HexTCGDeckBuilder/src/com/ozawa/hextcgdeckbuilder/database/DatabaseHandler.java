@@ -43,7 +43,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Interpolator.Result;
 
 /**
  * Database Handler classed used to read and write application information to
@@ -1001,18 +1000,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	public boolean updateGemResources(List<GemResource> gemResources) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		boolean updated = true;
+		if (!gemResources.isEmpty()) {
+			try {
+				db.beginTransaction();
 
-		try {
-			db.beginTransaction();
+				deleteGemResourceFromDeck(gemResources.get(0).deckId.gUID, db);
+				addGemResources(gemResources, db);
 
-			deleteGemResourceFromDeck(gemResources.get(0).deckId.gUID, db);
-			addGemResources(gemResources, db);
-
-			db.setTransactionSuccessful();
-		} catch (Exception ex) {
-			updated = false;
-		} finally {
-			db.endTransaction();
+				db.setTransactionSuccessful();
+			} catch (Exception ex) {
+				updated = false;
+			} finally {
+				db.endTransaction();
+				db.close();
+			}
+		} else {
 			db.close();
 		}
 
