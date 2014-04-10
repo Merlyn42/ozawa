@@ -50,99 +50,104 @@ public class CardImagerMapperUtil {
 			e1.printStackTrace();
 			return;
 		}
-
-		CardImageMapper mapper = new CardImageMapper(hexLocation, out, quality);
-
-		InputStream hashes = null;
-		ZipFile originalZip;
 		try {
-			if (previous != null) {
-				originalZip = new ZipFile(previous);
-				hashes = originalZip.getInputStream(originalZip.getEntry("hashes.json"));
-				mapper.loadOldHashData(hashes);
-			}
-		} catch (ZipException e2) {
-			e2.printStackTrace();
-			return;
-		} catch (IOException e2) {
-			e2.printStackTrace();
-			return;
-		}
+			CardImageMapper mapper = new CardImageMapper(hexLocation, out, quality);
 
-		FilenameFilter filter = new FilenameFilter() {
-			@Override
-			public boolean accept(File directory, String fileName) {
-				return !fileName.endsWith("~");
-			}
-		};
-		File[] cardFiles = new File(hexLocation, "Sets\\Set001\\CardDefinitions").listFiles(filter);
-
-		for (File cardFile : cardFiles) {
+			InputStream hashes = null;
+			ZipFile originalZip;
 			try {
-				mapper.transcribeCardFile(cardFile);
-			} catch (Exception e) {
-				System.err.println("Unable to copy card file:" + cardFile.getName());
-				e.printStackTrace();
-			}
-		}
-
-		File[] championFiles = new File(hexLocation, "Champions\\Templates").listFiles();
-
-		for (File championFile : championFiles) {
-			try {
-				mapper.transcribeChampionFile(championFile);
-			} catch (IOException e) {
-				System.err.println("Unable to copy champion file:" + championFile.getName());
-				e.printStackTrace();
-			}
-		}
-
-		// Generate Gem JSON
-
-		File[] gemFiles = new File(hexLocation, "Items\\Gems").listFiles();
-		for (File gemFile : gemFiles) {
-			try {
-				mapper.transcribeGemFile(gemFile);
-			} catch (IOException e) {
-				System.err.println("Unable to copy gem file:" + gemFile.getName());
-				e.printStackTrace();
-			}
-		}
-		
-		List<String> entries = mapper.zipEntries;
-		
-		ZipEntry newHashes = new ZipEntry("hashes.json");
-		try {
-			out.putNextEntry(newHashes);
-			out.write(mapper.getNewHashData());
-			entries.add(newHashes.getName());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		if (!previousIsMain) {
-			if (previous != null) {
-				try {
+				if (previous != null) {
 					originalZip = new ZipFile(previous);
-					patch(originalZip,out,entries);
-				} catch (ZipException e) {
-					e.printStackTrace();
-					return;
-				} catch (IOException e) {
+					hashes = originalZip.getInputStream(originalZip.getEntry("hashes.json"));
+					mapper.loadOldHashData(hashes);
+				}
+			} catch (ZipException e2) {
+				e2.printStackTrace();
+				return;
+			} catch (IOException e2) {
+				e2.printStackTrace();
+				return;
+			}
+
+			FilenameFilter filter = new FilenameFilter() {
+				@Override
+				public boolean accept(File directory, String fileName) {
+					return !fileName.endsWith("~");
+				}
+			};
+			File[] cardFiles = new File(hexLocation, "Sets\\Set001\\CardDefinitions").listFiles(filter);
+
+			for (File cardFile : cardFiles) {
+				try {
+					mapper.transcribeCardFile(cardFile);
+				} catch (Exception e) {
+					System.err.println("Fatal error while zipping:" + cardFile.getName());
 					e.printStackTrace();
 					return;
 				}
 			}
-		}
 
+			File[] championFiles = new File(hexLocation, "Champions\\Templates").listFiles();
 
-		
-		try {
-			out.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			for (File championFile : championFiles) {
+				try {
+					mapper.transcribeChampionFile(championFile);
+				} catch (IOException e) {
+					System.err.println("Fatal error while zipping:" + championFile.getName());
+					e.printStackTrace();
+					return;
+				}
+			}
+
+			// Generate Gem JSON
+
+			File[] gemFiles = new File(hexLocation, "Items\\Gems").listFiles();
+			for (File gemFile : gemFiles) {
+				try {
+					mapper.transcribeGemFile(gemFile);
+				} catch (IOException e) {
+					System.err.println("Fatal error while zipping:" + gemFile.getName());
+					e.printStackTrace();
+					return;
+				}
+			}
+
+			List<String> entries = mapper.zipEntries;
+
+			ZipEntry newHashes = new ZipEntry("hashes.json");
+			try {
+				out.putNextEntry(newHashes);
+				out.write(mapper.getNewHashData());
+				entries.add(newHashes.getName());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			if (!previousIsMain) {
+				if (previous != null) {
+					try {
+						originalZip = new ZipFile(previous);
+						patch(originalZip, out, entries);
+					} catch (ZipException e) {
+						e.printStackTrace();
+						return;
+					} catch (IOException e) {
+						e.printStackTrace();
+						return;
+					}
+				}
+			}
+
+		} finally {
+			try {
+				if (out != null) {
+					out.close();
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 	}
@@ -321,6 +326,7 @@ public class CardImagerMapperUtil {
 
 	}
 
+	@SuppressWarnings("unused")
 	private static void cleanTarget(File targetFile) {
 		File res = new File(targetFile, "res");
 		if (res.exists()) {

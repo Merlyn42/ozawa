@@ -19,6 +19,7 @@ package com.ozawa.hextcgdeckbuilder.hexentities;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -27,6 +28,7 @@ import android.graphics.Rect;
 import android.os.Build;
 
 import com.google.gson.annotations.SerializedName;
+import com.ozawa.hextcgdeckbuilder.R;
 import com.ozawa.hextcgdeckbuilder.UI.CardTemplate;
 import com.ozawa.hextcgdeckbuilder.programstate.ImageCache;
 import com.ozawa.hextcgdeckbuilder.programstate.ImageCache.CacheType;
@@ -46,10 +48,12 @@ public class ResourceCard extends AbstractCard {
 	@SuppressLint("NewApi")
 	@Override
 	public Bitmap getCardBitmap(Context context, CardTemplate template, int maxWidth) {
-		
+		Resources resources = context.getResources();
+		final int resourceId = resources.getIdentifier(cardImagePath.split("\\.")[0].split("/")[1], "drawable", context.getPackageName());
+
 		BitmapFactory.Options o = new BitmapFactory.Options();
 		o.inJustDecodeBounds = true;
-		HexUtil.getBitmapFromExpansionFiles(context, cardImagePath, o);
+		BitmapFactory.decodeResource(resources, resourceId, o);
 		int scale = 1;
 		while (o.outWidth / scale / 2 >= maxWidth)
 			scale *= 2;
@@ -59,12 +63,15 @@ public class ResourceCard extends AbstractCard {
         	o2.inMutable = true;
         } 
 		o2.inSampleSize = scale;
-		Bitmap output = HexUtil.getBitmapFromExpansionFiles(context, cardImagePath, o2);
-		
+		Bitmap output = BitmapFactory.decodeResource(resources, resourceId, o2);
+		//int left = Double.valueOf(o2.outWidth * defaultLayout.portraitLeft).intValue();
+		//int width = Double.valueOf(o2.outWidth * defaultLayout.portraitRight).intValue() - left;
+		//int top = Double.valueOf(o2.outHeight * defaultLayout.portraitTop).intValue();
+		//int height = Double.valueOf(o2.outHeight * defaultLayout.portraitBottom).intValue() - top;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
         	output=output.copy(Bitmap.Config.ARGB_8888, true);
         } 
-		image = output;
+		image = output;//Bitmap.createBitmap(output, left, top, width, height);
 		return image;
 	}
 
@@ -74,7 +81,8 @@ public class ResourceCard extends AbstractCard {
 			if (portrait == null) {
 				BitmapFactory.Options portraitOptions = new BitmapFactory.Options();
 				portraitOptions.inSampleSize = 4;
-				portrait = HexUtil.getBitmapFromExpansionFiles(mContext, cardImagePath, portraitOptions);
+				portrait = BitmapFactory.decodeResource(mContext.getResources(),
+						HexUtil.getResourceID(this.cardImagePath, R.drawable.class), portraitOptions);
 				if (portrait != null) {
 					double pL = defaultLayout.portraitLeft * portrait.getWidth();
 					double pR = defaultLayout.portraitRight * portrait.getWidth();
