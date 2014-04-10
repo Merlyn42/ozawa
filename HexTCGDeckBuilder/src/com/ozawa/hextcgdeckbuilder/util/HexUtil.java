@@ -138,7 +138,7 @@ public class HexUtil {
 		try {
 			ZipResourceFile expansionFile = getExpansionFile(mContext);
 			if(expansionFile != null){
-				InputStream imageInputStream = expansionFile.getInputStream("images/" + fileName);
+				InputStream imageInputStream = expansionFile.getInputStream(fileName);
 				
 				return BitmapFactory.decodeStream(imageInputStream, null, portraitOptions);
 			}

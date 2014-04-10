@@ -17,18 +17,27 @@
  ******************************************************************************/
 package com.ozawa.hextcgdeckbuilder.json;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 
+import com.android.vending.expansion.zipfile.ZipResourceFile;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.ozawa.hextcgdeckbuilder.R;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 import com.ozawa.hextcgdeckbuilder.linkedcards.LinkedCards;
+import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 public class MasterDeck {
 	private static List<AbstractCard>	masterDeck;
@@ -42,7 +51,7 @@ public class MasterDeck {
 		if (masterDeck == null) {
 			JsonReader jsonReader = new JsonReader(context);
 			try {
-				masterDeck = jsonReader.deserializeJSONInputStreamsToCard(getJson(context.getResources()));
+				masterDeck = jsonReader.deserializeJSONInputStreamsToCard(JsonReader.getJson(context,"cards/hexcard"));
 				ArrayList<String> names = getNames(masterDeck);
 				int max = 0;
 				for (AbstractCard card : masterDeck) {
@@ -139,8 +148,12 @@ public class MasterDeck {
 		}
 		return matchedCards;
 	}
+	
+	
+	
 
-	private static ArrayList<InputStream> getJson(Resources res) throws IllegalAccessException {
+
+	private static ArrayList<InputStream> getJson2(Resources res) throws IllegalAccessException {
 		Field[] rawFields = R.raw.class.getFields();
 		ArrayList<InputStream> jsonFiles = new ArrayList<InputStream>();
 

@@ -19,21 +19,27 @@ package com.ozawa.hextcgdeckbuilder.json;
 
 import android.content.Context;
 
+import com.android.vending.expansion.zipfile.ZipResourceFile;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.ozawa.hextcgdeckbuilder.UI.CardTemplate;
 import com.ozawa.hextcgdeckbuilder.UI.SymbolTemplate;
 import com.ozawa.hextcgdeckbuilder.enums.Attribute;
 import com.ozawa.hextcgdeckbuilder.enums.CardType;
 import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
+import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class JsonReader {
 
@@ -81,4 +87,25 @@ public class JsonReader {
     	}
     	return result;    
     }
+    
+	public static ArrayList<InputStream> getJson(Context mContext, String match) throws IllegalAccessException {
+		ArrayList<InputStream> jsonFiles = new ArrayList<InputStream>();
+		try {
+			ZipResourceFile expansionFile = HexUtil.getExpansionFile(mContext);
+			if(expansionFile != null){
+				InputStream hashes = expansionFile.getInputStream("hashes.json");
+				Gson gson = new Gson();
+				Type typeOfHashMap = new TypeToken<Map<String, byte[]>>() {}.getType();
+				Map<String, byte[]> hashData = gson.fromJson(new InputStreamReader(hashes), typeOfHashMap);
+				for( String fileName:hashData.keySet()){
+					if (fileName.startsWith(match)) {
+						jsonFiles.add(expansionFile.getInputStream(fileName));
+					}
+				}
+			}
+		} catch (IOException e) {
+			
+		}
+		return jsonFiles;
+	}
 }

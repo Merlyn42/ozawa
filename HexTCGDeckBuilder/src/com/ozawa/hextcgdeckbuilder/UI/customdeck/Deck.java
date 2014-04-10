@@ -30,6 +30,7 @@ import com.ozawa.hextcgdeckbuilder.hexentities.GemResource;
 import com.ozawa.hextcgdeckbuilder.hexentities.GlobalIdentifier;
 import com.ozawa.hextcgdeckbuilder.hexentities.HexDeck;
 import com.ozawa.hextcgdeckbuilder.hexentities.DeckResource;
+import com.ozawa.hextcgdeckbuilder.hexentities.ResourceCard;
 import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
 
 public class Deck {
@@ -67,7 +68,11 @@ public class Deck {
 	 */
 	public void addCardToDeck(AbstractCard card, int value) {
 		if (deckCardList.contains(card)) {
-			deckData.put(card, deckData.get(card) + value);
+			if(!(card instanceof ResourceCard)&&(deckData.get(card)+value)>4){
+				deckData.put(card, 4);
+			}else{
+				deckData.put(card, deckData.get(card) + value);
+			}
 		} else {
 			deckData.put(card, value);
 			deckCardList.add(card);

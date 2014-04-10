@@ -138,7 +138,7 @@ public class ExpansionDownloaderActivity extends Activity implements IDownloader
                     true, // true signifies a main file
                     10, // the version of the APK that the file was uploaded
                        // against
-                    45358556L // the length of the file in bytes
+                    43516869L // the length of the file in bytes
             )
             /*new XAPKFile(
                     false, // false signifies a patch file
