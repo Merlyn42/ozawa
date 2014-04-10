@@ -250,9 +250,9 @@ public class CardImageMapper {
 			}
 		}
 		String imageGuid = imageName + card.getM_Id().getM_Guid().replace("-", "_") + ".jpg";
-		card.setM_CardImagePath(imageGuid);
 		String cardGuid = newCardName + card.getM_Id().getM_Guid().replace("-", "_") + ".json";
 		String cardImagePath = card.getM_CardImagePath();
+		card.setM_CardImagePath(imageGuid);
 		File imageFile = new File(hexLocation, cardImagePath);
 		DigestInputStream dis = null;
 		BufferedImage image = null;
