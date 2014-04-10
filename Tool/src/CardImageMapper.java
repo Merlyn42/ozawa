@@ -58,12 +58,26 @@ public class CardImageMapper {
 	}
 
 	public void transcribeGemFile(File gemFile) throws NoSuchAlgorithmException, IOException {
-
 		MessageDigest md = MessageDigest.getInstance("MD5");
-		FileInputStream gemStream = new FileInputStream(gemFile);
-		DigestInputStream gemDigestStream = new DigestInputStream(gemStream, md);
-		Gem gem = JSONSerializer.deserializeJSONtoGem(gemDigestStream);
-		gemDigestStream.close();
+		DigestInputStream gemDigestStream = null;
+		Gem gem = null;
+		try {
+			FileInputStream gemStream = new FileInputStream(gemFile);
+			gemDigestStream = new DigestInputStream(gemStream, md);
+			gem = JSONSerializer.deserializeJSONtoGem(gemDigestStream);
+		} catch (IOException e) {
+			System.err.println("Failed to read Gem file: " + gemFile.getAbsolutePath());
+			System.err.println("Skipping...");
+			return;
+		} finally {
+			if (gemDigestStream != null) {
+				try {
+					gemDigestStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		byte[] gemDigest = md.digest();
 		String newGemJSON = JSONSerializer.serializeGemToJSON(gem);
 		String guid = newGemName + gem.id.getM_Guid().replace("-", "_") + ".json";
@@ -78,14 +92,41 @@ public class CardImageMapper {
 	}
 
 	public void transcribeChampionFile(File championFile) throws NoSuchAlgorithmException, IOException {
+		// Get Champion JSON
 		Gson gson = new Gson();
 		MessageDigest champMD = MessageDigest.getInstance("MD5");
-		FileInputStream champStream = new FileInputStream(championFile);
-		DigestInputStream champDigestStream = new DigestInputStream(champStream, champMD);
-		Champion champ = gson.fromJson(new InputStreamReader(champDigestStream), Champion.class);
-		champDigestStream.close();
+		DigestInputStream champDigestStream = null;
+		Champion champ = null;
+		try {
+			FileInputStream champStream = new FileInputStream(championFile);
+			champDigestStream = new DigestInputStream(champStream, champMD);
+			champ = gson.fromJson(new InputStreamReader(champDigestStream), Champion.class);
+		} catch (IOException e) {
+			System.err.println("Failed to read Champion file: " + championFile.getAbsolutePath());
+			System.err.println("Skipping...");
+			return;
+		} finally {
+			try {
+				if (champDigestStream != null) {
+					champDigestStream.close();
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		byte[] champDigest = champMD.digest();
 		if (champ.gameText != null && !champ.gameText.trim().contentEquals("")) {
+			ArrayList<PendingFile> pendingFiles = new ArrayList<PendingFile>();
+			String champGuid = newChampionName + champ.id.getM_Guid().replace("-", "_") + ".json";
+			
+			if (!compareDigests(champDigest, oldHashData.get(champGuid))) {
+				String newChampionJSON = gson.toJson(champ);
+				ZipEntry newChampionEntry = new ZipEntry(champGuid);
+				pendingFiles.add(new PendingFile(newChampionEntry, newChampionJSON.getBytes()));
+			}
+
+			// Get Small portrait
 			if (champ.hudPortraitSmall != null) {
 				String championImagePath = champ.hudPortraitSmall;
 				File imageFile = new File(hexLocation, championImagePath);
@@ -94,59 +135,93 @@ public class CardImageMapper {
 				ZipEntry smallPortEntry = new ZipEntry(guid);
 
 				MessageDigest md = MessageDigest.getInstance("MD5");
-				FileInputStream stream = new FileInputStream(imageFile);
-				DigestInputStream digestStream = new DigestInputStream(stream, md);
+				DigestInputStream digestStream = null;
+				ByteArrayOutputStream outputStream;
+				try {
+					FileInputStream stream = new FileInputStream(imageFile);
+					digestStream = new DigestInputStream(stream, md);
 
-				byte[] buf = new byte[1024];
-				int len = 0;
-				ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-				while ((len = digestStream.read(buf)) > 0) {
-					outputStream.write(buf, 0, len);
+					byte[] buf = new byte[1024];
+					int len = 0;
+					outputStream = new ByteArrayOutputStream();
+					while ((len = digestStream.read(buf)) > 0) {
+						outputStream.write(buf, 0, len);
+					}
+				} catch (IOException e) {
+					System.err.println("Failed to read Champion Small Portrait file: " + imageFile.getAbsolutePath() + " For champion file: "+ championFile.getAbsolutePath());
+					System.err.println("Skipping...");
+					return;
+				} finally {
+					if (digestStream != null) {
+						try {
+							digestStream.close();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
 				}
-				digestStream.close();
 				byte[] digest = md.digest();
 				newHashData.put(guid, digest);
 				if (!compareDigests(digest, oldHashData.get(guid))) {
-					target.putNextEntry(smallPortEntry);
-					zipEntries.add(smallPortEntry.getName());
-					target.write(outputStream.toByteArray());
-					target.closeEntry();
+					pendingFiles.add(new PendingFile(smallPortEntry, outputStream.toByteArray()));
 					champ.hudPortraitSmall = smallPortEntry.getName();
 				}
 			}
 
+			// get large portrait
 			if (champ.hudPortrait != null) {
 				MessageDigest md = MessageDigest.getInstance("MD5");
 				String championImagePath = champ.hudPortrait;
 				File imageFile = new File(hexLocation, championImagePath);
 				String guid = championPortrait + champ.id.getM_Guid().replace("-", "_") + ".jpg";
-
-				FileInputStream stream = new FileInputStream(imageFile);
-				DigestInputStream dis = new DigestInputStream(stream, md);
-				BufferedImage image = CardImagerMapperUtil.openImage(dis);
-				dis.close();
+				DigestInputStream dis = null;
+				BufferedImage image = null;
+				try {
+					FileInputStream stream = new FileInputStream(imageFile);
+					dis = new DigestInputStream(stream, md);
+					image = CardImagerMapperUtil.openImage(dis);
+				} catch (IOException e) {
+					System.err.println("Failed to read Champion Portrait file: " + imageFile.getAbsolutePath() + " For champion file: "+ championFile.getAbsolutePath());
+					System.err.println("Skipping...");
+					return;
+				} finally {
+					if (dis != null) {
+						try {
+							dis.close();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
 				byte[] portraitDigest = md.digest();
 				newHashData.put(guid, portraitDigest);
 				if (!compareDigests(portraitDigest, oldHashData.get(guid))) {
+					ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+					try {
+						CardImagerMapperUtil.writeJpegToOutputStream(byteArrayOutputStream, image, quality);
+					} catch (IOException e) {
+						System.err.println("Failed to compress champion portrait file: " + imageFile.getAbsolutePath());
+						System.err.println("Skipping...");
+						e.printStackTrace();
+						return;
+					}
 					ZipEntry newImageEntry = new ZipEntry(guid);
-					target.putNextEntry(newImageEntry);
-					zipEntries.add(newImageEntry.getName());
-					CardImagerMapperUtil.writeJpegToOutputStream(target, image, quality);
-					target.closeEntry();
+					pendingFiles.add(new PendingFile(newImageEntry, byteArrayOutputStream.toByteArray()));
 					champ.hudPortrait = newImageEntry.getName();
 				}
 
 			}
-			String guid = newChampionName + champ.id.getM_Guid().replace("-", "_") + ".json";
-			newHashData.put(guid, champDigest);
-			if (!compareDigests(champDigest, oldHashData.get(guid))) {
-				String newChampionJSON = gson.toJson(champ);
-				ZipEntry newChampionEntry = new ZipEntry(guid);
-				target.putNextEntry(newChampionEntry);
-				zipEntries.add(newChampionEntry.getName());
-				target.write(newChampionJSON.getBytes());
+
+			// write data to zip
+			for (PendingFile pendingFile : pendingFiles) {
+				target.putNextEntry(pendingFile.zipEntry);
+				zipEntries.add(pendingFile.zipEntry.getName());
+				target.write(pendingFile.bytes);
 				target.closeEntry();
 			}
+			newHashData.put(champGuid, champDigest);
 		}
 
 	}
@@ -154,25 +229,64 @@ public class CardImageMapper {
 	public void transcribeCardFile(File cardFile) throws NoSuchAlgorithmException, IOException {
 		MessageDigest cardMD = MessageDigest.getInstance("MD5");
 		MessageDigest imageMD = MessageDigest.getInstance("MD5");
-		FileInputStream cardStream = new FileInputStream(cardFile);
-		DigestInputStream cardDigestStream = new DigestInputStream(cardStream, cardMD);
-		Card card = JSONSerializer.deserializeJSONtoCard(cardDigestStream);
-		cardDigestStream.close();
+		DigestInputStream cardDigestStream = null;
+		Card card = null;
+		try {
+			FileInputStream cardStream = new FileInputStream(cardFile);
+			cardDigestStream = new DigestInputStream(cardStream, cardMD);
+			card = JSONSerializer.deserializeJSONtoCard(cardDigestStream);
+		} catch (IOException e) {
+			System.err.println("Failed to read card file: " + cardFile.getAbsolutePath());
+			System.err.println("Skipping...");
+			return;
+		} finally {
+			try {
+				if (cardDigestStream != null) {
+					cardDigestStream.close();
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		String imageGuid = imageName + card.getM_Id().getM_Guid().replace("-", "_") + ".jpg";
 		String cardGuid = newCardName + card.getM_Id().getM_Guid().replace("-", "_") + ".json";
 		String cardImagePath = card.getM_CardImagePath();
 		File imageFile = new File(hexLocation, cardImagePath);
-		FileInputStream stream = new FileInputStream(imageFile);
-		DigestInputStream dis = new DigestInputStream(stream, imageMD);
-		BufferedImage image = CardImagerMapperUtil.openImage(dis);
-		dis.close();
+		DigestInputStream dis = null;
+		BufferedImage image = null;
+		try {
+			FileInputStream stream = new FileInputStream(imageFile);
+			dis = new DigestInputStream(stream, imageMD);
+			image = CardImagerMapperUtil.openImage(dis);
+		} catch (IOException e) {
+			System.err.println("Failed to read card portrait file: " + imageFile.getAbsolutePath()  + " For card file: "+ cardFile.getAbsolutePath() );
+			System.err.println("Skipping...");
+			return;
+		} finally {
+			if (dis != null) {
+				try {
+					dis.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 		byte[] newImageDigest = imageMD.digest();
 		newHashData.put(imageGuid, newImageDigest);
 		if (!compareDigests(newImageDigest, oldHashData.get(imageGuid))) {
 			ZipEntry newImageEntry = new ZipEntry(imageGuid);
 			target.putNextEntry(newImageEntry);
 			zipEntries.add(newImageEntry.getName());
-			CardImagerMapperUtil.writeJpegToOutputStream(target, image, quality);
+			try {
+				CardImagerMapperUtil.writeJpegToOutputStream(target, image, quality);
+			} catch (IOException e) {
+				System.err.println("Failed to compress portrait file: " + imageFile.getAbsolutePath());
+				System.err.println("Skipping...");
+				e.printStackTrace();
+				return;
+			}
 			target.closeEntry();
 			card.setM_CardImagePath(newImageEntry.getName());
 		}
@@ -205,6 +319,18 @@ public class CardImageMapper {
 			}
 		}
 		return true;
+	}
+
+	private static class PendingFile {
+		public ZipEntry	zipEntry;
+		public byte[]	bytes;
+
+		public PendingFile(ZipEntry zipEntry, byte[] bytes) {
+			super();
+			this.zipEntry = zipEntry;
+			this.bytes = bytes;
+		}
+
 	}
 
 	public byte[] getNewHashData() {
