@@ -38,10 +38,11 @@ public class CardImagerMapperUtil {
 
 	public final static String	VERSION	= "v1.0";
 	public static float			quality	= 0.6f;
+	
 
-	public static void generateImageAndCardJSONData(File hexLocation, File target, File previous, boolean previousIsMain)
+	public static void generateImageAndCardJSONData(File hexLocation, File target, File previous, boolean previousIsMain,boolean compress)
 			throws NoSuchAlgorithmException {
-
+		if(!compress)System.out.println("Creating expansion file with no compression");
 		ZipOutputStream out;
 		try {
 			out = new ZipOutputStream(new FileOutputStream(target));
@@ -51,7 +52,7 @@ public class CardImagerMapperUtil {
 			return;
 		}
 		try {
-			CardImageMapper mapper = new CardImageMapper(hexLocation, out, quality);
+			CardImageMapper mapper = new CardImageMapper(hexLocation, out,compress, quality);
 
 			InputStream hashes = null;
 			ZipFile originalZip;
@@ -257,17 +258,17 @@ public class CardImagerMapperUtil {
 			System.out.println("Written by havocx42");
 			return;
 		}
-
+		Integer qualityInput = null;
 		if (cmd.hasOption("quality")) {
 			Boolean fail = false;
-			Integer value = null;
+			
 			try {
-				value = Integer.valueOf(cmd.getOptionValue("quality"));
+				qualityInput = Integer.valueOf(cmd.getOptionValue("quality"));
 			} catch (Exception e) {
 				fail = true;
 			}
-			if (!fail && value != null && value > 0 && value <= 100) {
-				quality = value / 100.0f;
+			if (!fail && qualityInput != null && qualityInput > 0 && qualityInput <= 100) {
+				quality = qualityInput / 100.0f;
 				System.out.println("Setting quality to: " + quality);
 			} else {
 				System.out.println("quality must be between 1 and 100");
@@ -317,7 +318,7 @@ public class CardImagerMapperUtil {
 
 		// cleanTarget(targetFile);
 
-		generateImageAndCardJSONData(sourceFile, targetFile, previousFile, main);
+		generateImageAndCardJSONData(sourceFile, targetFile, previousFile, main,qualityInput!=100);
 
 	}
 
