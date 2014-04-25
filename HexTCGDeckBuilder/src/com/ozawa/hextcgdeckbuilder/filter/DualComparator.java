@@ -8,12 +8,14 @@ import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 public class DualComparator implements Comparator<AbstractCard> {
 	private Comparator<AbstractCard> primary;
 	private Comparator<AbstractCard> secondary;
+	private Comparator<AbstractCard> alpha;
 	
 
 	public DualComparator(Comparator<AbstractCard> primary, Comparator<AbstractCard> secondary) {
 		super();
 		this.primary = primary;
 		this.secondary = secondary;
+		this.alpha = new CardComparatorName();
 	}
 
 	@Override
@@ -22,6 +24,10 @@ public class DualComparator implements Comparator<AbstractCard> {
 		if(result==0){
 			result= secondary.compare(arg0, arg1);
 		}
+		if(result==0){
+			result= alpha.compare(arg0, arg1);
+		}
+		
 		return result;
 	}
 
