@@ -1,0 +1,232 @@
+[
+	{
+		"cardText": "ARROWL",
+		"imageName": "gametext_arrowleft.png",
+		"sizeRatio": 1.6896
+	},
+	{
+		"cardText": "ARROWR",
+		"imageName": "gametext_arrowright.png",
+		"sizeRatio": 1.6896
+	},
+	{
+		"cardText": "(0)",
+		"imageName": "gametext_costzero.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "(1)",
+		"imageName": "gametext_costone.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "(2)",
+		"imageName": "gametext_costtwo.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "(3)",
+		"imageName": "gametext_costthree.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "(4)",
+		"imageName": "gametext_costfour.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "(5)",
+		"imageName": "gametext_costfive.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "(6)",
+		"imageName": "gametext_costsix.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "(7)",
+		"imageName": "gametext_costseven.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "(8)",
+		"imageName": "gametext_costeight.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "(9)",
+		"imageName": "gametext_costnine.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "(10)",
+		"imageName": "gametext_costten.png",
+		"sizeRatio": 1
+	},	
+	{
+		"cardText": "(X)",
+		"imageName": "gametext_costx.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "BASIC",
+		"imageName": "gametext_basic.png",
+		"sizeRatio": 2.1162
+	},
+	{
+		"cardText": "BLOOD",
+		"imageName": "gametext_bloodshard.png",
+		"sizeRatio": 0.8636
+	},
+	{
+		"cardText": "DIAMOND",
+		"imageName": "gametext_diamondshard.png",
+		"sizeRatio": 1.25
+	},
+	{
+		"cardText": "RUBY",
+		"imageName": "gametext_rubyshard.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "SAPPHIRE",
+		"imageName": "gametext_sapphireshard.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "WILD",
+		"imageName": "gametext_wildshard.png",
+		"sizeRatio": 0.8636
+	},
+	{
+		"cardText": "ATK",
+		"imageName": "gametext_attack.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "DEF",
+		"imageName": "gametext_defense.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "L0",
+		"imageName": "gametext_resourcezero.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "L1",
+		"imageName": "gametext_resourceone.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "L2",
+		"imageName": "gametext_resourcetwo.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "L3",
+		"imageName": "gametext_resourcethree.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "L4",
+		"imageName": "gametext_resourcefour.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "L5",
+		"imageName": "gametext_resourcefive.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "L6",
+		"imageName": "gametext_resourcesix.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "L7",
+		"imageName": "gametext_resourceseven.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "L8",
+		"imageName": "gametext_resourceeight.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "L9",
+		"imageName": "gametext_resourcenine.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "L10",
+		"imageName": "gametext_resourceten.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "R0",
+		"imageName": "gametext_resourcethresholdzero.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "R1",
+		"imageName": "gametext_resourcethresholdone.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "R2",
+		"imageName": "gametext_resourcethresholdtwo.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "R3",
+		"imageName": "gametext_resourcethresholdthree.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "R4",
+		"imageName": "gametext_resourcethresholdfour.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "R5",
+		"imageName": "gametext_resourcethresholdfive.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "R6",
+		"imageName": "gametext_resourcethresholdsix.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "R7",
+		"imageName": "gametext_resourcethresholdseven.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "R8",
+		"imageName": "gametext_resourcethresholdeight.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "R9",
+		"imageName": "gametext_resourcethresholdnine.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "R10",
+		"imageName": "gametext_resourcethresholdten.png",
+		"sizeRatio": 1
+	},
+	{
+		"cardText": "ACT",
+		"imageName": "gametext_exhaustcard.png",
+		"sizeRatio": 1.1025
+	},
+	{
+		"cardText": "ONE-SHOT",
+		"imageName": "gametext_oneshot.png",
+		"sizeRatio": 2.7442
+	}
+]
