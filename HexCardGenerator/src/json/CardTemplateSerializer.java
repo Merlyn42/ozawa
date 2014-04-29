@@ -26,8 +26,7 @@ public class CardTemplateSerializer implements JsonDeserializer<CardTemplate> {
 		Gson gson = gsonBuilder.create();
 		CardTemplate template = gson.fromJson(json, CardTemplate.class);
 
-		template.templateId = "HexCardGenerator/images/" + template.templateName;//resources.getIdentifier(template.templateName, "drawable", androidContext.getPackageName());
-
+		template.templateId = "HexCardGenerator/images/" + template.templateName;
 		return template;
 	}
 

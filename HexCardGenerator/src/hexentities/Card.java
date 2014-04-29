@@ -42,7 +42,7 @@ public class Card {
     @Expose
     private Integer m_ResourceCost;
     @Expose
-    private Object m_Threshold;
+    private ResourceThreshold[] m_Threshold;
     @Expose
     private String m_CardImagePath;
     /*@Expose
@@ -243,11 +243,11 @@ public class Card {
         this.m_ResourceCost = m_ResourceCost;
     }
 
-    public Object getM_Threshold() {
+    public ResourceThreshold[] getM_Threshold() {
         return m_Threshold;
     }
 
-    public void setM_Threshold(Object m_Threshold) {
+    public void setM_Threshold(ResourceThreshold[] m_Threshold) {
         this.m_Threshold = m_Threshold;
     }
 

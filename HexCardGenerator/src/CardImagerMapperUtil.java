@@ -2,10 +2,12 @@ import hexentities.Card;
 import hexentities.CardTemplate;
 import hexentities.Champion;
 import hexentities.Gem;
+import hexentities.ResourceThreshold;
 import hexentities.SymbolTemplate;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.image.BufferedImage;
@@ -17,6 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -349,6 +352,9 @@ public class CardImagerMapperUtil {
 		drawRarity(card, canvas, templateImage, template);
 		graphics2D.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, (int)(imageHeight * template.typeFontRatio)));
 		drawGameText(card.getM_GameText().trim(), 64, card, canvas, templateImage, template);
+		BufferedImage threshold = getCardThresholdImage(card, template, canvas);
+		graphics2D.drawImage(threshold, (int)(templateImage.getWidth() / template.thresholdWidth), 
+				(int)(templateImage.getHeight() / template.thresholdHeight), null);
 		graphics2D.dispose();
 		
 		
@@ -411,8 +417,9 @@ public class CardImagerMapperUtil {
 	
 	private static void drawGameText(String gameText, int length, Card card, BufferedImage canvas, BufferedImage templateImage, CardTemplate template) {
 		line = 0f;
-
-		if (gameText.length() < 65) {
+		FontMetrics fMetrics = canvas.createGraphics().getFontMetrics(new Font(Font.SANS_SERIF, Font.BOLD, (int)(templateImage.getHeight() * template.typeFontRatio)));
+		
+		if (fMetrics.stringWidth(gameText) < (templateImage.getWidth() * template.gameTextLength)) {
 			if (gameText.contains("<p>")) {
 				int pLocation = gameText.lastIndexOf("<p>") + 3;
 				String paragraph = gameText.substring(0, pLocation);
@@ -432,7 +439,7 @@ public class CardImagerMapperUtil {
 					drawTextWithImages(displayText, templateImage, canvas, template);
 					displayText = "" + word.substring(pLocation, word.length()) + " ";
 				} else {
-					if ((displayText + word).length() > 65) {
+					if (fMetrics.stringWidth(displayText + word) > (templateImage.getWidth() * template.gameTextLength)) {
 						drawTextWithImages(displayText, templateImage, canvas, template);
 						displayText = "";
 						line += .05f;
@@ -440,7 +447,7 @@ public class CardImagerMapperUtil {
 					displayText += word + " ";
 				}
 			}
-			if (displayText.length() > 65) {
+			if (fMetrics.stringWidth(displayText) > (templateImage.getWidth() * 0.829)) {
 				String stuff = displayText.substring(0, displayText.lastIndexOf(" "));
 				drawTextWithImages(stuff, templateImage, canvas, template);
 				line += .05f;
@@ -455,18 +462,21 @@ public class CardImagerMapperUtil {
 	private static void drawTextWithImages(String displayText, BufferedImage templateImage, BufferedImage canvas, CardTemplate template) {
 		String delims = "[\\[\\]<>]";
 		String[] stuff = displayText.split(delims);
+		FontMetrics fMetrics = canvas.createGraphics().getFontMetrics(new Font(Font.SANS_SERIF, Font.BOLD, (int)(templateImage.getHeight() * template.typeFontRatio)));
 		float width = templateImage.getWidth() / template.gameTextWidth;
-		int height = (int) templateImage.getHeight() / 20;
+		int baseline = fMetrics.getAscent();
+		int height = baseline + fMetrics.getDescent();//(int) templateImage.getHeight() / 20;
 		for (int i = 0; i < stuff.length; i++) {
 			if (i % 2 == 0) {
 				if (stuff[i].equals(""))
 					continue;
-				BufferedImage startImage = textAsBitmap(stuff[i], templateImage, template);
+				BufferedImage startImage = textAsBitmap(stuff[i], templateImage, template, 
+															(int)(fMetrics.stringWidth(stuff[i]) + 0.5f), baseline, height);
 				Graphics2D graphics2D = canvas.createGraphics();
 				graphics2D.setFont(new Font(Font.SANS_SERIF, Font.BOLD, (int)(templateImage.getHeight() * template.typeFontRatio)));
-				graphics2D.drawString(stuff[i], width, (templateImage.getHeight() / (template.gameTextHeight - line)));
+				graphics2D.drawString(stuff[i], width, (templateImage.getHeight() / (template.gameTextHeight - line)) + 20);
 				//graphics2D.drawImage(startImage, (int)width, (int)(templateImage.getHeight() / (template.gameTextHeight - line)), null);
-				width += startImage.getWidth();
+				width += (fMetrics.stringWidth(stuff[i]) + 0.5f);//startImage.getWidth();
 				graphics2D.dispose();
 			} else {
 				if (stuff[i].equalsIgnoreCase("p")) {
@@ -504,14 +514,14 @@ public class CardImagerMapperUtil {
 		}
 	}
 
-	private static BufferedImage textAsBitmap(String DisplayText, BufferedImage templateImage, CardTemplate template) {
-		int width = (int) (templateImage.getWidth() - templateImage.getWidth() / 15);
-		int height = (int)(templateImage.getHeight() * template.typeFontRatio);//(int) templateImage.getHeight() / 20;
+	private static BufferedImage textAsBitmap(String DisplayText, BufferedImage templateImage, CardTemplate template, int baseline, int width, int height) {
+		//int width = (int) (templateImage.getWidth() - templateImage.getWidth() / 15);
+		//int height = (int)(templateImage.getHeight() * template.typeFontRatio);//(int) templateImage.getHeight() / 20;
 		BufferedImage displayTextImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D graphics2D = displayTextImage.createGraphics();
-		graphics2D.drawImage(displayTextImage, 0, 0, new Color(0,0,0,0), null);
+		//graphics2D.drawImage(displayTextImage, 0, 0, new Color(0,0,0,0), null);
 		graphics2D.setFont(new Font(Font.SANS_SERIF, Font.BOLD, (int)(templateImage.getHeight() * template.typeFontRatio)));
-		graphics2D.drawString(DisplayText, 0, 0);
+		graphics2D.drawString(DisplayText, 0, baseline);
 		
 		return displayTextImage;
 	}
@@ -520,7 +530,10 @@ public class CardImagerMapperUtil {
 		SymbolTemplate symTemp = SymbolTemplate.findSymbolTemplate(symbol, SymbolTemplate.getAllTemplates(SymbolTemplate.symbolJson));
 		if (symTemp != null) {
 			try {
-				return openImage(new File(symTemp.templateId));
+				BufferedImage bufferedImage = ImageIO.read(new File(symTemp.templateId));
+				BufferedImage symbolImage = new BufferedImage((int) (height * symTemp.sizeRatio), height, BufferedImage.TYPE_INT_ARGB);
+				symbolImage.createGraphics().drawImage(bufferedImage, 0, 0, (int) (height * symTemp.sizeRatio), height, null);
+				return symbolImage;
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -535,6 +548,86 @@ public class CardImagerMapperUtil {
 		}
 		
 		return blank;
+	}
+	
+	public static BufferedImage getCardThresholdImage(Card card, CardTemplate template, BufferedImage canvas) {
+		if (card.getM_Threshold() != null && card.getM_Threshold().length > 0) {
+			ArrayList<BufferedImage> thresholds = new ArrayList<BufferedImage>();
+			String imagePath = "HexCardGenerator/images/";
+			for (ResourceThreshold threshold : card.getM_Threshold()) {
+				if (threshold.colorFlags != null && threshold.colorFlags.length > 0 && threshold.colorFlags[0] != null) {
+					String thresholdName = null;
+					switch (threshold.colorFlags[0]) {
+					case COLORLESS: {
+						break;
+					}
+					case BLOOD: {
+						thresholdName = "blood_threshold_new.png";
+						break;
+					}
+					case DIAMOND: {
+						thresholdName = "diamond_threshold_new.png";
+						break;
+					}
+					case RUBY: {
+						thresholdName = "ruby_threshold_new.png";
+						break;
+					}
+					case SAPPHIRE: {
+						thresholdName = "sapphire_threshold_new.png";
+						break;
+					}
+					case WILD: {
+						thresholdName = "wild_threshold_new.png";
+						break;
+					}
+					default: {
+						break;
+					}
+					}
+					int subsample = 1;
+					if (template != null && template.currentSubsample != null) {
+						subsample = template.currentSubsample.intValue();
+					}
+					if (thresholdName != null) {
+						addCardThresholdBitmapToList(thresholds, imagePath + thresholdName, threshold.thresholdColorRequirement);
+					}
+				}
+			}
+
+			BufferedImage allThresholds = null;
+			if (!thresholds.isEmpty()) {
+					int width = Math.round(canvas.getWidth() * template.thresholdWidthRatio);
+					int height = Math.round(canvas.getHeight() * template.thresholdHeightRatio);
+					allThresholds = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
+					Graphics2D graphics2D = allThresholds.createGraphics();
+					int left = 0;
+					int top = 0;
+					int padding = Math.round(canvas.getHeight() * template.thresholdPaddingRatio);
+					for (BufferedImage image : thresholds) {
+						graphics2D.drawImage(image, left, top, null);
+						top += image.getHeight() + padding;
+					}
+			}
+
+			return allThresholds;
+		}
+
+		return null;
+	}
+
+	private static void addCardThresholdBitmapToList(List<BufferedImage> thresholds, String resourcesName, int thresholdCount) {
+		for (int i = 0; i < thresholdCount; i++) {
+			BufferedImage thresh;
+			try {
+				thresh = openImage(new File(resourcesName));
+				thresholds.add(thresh);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
+		}
 	}
 
 }
