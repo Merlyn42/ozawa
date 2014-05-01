@@ -15,18 +15,14 @@ public class SymbolTemplate {
 	public String imageName;
 	public double sizeRatio;
 	//private Bitmap image;
-	public static String symbolJson = "HexCardGenerator/src/json/data/symbols.json";
+	public static String symbolJson = "json/data/symbols.json";
 	
 	private static Map<String,SymbolTemplate>	ALLTEMPLATES;
 	
 	public static Map<String, SymbolTemplate> getAllTemplates(String symbolJson) {
 		if (ALLTEMPLATES == null) {
 			JsonReader jsonReader = new JsonReader();
-			try {
-				ALLTEMPLATES = jsonReader.deserializeJSONInputStreamToSymbolTemplates(new FileInputStream(new File(symbolJson)));
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
+			ALLTEMPLATES = jsonReader.deserializeJSONInputStreamToSymbolTemplates(ClassLoader.getSystemResourceAsStream(symbolJson));
 		}
 		return ALLTEMPLATES;
 	}

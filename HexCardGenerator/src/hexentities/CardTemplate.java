@@ -69,7 +69,7 @@ public class CardTemplate {
 
 	private static List<CardTemplate>	ALLTEMPLATES;
 	
-	public static final String templateJsonPath = "HexCardGenerator/src/json/data/card_templates.json";
+	public static final String templateJsonPath = "json/data/card_templates.json";
 
 	/**
 	 * Find the appropriate template for a provided card.
@@ -120,11 +120,7 @@ public class CardTemplate {
 	public static List<CardTemplate> getAllTemplates(String templateJson) {
 		if (ALLTEMPLATES == null) {
 			JsonReader jsonReader = new JsonReader();
-			try {
-				ALLTEMPLATES = Arrays.asList(jsonReader.deserializeJSONInputStreamToCardTemplates(new FileInputStream(new File(templateJson))));
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
+			ALLTEMPLATES = Arrays.asList(jsonReader.deserializeJSONInputStreamToCardTemplates(ClassLoader.getSystemResourceAsStream(templateJson)));
 		}
 		return ALLTEMPLATES;
 

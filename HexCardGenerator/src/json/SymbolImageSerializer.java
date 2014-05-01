@@ -22,7 +22,7 @@ public class SymbolImageSerializer implements JsonDeserializer<SymbolTemplate> {
 		Gson gson = new Gson();
 		SymbolTemplate template = gson.fromJson(json, SymbolTemplate.class);
 
-		template.templateId = "HexCardGenerator/images/" + template.imageName;
+		template.templateId = "images\\" + template.imageName;
 		return template;
 	}
 
