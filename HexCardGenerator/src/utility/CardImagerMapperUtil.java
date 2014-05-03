@@ -2,8 +2,6 @@ package utility;
 
 import hexentities.Card;
 import hexentities.CardTemplate;
-import hexentities.Champion;
-import hexentities.Gem;
 import hexentities.ResourceThreshold;
 import hexentities.SymbolTemplate;
 
@@ -11,15 +9,13 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
-import java.awt.Paint;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -39,39 +35,28 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
-import org.apache.commons.io.FileUtils;
-
-import com.google.gson.Gson;
 
 import enums.CardType;
 import json.JSONSerializer;
 
 public class CardImagerMapperUtil {
 	private static String		cardName				= "hexcard";
-	private static String		championPortrait		= "championportait";
-	private static String		championPortraitSmall	= "championportaitsmall";
-	private static int			fileNumber				= 1;
-
-	private static String		newCardName				= "hexcard";
-	private static String		newChampionName			= "champion";
-	private static String		newGemName				= "gemdata";
 	public final static String	VERSION					= "v1.0";
 	public static float			quality					= 0.6f;
 	public static float			line;
 	
-	public static void generateCardImages(File hexLocation, File target, Integer quality){
+	public static boolean generateCardImages(File hexLocation, File target, Integer quality){
 		CardImagerMapperUtil.quality = quality / 100.0f;
 		cleanTarget(target);
 
 		generateImageAndCardJSONData(hexLocation, target);
+		
+		return true;
 	}
 	
 	public static void generateImageAndCardJSONData(File hexLocation, File target) {
 		File newImageLocation = new File(target, "\\cards\\");
-		//File newCardLocation = new File(target, "\\res\\raw\\");
-		//HashMap<String, File> portraitMap = new HashMap<String, File>();
-		// File[] cardFiles = new
-		// File("C:\\Program Files (x86)\\Hex\\Data\\Sets\\Set001\\CardDefinitions").listFiles();
+		
 		try {
 			target.mkdir();
 			newImageLocation.getParentFile().mkdir();
@@ -113,7 +98,7 @@ public class CardImagerMapperUtil {
 				File portraitImageFile = new File(hexLocation, card.getM_CardImagePath());
 				
 				BufferedImage fullCardImage = generateCardImage(card, template, templateImageFile, portraitImageFile);
-				File newImageFile = new File(newImageLocation, cardName + card.getM_Name().trim() + ".png");
+				File newImageFile = new File(newImageLocation, cardName + card.getM_Name().replaceAll("\\s", "") + ".png");
 				
 				writeJpeg(newImageFile, fullCardImage, quality);
 			} catch (FileNotFoundException e) {
@@ -127,67 +112,6 @@ public class CardImagerMapperUtil {
 		}
 	}
 	
-	public static void generateImageAndCardJSONData(File hexLocation, File target, float quality) {
-		File newImageLocation = new File(target, "\\cards\\");
-		//File newCardLocation = new File(target, "\\res\\raw\\");
-		//HashMap<String, File> portraitMap = new HashMap<String, File>();
-		// File[] cardFiles = new
-		// File("C:\\Program Files (x86)\\Hex\\Data\\Sets\\Set001\\CardDefinitions").listFiles();
-		try {
-			target.mkdir();
-			newImageLocation.getParentFile().mkdir();
-			newImageLocation.mkdir();
-		} catch (Exception e) {
-		}
-		if (!newImageLocation.exists()) {
-			throw new RuntimeException("Location not found");
-		}
-		ArrayList<Card> allCards = new ArrayList<Card>();
-		try {
-			FilenameFilter filter = new FilenameFilter() {
-				@Override
-				public boolean accept(File directory, String fileName) {
-					return !fileName.endsWith("~");
-				}
-			};
-			File[] cardFiles = new File(hexLocation, "Sets\\Set001\\CardDefinitions").listFiles(filter);
-
-			for (File cardFile : cardFiles) {
-				String cardJSON = JSONSerializer.getJSONFromFiles(cardFile);
-				try {
-					allCards.add(JSONSerializer.deserializeJSONtoCard(cardJSON));
-
-				} catch (Exception e) {
-					System.err.println("Unable to parse file:" + cardFile.getName());
-					throw e;
-				}
-			}
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-
-		for (Card card : allCards) {
-			try {
-				CardTemplate template = CardTemplate.findCardTemplate(card, true, CardTemplate.getAllTemplates(CardTemplate.templateJsonPath));
-				File templateImageFile = new File(template.templateId);
-				File portraitImageFile = new File(hexLocation, card.getM_CardImagePath());
-				System.out.println("************************************* TEMPLATE ID " + template.templateId);
-				System.out.println("************************************* ImagePath ID " + card.getM_CardImagePath());
-				BufferedImage fullCardImage = generateCardImage(card, template, templateImageFile, portraitImageFile);
-				File newImageFile = new File(newImageLocation, cardName + card.getM_Name().trim() + ".png");
-				
-				writeJpeg(newImageFile, fullCardImage, quality);
-			} catch (FileNotFoundException e) {
-				System.out.println("Skipping file as image not found" + card.getM_Name());
-			} catch (IOException e) {
-				System.out.println("Skipping file as error loading image" + card.getM_Name());
-				e.printStackTrace();
-			} catch (Exception e){
-				
-			}
-		}
-	}
 	
 	private static BufferedImage openImage(File f) throws IOException {
 
@@ -208,6 +132,7 @@ public class CardImagerMapperUtil {
 			BufferedImage cardTemplate = openImage(templateImageFile);
 			canvas = new BufferedImage(cardTemplate.getWidth(), cardTemplate.getHeight(), BufferedImage.TYPE_INT_RGB);
 			Graphics2D graphics2D = canvas.createGraphics();
+			graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			graphics2D.drawImage(canvas, 0, 0, Color.BLACK, null);
 			int dstRectY1 = (int) (cardTemplate.getHeight() * template.top);
 			int dstRectY2 = (int) (cardTemplate.getHeight() * template.bottom);
@@ -224,8 +149,7 @@ public class CardImagerMapperUtil {
 			
 			drawFullImageText(card, canvas, cardTemplate, template);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
 		}catch(Exception e){
 			
 		}
@@ -363,10 +287,13 @@ public class CardImagerMapperUtil {
 	private static void drawFullImageText(Card card, BufferedImage canvas, BufferedImage templateImage,	CardTemplate template) {
 		float imageHeight = templateImage.getHeight();
 		Graphics2D graphics2D = canvas.createGraphics();
+		
+		graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);		
 		graphics2D.setFont(new Font(Font.SANS_SERIF, Font.BOLD, (int)(imageHeight * template.nameFontRatio)));
 		graphics2D.drawString(card.getM_Name(), templateImage.getWidth() / template.nameWidth, templateImage.getHeight() / template.nameHeight);
 		graphics2D.setFont(new Font(Font.SANS_SERIF, Font.BOLD, (int)(imageHeight * template.numberRatio)));
 		int resourceCost = card.getM_ResourceCost();
+		
 		if (resourceCost > 9) {
 			graphics2D.drawString("" + resourceCost, templateImage.getWidth() / template.bigResourceWidth, templateImage.getHeight()
 					/ template.bigResourceHeight);
@@ -426,12 +353,6 @@ public class CardImagerMapperUtil {
 		graphics2D.drawImage(threshold, (int)(templateImage.getWidth() / template.thresholdWidth), 
 				(int)(templateImage.getHeight() / template.thresholdHeight), null);
 		graphics2D.dispose();
-		
-		
-		
-		/*
-		paint.setTextSize(imageHeight * template.costFontRatio);
-		drawGameText(gameText.trim(), 64, canvas, templateImage, paint, resources, context, template);*/
 	}
 	
 	private static void drawFaction(Card card, BufferedImage canvas, BufferedImage templateImage, CardTemplate template) {
@@ -540,28 +461,25 @@ public class CardImagerMapperUtil {
 			if (i % 2 == 0) {
 				if (stuff[i].equals(""))
 					continue;
-				BufferedImage startImage = textAsBitmap(stuff[i], templateImage, template, 
-															(int)(fMetrics.stringWidth(stuff[i]) + 0.5f), baseline, height);
 				Graphics2D graphics2D = canvas.createGraphics();
+				
+				graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 				graphics2D.setFont(new Font(Font.SANS_SERIF, Font.BOLD, (int)(templateImage.getHeight() * template.typeFontRatio)));
 				graphics2D.drawString(stuff[i], width, (templateImage.getHeight() / (template.gameTextHeight - line)) + 20);
-				//graphics2D.drawImage(startImage, (int)width, (int)(templateImage.getHeight() / (template.gameTextHeight - line)), null);
-				width += (fMetrics.stringWidth(stuff[i]) + 0.5f);//startImage.getWidth();
+				width += (fMetrics.stringWidth(stuff[i]) + 0.5f);
 				graphics2D.dispose();
 			} else {
 				if (stuff[i].equalsIgnoreCase("p")) {
 					line += 0.04f;
 					width = templateImage.getWidth() / 14;
 				} else if (stuff[i].equalsIgnoreCase("b")) {
-					//paint.setFakeBoldText(true);
-					//paint.setTextSize(paint.getTextSize() + 1);
+					// TODO: Make text bold.
 				} else if (stuff[i].equalsIgnoreCase("/b")) {
-					//paint.setFakeBoldText(false);
-					//paint.setTextSize(paint.getTextSize() - 1);
+					// TODO: Make text bold.
 				} else if (stuff[i].equalsIgnoreCase("i")) {
-					//paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.ITALIC));
+					// TODO: Make text italic.
 				} else if (stuff[i].equalsIgnoreCase("/i")) {
-					//paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+					// TODO: Make text italic.
 				} else {
 					BufferedImage symbolImage;
 					if (stuff[i].equalsIgnoreCase("BASIC")) {
@@ -584,18 +502,6 @@ public class CardImagerMapperUtil {
 		}
 	}
 
-	private static BufferedImage textAsBitmap(String DisplayText, BufferedImage templateImage, CardTemplate template, int baseline, int width, int height) {
-		//int width = (int) (templateImage.getWidth() - templateImage.getWidth() / 15);
-		//int height = (int)(templateImage.getHeight() * template.typeFontRatio);//(int) templateImage.getHeight() / 20;
-		BufferedImage displayTextImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D graphics2D = displayTextImage.createGraphics();
-		//graphics2D.drawImage(displayTextImage, 0, 0, new Color(0,0,0,0), null);
-		graphics2D.setFont(new Font(Font.SANS_SERIF, Font.BOLD, (int)(templateImage.getHeight() * template.typeFontRatio)));
-		graphics2D.drawString(DisplayText, 0, baseline);
-		
-		return displayTextImage;
-	}
-
 	private static BufferedImage getSymbolImage(String symbol, int height) {
 		SymbolTemplate symTemp = SymbolTemplate.findSymbolTemplate(symbol, SymbolTemplate.getAllTemplates(SymbolTemplate.symbolJson));
 		if (symTemp != null) {
@@ -605,16 +511,12 @@ public class CardImagerMapperUtil {
 				symbolImage.createGraphics().drawImage(bufferedImage, 0, 0, (int) (height * symTemp.sizeRatio), height, null);
 				return symbolImage;
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 		}
 		BufferedImage blank = null;
 		try {
 			blank =  openImage(new File("images/blank.png"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
 		return blank;
@@ -655,10 +557,7 @@ public class CardImagerMapperUtil {
 						break;
 					}
 					}
-					int subsample = 1;
-					if (template != null && template.currentSubsample != null) {
-						subsample = template.currentSubsample.intValue();
-					}
+					
 					if (thresholdName != null) {
 						addCardThresholdBitmapToList(thresholds, imagePath + thresholdName, threshold.thresholdColorRequirement);
 					}
@@ -672,6 +571,7 @@ public class CardImagerMapperUtil {
 					allThresholds = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
 					Graphics2D graphics2D = allThresholds.createGraphics();
+					graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 					int left = 0;
 					int top = 0;
 					int padding = Math.round(canvas.getHeight() * template.thresholdPaddingRatio);
@@ -679,6 +579,7 @@ public class CardImagerMapperUtil {
 						graphics2D.drawImage(image, left, top, null);
 						top += image.getHeight() + padding;
 					}
+					graphics2D.dispose();
 			}
 
 			return allThresholds;
@@ -694,7 +595,6 @@ public class CardImagerMapperUtil {
 				thresh = openImage(new File(resourcesName));
 				thresholds.add(thresh);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}			
 		}
