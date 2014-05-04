@@ -39,6 +39,8 @@ public class HomePage extends JFrame implements PropertyChangeListener{
 	
 	private JProgressBar progressBar;
 	
+	private boolean success = true;
+	
 	public HomePage(){
 		initUI();
 	}
@@ -172,17 +174,20 @@ public class HomePage extends JFrame implements PropertyChangeListener{
             thread.start();
         	while(thread.isAlive()){
         		//Sleep for up to one second.
-        		if(progress < 100){
+        		if(progress < 100 && success){
 	                try {
 	                    Thread.sleep(random.nextInt(5000));
 	                } catch (InterruptedException ignore) {}
 	                //Make random progress.
 	                progress += random.nextInt(5);
 	                setProgress(Math.min(progress, 100));
-        		}else{
+        		}else if(success){
         			panelLie.setVisible(true);
         		}
         	};
+        	if(progress < 100){
+        		setProgress(100);
+        	}
             return null;
         }
 
@@ -195,7 +200,11 @@ public class HomePage extends JFrame implements PropertyChangeListener{
             buttonStart.setEnabled(true);
             progressBar.setVisible(false);
             setCursor(null); //turn off the wait cursor
-            JOptionPane.showMessageDialog(null, "Hex cards generated!");
+            if(success){
+            	JOptionPane.showMessageDialog(null, "Hex cards generated!");
+            }else{
+            	success = true;
+            }
             panelLie.setVisible(false);
         }
     }
@@ -214,8 +223,13 @@ public class HomePage extends JFrame implements PropertyChangeListener{
 	    }
 
 	    public void run() {
-	    	CardImagerMapperUtil.generateCardImages(new File(textFieldHexDir.getText(), "\\Data\\"), 
-					new File(textFieldSaveDir.getText()), (int)comboQuality.getSelectedItem());
+	    	try {
+				CardImagerMapperUtil.generateCardImages(new File(textFieldHexDir.getText(), "\\Data\\"), 
+															new File(textFieldSaveDir.getText()), (int)comboQuality.getSelectedItem());
+			} catch (Exception e) {
+				success = false;
+				JOptionPane.showMessageDialog(null, "Could not find card files. Check path is HEX root directory.");				
+			}
 	    }
 	}
 }

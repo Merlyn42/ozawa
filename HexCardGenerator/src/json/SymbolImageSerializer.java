@@ -22,7 +22,7 @@ public class SymbolImageSerializer implements JsonDeserializer<SymbolTemplate> {
 		Gson gson = new Gson();
 		SymbolTemplate template = gson.fromJson(json, SymbolTemplate.class);
 
-		template.templateId = "images\\" + template.imageName;
+		template.templateId = this.getClass().getResource("/images/" + template.imageName);
 		return template;
 	}
 

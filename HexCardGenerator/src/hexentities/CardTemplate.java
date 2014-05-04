@@ -1,14 +1,9 @@
 package hexentities;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import javax.imageio.stream.FileImageInputStream;
 
 import json.JsonReader;
 import enums.CardType;
@@ -23,7 +18,7 @@ public class CardTemplate {
 	public double						left;
 	public double						right;
 	public String						templateName;
-	transient public String				templateId;
+	transient public URL				templateId;
 	public boolean						isTroop;
 	public ColorFlag[]					colors;
 	public boolean						fullCard;
@@ -35,8 +30,6 @@ public class CardTemplate {
 	public float						typeFontRatio;
 	public float						socketRatio;
 	public double						factionRatio;
-	//private Bitmap						image;
-	private int							cachedImageWidthLimit;
 	public Integer						currentSubsample;
 	public int							nameShortenedText;
 	public float						nameWidth;

@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -45,16 +46,20 @@ public class CardImagerMapperUtil {
 	public static float			quality					= 0.6f;
 	public static float			line;
 	
-	public static boolean generateCardImages(File hexLocation, File target, Integer quality){
+	public static boolean generateCardImages(File hexLocation, File target, Integer quality) throws FileNotFoundException{
 		CardImagerMapperUtil.quality = quality / 100.0f;
 		cleanTarget(target);
 
-		generateImageAndCardJSONData(hexLocation, target);
+		try {
+			generateImageAndCardJSONData(hexLocation, target);
+		} catch (FileNotFoundException e) {
+			throw new FileNotFoundException("Could not find card files. Check path is HEX root directory.");
+		}
 		
 		return true;
 	}
 	
-	public static void generateImageAndCardJSONData(File hexLocation, File target) {
+	public static void generateImageAndCardJSONData(File hexLocation, File target) throws FileNotFoundException {
 		File newImageLocation = new File(target, "\\cards\\");
 		
 		try {
@@ -62,6 +67,7 @@ public class CardImagerMapperUtil {
 			newImageLocation.getParentFile().mkdir();
 			newImageLocation.mkdir();
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		if (!newImageLocation.exists()) {
 			throw new RuntimeException("Location not found");
@@ -89,15 +95,16 @@ public class CardImagerMapperUtil {
 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+			throw new FileNotFoundException("Could not find card files. Check path is HEX root directory.");
 		}
 
 		for (Card card : allCards) {
 			try {
 				CardTemplate template = CardTemplate.findCardTemplate(card, true, CardTemplate.getAllTemplates(CardTemplate.templateJsonPath));
-				File templateImageFile = new File(template.templateId);
+				//File templateImageFile = new File(null, template.templateId);
 				File portraitImageFile = new File(hexLocation, card.getM_CardImagePath());
 				
-				BufferedImage fullCardImage = generateCardImage(card, template, templateImageFile, portraitImageFile);
+				BufferedImage fullCardImage = generateCardImage(card, template, null, portraitImageFile);
 				File newImageFile = new File(newImageLocation, cardName + card.getM_Name().replaceAll("\\s", "") + ".png");
 				
 				writeJpeg(newImageFile, fullCardImage, quality);
@@ -107,17 +114,20 @@ public class CardImagerMapperUtil {
 				System.out.println("Skipping file as error loading image" + card.getM_Name());
 				e.printStackTrace();
 			} catch (Exception e){
-				
+				e.printStackTrace();
 			}
 		}
 	}
 	
 	
-	private static BufferedImage openImage(File f) throws IOException {
+	private static BufferedImage openImage(File f, URL url) throws IOException {
 
 		BufferedImage bufferedImage;
-
-		bufferedImage = ImageIO.read(f);
+		if(f != null){
+			bufferedImage = ImageIO.read(f);
+		}else{
+			bufferedImage = ImageIO.read(url);
+		}
 		BufferedImage newBufferedImage = new BufferedImage(bufferedImage.getWidth(), bufferedImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		newBufferedImage.createGraphics().drawImage(bufferedImage, 0, 0, null);
 
@@ -128,8 +138,8 @@ public class CardImagerMapperUtil {
 		BufferedImage canvas = null;
 		
 		try {
-			BufferedImage portrait = openImage(portraitImageFile);
-			BufferedImage cardTemplate = openImage(templateImageFile);
+			BufferedImage portrait = openImage(portraitImageFile, null);
+			BufferedImage cardTemplate = openImage(null, template.templateId);
 			canvas = new BufferedImage(cardTemplate.getWidth(), cardTemplate.getHeight(), BufferedImage.TYPE_INT_RGB);
 			Graphics2D graphics2D = canvas.createGraphics();
 			graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -149,9 +159,9 @@ public class CardImagerMapperUtil {
 			
 			drawFullImageText(card, canvas, cardTemplate, template);
 		} catch (IOException e) {
-			
+			e.printStackTrace();
 		}catch(Exception e){
-			
+			e.printStackTrace();
 		}
 		
 		return canvas;
@@ -249,7 +259,11 @@ public class CardImagerMapperUtil {
 
 		cleanTarget(targetFile);
 
-		generateImageAndCardJSONData(sourceFile, targetFile);
+		try {
+			generateImageAndCardJSONData(sourceFile, targetFile);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 
 	}
 
@@ -359,12 +373,12 @@ public class CardImagerMapperUtil {
 		BufferedImage factionImage = null;
 		try{
 		if (card.getM_Faction().equalsIgnoreCase("Aria")) {
-			factionImage = openImage(new File("HexCardGenerator/images/faction_ardent_new.png"));
+			factionImage = openImage(null, card.getClass().getResource("/images/faction_ardent_new.png"));
 		} else if (card.getM_Faction().equalsIgnoreCase("Underworld")) {
-			factionImage = openImage(new File("HexCardGenerator/images/faction_underworld_new.png"));
+			factionImage = openImage(null, card.getClass().getResource("/images/faction_underworld_new.png"));
 		}
 		}catch (IOException e) {
-			
+			e.printStackTrace();
 		}
 
 		canvas.createGraphics().drawImage(factionImage, (int)(templateImage.getWidth() / template.factionWidth),
@@ -373,35 +387,35 @@ public class CardImagerMapperUtil {
 	
 	private static void drawRarity(Card card, BufferedImage canvas, BufferedImage templateImage, CardTemplate template) {
 		String resourceId;
+		String imagePath = "/images/";
 		switch (card.getM_CardRarity().toUpperCase()) {
 		case "COMMON":
-			resourceId = "images/card_rarity_common_new.png";
+			resourceId = "card_rarity_common_new.png";
 			break;
 		case "UNCOMMON":
-			resourceId = "images/card_rarity_uncommon_new.png";
+			resourceId = "card_rarity_uncommon_new.png";
 			break;
 		case "RARE":
-			resourceId = "images/card_rarity_rare_new.png";
+			resourceId = "card_rarity_rare_new.png";
 			break;
 		case "LEGENDARY":
-			resourceId = "images/card_rarity_legendary_new.png";
+			resourceId = "card_rarity_legendary_new.png";
 			break;
 		case "LAND":
-			resourceId = "images/card_rarity_system_new.png";
+			resourceId = "card_rarity_system_new.png";
 			break;
 		case "PROMO":
-			resourceId = "images/card_rarity_common_new.png";
+			resourceId = "card_rarity_common_new.png";
 			break;
 		default:
-			resourceId = "images/card_rarity_common_new.png";
+			resourceId = "card_rarity_common_new.png";
 		}
 		BufferedImage rarity;
 		try {
-			rarity = openImage(new File(resourceId));
+			rarity = openImage(null, card.getClass().getResource(imagePath + resourceId));
 			canvas.createGraphics().drawImage(rarity, (int)(templateImage.getWidth() / template.rarityWidth),
 					(int)(templateImage.getHeight() - (templateImage.getHeight() / template.rarityHeight)), null);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
 	}
@@ -506,17 +520,19 @@ public class CardImagerMapperUtil {
 		SymbolTemplate symTemp = SymbolTemplate.findSymbolTemplate(symbol, SymbolTemplate.getAllTemplates(SymbolTemplate.symbolJson));
 		if (symTemp != null) {
 			try {
-				BufferedImage bufferedImage = ImageIO.read(new File(symTemp.templateId));
+				BufferedImage bufferedImage = ImageIO.read(symTemp.templateId);
 				BufferedImage symbolImage = new BufferedImage((int) (height * symTemp.sizeRatio), height, BufferedImage.TYPE_INT_ARGB);
 				symbolImage.createGraphics().drawImage(bufferedImage, 0, 0, (int) (height * symTemp.sizeRatio), height, null);
 				return symbolImage;
 			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 		BufferedImage blank = null;
 		try {
-			blank =  openImage(new File("images/blank.png"));
+			blank =  openImage(null, symTemp.getClass().getResource("/images/blank.png"));
 		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		
 		return blank;
@@ -525,7 +541,7 @@ public class CardImagerMapperUtil {
 	public static BufferedImage getCardThresholdImage(Card card, CardTemplate template, BufferedImage canvas) {
 		if (card.getM_Threshold() != null && card.getM_Threshold().length > 0) {
 			ArrayList<BufferedImage> thresholds = new ArrayList<BufferedImage>();
-			String imagePath = "images/";
+			String imagePath = "/images/";
 			for (ResourceThreshold threshold : card.getM_Threshold()) {
 				if (threshold.colorFlags != null && threshold.colorFlags.length > 0 && threshold.colorFlags[0] != null) {
 					String thresholdName = null;
@@ -559,7 +575,7 @@ public class CardImagerMapperUtil {
 					}
 					
 					if (thresholdName != null) {
-						addCardThresholdBitmapToList(thresholds, imagePath + thresholdName, threshold.thresholdColorRequirement);
+						addCardThresholdBitmapToList(thresholds, card.getClass().getResource(imagePath + thresholdName), threshold.thresholdColorRequirement);
 					}
 				}
 			}
@@ -588,11 +604,11 @@ public class CardImagerMapperUtil {
 		return null;
 	}
 
-	private static void addCardThresholdBitmapToList(List<BufferedImage> thresholds, String resourcesName, int thresholdCount) {
+	private static void addCardThresholdBitmapToList(List<BufferedImage> thresholds, URL resourcesName, int thresholdCount) {
 		for (int i = 0; i < thresholdCount; i++) {
 			BufferedImage thresh;
 			try {
-				thresh = openImage(new File(resourcesName));
+				thresh = openImage(null, resourcesName);
 				thresholds.add(thresh);
 			} catch (IOException e) {
 				e.printStackTrace();

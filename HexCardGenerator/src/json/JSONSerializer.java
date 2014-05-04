@@ -2,11 +2,8 @@ package json;
 
 import enums.Attribute;
 import hexentities.Card;
-import hexentities.Gem;
 import enums.CardType;
 import enums.ColorFlag;
-import enums.GemType;
-import enums.ItemType;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -91,41 +88,5 @@ public class JSONSerializer {
 		}
 
 		return json;
-	}
-
-	/**
-	 * Deserialize a JSON String into a Gem
-	 * 
-	 * @param json
-	 * @return A Gem deserialized from the given JSON
-	 */
-	public static Gem deserializeJSONtoGem(String json) {
-		GsonBuilder gsonBuilder = new GsonBuilder();
-		gsonBuilder.registerTypeAdapter(GemType[].class, new MultiValueSerializer<GemType>(GemType.class));
-		gsonBuilder.registerTypeAdapter(ItemType[].class, new MultiValueSerializer<ItemType>(ItemType.class));
-		gsonBuilder.setPrettyPrinting();
-		Gson gson = gsonBuilder.create();
-
-		Gem newGem = gson.fromJson(json, Gem.class);
-
-		return newGem;
-	}
-
-	/**
-	 * Deserialize a JSON String into a Gem
-	 * 
-	 * @param json
-	 * @return A Gem deserialized from the given JSON
-	 */
-	public static String serializeGemToJSON(Gem gem) {
-		GsonBuilder gsonBuilder = new GsonBuilder();
-		gsonBuilder.registerTypeAdapter(GemType[].class, new MultiValueSerializer<GemType>(GemType.class));
-		gsonBuilder.registerTypeAdapter(ItemType[].class, new MultiValueSerializer<ItemType>(ItemType.class));
-		gsonBuilder.setPrettyPrinting();
-		Gson gson = gsonBuilder.create();
-
-		String newJSON = gson.toJson(gem);
-
-		return newJSON;
 	}
 }
