@@ -41,7 +41,7 @@ import enums.CardType;
 import json.JSONSerializer;
 
 public class CardImagerMapperUtil {
-	private static String		cardName				= "hexcard";
+	private static String		cardName				= "hexcard_";
 	public final static String	VERSION					= "v1.0";
 	public static float			quality					= 0.6f;
 	public static float			line;

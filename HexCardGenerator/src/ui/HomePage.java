@@ -53,11 +53,11 @@ public class HomePage extends JFrame implements PropertyChangeListener{
         }
 		
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(6, 1));
+        panel.setLayout(new GridLayout(7, 1));
         
         JPanel panelHexDir = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         panelHexDir.setMaximumSize(new Dimension(650, 0));
-        JLabel labelHexDir = new JLabel("Hex Directory: ");
+        JLabel labelHexDir = new JLabel("Hex Directory (e.g. C:\\Games\\HEX\\): ");
         JButton selectHexDir = new JButton("Select Hex Directory");
         selectHexDir.addActionListener(new ActionListener() {
 			
@@ -69,7 +69,6 @@ public class HomePage extends JFrame implements PropertyChangeListener{
 				if (fileChooser.showOpenDialog(HomePage.this) == JFileChooser.APPROVE_OPTION) {
 					textFieldHexDir.setText(fileChooser.getSelectedFile().toString());
 				}
-				
 			}
 		});        
         
@@ -90,8 +89,7 @@ public class HomePage extends JFrame implements PropertyChangeListener{
 				fileChooser.setAcceptAllFileFilterUsed(false);
 				if (fileChooser.showOpenDialog(HomePage.this) == JFileChooser.APPROVE_OPTION) {
 					textFieldSaveDir.setText(fileChooser.getSelectedFile().toString());
-				}
-				
+				}				
 			}
 		});
         
@@ -112,17 +110,21 @@ public class HomePage extends JFrame implements PropertyChangeListener{
         panelStart.setMaximumSize(new Dimension(650, 0));
         
         buttonStart = new JButton("Start");
-       
         buttonStart.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				buttonStart.setEnabled(false);
-				progressBar.setVisible(true);
-		        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-		        Task task = new Task();
-		        task.addPropertyChangeListener(HomePage.this);
-		        task.execute();
+				if(textFieldHexDir.getText() != null && !textFieldHexDir.getText().isEmpty() 
+						&& textFieldSaveDir.getText() != null && !textFieldSaveDir.getText().isEmpty()){
+					buttonStart.setEnabled(false);
+					progressBar.setVisible(true);
+			        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+			        Task task = new Task();
+			        task.addPropertyChangeListener(HomePage.this);
+			        task.execute();
+				}else{					
+			        JOptionPane.showMessageDialog(null, "Please select the HEX and save directories.");
+				}
 				
 			}
 		});
@@ -146,7 +148,7 @@ public class HomePage extends JFrame implements PropertyChangeListener{
         panel.add(progressBar);
         add(panel);
 
-        setTitle("Hex TCG - Card Image Generator");
+        setTitle("Hex TCG - Card Image Generator by TCG Dev Studios");
         setSize(new Dimension(650, 300));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
