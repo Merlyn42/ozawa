@@ -1,3 +1,20 @@
+/*******************************************************************************
+ * Hex TCG Card Generator
+ *     Copyright ( C ) 2014  Chad Kinsella, Dave Kerr and Laurence Reading
+ * 
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * 
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ * 
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package ui;
 
 import java.awt.Cursor;
@@ -55,7 +72,23 @@ public class HomePage extends JFrame implements PropertyChangeListener{
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(7, 1));
         
-        JPanel panelHexDir = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        panel.add(setUpHexDirPanel());
+        panel.add(setUpSaveDirPanel());
+        panel.add(setUpQualityPanel());
+        panel.add(setUpStartButtonPanel());
+        panel.add(setUpLiePanel());
+        panel.add(setUpProgressBar());
+        
+        add(panel);
+
+        setTitle("Hex TCG - Card Image Generator by TCG Dev Studios");
+        setSize(new Dimension(650, 300));
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+    }
+	
+	private JPanel setUpHexDirPanel(){
+		JPanel panelHexDir = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         panelHexDir.setMaximumSize(new Dimension(650, 0));
         JLabel labelHexDir = new JLabel("Hex Directory (e.g. C:\\Games\\HEX\\): ");
         JButton selectHexDir = new JButton("Select Hex Directory");
@@ -76,7 +109,11 @@ public class HomePage extends JFrame implements PropertyChangeListener{
         panelHexDir.add(textFieldHexDir);
         panelHexDir.add(selectHexDir);
         
-        JPanel panelSaveDir = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        return panelHexDir;
+	}
+	
+	private JPanel setUpSaveDirPanel(){
+		JPanel panelSaveDir = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         panelSaveDir.setMaximumSize(new Dimension(650, 0));
         JLabel labelSaveDir = new JLabel("Save Directory: ");
         JButton selectSaveDir = new JButton("Select Save Directory");
@@ -98,7 +135,11 @@ public class HomePage extends JFrame implements PropertyChangeListener{
         panelSaveDir.add(textFieldSaveDir);
         panelSaveDir.add(selectSaveDir);
         
-        JPanel panelQuality = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        return panelSaveDir;
+	}
+	
+	private JPanel setUpQualityPanel(){
+		JPanel panelQuality = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         panelQuality.setMaximumSize(new Dimension(650, 0));
         JLabel labelQuality = new JLabel("Image Quality %: ");
         comboQuality.setSelectedItem(qualities[7]);
@@ -106,53 +147,54 @@ public class HomePage extends JFrame implements PropertyChangeListener{
         panelQuality.add(labelQuality);
         panelQuality.add(comboQuality);
         
-        JPanel panelStart = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        panelStart.setMaximumSize(new Dimension(650, 0));
-        
-        buttonStart = new JButton("Start");
-        buttonStart.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(textFieldHexDir.getText() != null && !textFieldHexDir.getText().isEmpty() 
-						&& textFieldSaveDir.getText() != null && !textFieldSaveDir.getText().isEmpty()){
-					buttonStart.setEnabled(false);
-					progressBar.setVisible(true);
-			        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-			        Task task = new Task();
-			        task.addPropertyChangeListener(HomePage.this);
-			        task.execute();
-				}else{					
-			        JOptionPane.showMessageDialog(null, "Please select the HEX and save directories.");
-				}
-				
-			}
-		});
-        panelStart.add(buttonStart);
-        
-        panelLie = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        return panelQuality;
+	}
+	
+	private JPanel setUpLiePanel(){
+		panelLie = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JLabel labelLie = new JLabel("The progress bar is lying... Still generating cards...");
         panelLie.add(labelLie);
         panelLie.setVisible(false);
         
-        progressBar = new JProgressBar(0, 100);
+        return panelLie;
+	}
+	
+	private JProgressBar setUpProgressBar(){
+		progressBar = new JProgressBar(0, 100);
         progressBar.setValue(0);
         progressBar.setStringPainted(true);
         progressBar.setVisible(false);
         
-        panel.add(panelHexDir);
-        panel.add(panelSaveDir);
-        panel.add(panelQuality);
-        panel.add(panelStart);
-        panel.add(panelLie);
-        panel.add(progressBar);
-        add(panel);
-
-        setTitle("Hex TCG - Card Image Generator by TCG Dev Studios");
-        setSize(new Dimension(650, 300));
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-    }
+        return progressBar;
+	}
+	
+	private JPanel setUpStartButtonPanel(){
+		 JPanel panelStart = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+	        panelStart.setMaximumSize(new Dimension(650, 0));
+	        
+	        buttonStart = new JButton("Start");
+	        buttonStart.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if(textFieldHexDir.getText() != null && !textFieldHexDir.getText().isEmpty() 
+							&& textFieldSaveDir.getText() != null && !textFieldSaveDir.getText().isEmpty()){
+						buttonStart.setEnabled(false);
+						progressBar.setVisible(true);
+				        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+				        Task task = new Task();
+				        task.addPropertyChangeListener(HomePage.this);
+				        task.execute();
+					}else{					
+				        JOptionPane.showMessageDialog(null, "Please select the HEX and save directories.");
+					}
+					
+				}
+			});
+	        panelStart.add(buttonStart);
+	        
+	        return panelStart;
+	}
 	
 	public static void main(String[] args) {
 

@@ -1,3 +1,20 @@
+/*******************************************************************************
+ * Hex TCG Card Generator
+ *     Copyright ( C ) 2014  Chad Kinsella, Dave Kerr and Laurence Reading
+ * 
+ *     This program is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ * 
+ *     This program is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ * 
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package utility;
 
 import hexentities.Card;
@@ -100,14 +117,16 @@ public class CardImagerMapperUtil {
 
 		for (Card card : allCards) {
 			try {
-				CardTemplate template = CardTemplate.findCardTemplate(card, true, CardTemplate.getAllTemplates(CardTemplate.templateJsonPath));
-				//File templateImageFile = new File(null, template.templateId);
-				File portraitImageFile = new File(hexLocation, card.getM_CardImagePath());
-				
-				BufferedImage fullCardImage = generateCardImage(card, template, null, portraitImageFile);
-				File newImageFile = new File(newImageLocation, cardName + card.getM_Name().replaceAll("\\s", "") + ".png");
-				
-				writeJpeg(newImageFile, fullCardImage, quality);
+				if(card.cardType[0] != CardType.RESOURCE){
+					CardTemplate template = CardTemplate.findCardTemplate(card, true, CardTemplate.getAllTemplates(CardTemplate.templateJsonPath));
+					//File templateImageFile = new File(null, template.templateId);
+					File portraitImageFile = new File(hexLocation, card.getM_CardImagePath());
+					
+					BufferedImage fullCardImage = generateCardImage(card, template, null, portraitImageFile);
+					File newImageFile = new File(newImageLocation, cardName + card.getM_Name().replaceAll("\\s", "") + "_" + card.getM_Id().getM_Guid() + ".png");
+					
+					writeJpeg(newImageFile, fullCardImage, quality);
+				}
 			} catch (FileNotFoundException e) {
 				System.out.println("Skipping file as image not found" + card.getM_Name());
 			} catch (IOException e) {
@@ -175,6 +194,7 @@ public class CardImagerMapperUtil {
 		ImageWriter writer = getJpegWriter();
 		writer.setOutput(new FileImageOutputStream(f));
 		writer.write(null, new IIOImage(image, null, null), jpegParams);
+		writer.dispose();
 	}
 
 	private static ImageWriter getJpegWriter() throws IOException {
@@ -303,9 +323,9 @@ public class CardImagerMapperUtil {
 		Graphics2D graphics2D = canvas.createGraphics();
 		
 		graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);		
-		graphics2D.setFont(new Font(Font.SANS_SERIF, Font.BOLD, (int)(imageHeight * template.nameFontRatio)));
+		graphics2D.setFont(new Font("Roboto", Font.BOLD, (int)(imageHeight * template.nameFontRatio)));
 		graphics2D.drawString(card.getM_Name(), templateImage.getWidth() / template.nameWidth, templateImage.getHeight() / template.nameHeight);
-		graphics2D.setFont(new Font(Font.SANS_SERIF, Font.BOLD, (int)(imageHeight * template.numberRatio)));
+		graphics2D.setFont(new Font("Roboto", Font.BOLD, (int)(imageHeight * template.numberRatio)));
 		int resourceCost = card.getM_ResourceCost();
 		
 		if (resourceCost > 9) {
@@ -339,7 +359,7 @@ public class CardImagerMapperUtil {
 						templateImage.getHeight() - (templateImage.getHeight() / template.defHeight));
 			}
 		}
-		graphics2D.setFont(new Font(Font.SANS_SERIF, Font.BOLD, (int)(imageHeight * template.typeFontRatio)));
+		graphics2D.setFont(new Font("Roboto", Font.BOLD, (int)(imageHeight * template.typeFontRatio)));
 		String cardTypes = "";
 		for (int i = 0; i < card.cardType.length; i++) {
 			cardTypes += card.cardType[i].getCardType();
@@ -361,7 +381,7 @@ public class CardImagerMapperUtil {
 		}
 		
 		drawRarity(card, canvas, templateImage, template);
-		graphics2D.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, (int)(imageHeight * template.typeFontRatio)));
+		graphics2D.setFont(new Font("Roboto", Font.PLAIN, (int)(imageHeight * template.typeFontRatio)));
 		drawGameText(card.getM_GameText().trim(), 64, card, canvas, templateImage, template);
 		BufferedImage threshold = getCardThresholdImage(card, template, canvas);
 		graphics2D.drawImage(threshold, (int)(templateImage.getWidth() / template.thresholdWidth), 
@@ -422,7 +442,7 @@ public class CardImagerMapperUtil {
 	
 	private static void drawGameText(String gameText, int length, Card card, BufferedImage canvas, BufferedImage templateImage, CardTemplate template) {
 		line = 0f;
-		FontMetrics fMetrics = canvas.createGraphics().getFontMetrics(new Font(Font.SANS_SERIF, Font.BOLD, (int)(templateImage.getHeight() * template.typeFontRatio)));
+		FontMetrics fMetrics = canvas.createGraphics().getFontMetrics(new Font("Roboto", Font.BOLD, (int)(templateImage.getHeight() * template.typeFontRatio)));
 		
 		if (fMetrics.stringWidth(gameText) < (templateImage.getWidth() * template.gameTextLength)) {
 			if (gameText.contains("<p>")) {
@@ -467,7 +487,7 @@ public class CardImagerMapperUtil {
 	private static void drawTextWithImages(String displayText, BufferedImage templateImage, BufferedImage canvas, CardTemplate template) {
 		String delims = "[\\[\\]<>]";
 		String[] stuff = displayText.split(delims);
-		FontMetrics fMetrics = canvas.createGraphics().getFontMetrics(new Font(Font.SANS_SERIF, Font.BOLD, (int)(templateImage.getHeight() * template.typeFontRatio)));
+		FontMetrics fMetrics = canvas.createGraphics().getFontMetrics(new Font("Roboto", Font.BOLD, (int)(templateImage.getHeight() * template.typeFontRatio)));
 		float width = templateImage.getWidth() / template.gameTextWidth;
 		int baseline = fMetrics.getAscent();
 		int height = baseline + fMetrics.getDescent();//(int) templateImage.getHeight() / 20;
@@ -478,7 +498,7 @@ public class CardImagerMapperUtil {
 				Graphics2D graphics2D = canvas.createGraphics();
 				
 				graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				graphics2D.setFont(new Font(Font.SANS_SERIF, Font.BOLD, (int)(templateImage.getHeight() * template.typeFontRatio)));
+				graphics2D.setFont(new Font("Roboto", Font.BOLD, (int)(templateImage.getHeight() * template.typeFontRatio)));
 				graphics2D.drawString(stuff[i], width, (templateImage.getHeight() / (template.gameTextHeight - line)) + 20);
 				width += (fMetrics.stringWidth(stuff[i]) + 0.5f);
 				graphics2D.dispose();
