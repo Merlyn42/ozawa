@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -26,6 +28,9 @@ import javax.imageio.spi.ImageWriterSpi;
 import javax.imageio.spi.ServiceRegistry;
 import javax.imageio.stream.FileImageOutputStream;
 import javax.imageio.stream.MemoryCacheImageOutputStream;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -33,6 +38,9 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 public class CardImagerMapperUtil {
 
@@ -77,10 +85,11 @@ public class CardImagerMapperUtil {
 				}
 			};
 			File[] cardFiles = new File(hexLocation, "Sets\\Set001\\CardDefinitions").listFiles(filter);
+			HashMap<String,List<String> > relatedIDs = getRelatedCards(hexLocation);
 
 			for (File cardFile : cardFiles) {
 				try {
-					mapper.transcribeCardFile(cardFile);
+					mapper.transcribeCardFile(cardFile, relatedIDs);
 				} catch (Exception e) {
 					System.err.println("Fatal error while zipping:" + cardFile.getName());
 					e.printStackTrace();
@@ -153,6 +162,40 @@ public class CardImagerMapperUtil {
 
 	}
 
+	private static HashMap<String,List<String>> getRelatedCards(File hexLocation) {
+    	File file = new File(hexLocation,"\\Localization\\abilities.en-us.xml");
+    	DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+    	DocumentBuilder db;
+    	HashMap<String, List<String>> relatedCardMap = new HashMap<String, List<String>>();
+		try {
+			db = dbf.newDocumentBuilder();
+			
+			Document document;
+			document = db.parse(file);
+			
+			document.getDocumentElement().normalize();
+			NodeList tests =document.getElementsByTagName("trans-unit");
+			
+			for(int i = 0;i < tests.getLength(); i++){
+				if(tests.item(i).getTextContent().contains("<a data=")){
+					String parentID = tests.item(i).getAttributes().item(0).getTextContent().split(":")[1];
+					String[] splitStrings = tests.item(i).getTextContent().split("data=");
+					ArrayList<String>  relatedIDs = new ArrayList<String>();
+					for(int j = 1;j < splitStrings.length; j++){
+						relatedIDs.add(splitStrings[j].trim().substring(0,36));
+					}
+					relatedCardMap.put(parentID, relatedIDs);					
+				}
+			}
+			}catch (ParserConfigurationException e) {
+				System.err.println("serious configuration error");
+				e.printStackTrace();				
+			} catch (SAXException | IOException e) {
+				System.err.println("Couldnt find XML file");				
+				e.printStackTrace();
+			}
+		return relatedCardMap;
+	}
 	// copy input to output stream
 	private static void copyEntry(InputStream input, OutputStream output) throws IOException {
 		byte[] BUFFER = new byte[4096 * 1024];

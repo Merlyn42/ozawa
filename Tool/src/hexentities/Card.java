@@ -127,6 +127,8 @@ public class Card {
     private Integer m_DesignerNumber;
     @Expose
     private M_ShuffleIntoDeckTarget m_ShuffleIntoDeckTarget;
+    @Expose 
+    private List<String> m_RelatedCards;
 
     public List<hexentities._v> get_v() {
         return _v;
@@ -599,5 +601,12 @@ public class Card {
     public void setM_ShuffleIntoDeckTarget(M_ShuffleIntoDeckTarget m_ShuffleIntoDeckTarget) {
         this.m_ShuffleIntoDeckTarget = m_ShuffleIntoDeckTarget;
     }
+    
+    public List<String> getM_RelatedCards() {
+        return m_RelatedCards;
+    }
 
+    public void setM_RelatedCards(List<String> m_RelatedCards) {
+        this.m_RelatedCards = m_RelatedCards;
+    }
 }
