@@ -233,7 +233,7 @@ public class CardImageMapper {
 
 	}
 
-	public void transcribeCardFile(File cardFile) throws NoSuchAlgorithmException, IOException {
+	public void transcribeCardFile(File cardFile, List<String>> relatedCards) throws NoSuchAlgorithmException, IOException {
 		// read the card json
 		MessageDigest cardMD = MessageDigest.getInstance("MD5");
 		DigestInputStream cardDigestStream = null;
@@ -242,6 +242,8 @@ public class CardImageMapper {
 			FileInputStream cardStream = new FileInputStream(cardFile);
 			cardDigestStream = new DigestInputStream(cardStream, cardMD);
 			card = JSONSerializer.deserializeJSONtoCard(cardDigestStream);
+			List<String> relatedCardIDs = relatedCards.get(card.getM_Id());
+			card.setM_RelatedCards(relatedCardIDs);
 		} catch (IOException e) {
 			System.err.println("Failed to read card file: " + cardFile.getAbsolutePath());
 			System.err.println("Skipping...");
