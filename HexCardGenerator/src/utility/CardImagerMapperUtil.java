@@ -55,6 +55,7 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 
 import enums.CardType;
+import enums.FontType;
 import json.JSONSerializer;
 
 public class CardImagerMapperUtil {
@@ -123,7 +124,8 @@ public class CardImagerMapperUtil {
 					File portraitImageFile = new File(hexLocation, card.getM_CardImagePath());
 					
 					BufferedImage fullCardImage = generateCardImage(card, template, null, portraitImageFile);
-					File newImageFile = new File(newImageLocation, cardName + card.getM_Name().replaceAll("\\s", "") + "_" + card.getM_Id().getM_Guid() + ".png");
+					//File newImageFile = new File(newImageLocation, cardName + card.getM_Name().replaceAll("\\s", "").replaceAll(":", "_") + "_" + card.getM_Id().getM_Guid() + ".png");
+					File newImageFile = new File(newImageLocation, card.getM_Name().replaceAll(":", "\\s") + ".png"); // Card naming convention for Wiki
 					
 					writeJpeg(newImageFile, fullCardImage, quality);
 				}
@@ -323,9 +325,9 @@ public class CardImagerMapperUtil {
 		Graphics2D graphics2D = canvas.createGraphics();
 		
 		graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);		
-		graphics2D.setFont(new Font("Roboto", Font.BOLD, (int)(imageHeight * template.nameFontRatio)));
+		graphics2D.setFont(new Font("Roboto", Font.PLAIN, (int)(imageHeight * template.nameFontRatio)));
 		graphics2D.drawString(card.getM_Name(), templateImage.getWidth() / template.nameWidth, templateImage.getHeight() / template.nameHeight);
-		graphics2D.setFont(new Font("Roboto", Font.BOLD, (int)(imageHeight * template.numberRatio)));
+		graphics2D.setFont(new Font("Roboto", Font.PLAIN, (int)(imageHeight * template.numberRatio)));
 		int resourceCost = card.getM_ResourceCost();
 		
 		if (resourceCost > 9) {
@@ -359,7 +361,7 @@ public class CardImagerMapperUtil {
 						templateImage.getHeight() - (templateImage.getHeight() / template.defHeight));
 			}
 		}
-		graphics2D.setFont(new Font("Roboto", Font.BOLD, (int)(imageHeight * template.typeFontRatio)));
+		graphics2D.setFont(new Font("Roboto", Font.PLAIN, (int)(imageHeight * template.typeFontRatio)));
 		String cardTypes = "";
 		for (int i = 0; i < card.cardType.length; i++) {
 			cardTypes += card.cardType[i].getCardType();
@@ -383,6 +385,7 @@ public class CardImagerMapperUtil {
 		drawRarity(card, canvas, templateImage, template);
 		graphics2D.setFont(new Font("Roboto", Font.PLAIN, (int)(imageHeight * template.typeFontRatio)));
 		drawGameText(card.getM_GameText().trim(), 64, card, canvas, templateImage, template);
+		drawFlavorText(card.getM_FlavorText().trim(), templateImage, canvas, template);
 		BufferedImage threshold = getCardThresholdImage(card, template, canvas);
 		graphics2D.drawImage(threshold, (int)(templateImage.getWidth() / template.thresholdWidth), 
 				(int)(templateImage.getHeight() / template.thresholdHeight), null);
@@ -442,7 +445,7 @@ public class CardImagerMapperUtil {
 	
 	private static void drawGameText(String gameText, int length, Card card, BufferedImage canvas, BufferedImage templateImage, CardTemplate template) {
 		line = 0f;
-		FontMetrics fMetrics = canvas.createGraphics().getFontMetrics(new Font("Roboto", Font.BOLD, (int)(templateImage.getHeight() * template.typeFontRatio)));
+		FontMetrics fMetrics = canvas.createGraphics().getFontMetrics(new Font("Roboto", Font.PLAIN, (int)(templateImage.getHeight() * template.typeFontRatio)));
 		
 		if (fMetrics.stringWidth(gameText) < (templateImage.getWidth() * template.gameTextLength)) {
 			if (gameText.contains("<p>")) {
@@ -487,7 +490,8 @@ public class CardImagerMapperUtil {
 	private static void drawTextWithImages(String displayText, BufferedImage templateImage, BufferedImage canvas, CardTemplate template) {
 		String delims = "[\\[\\]<>]";
 		String[] stuff = displayText.split(delims);
-		FontMetrics fMetrics = canvas.createGraphics().getFontMetrics(new Font("Roboto", Font.BOLD, (int)(templateImage.getHeight() * template.typeFontRatio)));
+		FontType _fontType = FontType.PLAIN;
+		FontMetrics fMetrics = canvas.createGraphics().getFontMetrics(new Font("Roboto", Font.PLAIN, (int)(templateImage.getHeight() * template.typeFontRatio)));
 		float width = templateImage.getWidth() / template.gameTextWidth;
 		int baseline = fMetrics.getAscent();
 		int height = baseline + fMetrics.getDescent();//(int) templateImage.getHeight() / 20;
@@ -498,22 +502,38 @@ public class CardImagerMapperUtil {
 				Graphics2D graphics2D = canvas.createGraphics();
 				
 				graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				graphics2D.setFont(new Font("Roboto", Font.BOLD, (int)(templateImage.getHeight() * template.typeFontRatio)));
-				graphics2D.drawString(stuff[i], width, (templateImage.getHeight() / (template.gameTextHeight - line)) + 20);
-				width += (fMetrics.stringWidth(stuff[i]) + 0.5f);
+				if(_fontType == FontType.PLAIN){
+					graphics2D.setFont(new Font("Roboto", Font.PLAIN, (int)(templateImage.getHeight() * template.typeFontRatio)));
+					graphics2D.drawString(stuff[i], width, (templateImage.getHeight() / (template.gameTextHeight - line)) + 20);
+					width += (fMetrics.stringWidth(stuff[i]) + 0.5f);
+				}else if(_fontType == FontType.BOLD){
+					graphics2D.setFont(new Font("Roboto", Font.BOLD, (int)(templateImage.getHeight() * template.typeFontRatio)));
+					graphics2D.drawString(stuff[i], width, (templateImage.getHeight() / (template.gameTextHeight - line)) + 20);
+					width += (fMetrics.stringWidth(stuff[i]) + 10f);
+				}else if(_fontType == FontType.ITALIC){
+					graphics2D.setFont(new Font("Roboto", Font.ITALIC, (int)(templateImage.getHeight() * template.typeFontRatio)));
+					graphics2D.drawString(stuff[i], width, (templateImage.getHeight() / (template.gameTextHeight - line)) + 20);
+					width += (fMetrics.stringWidth(stuff[i]) + 1f);
+				}
+				_fontType = FontType.PLAIN;
 				graphics2D.dispose();
 			} else {
 				if (stuff[i].equalsIgnoreCase("p")) {
 					line += 0.04f;
 					width = templateImage.getWidth() / 14;
+					_fontType = FontType.PLAIN;
 				} else if (stuff[i].equalsIgnoreCase("b")) {
 					// TODO: Make text bold.
+					_fontType = FontType.BOLD;
 				} else if (stuff[i].equalsIgnoreCase("/b")) {
 					// TODO: Make text bold.
+					_fontType = FontType.BOLD;
 				} else if (stuff[i].equalsIgnoreCase("i")) {
 					// TODO: Make text italic.
+					_fontType = FontType.ITALIC;
 				} else if (stuff[i].equalsIgnoreCase("/i")) {
 					// TODO: Make text italic.
+					_fontType = FontType.ITALIC;
 				} else {
 					BufferedImage symbolImage;
 					if (stuff[i].equalsIgnoreCase("BASIC")) {
@@ -533,6 +553,33 @@ public class CardImagerMapperUtil {
 					width += symbolImage.getWidth();
 				}
 			}
+		}
+	}
+	
+	private static void drawFlavorText(String displayText, BufferedImage templateImage, BufferedImage canvas, CardTemplate template){
+		String delims = "(\\s|<p>)";
+		String[] stuff = displayText.replaceAll("(<i>|</i>)", "").split(delims);
+		FontMetrics fMetrics = canvas.createGraphics().getFontMetrics(new Font("Roboto", Font.ITALIC, (int)(templateImage.getHeight() * 0.016354839)));
+		float width = templateImage.getWidth() / 5;		
+		float line = (fMetrics.stringWidth(displayText.replaceAll("(<i>|</i>|<p>)", "")) < 600 && !displayText.contains("<p>")) ? 0.06f: 0f;
+		
+		for (int i = 0; i < stuff.length; i++) {
+			if (stuff[i].equals(""))
+				continue;
+			if(width + fMetrics.stringWidth(stuff[i]) >= 600 || stuff[i].startsWith(">>")){
+				line += 0.03f;
+				width = templateImage.getWidth() / 5;
+			}
+			Graphics2D graphics2D = canvas.createGraphics();
+			
+			graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);				
+			graphics2D.setFont(new Font("Roboto", Font.ITALIC, (int)(templateImage.getHeight() * 0.016354839)));
+			
+			graphics2D.drawString(stuff[i], width, (templateImage.getHeight() / (1.13f - line)) + 10);
+			width += (fMetrics.stringWidth(stuff[i]) + 4f);				
+			
+			
+			graphics2D.dispose();
 		}
 	}
 
