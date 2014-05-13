@@ -1,3 +1,5 @@
+import hexentities.M_RelatedCard;
+
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -85,7 +87,7 @@ public class CardImagerMapperUtil {
 				}
 			};
 			File[] cardFiles = new File(hexLocation, "Sets\\Set001\\CardDefinitions").listFiles(filter);
-			HashMap<String,List<String> > relatedIDs = getRelatedCards(hexLocation);
+			HashMap<String,List<M_RelatedCard> > relatedIDs = getRelatedCards(hexLocation);
 
 			for (File cardFile : cardFiles) {
 				try {
@@ -162,11 +164,11 @@ public class CardImagerMapperUtil {
 
 	}
 
-	private static HashMap<String,List<String>> getRelatedCards(File hexLocation) {
+	private static HashMap<String,List<M_RelatedCard>> getRelatedCards(File hexLocation) {
     	File file = new File(hexLocation,"\\Localization\\abilities.en-us.xml");
     	DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
     	DocumentBuilder db;
-    	HashMap<String, List<String>> relatedCardMap = new HashMap<String, List<String>>();
+    	HashMap<String, List<M_RelatedCard>> relatedCardMap = new HashMap<String, List<M_RelatedCard>>();
 		try {
 			db = dbf.newDocumentBuilder();
 			
@@ -180,9 +182,11 @@ public class CardImagerMapperUtil {
 				if(tests.item(i).getTextContent().contains("<a data=")){
 					String parentID = tests.item(i).getAttributes().item(0).getTextContent().split(":")[1];
 					String[] splitStrings = tests.item(i).getTextContent().split("data=");
-					ArrayList<String>  relatedIDs = new ArrayList<String>();
+					ArrayList<M_RelatedCard>  relatedIDs = new ArrayList<M_RelatedCard>();
 					for(int j = 1;j < splitStrings.length; j++){
-						relatedIDs.add(splitStrings[j].trim().substring(0,36));
+						M_RelatedCard relatedCardID = new M_RelatedCard();
+						relatedCardID.setM_Guid(splitStrings[j].trim().substring(0,36));
+						relatedIDs.add(relatedCardID);
 					}
 					relatedCardMap.put(parentID, relatedIDs);					
 				}

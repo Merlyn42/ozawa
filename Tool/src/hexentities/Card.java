@@ -3,6 +3,7 @@ package hexentities;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 
@@ -128,7 +129,7 @@ public class Card {
     @Expose
     private M_ShuffleIntoDeckTarget m_ShuffleIntoDeckTarget;
     @Expose 
-    private List<String> m_RelatedCards;
+    private List<M_RelatedCard> m_RelatedCards;
 
     public List<hexentities._v> get_v() {
         return _v;
@@ -602,11 +603,11 @@ public class Card {
         this.m_ShuffleIntoDeckTarget = m_ShuffleIntoDeckTarget;
     }
     
-    public List<String> getM_RelatedCards() {
+    public List<M_RelatedCard> getM_RelatedCards() {
         return m_RelatedCards;
     }
 
-    public void setM_RelatedCards(List<String> m_RelatedCards) {
+    public void setM_RelatedCards(List<M_RelatedCard> m_RelatedCards) {
         this.m_RelatedCards = m_RelatedCards;
     }
 }

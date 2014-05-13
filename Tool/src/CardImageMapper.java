@@ -1,6 +1,7 @@
 import hexentities.Card;
 import hexentities.Champion;
 import hexentities.Gem;
+import hexentities.M_RelatedCard;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -233,7 +234,7 @@ public class CardImageMapper {
 
 	}
 
-	public void transcribeCardFile(File cardFile, List<String>> relatedCards) throws NoSuchAlgorithmException, IOException {
+	public void transcribeCardFile(File cardFile, HashMap<String, List<M_RelatedCard>> relatedCards) throws NoSuchAlgorithmException, IOException {
 		// read the card json
 		MessageDigest cardMD = MessageDigest.getInstance("MD5");
 		DigestInputStream cardDigestStream = null;
@@ -241,9 +242,8 @@ public class CardImageMapper {
 		try {
 			FileInputStream cardStream = new FileInputStream(cardFile);
 			cardDigestStream = new DigestInputStream(cardStream, cardMD);
-			card = JSONSerializer.deserializeJSONtoCard(cardDigestStream);
-			List<String> relatedCardIDs = relatedCards.get(card.getM_Id());
-			card.setM_RelatedCards(relatedCardIDs);
+			card = JSONSerializer.deserializeJSONtoCard(cardDigestStream);			
+			card.setM_RelatedCards(relatedCards.get(card.getM_Id()));
 		} catch (IOException e) {
 			System.err.println("Failed to read card file: " + cardFile.getAbsolutePath());
 			System.err.println("Skipping...");
