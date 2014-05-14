@@ -608,6 +608,6 @@ public class Card {
     }
 
     public void setM_RelatedCards(List<M_RelatedCard> m_RelatedCards) {
-        this.m_RelatedCards = m_RelatedCards;
+    	this.m_RelatedCards = m_RelatedCards;
     }
 }

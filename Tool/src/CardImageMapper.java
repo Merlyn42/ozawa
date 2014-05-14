@@ -1,6 +1,7 @@
 import hexentities.Card;
 import hexentities.Champion;
 import hexentities.Gem;
+import hexentities.M_CardAbility;
 import hexentities.M_RelatedCard;
 
 import java.awt.image.BufferedImage;
@@ -242,8 +243,13 @@ public class CardImageMapper {
 		try {
 			FileInputStream cardStream = new FileInputStream(cardFile);
 			cardDigestStream = new DigestInputStream(cardStream, cardMD);
-			card = JSONSerializer.deserializeJSONtoCard(cardDigestStream);			
-			card.setM_RelatedCards(relatedCards.get(card.getM_Id()));
+			card = JSONSerializer.deserializeJSONtoCard(cardDigestStream);
+			List<M_RelatedCard> relatedCardIDs = new ArrayList<M_RelatedCard>();
+			for(M_CardAbility cardAbility : card.getM_CardAbilities()){				
+				if(relatedCards.get(cardAbility.getM_CardAbilityId().getM_Guid())!= null)
+					relatedCardIDs.addAll(relatedCards.get(cardAbility.getM_CardAbilityId().getM_Guid()));
+			}
+			card.setM_RelatedCards(relatedCardIDs);
 		} catch (IOException e) {
 			System.err.println("Failed to read card file: " + cardFile.getAbsolutePath());
 			System.err.println("Skipping...");
