@@ -71,11 +71,11 @@ public class LinkedCardsDialogFragment extends DialogFragment {
 	 * @param cardId
 	 * @return the linked card list for the given card
 	 */
-	private ArrayList<LinkedCards> getCardLinkedList(String cardId) {
+	private ArrayList<Card> getCardLinkedList(String cardId) {
 		AbstractCard card = hexApplication.getCardLibrary().getCardById(cardId);
 
 		if (card instanceof Card) {
-			return ((Card) card).linkedCards.adjacenyList;
+			return ((Card) card).relatedCards;
 		}
 		return null;
 	}

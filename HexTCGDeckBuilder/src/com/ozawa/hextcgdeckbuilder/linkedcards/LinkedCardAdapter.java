@@ -3,6 +3,7 @@ package com.ozawa.hextcgdeckbuilder.linkedcards;
 import java.util.ArrayList;
 
 import com.ozawa.hextcgdeckbuilder.R;
+import com.ozawa.hextcgdeckbuilder.hexentities.Card;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -17,9 +18,9 @@ public class LinkedCardAdapter extends BaseAdapter {
 
 	private LayoutInflater			mLayoutInflater;
 
-	private ArrayList<LinkedCards>	linkedCards	= new ArrayList<LinkedCards>();
+	private ArrayList<Card>	linkedCards	= new ArrayList<Card>();
 
-	public LinkedCardAdapter(Context context, ArrayList<LinkedCards> linkedCards) {
+	public LinkedCardAdapter(Context context, ArrayList<Card> linkedCards) {
 		mContext = context;
 		mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.linkedCards = linkedCards;
@@ -50,7 +51,7 @@ public class LinkedCardAdapter extends BaseAdapter {
 			textView = (TextView) convertView;
 		}
 
-		textView.setText(linkedCards.get(position).card.name);
+		textView.setText(linkedCards.get(position).name);
 		return textView;
 	}
 

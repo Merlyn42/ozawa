@@ -51,12 +51,11 @@ public class MasterDeck {
 		if (masterDeck == null) {
 			JsonReader jsonReader = new JsonReader(context);
 			try {
-				masterDeck = jsonReader.deserializeJSONInputStreamsToCard(JsonReader.getJson(context,"cards/hexcard"));
-				ArrayList<String> names = getNames(masterDeck);
+				masterDeck = jsonReader.deserializeJSONInputStreamsToCard(JsonReader.getJson(context,"cards/hexcard"));				
 				int max = 0;
 				for (AbstractCard card : masterDeck) {
 					if (card instanceof Card) {
-						parseForLinks((Card) card, masterDeck, names);
+						parseForLinks((Card) card, masterDeck);
 						if (((Card) card).resourceCost > max) {
 							max = ((Card) card).resourceCost;
 						}
@@ -70,88 +69,25 @@ public class MasterDeck {
 		return masterDeck;
 	}
 
-	private static ArrayList<String> getNames(List<AbstractCard> allCards) {
-		ArrayList<String> names = new ArrayList<String>();
+	private static Card getCard(String guid) {		
 		for (AbstractCard card : masterDeck) {
-			if (card instanceof Card) {
-				names.add(card.name);
+			if (card instanceof Card && card.getID() == guid) {
+				return (Card) card;
 			}
 		}
-		return names;
+		return null;
 	}
 
-	private static void parseForLinks(Card card, List<AbstractCard> allCards, ArrayList<String> names) {
-		if (card.gameText.contains("<b>")) {
-			String delims = "[<>]";
-			String[] words = card.gameText.split(delims);
-			for (int i = 0; i < words.length; i++) {
-				if (words[i].equals("b")) {
-					if (checkFullName(words[i + 1], names)) {
-						mergeLinkedCards(card, getFullMatchedCard(words[i + 1], allCards));
-					} else if(checkPartialName(words[i + 1], names)){
-						mergeLinkedCards(card, getPartialMatchedCard(words[i + 1], allCards));
-					}
-				}
+	private static void parseForLinks(Card card, List<AbstractCard> allCards) {
+		List<Card> relatedCards = new ArrayList<Card>();
+		for(String guid : card.relatedCardIDs){
+			Card relatedCard = getCard(guid); 
+			if(relatedCard != null){
+				relatedCards.add(relatedCard);
 			}
 		}
+		card.relatedCards = relatedCards;
 	}
-
-	private static boolean checkFullName(String name, ArrayList<String> names) {
-		for (String cardName : names) {
-			if (cardName.equals(name)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private static boolean checkPartialName(String name, ArrayList<String> names) {
-		for (String cardName : names) {
-			if(cardName.contains(name)){
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	private static void mergeLinkedCards(Card card, ArrayList<Card> otherCards) {
-		for (Card otherCard : otherCards) {
-			if (!card.linkedCards.adjacenyList.contains(otherCard.linkedCards) && !card.name.equals(otherCard.name)) {
-				card.linkedCards.adjacenyList.add(otherCard.linkedCards);
-			}
-			if (!otherCard.linkedCards.adjacenyList.contains(card.linkedCards) && !otherCard.name.equals(card.name)) {
-				otherCard.linkedCards.adjacenyList.add(card.linkedCards);
-			}
-		}
-	}
-
-	private static ArrayList<Card> getPartialMatchedCard(String name, List<AbstractCard> allCards) {
-		ArrayList<Card> matchedCards = new ArrayList<Card>();
-		for (AbstractCard card : allCards) {
-			if (card instanceof Card) {
-				if (card.name.contains(name)) {
-					matchedCards.add((Card) card);
-				}
-			}
-		}
-		return matchedCards;
-	}
-	
-	private static ArrayList<Card> getFullMatchedCard(String name, List<AbstractCard> allCards) {
-		ArrayList<Card> matchedCards = new ArrayList<Card>();
-		for (AbstractCard card : allCards) {
-			if (card instanceof Card) {
-				if (card.name.equals(name)) {
-					matchedCards.add((Card) card);
-				}
-			}
-		}
-		return matchedCards;
-	}
-	
-	
-	
-
 
 	private static ArrayList<InputStream> getJson2(Resources res) throws IllegalAccessException {
 		Field[] rawFields = R.raw.class.getFields();
@@ -172,5 +108,4 @@ public class MasterDeck {
 		}
 		return jsonFiles;
 	}
-
 }
