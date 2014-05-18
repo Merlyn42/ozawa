@@ -79,7 +79,7 @@ public class MasterDeck {
 	}
 
 	private static void parseForLinks(Card card, List<AbstractCard> allCards) {
-		List<Card> relatedCards = new ArrayList<Card>();
+		ArrayList<Card> relatedCards = new ArrayList<Card>();
 		for(String guid : card.relatedCardIDs){
 			Card relatedCard = getCard(guid); 
 			if(relatedCard != null){

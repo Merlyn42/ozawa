@@ -48,7 +48,7 @@ public class LinkedCardsDialogFragment extends DialogFragment {
 		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0xaa000000));
 		dialog.setTitle("Related Cards");
 
-		final ArrayList<LinkedCards> linkedCards = getCardLinkedList(cardId);
+		final ArrayList<Card> linkedCards = getCardLinkedList(cardId);
 		LinkedCardAdapter adapter = new LinkedCardAdapter(getActivity(), linkedCards);
 
 		listView = (ListView) dialog.findViewById(R.id.lvLinkedCards);
@@ -57,9 +57,8 @@ public class LinkedCardsDialogFragment extends DialogFragment {
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				goToFullImagePage(linkedCards.get(position).card.getID());
+				goToFullImagePage(linkedCards.get(position).getID());
 			}
-
 		});
 
 		return dialog;
