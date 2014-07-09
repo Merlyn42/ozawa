@@ -99,6 +99,8 @@ public class CardImageMapper {
 	public void transcribeChampionFile(File championFile) throws NoSuchAlgorithmException, IOException {
 		// Get Champion JSON
 		Gson gson = new Gson();
+		
+		
 		MessageDigest champMD = MessageDigest.getInstance("MD5");
 		DigestInputStream champDigestStream = null;
 		Champion champ = null;
@@ -123,13 +125,7 @@ public class CardImageMapper {
 		byte[] champDigest = champMD.digest();
 		if (champ.gameText != null && !champ.gameText.trim().contentEquals("")) {
 			ArrayList<PendingFile> pendingFiles = new ArrayList<PendingFile>();
-			String champGuid = newChampionName + champ.id.getM_Guid().replace("-", "_") + ".json";
 
-			if (!compareDigests(champDigest, oldHashData.get(champGuid))) {
-				String newChampionJSON = gson.toJson(champ);
-				ZipEntry newChampionEntry = new ZipEntry(champGuid);
-				pendingFiles.add(new PendingFile(newChampionEntry, newChampionJSON.getBytes()));
-			}
 
 			// Get Small portrait
 			if (champ.hudPortraitSmall != null) {
@@ -221,6 +217,13 @@ public class CardImageMapper {
 					champ.hudPortrait = newImageEntry.getName();
 				}
 
+			}
+			String champGuid = newChampionName + champ.id.getM_Guid().replace("-", "_") + ".json";
+
+			if (!compareDigests(champDigest, oldHashData.get(champGuid))) {
+				String newChampionJSON = gson.toJson(champ);
+				ZipEntry newChampionEntry = new ZipEntry(champGuid);
+				pendingFiles.add(new PendingFile(newChampionEntry, newChampionJSON.getBytes()));
 			}
 
 			// write data to zip
