@@ -252,6 +252,10 @@ public class FilterDrawerFragment extends Fragment implements TextWatcher {
 		Button saveDeck = (Button) scrollView.findViewById(R.id.buttonSaveDeck);
 		saveDeck.setHapticFeedbackEnabled(true);
 		saveDeck.setVisibility(View.VISIBLE);
+		
+		Button exportDeck = (Button) scrollView.findViewById(R.id.buttonExportDeck);
+		exportDeck.setHapticFeedbackEnabled(true);
+		exportDeck.setVisibility(View.VISIBLE);
 
 		Button deleteDeck = (Button) scrollView.findViewById(R.id.buttonDeleteDeck);
 		deleteDeck.setHapticFeedbackEnabled(true);

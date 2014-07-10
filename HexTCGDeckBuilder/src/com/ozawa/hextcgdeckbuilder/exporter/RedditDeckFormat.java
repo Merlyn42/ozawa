@@ -13,13 +13,15 @@ import com.ozawa.hextcgdeckbuilder.hexentities.ResourceCard;
 public class RedditDeckFormat implements IDeckFormat {
 	
 	private DatabaseHandler databaseHandler;
+	private Deck deck;
 	
-	RedditDeckFormat(DatabaseHandler databaseHandler_in){
+	public RedditDeckFormat(DatabaseHandler databaseHandler_in,Deck deckin){
 		databaseHandler=databaseHandler_in;
+		deck = deckin;
 	}
 
 	@Override
-	public String formatDeck(Deck deck) {
+	public String formatDeck() {
 		StringBuilder builder = new StringBuilder();
 		ArrayList<ResourceCard> resources = new ArrayList<ResourceCard>();
 		ArrayList<Card> troops = new ArrayList<Card>();
@@ -36,15 +38,15 @@ public class RedditDeckFormat implements IDeckFormat {
 		}
 		
 		for (ResourceCard card : resources){
-			appendCardRedditFormat(builder,card,deck);
+			appendCardRedditFormat(builder,card);
 		}
 		builder.append("\n");
 		for (Card card : troops){
-			appendCardRedditFormat(builder,card,deck);
+			appendCardRedditFormat(builder,card);
 		}
 		builder.append("\n");
 		for (AbstractCard card : others){
-			appendCardRedditFormat(builder,card,deck);
+			appendCardRedditFormat(builder,card);
 		}
 		builder.append("\n");
 		
@@ -53,11 +55,16 @@ public class RedditDeckFormat implements IDeckFormat {
 
 	@Override
 	public String getName() {
+		return "Deck name would go here if I could find it";
+	}
+	
+	@Override
+	public String toString(){
 		return "Reddit";
 	}
 	
 	
-	private void appendCardRedditFormat(StringBuilder builder, AbstractCard card,Deck deck){
+	private void appendCardRedditFormat(StringBuilder builder, AbstractCard card){
 		
 		List<GemResource> gems = databaseHandler.getAllGemResourcesForDeck(deck.getCurrentDeck().getID());
 		//gems.get(0).

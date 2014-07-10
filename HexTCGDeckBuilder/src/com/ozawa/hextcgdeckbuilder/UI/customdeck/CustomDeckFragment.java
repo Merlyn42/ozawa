@@ -33,6 +33,7 @@ import com.ozawa.hextcgdeckbuilder.UI.PlaceholderFragment;
 import com.ozawa.hextcgdeckbuilder.UI.TutorialEventListener;
 import com.ozawa.hextcgdeckbuilder.UI.customdeck.champions.SelectChampionDialogFragment;
 import com.ozawa.hextcgdeckbuilder.UI.customdeck.deckstats.DeckTestDrawActivity;
+import com.ozawa.hextcgdeckbuilder.UI.exporter.ExportDeckDialogFragment;
 import com.ozawa.hextcgdeckbuilder.UI.filter.FilterDrawerFragment;
 import com.ozawa.hextcgdeckbuilder.UI.listview.DeckListViewAdapter;
 import com.ozawa.hextcgdeckbuilder.UI.multiplecarddialogs.AbstractMultipleCardsDialogFragment;
@@ -121,10 +122,10 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 	public static final String	PREFS_NAME	= "FirstLaunchPrefCustomDeck";
 	private SharedPreferences	mPreferences;
 
-	private Deck				customDeck;
+	public Deck				customDeck;
 	private HexApplication		hexApplication;
 
-	private Context				mContext;
+	public Context				mContext;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -633,6 +634,21 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 			}
 
 		});
+		
+		Button exportDeck = (Button) mFilterDrawerFragment.getView().findViewById(R.id.buttonExportDeck);
+		exportDeck.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				v.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+				if (customDeck.isUnsavedDeck()) {
+					buildSaveUnsavedDeckDialog(null, fragment);
+				} else {
+					showExportDeckPopup();
+				}
+			}
+
+		});
 
 		deleteDeck = (Button) mFilterDrawerFragment.getView().findViewById(R.id.buttonDeleteDeck);
 		deleteDeck.setOnClickListener(new OnClickListener() {
@@ -689,6 +705,15 @@ public class CustomDeckFragment extends Fragment implements FilterDrawerFragment
 		LoadDeckDialogFragment loadDeckDialog = new LoadDeckDialogFragment();
 		loadDeckDialog.setTargetFragment(this, 1);
 		loadDeckDialog.show(getActivity().getSupportFragmentManager(), "Load Deck Popup");
+	}
+	
+	/**
+	 * Display the Export Deck Dialog
+	 */
+	private void showExportDeckPopup() {
+		ExportDeckDialogFragment exportDeckDialog = new ExportDeckDialogFragment();
+		exportDeckDialog.setTargetFragment(this, 1);
+		exportDeckDialog.show(getActivity().getSupportFragmentManager(), "Export Deck Popup");
 	}
 
 	/**

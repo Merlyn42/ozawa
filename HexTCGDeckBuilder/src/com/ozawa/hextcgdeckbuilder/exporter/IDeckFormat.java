@@ -6,7 +6,7 @@ import com.ozawa.hextcgdeckbuilder.UI.customdeck.Deck;
 
 public interface IDeckFormat {
 	
-	public String formatDeck(Deck deck);
+	public String formatDeck();
 	
 	public String getName();
 

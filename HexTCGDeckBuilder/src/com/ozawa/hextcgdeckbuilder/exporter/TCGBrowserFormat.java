@@ -12,66 +12,72 @@ import com.ozawa.hextcgdeckbuilder.hexentities.ResourceCard;
 
 public class TCGBrowserFormat implements IDeckFormat {
 
-private DatabaseHandler databaseHandler;
-	
-	TCGBrowserFormat(DatabaseHandler databaseHandler_in){
-		databaseHandler=databaseHandler_in;
+	private DatabaseHandler	databaseHandler;
+	private Deck			deck;
+
+	public TCGBrowserFormat(DatabaseHandler databaseHandler_in,Deck deckin) {
+		databaseHandler = databaseHandler_in;
+		deck = deckin;
 	}
 
 	@Override
-	public String formatDeck(Deck deck) {
+	public String formatDeck() {
 		StringBuilder builder = new StringBuilder();
 		ArrayList<ResourceCard> resources = new ArrayList<ResourceCard>();
 		ArrayList<Card> troops = new ArrayList<Card>();
 		ArrayList<AbstractCard> spells = new ArrayList<AbstractCard>();
-		
-		for(AbstractCard card:deck.getDeckCardList()){
-			if(card instanceof ResourceCard){
-				resources.add((ResourceCard)card);
-			}else if(card instanceof Card&&((Card)card).isTroop()){
-				troops.add((Card)card);
-			}else{
+
+		for (AbstractCard card : deck.getDeckCardList()) {
+			if (card instanceof ResourceCard) {
+				resources.add((ResourceCard) card);
+			} else if (card instanceof Card && ((Card) card).isTroop()) {
+				troops.add((Card) card);
+			} else {
 				spells.add(card);
 			}
 		}
 		builder.append("Troops\n");
-		for (Card card : troops){
-			appendCardRedditFormat(builder,card,deck);
+		for (Card card : troops) {
+			appendCardRedditFormat(builder, card);
 		}
 		builder.append("\n");
-		
+
 		builder.append("Spells\n");
-		for (AbstractCard card : spells){
-			appendCardRedditFormat(builder,card,deck);
+		for (AbstractCard card : spells) {
+			appendCardRedditFormat(builder, card);
 		}
 		builder.append("\n");
-		
+
 		builder.append("Resources\n");
-		for (ResourceCard card : resources){
-			appendCardRedditFormat(builder,card,deck);
+		for (ResourceCard card : resources) {
+			appendCardRedditFormat(builder, card);
 		}
 		builder.append("\n");
-			
+
 		return builder.toString();
 	}
 
 	@Override
 	public String getName() {
-		return "Reddit";
+		return "Deck name would go here if I could find it";
 	}
-	
-	
-	private void appendCardRedditFormat(StringBuilder builder, AbstractCard card,Deck deck){
-		
+
+	@Override
+	public String toString() {
+		return "TCGBrowser.com";
+	}
+
+	private void appendCardRedditFormat(StringBuilder builder, AbstractCard card) {
+
 		List<GemResource> gems = databaseHandler.getAllGemResourcesForDeck(deck.getCurrentDeck().getID());
-		//if(gemExists)
-		//for gem
-		
+		// if(gemExists)
+		// for gem
+
 		builder.append(deck.getDeckData().get(card));
 		builder.append("x ");
 		builder.append(card.name);
-		//if gem!=null
-		//	add gem
+		// if gem!=null
+		// add gem
 		builder.append("\n");
 	}
 
