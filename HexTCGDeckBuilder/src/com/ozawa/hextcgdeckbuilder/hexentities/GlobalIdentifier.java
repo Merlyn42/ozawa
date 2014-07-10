@@ -26,8 +26,18 @@ public class GlobalIdentifier {
 	
 	public GlobalIdentifier(String id){
 		this.gUID = id;
+		
 	}
 	@SerializedName("m_Guid")
 	public String gUID;
+	
+	@Override
+	public boolean equals(Object other){
+		boolean result = false;
+		if(other instanceof GlobalIdentifier){
+			result =  gUID.equals(((GlobalIdentifier)other).gUID);
+		}
+		return result;
+	}
 
 }

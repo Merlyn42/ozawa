@@ -1,24 +1,26 @@
-﻿<?xml version="1.0" encoding="utf-8"?><LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    <Spinner        android:id="@+id/spinnerFormat"        android:layout_width="match_parent"        android:layout_height="wrap_content" />        
-    <LinearLayout
+
+    <Spinner
+        android:id="@+id/spinnerFormat"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content" />
+    
+    <Button
+        android:id="@+id/buttonShare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Share" />
 
-        <Button
-            android:id="@+id/buttonCopy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Copy to Clipboard" />
-
-        <Button
-            android:id="@+id/buttonEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Send as Email" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Preview:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <EditText
         android:id="@+id/editText1"

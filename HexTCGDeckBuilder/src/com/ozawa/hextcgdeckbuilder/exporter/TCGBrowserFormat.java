@@ -15,7 +15,7 @@ public class TCGBrowserFormat implements IDeckFormat {
 	private DatabaseHandler	databaseHandler;
 	private Deck			deck;
 
-	public TCGBrowserFormat(DatabaseHandler databaseHandler_in,Deck deckin) {
+	public TCGBrowserFormat(DatabaseHandler databaseHandler_in, Deck deckin) {
 		databaseHandler = databaseHandler_in;
 		deck = deckin;
 	}
@@ -36,23 +36,29 @@ public class TCGBrowserFormat implements IDeckFormat {
 				spells.add(card);
 			}
 		}
-		builder.append("Troops\n");
-		for (Card card : troops) {
-			appendCardRedditFormat(builder, card);
+		if (!troops.isEmpty()) {
+			builder.append("Troops\n");
+			for (Card card : troops) {
+				appendCard(builder, card);
+			}
+			builder.append("\n");
 		}
-		builder.append("\n");
 
-		builder.append("Spells\n");
-		for (AbstractCard card : spells) {
-			appendCardRedditFormat(builder, card);
+		if (!spells.isEmpty()) {
+			builder.append("Spells\n");
+			for (AbstractCard card : spells) {
+				appendCard(builder, card);
+			}
+			builder.append("\n");
 		}
-		builder.append("\n");
 
-		builder.append("Resources\n");
-		for (ResourceCard card : resources) {
-			appendCardRedditFormat(builder, card);
+		if (!resources.isEmpty()) {
+			builder.append("Resources\n");
+			for (ResourceCard card : resources) {
+				appendCard(builder, card);
+			}
+			builder.append("\n");
 		}
-		builder.append("\n");
 
 		return builder.toString();
 	}
@@ -67,18 +73,35 @@ public class TCGBrowserFormat implements IDeckFormat {
 		return "TCGBrowser.com";
 	}
 
-	private void appendCardRedditFormat(StringBuilder builder, AbstractCard card) {
+	private void appendCard(StringBuilder builder, AbstractCard card) {
 
-		List<GemResource> gems = databaseHandler.getAllGemResourcesForDeck(deck.getCurrentDeck().getID());
-		// if(gemExists)
-		// for gem
+		ArrayList<GemResource> gems = new ArrayList<GemResource>();
 
-		builder.append(deck.getDeckData().get(card));
-		builder.append("x ");
-		builder.append(card.name);
-		// if gem!=null
-		// add gem
-		builder.append("\n");
+		if (card.isTroop() && ((Card) card).isSocketable()) {
+			List<GemResource> allGems = databaseHandler.getAllGemResourcesForDeck(deck.getCurrentDeck().getID());
+			for (GemResource gem : allGems) {
+				if (gem.cardId.equals(card.id)) {
+					gems.add(gem);
+				}
+			}
+		}
+		int amount = deck.getDeckData().get(card);
+		int count = 0;
+		for (GemResource gem : gems) {
+			count += gem.gemCount;
+			builder.append(gem.gemCount);
+			builder.append("x ");
+			builder.append(card.name);
+			builder.append(" [");
+			builder.append(databaseHandler.getGem(gem.gemId.gUID).name);
+			builder.append("]\n");
+		}
+		if (count < amount) {
+			builder.append(amount-count);
+			builder.append("x ");
+			builder.append(card.name);
+			builder.append("\n");
+		}
 	}
 
 }

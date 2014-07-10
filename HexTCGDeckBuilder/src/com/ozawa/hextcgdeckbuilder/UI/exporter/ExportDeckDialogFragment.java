@@ -32,11 +32,11 @@ import com.ozawa.hextcgdeckbuilder.programstate.HexApplication;
 import com.ozawa.hextcgdeckbuilder.util.HexUtil;
 
 public class ExportDeckDialogFragment extends DialogFragment {
-	private Button		copyButton;
-	private Button		emailButton;
+	private Button		shareButton;
 	private Spinner		formatSpinner;
 	private EditText	text;
 	IDeckFormat[]		array;
+	IDeckFormat			selectedFormat;
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -46,8 +46,7 @@ public class ExportDeckDialogFragment extends DialogFragment {
 		dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0xaa000000));
 		dialog.setTitle("Export deck");
 
-		copyButton = (Button) dialog.findViewById(R.id.buttonCopy);
-		emailButton = (Button) dialog.findViewById(R.id.buttonEmail);
+		shareButton = (Button) dialog.findViewById(R.id.buttonShare);
 		text = (EditText) dialog.findViewById(R.id.editText1);
 		formatSpinner = (Spinner) dialog.findViewById(R.id.spinnerFormat);
 
@@ -56,7 +55,8 @@ public class ExportDeckDialogFragment extends DialogFragment {
 		DatabaseHandler dbHandler = (mContext instanceof HexApplication) ? ((HexApplication) mContext).getDatabaseHandler()
 				: new DatabaseHandler(mContext);
 
-		array = new IDeckFormat[]{ new TCGBrowserFormat(dbHandler,fragment.customDeck), new RedditDeckFormat(dbHandler,fragment.customDeck) };
+		array = new IDeckFormat[] { new TCGBrowserFormat(dbHandler, fragment.customDeck),
+				new RedditDeckFormat(dbHandler, fragment.customDeck) };
 
 		ArrayAdapter<IDeckFormat> adapter = new ArrayAdapter<IDeckFormat>(mContext, android.R.layout.simple_list_item_1, array);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -65,6 +65,7 @@ public class ExportDeckDialogFragment extends DialogFragment {
 			@Override
 			public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 				text.setText(array[position].formatDeck());
+				selectedFormat = array[position];
 			}
 
 			@Override
@@ -74,19 +75,21 @@ public class ExportDeckDialogFragment extends DialogFragment {
 
 		});
 
-		
-		 copyButton.setOnClickListener(new OnClickListener() {
-		 
-		 @Override public void onClick(View v) {
-			 Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND); 
-			    sharingIntent.setType("text/plain");
-			    String shareBody = text.getText().toString();
-			    sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");
-			    sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
-			startActivity(Intent.createChooser(sharingIntent, "Share via"));
-		 
-		 } });
-		 /* 
+		shareButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+				sharingIntent.setType("text/plain");
+				String shareBody = selectedFormat.formatDeck();
+				String shareSubject = selectedFormat.getName();
+				sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, shareSubject);
+				sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+				startActivity(Intent.createChooser(sharingIntent, "Share via"));
+
+			}
+		});
+		/*
 		 * emailButton.setOnClickListener(new OnClickListener() {
 		 * 
 		 * @Override public void onClick(View v) {
