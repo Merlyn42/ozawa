@@ -49,7 +49,13 @@ public enum Attribute {
     @SerializedName("PreventCombatDamage")
     PREVENTCOMBATDAMAGE("Prevent Combat Damage"),
     @SerializedName("CantBeBlocked")
-    CANTBEBLOCKED("Can't Be Blocked");
+    CANTBEBLOCKED("Can't Be Blocked"),
+    @SerializedName("SkyGuard")
+    SKYGUARD("SkyGuad"),
+    @SerializedName("Lethal")
+    LETHAL("Lethal"),
+    @SerializedName("Tunneling")
+    TUNNELING("Tunneling");
     
     private String attribute;
     
