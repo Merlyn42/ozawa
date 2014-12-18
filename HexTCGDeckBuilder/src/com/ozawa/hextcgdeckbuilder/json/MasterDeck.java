@@ -71,7 +71,7 @@ public class MasterDeck {
 
 	private static Card getCard(String guid) {		
 		for (AbstractCard card : masterDeck) {
-			if (card instanceof Card && card.getID() == guid) {
+			if (card instanceof Card && card.getID().equals(guid)) {
 				return (Card) card;
 			}
 		}

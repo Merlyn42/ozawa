@@ -36,7 +36,6 @@ import com.ozawa.hextcgdeckbuilder.UI.CardTemplate;
 import com.ozawa.hextcgdeckbuilder.UI.SymbolTemplate;
 import com.ozawa.hextcgdeckbuilder.enums.Attribute;
 import com.ozawa.hextcgdeckbuilder.enums.CardType;
-import com.ozawa.hextcgdeckbuilder.linkedcards.LinkedCards;
 import com.ozawa.hextcgdeckbuilder.programstate.ImageCache;
 import com.ozawa.hextcgdeckbuilder.programstate.ImageCache.CacheType;
 import com.ozawa.hextcgdeckbuilder.programstate.ImageCache.ImageType;
