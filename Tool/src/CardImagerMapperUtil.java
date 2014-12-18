@@ -87,6 +87,7 @@ public class CardImagerMapperUtil {
 				}
 			};
 			File[] cardFiles = new File(hexLocation, "Sets\\Set001\\CardDefinitions").listFiles(filter);
+
 			HashMap<String,List<M_RelatedCard> > relatedIDs = getRelatedCards(hexLocation);
 
 			for (File cardFile : cardFiles) {
@@ -98,7 +99,20 @@ public class CardImagerMapperUtil {
 					return;
 				}
 			}
-
+			
+			
+			cardFiles = new File(hexLocation,"Sets\\Set002_PvP\\CardDefinitions").listFiles(filter);
+			
+			for (File cardFile : cardFiles) {
+				try {
+					mapper.transcribeCardFile(cardFile, relatedIDs);
+				} catch (Exception e) {
+					System.err.println("Fatal error while zipping:" + cardFile.getName());
+					e.printStackTrace();
+					return;
+				}
+			}
+			
 			File[] championFiles = new File(hexLocation, "Champions\\Templates").listFiles();
 
 			for (File championFile : championFiles) {
@@ -194,9 +208,12 @@ public class CardImagerMapperUtil {
 			}catch (ParserConfigurationException e) {
 				System.err.println("serious configuration error");
 				e.printStackTrace();				
-			} catch (SAXException | IOException e) {
+			} catch (SAXException e) {
 				System.err.println("Couldnt find XML file");				
 				e.printStackTrace();
+			} catch ( IOException e){
+				System.err.println("Couldnt find XML file");				
+				e.printStackTrace();				
 			}
 		return relatedCardMap;
 	}
