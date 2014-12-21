@@ -21,6 +21,7 @@ import android.content.Context;
 import com.ozawa.hextcgdeckbuilder.ImageAdapter;
 import com.ozawa.hextcgdeckbuilder.UI.customdeck.Deck;
 import com.ozawa.hextcgdeckbuilder.enums.CardEnum;
+import com.ozawa.hextcgdeckbuilder.enums.CardSet;
 import com.ozawa.hextcgdeckbuilder.filter.Filter;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 
@@ -73,6 +74,20 @@ public class CardsViewer {
 
 	public void setFilterString(String filterString) {
 		filter.setFilterString(filterString);
+		updateDeckAndView();
+	}
+	
+	public String getCardSet() {
+		return filter.getCardSet().getSetName();
+	}
+
+	public void setCardSet(String setName) {
+		for(CardSet set : CardSet.values()){
+			if(setName.equalsIgnoreCase(set.getSetName())){
+				filter.setCardSet(set);
+				break;
+			}
+		}
 		updateDeckAndView();
 	}
 	

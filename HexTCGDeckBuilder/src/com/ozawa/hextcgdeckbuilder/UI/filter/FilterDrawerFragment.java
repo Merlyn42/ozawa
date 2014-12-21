@@ -46,10 +46,13 @@ import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -238,6 +241,22 @@ public class FilterDrawerFragment extends Fragment implements TextWatcher {
 				}
 			}
 		});
+		
+		// Filter cards by card set
+		Spinner selectCardSet = (Spinner) scrollView.findViewById(R.id.spinnerSelectCardSet);
+		selectCardSet.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View aView, int position, long id) {
+				cardViewer.setCardSet(parent.getItemAtPosition(position).toString());
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub				
+			}
+			
+		});
 	}
 
 	public void setUpCustomDeckViews() {
@@ -253,9 +272,9 @@ public class FilterDrawerFragment extends Fragment implements TextWatcher {
 		saveDeck.setHapticFeedbackEnabled(true);
 		saveDeck.setVisibility(View.VISIBLE);
 		
-		Button exportDeck = (Button) scrollView.findViewById(R.id.buttonExportDeck);
+		/*Button exportDeck = (Button) scrollView.findViewById(R.id.buttonExportDeck);
 		exportDeck.setHapticFeedbackEnabled(true);
-		exportDeck.setVisibility(View.VISIBLE);
+		exportDeck.setVisibility(View.VISIBLE);*/
 
 		Button deleteDeck = (Button) scrollView.findViewById(R.id.buttonDeleteDeck);
 		deleteDeck.setHapticFeedbackEnabled(true);

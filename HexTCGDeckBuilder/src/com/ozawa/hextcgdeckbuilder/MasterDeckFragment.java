@@ -367,8 +367,13 @@ public class MasterDeckFragment extends Fragment implements FilterDrawerFragment
 		AbstractCard card = cardViewer.getFilteredCardList().get(position);
 
 		if ((card instanceof Card) && ((Card) card).cardNumber == 0) {
-			Toast.makeText(mainActivity.getApplicationContext(), card.name + " is a token card and cannot be added directly to decks.",
+			if(card.name.equalsIgnoreCase("Greyhaven")){
+				Toast.makeText(mainActivity.getApplicationContext(), card.name + " is a vanity card created for the 2014 Hex Secret Santa. Merry Christmas to Greyhaven and to all.",
+						Toast.LENGTH_LONG).show();
+			}else{
+				Toast.makeText(mainActivity.getApplicationContext(), card.name + " is a token card and cannot be added directly to decks.",
 					Toast.LENGTH_SHORT).show();
+			}
 			return false;
 		}
 		Integer cardCount = ((HexApplication) getActivity().getApplication()).getCustomDeck().getDeckData().get(card);

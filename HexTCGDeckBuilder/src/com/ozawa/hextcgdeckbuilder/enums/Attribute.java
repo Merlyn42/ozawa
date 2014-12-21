@@ -63,7 +63,13 @@ public enum Attribute implements CardEnum {
     @SerializedName("PreventCombatDamage")
     PREVENTCOMBATDAMAGE("Prevent Combat Damage"),
     @SerializedName("CantBeBlocked")
-    CANTBEBLOCKED("Can't Be Blocked");
+    CANTBEBLOCKED("Can't Be Blocked"),
+    @SerializedName("SkyGuard")
+    SKYGUARD("SkyGuard"),
+    @SerializedName("Lethal")
+    LETHAL("Lethal"),
+    @SerializedName("Tunneling")
+    TUNNELING("Tunneling");
     
     private String attribute;
     

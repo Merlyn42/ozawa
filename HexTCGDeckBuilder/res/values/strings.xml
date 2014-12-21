@@ -60,6 +60,12 @@
     <string name="about">About</string>
     <string name="about_us">The Hex TCG Deck Builder App for Android is developed by Three Cool Guys: Chad (Chaxtreme), Laurence (Drisen Morl\'Baal), and Dave (Hawkstalion).</string>
     
+    <string name="set_select_prompt">All Sets</string> 
+    <string-array name="card_set_arrays">
+        <item>All sets</item>
+        <item>Shards of Fate</item>
+        <item>Shattered Destiny</item>
+    </string-array>
     
     <!-- Site Links -->
     <string name="officialcontent">Official Content</string>

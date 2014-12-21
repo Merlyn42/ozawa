@@ -218,11 +218,15 @@ public class Card extends AbstractCard {
 		}
 
 		if (socketCount > 0) {
-			Bitmap socketImage = BitmapFactory.decodeResource(resources, R.drawable.gem_socket_new);
-			socketImage = Bitmap.createScaledBitmap(socketImage, (int) (templateImage.getWidth() * template.socketRatio),
-					(int) (templateImage.getWidth() * template.socketRatio), true);
-			combine.drawBitmap(socketImage, templateImage.getWidth() - (templateImage.getWidth() / 6.5f), templateImage.getHeight() / 2.6f,
-					paint);
+			int loop = 0;
+			while(loop < socketCount){
+				Bitmap socketImage = BitmapFactory.decodeResource(resources, R.drawable.gem_socket_new);
+				socketImage = Bitmap.createScaledBitmap(socketImage, (int) (templateImage.getWidth() * template.socketRatio),
+						(int) (templateImage.getWidth() * template.socketRatio), true);
+				combine.drawBitmap(socketImage, templateImage.getWidth() - (templateImage.getWidth() / 6.5f), templateImage.getHeight() / (2.6f * (loop + 1)),
+						paint);				
+				loop++;
+			}
 			/*
 			 * Bitmap socketImage = BitmapFactory.decodeResource(resources,
 			 * R.drawable.gem_socket); socketImage =
@@ -287,6 +291,7 @@ public class Card extends AbstractCard {
 
 		combine.drawText(cardTypes, templateImage.getWidth() / template.cardTypeWidth,
 				templateImage.getHeight() - (templateImage.getHeight() / template.cardTypeHeight), paint);
+		drawFlavorText(flavorText.trim(), 64, combine, templateImage, paint, resources, context, template);
 		if (unique) {
 			float textWidth = paint.measureText("Unique");
 			combine.drawText("Unique", (templateImage.getWidth() - (templateImage.getWidth() / template.uniqueWidth)) - textWidth,
@@ -296,8 +301,9 @@ public class Card extends AbstractCard {
 		if (!faction.equals("None")) {
 			drawFaction(combine, paint, templateImage, resources, context, template);
 		}
-
-		drawRarity(combine, paint, templateImage, resources, context, template);
+		if(cardRarity != null){
+			drawRarity(combine, paint, templateImage, resources, context, template);
+		}
 	}
 
 	private void drawFaction(Canvas combine, Paint paint, Bitmap templateImage, Resources res, Context context, CardTemplate template) {
@@ -354,7 +360,9 @@ public class Card extends AbstractCard {
 	private void drawGameText(String gameText, int length, Canvas combine, Bitmap templateImage, Paint paint, Resources resources,
 			Context context, CardTemplate template) {
 		line = 0f;
-
+		if(gameText.indexOf("#SELF#") > -1){
+			gameText = gameText.replaceAll("#SELF#", this.name);
+		}
 		if (paint.measureText(gameText) < (templateImage.getWidth() * template.gameTextLength)) {
 			if (gameText.contains("<p>")) {
 				int pLocation = gameText.lastIndexOf("<p>") + 3;
@@ -393,6 +401,27 @@ public class Card extends AbstractCard {
 			} else {
 				drawTextWithImages(displayText, templateImage, combine, paint, resources, context, template);
 			}
+		}
+	}
+	
+	private void drawFlavorText(String flavorText, int length, Canvas combine, Bitmap templateImage, Paint paint, Resources resources,
+			Context context, CardTemplate template){
+		String delims = "(\\s|<p>)";
+		String[] flavText = flavorText.replaceAll("(<i>|</i>)", "").split(delims);
+		float width = templateImage.getWidth() / 5;		
+		float line = (paint.measureText(flavorText.replaceAll("(<i>|</i>|<p>)", "")) < 600 && !flavorText.contains("<p>")) ? 0.06f: 0f;
+		paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.ITALIC));
+		paint.setTextSize((float) (templateImage.getHeight() * 0.016354839));
+		for (int i = 0; i < flavText.length; i++) {
+			if (flavText[i].equals(""))
+				continue;
+			if(width + paint.measureText(flavText[i]) >= 600 || flavText[i].startsWith(">>")){
+				line += 0.03f;
+				width = templateImage.getWidth() / 5;
+			}
+			combine.drawText(flavText[i], width, (templateImage.getHeight() / (1.10f - line)), paint);
+			 
+			width += (paint.measureText(flavText[i]) + 4f);	
 		}
 	}
 

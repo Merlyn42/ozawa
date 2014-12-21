@@ -20,6 +20,7 @@ package com.ozawa.hextcgdeckbuilder.filter;
 import com.ozawa.hextcgdeckbuilder.enums.CardEnum;
 import com.ozawa.hextcgdeckbuilder.hexentities.AbstractCard;
 import com.ozawa.hextcgdeckbuilder.hexentities.Card;
+import com.ozawa.hextcgdeckbuilder.hexentities.ResourceCard;
 import com.ozawa.hextcgdeckbuilder.json.MasterDeck;
 
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ import java.util.Locale;
 import com.ozawa.hextcgdeckbuilder.enums.Attribute;
 import com.ozawa.hextcgdeckbuilder.enums.CardType;
 import com.ozawa.hextcgdeckbuilder.enums.ColorFlag;
+import com.ozawa.hextcgdeckbuilder.enums.CardSet;
 
 public class Filter {
 
@@ -41,6 +43,8 @@ public class Filter {
 	private final EnumSet<Attribute>	attributes;
 	private final EnumSet<ColorFlag>	colors;
 	private final EnumSet<CardType>		cardTypes;
+	private final EnumSet<CardSet>		cardSets;
+	private CardSet 					cardSet	= CardSet.ALLSETS;
 	private Comparator<AbstractCard>	comparator;
 	private int minCost;
 	private int maxCost;
@@ -61,8 +65,9 @@ public class Filter {
 		maxCost=MasterDeck.getHighestCardCost();
 		attributes = EnumSet.noneOf(Attribute.class);
 		colors = EnumSet.allOf(ColorFlag.class);
-		cardTypes = EnumSet.allOf(CardType.class);
+		cardTypes = EnumSet.allOf(CardType.class);		
 		cardTypes.remove(CardType.CHAMPION);
+		cardSets = EnumSet.allOf(CardSet.class);
 	}
 
 	public String getFilterString() {
@@ -79,6 +84,14 @@ public class Filter {
 
 	public int getMaxCost() {
 		return maxCost;
+	}
+	
+	public CardSet getCardSet(){
+		return cardSet;
+	}
+	
+	public void setCardSet(CardSet set){
+		this.cardSet = set;
 	}
 
 	public void setMaxCost(int maxCost) {
@@ -168,11 +181,22 @@ public class Filter {
 	public List<AbstractCard> filter(List<? extends AbstractCard> cards) {
 		ArrayList<AbstractCard> result = new ArrayList<AbstractCard>();
 		for (AbstractCard abstractCard : cards) {
-			if (filterCard(abstractCard)) {
+			if (filterDuplicateResources(abstractCard) && filterCard(abstractCard) && filterCardBySet(abstractCard, cardSet)) {
 				result.add(abstractCard);
 			}
 		}
 		return result;
+	}
+	
+	private boolean filterDuplicateResources(AbstractCard abstractCard){
+		if(abstractCard instanceof ResourceCard){
+			if(abstractCard.name.contains("Choose") 
+					&& (abstractCard.name.contains("Blood") || abstractCard.name.contains("Diamond") || abstractCard.name.contains("Ruby") || abstractCard.name.contains("Sapphire")
+							|| abstractCard.name.contains("Wild"))){
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private boolean searchCardText(AbstractCard card, String searchString) {
@@ -188,8 +212,19 @@ public class Filter {
 		}
 		return false;
 	}
+	
+	private boolean filterCardBySet(AbstractCard card, CardSet set){
+		if(set == CardSet.ALLSETS){
+			return true;
+		}else if(set == CardSet.SHARDSOFFATE && card.setID.gUID.equalsIgnoreCase("0382f729-7710-432b-b761-13677982dcd2")){
+			return true;
+		}else if(set == CardSet.SHATTEREDDESTINY && card.setID.gUID.equalsIgnoreCase("b05e69d2-299a-4eed-ac31-3f1b4fa36470")){
+			return true;
+		}
+		return false;
+	}
 
-	private boolean filterCard(AbstractCard abstractCard) {
+	private boolean filterCard(AbstractCard abstractCard) {		
 		if (filterString != null && filterString.length() != 0) {
 			if (!searchCardText(abstractCard, filterString)) {
 				return false;
